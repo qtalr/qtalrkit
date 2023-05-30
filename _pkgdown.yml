@@ -1,20 +1,4 @@
 url: https://qtalr.github.io/qtalrkit/
 template:
   bootstrap: 5
-  bootswatch: flatly
 
-reference:
-  - title: "Functions"
-    desc: ~
-  - contents:
-      - get_compressed_data
-
-navbar:
-  left:
-    - icon: fa-home fa-lg
-      href: index.html
-  right:
-    - text: "Reference"
-      href: reference/index.html
-    - icon: fa-github fa-lg
-      href: https://github.com/qtalr/qtalrkit
