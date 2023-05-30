@@ -1,2 +1,6 @@
 ^LICENSE\.md$
 ^.*\.code-workspace$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^README\.Rmd$
