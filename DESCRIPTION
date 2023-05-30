@@ -1,0 +1,11 @@
+Package: qtalrkit
+Title: Quantitative Text Analysis for Linguists Resource Kit
+Version: 0.0.0.9000
+Authors@R: 
+    person("Jerid", "Francom", , "francojc@wfu.edu", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-5972-6330"))
+Description: Support package for the textbook "An Introduction to Quantitative Text Analysis for Linguists: Reproducible Research using R". Includes access to interactive code exercises and demos, data, and misc functions.
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
