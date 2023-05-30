@@ -10,9 +10,6 @@ reference:
       - get_compressed_data
 
 navbar:
-  bg: light # TODO: site color scheme
-  fg: dark
-  primary: "#007bff"
   left:
     - icon: fa-home fa-lg
       href: index.html
