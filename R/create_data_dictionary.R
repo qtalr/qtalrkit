@@ -1,4 +1,4 @@
-#' Create a data dictionary for a given dataset.
+#' Create a Data Dictionary for a Given Dataset
 #'
 #' The data dictionary returned includes the variable name, human-readable name, description, and variable type. The function uses OpenAI's chat completions models to generate the descriptions for each of the variables in the dataset. The data dictionary is returned as a data frame and written to a file in CSV format.
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_data_dictionary.R
 \name{create_data_dictionary}
 \alias{create_data_dictionary}
-\title{Create a data dictionary for a given dataset.}
+\title{Create a Data Dictionary for a Given Dataset}
 \usage{
 create_data_dictionary(
   data,
