@@ -1,0 +1,18 @@
+```{r common, include=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  out.width = "85%",
+  fig.align = "center",
+  tidy = TRUE
+)
+pacman::p_load(tidyverse, rmarkdown, knitr, fontawesome)
+theme_set(theme_minimal())
+
+options(digits = 3)
+
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  "tidyverse", "readr", "rmarkdown", "dplyr", "usethis", "gitcreds", "quanteda", "textdata", "tidycensus", "sf", "rtweet", "skimr", "janitor", "ggplot2", "gridExtra"
+), "packages.bib")
+```

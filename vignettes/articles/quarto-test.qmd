@@ -1,0 +1,20 @@
+---
+title: "Quarto test"
+---
+
+```{r}
+#| label: setup
+#| message: false
+
+library(tidyverse) # load tidyverse packages
+library(qtalrkit)
+```
+
+## Test
+
+```{r}
+#| labl: test
+
+1 + 1
+```
+

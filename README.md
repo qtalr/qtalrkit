@@ -1,17 +1,15 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
-# qtalrkit
+# qtalr
 
 <!-- badges: start -->
-
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-The goal of `qtalrkit` is to provide supporting resources for the
-coursebook [“Text as Data: An introduction to quantitative text analysis
-and reproducible research with R”](https://qtalr.github.io/coursebook/).
+The goal of `qtalrkit` is to provide supporting resources for the book
+[“An Introduction to Quantitative Text Analysis for Linguists:
+Reproducible Research using R”](https://qtalr.github.io/book/).
 
 ## `qtalrkit` package
 
