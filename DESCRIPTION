@@ -21,6 +21,7 @@ Suggests:
     bookdown,
     fontawesome,
     knitr,
+    pacman,
     rmarkdown
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
