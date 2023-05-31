@@ -20,7 +20,6 @@ Download and extract the compressed data file
 Possible file types include .zip, .gz, .tar, and .tgz
 }
 \examples{
-get_compressed_data(url = "http://www.test.com/file.zip", target_dir = "./")
 \dontrun{
 get_compressed_data(url = "http://www.test.com/file.zip", target_dir = "./")
 }

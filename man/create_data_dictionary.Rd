@@ -2,14 +2,14 @@
 % Please edit documentation in R/create_data_dictionary.R
 \name{create_data_dictionary}
 \alias{create_data_dictionary}
-\title{This function creates a data dictionary for a given dataset. The data dictionary includes the variable name, human-readable name, description, and variable type. The function uses OpenAI's GPT-3 or GPT-4 to generate the descriptions for each of the variables in the dataset. The data dictionary is returned as a data frame and written to a file in CSV format.}
+\title{Create a data dictionary for a given dataset.}
 \usage{
 create_data_dictionary(
   data,
   file_path,
   sample_n = 5,
   grouping = NULL,
-  model = c("gpt-3.5-turbo", "gpt-4")
+  model = "gpt-3.5-turbo"
 )
 }
 \arguments{
@@ -21,17 +21,16 @@ create_data_dictionary(
 
 \item{grouping}{A character vector specifying the grouping variables to use when sampling the data frame.}
 
-\item{model}{A character vector specifying the OpenAI model to use for generating the variable descriptions. Defaults to c("gpt-3.5-turbo", "gpt-4").}
+\item{model}{A character vector specifying the OpenAI chat completion model to use for generating the variable descriptions. Defaults to "gpt-3.5-turbo". See \code{\link[openai]{create_chat_completion}} for more information.}
 }
 \value{
 A data frame containing the variable name, human-readable name, description, and variable type.
 }
 \description{
-This function creates a data dictionary for a given dataset. The data dictionary includes the variable name, human-readable name, description, and variable type. The function uses OpenAI's GPT-3 or GPT-4 to generate the descriptions for each of the variables in the dataset. The data dictionary is returned as a data frame and written to a file in CSV format.
+The data dictionary returned includes the variable name, human-readable name, description, and variable type. The function uses OpenAI's chat completions models to generate the descriptions for each of the variables in the dataset. The data dictionary is returned as a data frame and written to a file in CSV format.
 }
 \examples{
+\dontrun{
 create_data_dictionary(mtcars, "mtcars_data_dictionary.csv")
-create_data_dictionary(iris, "iris_data_dictionary.csv", grouping = "Species")
-create_data_dictionary(airquality, "airquality_data_dictionary.csv", sample_n = 10)
-
+}
 }

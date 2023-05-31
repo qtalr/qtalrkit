@@ -1,30 +1,27 @@
-#' This function creates a data dictionary for a given dataset. The data dictionary includes the variable name, human-readable name, description, and variable type. The function uses OpenAI's GPT-3.5-turbo or GPT-4 to generate the descriptions for each of the variables in the dataset. The data dictionary is returned as a data frame and written to a file in CSV format.
+#' Create a data dictionary for a given dataset.
+#'
+#' The data dictionary returned includes the variable name, human-readable name, description, and variable type. The function uses OpenAI's chat completions models to generate the descriptions for each of the variables in the dataset. The data dictionary is returned as a data frame and written to a file in CSV format.
 #'
 #' @param data A data frame to create a data dictionary for.
 #' @param file_path A character string specifying the file path to write the data dictionary to.
 #' @param sample_n An integer specifying the number of rows to sample from the data frame.
 #' @param grouping A character vector specifying the grouping variables to use when sampling the data frame.
-#' @param model A character vector specifying the OpenAI model to use for generating the variable descriptions. Defaults to c("gpt-3.5-turbo", "gpt-4").
+#' @param model A character vector specifying the OpenAI chat completion model to use for generating the variable descriptions. Defaults to "gpt-3.5-turbo". See \code{\link[openai]{create_chat_completion}} for more information.
 #'
-#' @return A data frame containing the variable name, human-readable name, description, and variable type.
+#' @returns A data frame containing the variable name, human-readable name, description, and variable type.
 #'
-#' @import tidyverse
+#' @import dplyr
 #' @import glue
 #' @import openai
+#' @import stringr
 #' @importFrom readr read_csv write_csv
+#' @importFrom utils capture.output
 #'
-#' @examples
+#' @examples \dontrun{
 #' create_data_dictionary(mtcars, "mtcars_data_dictionary.csv")
-#' create_data_dictionary(iris, "iris_data_dictionary.csv", grouping = "Species")
-#' create_data_dictionary(airquality, "airquality_data_dictionary.csv", sample_n = 10)
-#'
+#' }
 #' @export
-create_data_dictionary <- function(data, file_path, sample_n = 5, grouping = NULL, model = c("gpt-3.5-turbo", "gpt-4")) {
-  # Libraries
-  library(tidyverse)
-  library(glue)
-  library(openai)
-
+create_data_dictionary <- function(data, file_path, sample_n = 5, grouping = NULL, model = "gpt-3.5-turbo") {
   # Set the OpenAI API key
   if (is.na(Sys.getenv()["OPENAI_API_KEY"])) message("Set your OPENAI_API_KEY environment variable.")
 

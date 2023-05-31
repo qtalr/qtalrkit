@@ -6,14 +6,15 @@
 #' @param target_dir The directory where the compressed file should be downloaded
 #' @param force An optional argument which forcefully overwrites existing data
 #'
-#' @return Download and extract the compressed data file
-#' @export
+#' @returns Download and extract the compressed data file
 #'
-#' @examples
-#' get_compressed_data(url = "http://www.test.com/file.zip", target_dir = "./")
-#' \dontrun{
+#' @importFrom utils download.file unzip untar
+#' @importFrom tools file_ext
+#'
+#' @examples \dontrun{
 #' get_compressed_data(url = "http://www.test.com/file.zip", target_dir = "./")
 #' }
+#' @export
 get_compressed_data <- function(url, target_dir, force = FALSE) {
   # Get the extension of the target file
   ext <- tools::file_ext(url)

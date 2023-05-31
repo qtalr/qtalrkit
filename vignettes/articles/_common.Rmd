@@ -1,4 +1,8 @@
 ```{r common, include=FALSE}
+# Install/ load packages
+pacman::p_load(dplyr, readr, stringr, rmarkdown, knitr, fontawesome)
+theme_set(theme_minimal())
+
 knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE,
@@ -6,8 +10,6 @@ knitr::opts_chunk$set(
   fig.align = "center",
   tidy = TRUE
 )
-pacman::p_load(tidyverse, rmarkdown, knitr, fontawesome)
-theme_set(theme_minimal())
 
 options(digits = 3)
 

@@ -1,5 +1,7 @@
-^LICENSE\.md$
+^.*\.Rproj$
+^\.Rproj\.user$
 ^.*\.code-workspace$
+^LICENSE\.md$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$

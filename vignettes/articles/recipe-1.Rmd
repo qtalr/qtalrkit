@@ -5,8 +5,7 @@ biblio-style: apalike
 link-citations: true
 ---
 
-```{r, child="_common.Rmd"}
-```
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
