@@ -6,4 +6,6 @@
 .httr-oauth
 .DS_Store
 *.code-workspace
+*.Rproj
 docs
+vignettes/articles/_site/

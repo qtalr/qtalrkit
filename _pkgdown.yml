@@ -32,7 +32,8 @@ articles:
   - title: Recipes
     desc: "A collection of programming demonstrations"
     contents:
-      - articles/recipe-1
+      - articles/recipe-0 # Preface
+      - articles/recipe-1 # Chapter 1
   # - title: Guides
   #   desc:: "A collection of guides for using R and related tools"
 
