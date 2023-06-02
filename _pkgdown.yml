@@ -4,18 +4,18 @@ template:
   bootstrap: 5  
   bslib:
     primary: "#18bc9c"
-    # border-radius: 0.5rem
-    # btn-border-radius: 0.25rem
 
 navbar:
   structure:
     left:
-    - intro
-    - reference
-    - articles
-    - tutorials
-    - news
-    right: github
+      - intro
+      - articles
+      - tutorials
+      - reference
+    right: 
+      - search
+      - news
+      - github
   components:
     reference:
       text: Reference
@@ -25,17 +25,31 @@ navbar:
       href: https://github.com/qtalr/qtalrkit/
       aria-label: github
     articles:
-      text: Articles
+      text: Recipes & Guides
       href: articles/index.html
+    news:
+      text: News
+      href: news/index.html
 
 articles: 
   - title: Recipes
     desc: "A collection of programming demonstrations"
     contents:
-      - articles/recipe-0 # Preface
-      - articles/recipe-1 # Chapter 1
-  # - title: Guides
-  #   desc:: "A collection of guides for using R and related tools"
+      - articles/recipe-0 # Preface/ Literate Programming I
+      - articles/recipe-1 # Chapter 1/ Literate Programming II
+  - title: Guides
+    desc:: "A collection of guides for using R and related tools"
+    contents:
+      - articles/guide-0 # R
+      - articles/guide-1 # IDEs
+      - articles/guide-2 # Remote and virtual machines
+
+reference:
+  - title: Reference
+    desc: "Functions"
+    contents:
+      - create_data_dictionary
+      - get_compressed_data
 
 footer:
   structure:

@@ -1,0 +1,16 @@
+---
+title: "Choosing and setting up an IDE"
+bibliography: bibliography.bib
+biblio-style: apalike
+link-citations: true
+pkgdown:
+  as_is: true
+---
+
+```{r, child="_common.Rmd"}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
