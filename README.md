@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# qtalr
+# Quantitative Text Analysis for Linguistics Resources
 
 <!-- badges: start -->
 

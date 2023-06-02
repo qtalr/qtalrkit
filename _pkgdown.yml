@@ -1,11 +1,11 @@
 url: https://qtalr.github.io/qtalrkit/
-title: "Quantitative Text Analysis for Linguists Resources"
+title: "qtalr"
 template:
-  bootstrap: 5
-  # bootswatch: flatly
-  theme: tango
+  bootstrap: 5  
   bslib:
-    pkgdown-nav-height: 75px
+    primary: "#18bc9c"
+    # border-radius: 0.5rem
+    # btn-border-radius: 0.25rem
 
 navbar:
   structure:
