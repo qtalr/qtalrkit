@@ -37,7 +37,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="active nav-item">
-  <a class="nav-link" href="../articles/index.html">Recipes &amp; Guides</a>
+  <a class="nav-link" href="../articles/index.html">Materials</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
@@ -76,8 +76,106 @@
 
     
     
-
-  </main>
+<hr>
+<p>In this Guide, we will explore how to create reproducible examples using the <code>reprex</code> package <span class="citation">(<a href="#ref-R-reprex" role="doc-biblioref">Bryan et al. 2022</a>)</span> in R. Reproducible examples are essential for effective communication and collaboration among data scientists and statisticians.</p>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>Reproducible examples are crucial for effectively communicating problems, solutions, and ideas in the world of data science. In this post, we will discuss the importance of reproducible examples and demonstrate how to create them using the <code>reprex</code> package in R.</p>
+</div>
+<div class="section level2">
+<h2 id="what-is-a-reproducible-example">What is a Reproducible Example?<a class="anchor" aria-label="anchor" href="#what-is-a-reproducible-example"></a>
+</h2>
+<p>A reproducible example, often referred to as a “reprex,” is a minimal, self-contained piece of code that demonstrates a specific issue or concept. It should include:</p>
+<ul>
+<li>A brief description of the problem or question</li>
+<li>The necessary data to reproduce the issue</li>
+<li>The R code used to generate the output</li>
+<li>The actual output, including any error messages or warnings</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="why-use-the-reprex-package">Why Use the reprex Package?<a class="anchor" aria-label="anchor" href="#why-use-the-reprex-package"></a>
+</h2>
+<p>The <code>reprex</code> package in R streamlines the process of creating reproducible examples by:</p>
+<ul>
+<li>Automatically capturing code, input data, and output</li>
+<li>Formatting the example for easy sharing on various platforms (e.g., GitHub, Stack Overflow)</li>
+<li>Encouraging best practices for creating clear and concise examples</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="installing-and-loading-the-reprex-package">Installing and Loading the reprex Package<a class="anchor" aria-label="anchor" href="#installing-and-loading-the-reprex-package"></a>
+</h2>
+<p>To get started with the <code>reprex</code> package, first install it from CRAN and load it into your R session:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"reprex"</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://reprex.tidyverse.org" class="external-link">reprex</a></span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="creating-a-reproducible-example-with-reprex">Creating a Reproducible Example with reprex<a class="anchor" aria-label="anchor" href="#creating-a-reproducible-example-with-reprex"></a>
+</h2>
+<p>In this section, we will demonstrate how to create a reproducible example using the <code>reprex</code> package.</p>
+<div class="section level3">
+<h3 id="basic-usage">Basic Usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
+</h3>
+<p>To create a simple reprex, write your R code and then call the <code><a href="https://reprex.tidyverse.org/reference/reprex.html" class="external-link">reprex()</a></code> function:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://reprex.tidyverse.org" class="external-link">reprex</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">code</span> <span class="op">&lt;-</span> <span class="st">'</span></span>
+<span><span class="st">x &lt;- 1:10</span></span>
+<span><span class="st">mean(x)</span></span>
+<span><span class="st">'</span></span>
+<span></span>
+<span><span class="fu"><a href="https://reprex.tidyverse.org/reference/reprex.html" class="external-link">reprex</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">code</span><span class="op">)</span></span></code></pre></div>
+<p>This will generate a formatted output that includes the code, input data, and results.</p>
+</div>
+<div class="section level3">
+<h3 id="customizing-output-format">Customizing Output Format<a class="anchor" aria-label="anchor" href="#customizing-output-format"></a>
+</h3>
+<p>You can customize the output format of your reprex by specifying the <code>venue</code> argument. For example, to create a reprex suitable for GitHub, use:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://reprex.tidyverse.org/reference/reprex.html" class="external-link">reprex</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">code</span>, venue <span class="op">=</span> <span class="st">"gh"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="including-data">Including Data<a class="anchor" aria-label="anchor" href="#including-data"></a>
+</h3>
+<p>When your example requires specific data, you can include it using the <code><a href="https://rdrr.io/r/base/dput.html" class="external-link">dput()</a></code> function:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, y <span class="op">=</span> <span class="fl">11</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span></span>
+<span><span class="va">data_dput</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/dput.html" class="external-link">dput</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">code_with_data</span> <span class="op">&lt;-</span> <span class="st">'</span></span>
+<span><span class="st">data &lt;- {{ data_dput }}</span></span>
+<span><span class="st">plot(data$x, data$y)</span></span>
+<span><span class="st">'</span></span>
+<span></span>
+<span><span class="fu"><a href="https://reprex.tidyverse.org/reference/reprex.html" class="external-link">reprex</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">code_with_data</span><span class="op">)</span></span></code></pre></div>
+<p>This will incorporate the data into your reprex, allowing others to reproduce your example easily.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="sharing-your-reproducible-example">Sharing Your Reproducible Example<a class="anchor" aria-label="anchor" href="#sharing-your-reproducible-example"></a>
+</h2>
+<p>Once you have created your reprex, you can share it on various platforms such as GitHub, Stack Overflow, or via email. The formatted output generated by the <code>reprex</code> package ensures that your example is easy to read and understand.</p>
+</div>
+<div class="section level2">
+<h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
+</h2>
+<p>In this blog post, we have discussed the importance of reproducible examples and demonstrated how to create them using the <code>reprex</code> package in R. By creating clear and concise reprexes, you can effectively communicate problems, solutions, and ideas with your peers and collaborators. Give the <code>reprex</code> package a try and see how it can improve your workflow!</p>
+</div>
+<div class="section level2 unnumbered">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-R-reprex" class="csl-entry">
+Bryan, Jennifer, Jim Hester, David Robinson, Hadley Wickham, and Christophe Dervieux. 2022. <em>Reprex: Prepare Reproducible Example Code via the Clipboard</em>.
+</div>
+</div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
