@@ -17,6 +17,6 @@ options(digits = 3)
 
 # automatically create a bib database for R packages
 knitr::write_bib(c(
-  "tidyverse", "readr", "rmarkdown", "dplyr", "usethis", "gitcreds", "quanteda", "textdata", "tidycensus", "sf", "rtweet", "skimr", "janitor", "ggplot2", "gridExtra"
+  "tidyverse", "readr", "rmarkdown", "dplyr", "usethis", "gitcreds", "quanteda", "textdata", "tidycensus", "sf", "rtweet", "skimr", "janitor", "ggplot2", "gridExtra", "reprex"
 ), "packages.bib")
 ```

@@ -25,7 +25,7 @@ navbar:
       href: https://github.com/qtalr/qtalrkit/
       aria-label: github
     articles:
-      text: Recipes & Guides
+      text: Materials
       href: articles/index.html
     news:
       text: News
@@ -33,6 +33,9 @@ navbar:
 
 articles: 
   - title: Recipes
+    navbar: 
+      title: Recipes
+      icon: fas fa-book fa-lg
     desc: "A collection of programming demonstrations"
     contents:
       - articles/recipe-0 # Preface/ Literate Programming I
@@ -45,6 +48,10 @@ articles:
       - articles/guide-2 # Remote and virtual machines
       - articles/guide-3 # Git and GitHub
       - articles/guide-4 # Reproducible examples
+  - title: Errata
+    desc: "A collection of errata"
+    contents:
+      - articles/errata # Errata
 
 reference:
   - title: Reference

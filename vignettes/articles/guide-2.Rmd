@@ -1,6 +1,6 @@
 ---
 title: "Working with R in remote and virtual environments"
-bibliography: bibliography.bib
+bibliography: [bibliography.bib, packages.bib]
 biblio-style: apalike
 link-citations: true
 pkgdown:

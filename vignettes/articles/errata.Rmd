@@ -1,5 +1,5 @@
 ---
-title: "Installing R"
+title: "Errata"
 bibliography: [bibliography.bib, packages.bib]
 biblio-style: apalike
 link-citations: true
@@ -11,6 +11,5 @@ pkgdown:
 ```
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 ```
-

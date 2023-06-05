@@ -2,7 +2,7 @@
 title: "Literate Programming II"
 pkgdown:
   as_is: true
-bibliography: [bibliography.bib]
+bibliography: [bibliography.bib, packages.bib]
 biblio-style: apalike
 link-citations: true
 ---

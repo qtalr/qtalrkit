@@ -1,6 +1,6 @@
 ---
 title: "Choosing and setting up an IDE"
-bibliography: bibliography.bib
+bibliography: [bibliography.bib, packages.bib]
 biblio-style: apalike
 link-citations: true
 pkgdown:
