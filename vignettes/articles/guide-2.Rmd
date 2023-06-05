@@ -14,3 +14,95 @@ pkgdown:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+---- 
+
+In this Guide, we will explore two powerful strategies for working with R in remote and virtual environments: RStudio Cloud and Docker with Rocker. These tools enable you to easily collaborate on projects, manage dependencies, and ensure reproducibility of your work.
+
+## Introduction
+
+Working with R in remote and virtual environments can greatly enhance your productivity and collaboration capabilities. In this post, we will discuss two popular options for achieving this: RStudio Cloud and Docker with Rocker.
+
+## RStudio Cloud
+
+RStudio Cloud is a cloud-based platform that allows you to run RStudio in your web browser without the need for any local installation.
+
+### What is RStudio Cloud?
+
+RStudio Cloud provides an environment where you can create, edit, and run R projects from anywhere with internet access. It offers several advantages:
+
+* No need to install R or RStudio locally
+* Access your projects from any device
+* Collaborate with others in real-time
+* Easily share your work
+
+### Setting up RStudio Cloud
+
+To get started with RStudio Cloud, follow these steps:
+
+1. Go to [RStudio Cloud](https://rstudio.cloud/)
+2. Sign up for a free account or log in with your existing RStudio account
+3. Create a new project by clicking on the "New Project" button
+4. Start coding in the RStudio IDE within your browser
+
+### Collaboration and Sharing
+
+RStudio Cloud makes it easy to collaborate with others and share your work. You can invite collaborators to your project, allowing them to view and edit your code in real-time. To share your project, simply click on the "Share" button in the top right corner of the RStudio Cloud interface and choose the desired sharing options.
+
+## Docker with Rocker
+
+Docker is a platform that allows you to create, deploy, and run applications in containers. Rocker is a collection of Docker images specifically designed for running R.
+
+### What is Docker and Rocker?
+
+Docker enables you to package an application along with its dependencies into a container, ensuring that it will run consistently across different environments. Rocker extends this concept to R, providing pre-built Docker images with various R configurations.
+
+Using Docker with Rocker offers several benefits:
+
+* Reproducible environments
+* Simplified dependency management
+* Easy deployment and scaling
+
+### Setting up Docker and Rocker
+
+To start using Docker with Rocker, follow these steps:
+
+1. Install [Docker](https://www.docker.com/get-started) on your local machine
+2. Pull the desired Rocker image from [Docker Hub](https://hub.docker.com/u/rocker/)
+   ```
+   docker pull rocker/rstudio
+   ```
+3. Run a container using the pulled image
+   ```
+   docker run -d -p 8787:8787 -e PASSWORD=your_password --name rstudio_container rocker/rstudio
+   ```
+4. Access RStudio in your browser at `http://localhost:8787` and log in with username `rstudio` and the password you set
+
+### Creating a Custom Docker Image
+
+You can create a custom Docker image to include specific R packages or configurations. To do this, create a `Dockerfile` with the following content:
+
+```docker
+FROM rocker/rstudio
+
+# Install additional R packages
+RUN install2.r package1 package2 package3
+```
+
+Build the custom image by running:
+
+```
+docker build -t my_custom_r_image .
+```
+
+Now you can run a container using your custom image:
+
+```
+docker run -d -p 8787:8787 -e PASSWORD=your_password --name custom_rstudio_container my_custom_r_image
+```
+
+## Conclusion
+
+In this blog post, we have discussed two powerful strategies for working with R in remote and virtual environments: RStudio Cloud and Docker with Rocker. Both options offer unique advantages and can greatly enhance your productivity and collaboration capabilities. Give them a try and see which one works best for your needs!
+
+
+## References

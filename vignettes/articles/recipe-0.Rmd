@@ -16,11 +16,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Overview
 
-In this Recipe we will introduce the concept of Literate Programming and describe how to implement this concept through Quarto. I will provide a demonstration of some of the features of Quarto and describe the main structural characteristics of a Quarto document to help you get off and running!
+In this Recipe, we will introduce the concept of Literate Programming and describe how to implement this concept through Quarto. I will provide a demonstration of some of the features of Quarto and describe the main structural characteristics of a Quarto document to help you get off and running!
 
 ## Literate Programming
 
-First introduced by Donald Knuth [@Knuth1984], the aim of Literate Programming is to be able to combine computer code and text prose in one document. This allows an analyst the ability to both run code, view the output of the code, view the code itself and provide prose description all in one document. In this way, a literate programming document allows for presenting your analysis in a way that performs the computing steps desired and presents it in an easily readable format. Literate programming is now a key component of creating and distributing reproducible research [@Gandrud2015].
+First introduced by Donald Knuth [@Knuth1984], the aim of Literate Programming is to be able to combine computer code and text prose in one document. This allows an analyst the ability to both run code, view the output of the code, view the code itself, and provide prose description all in one document. In this way, a literate programming document allows for presenting your analysis in a way that performs the computing steps desired and presents it in an easily readable format. Literate programming is now a key component of creating and sharing reproducible research [@Gandrud2015].
 
 ## Quarto
 
@@ -34,22 +34,27 @@ First introduced by Donald Knuth [@Knuth1984], the aim of Literate Programming i
 ```
 ````
 
+::: {.callout}
+**`r fontawesome::fa("medal")` Dive deeper**
 
+Watch this video for a guided tour of Quarto [@Cetinkaya-Rundel2023].
 
+- [Getting Started with Quarto](https://www.youtube.com/watch?v=_f3latmOhew)
 
+:::
 
-
-
+```{r test, eval=TRUE}
+1 + 1
+```
 
 
 
 Here's a simple example of a literate programming document. 
 
-::: {.callout} 
-**`r fontawesome::fa("info-circle")` Note**
+::: {.callout}
+**`r fontawesome::fa('exclamation-triangle')` Warning**
 
-Hello world!
-
+Quarto is still in development and is not yet ready for production use, not!
 :::
 
 

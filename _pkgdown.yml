@@ -43,6 +43,8 @@ articles:
       - articles/guide-0 # R
       - articles/guide-1 # IDEs
       - articles/guide-2 # Remote and virtual machines
+      - articles/guide-3 # Git and GitHub
+      - articles/guide-4 # Reproducible examples
 
 reference:
   - title: Reference
