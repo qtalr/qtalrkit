@@ -14,13 +14,13 @@ BugReports: https://github.com/qtalr/qtalrkit/issues
 Imports: 
     dplyr,
     glue,
+    knitr,
     openai,
     readr,
     stringr
 Suggests: 
     bookdown,
     fontawesome,
-    knitr,
     pacman,
     rmarkdown
 Encoding: UTF-8

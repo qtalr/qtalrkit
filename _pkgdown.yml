@@ -41,7 +41,7 @@ articles:
       - articles/recipe-0 # Preface/ Literate Programming I
       - articles/recipe-1 # Chapter 1/ Literate Programming II
   - title: Guides
-    desc:: "A collection of guides for using R and related tools"
+    desc: "A collection of guides for using R and related tools"
     contents:
       - articles/guide-0 # R
       - articles/guide-1 # IDEs
@@ -59,9 +59,9 @@ reference:
     contents:
       - create_data_dictionary
       - get_compressed_data
+      - add_pkg_to_bib
 
 footer:
   structure:
     left: developed_by
     right: built_with
-
