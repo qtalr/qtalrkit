@@ -35,6 +35,7 @@ articles:
   - title: Recipes
     desc: "A collection of programming demonstrations"
     contents:
+      - qtalrkit
       - articles/recipe-0 # Preface/ Literate Programming I
       - articles/recipe-1 # Chapter 1/ Literate Programming II
   - title: Guides

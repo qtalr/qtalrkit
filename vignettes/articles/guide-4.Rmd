@@ -104,3 +104,79 @@ Once you have created your reprex, you can share it on various platforms such as
 In this blog post, we have discussed the importance of reproducible examples and demonstrated how to create them using the `reprex` package in R. By creating clear and concise reprexes, you can effectively communicate problems, solutions, and ideas with your peers and collaborators. Give the `reprex` package a try and see how it can improve your workflow!
 
 ## References
+
+
+----
+
+-   StackOverflow: [R](https://stackoverflow.com/questions/tagged/r), [Git](https://stackoverflow.com/questions/tagged/git), [RStudio](https://stackoverflow.com/questions/tagged/rstudio), [GitHub](https://stackoverflow.com/questions/tagged/github)
+-   Reddit: [R](https://www.reddit.com/r/rstats/), [Git](https://www.reddit.com/r/git/), [RStudio](https://www.reddit.com/r/RStudio/), [Github](https://www.reddit.com/r/github/)
+-   [RStudio Community](https://community.rstudio.com/)
+
+
+-   https://reprex.tidyverse.org/
+
+-   https://github.com/MilesMcBain/datapasta
+
+<!-- 
+- [ ] Work on reprex example with/without RStudio?
+- [ ] Example of a reprex on StackOverflow: https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example
+ -->
+
+```{r}
+#| label: reprex-example-1
+#| eval: false
+
+install.packages("reprex") # install reprex package
+```
+
+```{r}
+#| label: reprex-example-2
+#| eval: false
+# Create a vector with 100 random values from the normal distribution
+set.seed(123) # set seed for reproducibility
+my_vec <- rnorm(100) # random normal vector
+
+summary(my_vec) # 5 number summary
+```
+
+```{r}
+#| label: reprex-example-3
+#| eval: false
+
+reprex::reprex() # run reprex
+```
+
+Datapasta is a package that allows you to copy and paste data frames from RStudio into a reprex. This is a very useful tool for creating reproducible examples. Here is an example of how to use datapasta to create a reprex. 
+
+```{r}
+#| label: datapasta-example-1
+#| eval: false
+
+# install the datapasta package
+install.packages("datapasta")
+```
+
+```{r}
+#| label: datapasta-example-2
+#| eval: false
+
+# load the datapasta package
+library(datapasta)
+```
+
+```{r}
+#| label: datapasta-example-3
+#| eval: false
+
+# Create a data frame with 100 random values from the normal distribution
+set.seed(123) # set seed for reproducibility
+my_df <- data.frame(x = rnorm(100)) # random normal data frame
+```
+
+```{r}
+#| label: datapasta-example-4
+#| eval: false
+
+# copy the data frame to the clipboard
+dpasta(my_df)
+```

@@ -9,3 +9,4 @@
 *.Rproj
 docs
 vignettes/articles/_site/
+inst/doc
