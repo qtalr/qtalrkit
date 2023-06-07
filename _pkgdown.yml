@@ -33,9 +33,6 @@ navbar:
 
 articles: 
   - title: Recipes
-    navbar: 
-      title: Recipes
-      icon: fas fa-book fa-lg
     desc: "A collection of programming demonstrations"
     contents:
       - articles/recipe-0 # Preface/ Literate Programming I
@@ -54,11 +51,14 @@ articles:
       - articles/errata # Errata
 
 reference:
-  - title: Reference
-    desc: "Functions"
+  - title: "Data functions"
+    desc: "Functions to manage data"
     contents:
       - create_data_dictionary
       - get_compressed_data
+  - title: "Publishing functions"
+    desc: "Function to publish data"
+    contents:
       - add_pkg_to_bib
 
 footer:
