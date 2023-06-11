@@ -1,0 +1,41 @@
+---
+title: "Identifying data and data sources"
+bibliography: [bibliography.bib, packages.bib]
+biblio-style: apalike
+link-citations: true
+pkgdown:
+  as_is: true
+---
+
+```{r, child="_common.Rmd"}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r packages, include=FALSE}
+library(tidyverse) # for data manipulation
+```
+
+## Repositories 
+
+```{r pinboard-repos}
+read_rds("assets/listings/data_repositories.rds") |> 
+  knitr::kable(caption = "Data repositories")
+```
+
+## Corpora and datasets
+
+```{r pinboard-datasets}
+read_rds("assets/listings/data_corpora.rds") |> 
+  knitr::kable(caption = "Corpora and language datasets")
+```
+
+
+- https://dataverse.org/
+- https://osf.io/
+- https://www.zenodo.org/
+- https://figshare.com/
+- https://www.researchgate.net/
+- https://www.researchsquare.com/

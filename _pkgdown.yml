@@ -10,13 +10,15 @@ navbar:
     left:
       - intro
       - articles
-      - tutorials
       - reference
     right: 
       - search
       - news
       - github
   components:
+    articles:
+      text: Materials
+      href: articles/index.html
     reference:
       text: Reference
       href: reference/index.html
@@ -24,9 +26,6 @@ navbar:
       icon: fab fa-github fa-lg
       href: https://github.com/qtalr/qtalrkit/
       aria-label: github
-    articles:
-      text: Materials
-      href: articles/index.html
     news:
       text: News
       href: news/index.html
@@ -46,6 +45,7 @@ articles:
       - articles/guide-2 # Remote and virtual machines
       - articles/guide-3 # Git and GitHub
       - articles/guide-4 # Reproducible examples
+      - articles/guide-5 # Data and data sources
   - title: Errata
     desc: "A collection of errata"
     contents:
