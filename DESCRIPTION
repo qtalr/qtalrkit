@@ -21,7 +21,9 @@ Imports:
 Suggests: 
     bookdown,
     fontawesome,
+    formatR,
     pacman,
+    qpdf,
     rmarkdown
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
