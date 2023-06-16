@@ -52,6 +52,10 @@ articles:
       - articles/errata # Errata
 
 reference:
+  - title: "Statistical functions"
+    desc: "Functions to perform statistical analyses"
+    contents:
+      - calc_normalized_entropy
   - title: "Data functions"
     desc: "Functions to manage data"
     contents:

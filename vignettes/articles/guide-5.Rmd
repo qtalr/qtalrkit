@@ -7,6 +7,11 @@ pkgdown:
   as_is: true
 ---
 
+<!--  
+- [ ] Revise the pinboard tags to reflect these groupings
+- [ ] Check pinboard for dead links
+-->
+
 ```{r, child="_common.Rmd"}
 ```
 
@@ -18,20 +23,33 @@ knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse) # for data manipulation
 ```
 
-## Repositories 
+## Published
+
+### Repositories 
+
+Language-dedicated repositories are a great source of data for language research. Below I've included a listing of some of the more commonly used repositories.
 
 ```{r pinboard-repos}
 read_rds("assets/listings/data_repositories.rds") |> 
   knitr::kable(caption = "Data repositories")
 ```
 
-## Corpora and datasets
+### Corpora and datasets
+
+Below I've included a listing of corpora and datasets that are available for language research. This list is not exhaustive, but includes a few of the more common corpora and datasets used in language research.
 
 ```{r pinboard-datasets}
 read_rds("assets/listings/data_corpora.rds") |> 
   knitr::kable(caption = "Corpora and language datasets")
 ```
 
+### Data sharing platforms
+
+<!--  
+- [ ] Add data sharing platforms to pinboard
+- [ ] Create a listing of data sharing platforms
+- [ ] Include the listing here
+-->
 
 - https://dataverse.org/
 - https://osf.io/
@@ -39,3 +57,33 @@ read_rds("assets/listings/data_corpora.rds") |>
 - https://figshare.com/
 - https://www.researchgate.net/
 - https://www.researchsquare.com/
+
+### Aggregated listings
+
+The list of data available for language research is constantly growing. I've document very few of the wide variety of resources. In Table \@ref(tab:pinboard-listings) I've included attempts by others to provide a summary of the corpus data and language resources available.
+
+```{r pinboard-listings}
+read_rds("assets/listings/data_listings.rds") |> 
+  knitr::kable(caption = "Aggregated listings of language corpora and datasets")
+```
+
+## Custom-built
+
+### Application programming interfaces (APIs)
+
+There are many APIs available for accessing language corpora and datasets. Below I've included a few of the R packages that provide access to these resources.
+
+```{r pinboard-apis}
+read_rds("assets/listings/data_apis.rds") |> 
+  knitr::kable(caption = "R Package APIs to language corpora and datasets.)")
+```
+
+## Other language resources
+
+Data for language research is not limited to (primary) text sources. Other sources may include processed data from previous research; word lists, linguistic features, *etc*.. Alone or in combination with text sources this data can be a rich and viable source of data for a research project.
+
+```{r pinboard-other}
+read_rds("assets/listings/data_experimental.rds") |> 
+  knitr::kable(caption = "Other language resources")
+```
+
