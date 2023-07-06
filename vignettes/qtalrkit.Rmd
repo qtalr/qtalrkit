@@ -23,8 +23,9 @@ knitr::opts_chunk$set(
 You can install a development version of `qtalrkit` from [GitHub](https://github.com/) with:
 
 ```r
-install.packages("devtools")
-devtools::install_github("qtalr/qtalrkit")
+install.packages("remotes")
+library(remotes)
+install_github("qtalr/qtalrkit")
 ```
 
 ### Load
