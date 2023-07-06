@@ -9,10 +9,11 @@ articles:
   guide-3: guide-3.html
   guide-4: guide-4.html
   guide-5: guide-5.html
+  instructor-guide: instructor-guide.html
   recipe-0: recipe-0.html
   recipe-1: recipe-1.html
   qtalrkit: qtalrkit.html
-last_built: 2023-07-06T12:58Z
+last_built: 2023-07-06T15:01Z
 urls:
   reference: https://qtalr.github.io/qtalrkit/reference
   article: https://qtalr.github.io/qtalrkit/articles
