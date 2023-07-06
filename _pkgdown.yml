@@ -50,6 +50,10 @@ articles:
     desc: "A collection of errata"
     contents:
       - articles/errata # Errata
+  - title: Instructor materials
+    desc: "A collection of materials for instructors"
+    contents:
+      - articles/instructor-guide # Instructor guide
 
 reference:
   - title: "Statistical functions"
@@ -61,6 +65,7 @@ reference:
     contents:
       - create_data_dictionary
       - get_compressed_data
+      - get_outliers
   - title: "Publishing functions"
     desc: "Function to publish data"
     contents:

@@ -1,3 +1,8 @@
+# qtalrkit 0.0.1.9000
+
+* Added `get_outliers()` function
+* Added Instructor Guide
+
 # qtalrkit 0.0.1.0000
 
 * Added R tutorial 0

@@ -1,0 +1,42 @@
+---
+title: "Instructor Guide"
+bibliography: [bibliography.bib, packages.bib]
+biblio-style: apalike
+link-citations: true
+pkgdown:
+  as_is: true
+---
+
+```{r, child="_common.Rmd"}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Instructor Guide
+
+...
+
+A guide for instructors that offers tips on: 
+
+1. how to incorporate the textbook into a course syllabus. 
+2. possible assignment ideas.
+3. and suggestions for further reading.
+
+
+## Slides decks
+
+0. Introduction
+1. Text Analysis in Context
+2. Understanding Data
+3. Approaching Analysis
+4. Framing Research
+5. Data collection
+6. Data Curation
+7. Data Transformation
+8. Exploratory Data Analysis (EDA)
+9. Predictive Data Analysis (PDA)
+10. Inferential Data Analysis (IDA)
+11. Reporting
+12. Collaboration

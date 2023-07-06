@@ -1,6 +1,6 @@
 Package: qtalrkit
 Title: Quantitative Text Analysis for Linguists Resource Kit
-Version: 0.0.1.0000
+Version: 0.0.1.9000
 Authors@R: 
     person("Jerid", "Francom", , "francojc@wfu.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5972-6330"))
@@ -12,12 +12,13 @@ License: GPL (>= 3) + file LICENSE
 URL: https://github.com/qtalr/qtalrkit, https://qtalr.github.io/qtalrkit/
 BugReports: https://github.com/qtalr/qtalrkit/issues
 Imports: 
-    dplyr,
-    glue,
-    knitr,
-    openai,
-    readr,
-    stringr
+    dplyr (>= 1.1.2),
+    glue (>= 1.6.2),
+    knitr (>= 1.43),
+    openai (>= 0.4.1),
+    readr (>= 2.1.4),
+    rlang (>= 1.1.1),
+    stringr (>= 1.5.0)
 Suggests: 
     bookdown,
     fontawesome,
