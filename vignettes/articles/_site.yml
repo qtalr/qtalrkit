@@ -5,3 +5,7 @@ output:
     toc_depth: 3
     highlight: tango
     df_print: kable
+    base_format: webexercises::webexercises_default
+    # css: `r system.file("reports/default/webex.css", package = "webexercises")`
+    # includes:
+    #   after_body: `r system.file("reports/default/webex.js", package = "webexercises")`
