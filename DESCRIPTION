@@ -1,6 +1,6 @@
 Package: qtalrkit
 Title: Quantitative Text Analysis for Linguists Resource Kit
-Version: 0.0.1.9000
+Version: 0.0.1.9100
 Authors@R: 
     person("Jerid", "Francom", , "francojc@wfu.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5972-6330"))
@@ -25,7 +25,8 @@ Suggests:
     formatR,
     pacman,
     qpdf,
-    rmarkdown
+    rmarkdown,
+    webexercises
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3

@@ -26,7 +26,7 @@ create_data_dictionary <- function(data, file_path, sample_n = 5, grouping = NUL
   if (is.na(Sys.getenv()["OPENAI_API_KEY"])) message("Set your OPENAI_API_KEY environment variable.")
 
   # Set the instructions for the prompt
-  prompt_instructions <- "I have a dataset I would like you to create a data dictionary for. The information I want is the `variable`, `name`, `description`, and `variable_type`. Here's a small sample of the data for you to work with. In some cases some variables in the dataset may be null. In these cases use the variable name to predict the other information. Please return your data dictionary in `.csv` format. Remember to enclose text in quotes and only return the `.csv` info, no explanations."
+  prompt_instructions <- "I have a dataset I would like you to create a data dictionary for. The information I want is the `variable`, `name` (human readable), `variable_type` (one of 'categorical', 'ordinal', or 'numeric'), and `description`. Here's a small sample of the data for you to work with. In some cases some variables in the dataset may be null. In these cases use the variable name to predict the other information. Please return your data dictionary in `.csv` format. Remember to enclose text in quotes and only return the `.csv` info, no explanations."
 
   # Get a the first 5 rows of the data frame
   data_sample <-
