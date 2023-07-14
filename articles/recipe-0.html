@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">qtalr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.9100</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -105,11 +105,11 @@ Figure 1: Quarto source (left) and output (right) example.
 <p>To see Quarto in action, please check out the <a href="https://quarto.org/docs/gallery/" class="external-link">Quarto Gallery</a> for a variety of examples of Quarto documents and their output.</p>
 </div>
 <p>A Quarto source document is a plain-text file with the extension <code>.qmd</code> that can be opened in any plain text reader. We will be using the RStudio IDE (henceforth RStudio) to create, open, and edit, and generate output from <code>.qmd</code> files but any plain-text reader, such as TextEdit (MacOS) or Notepad (PC) can open these files.</p>
-<p>With this in mind, let’s now move on to the anatomy of an R Markdown document.</p>
+<p>With this in mind, let's now move on to the anatomy of an R Markdown document.</p>
 <div class="section level3">
 <h3 id="anatomy-of-a-quarto-document">Anatomy of a Quarto Document<a class="anchor" aria-label="anchor" href="#anatomy-of-a-quarto-document"></a>
 </h3>
-<p>At the most basic level a Quarto document contains two components: (1) a front-matter section and (2) a prose section. A third component, a code block, can be interleaved within the prose section to add code to the document. Let’s look at each of these in turn.</p>
+<p>At the most basic level a Quarto document contains two components: (1) a front-matter section and (2) a prose section. A third component, a code block, can be interleaved within the prose section to add code to the document. Let's look at each of these in turn.</p>
 <div class="section level4">
 <h4 id="front-matter">Front-matter<a class="anchor" aria-label="anchor" href="#front-matter"></a>
 </h4>
@@ -120,7 +120,7 @@ Figure 1: Quarto source (left) and output (right) example.
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> html</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div>
 <p>When creating a Quarto document with RStudio the default attribute keys are <code>title</code>, <code>author</code>, and <code>format</code>. The front matter is fenced by three dashes <code>---</code>.</p>
-<p>The values for the first two keys are pretty straightforward and can be edited as needed. The value for the <code>format</code> attribute can also be edited to tell the <code>.qmd</code> file to generate other output types. Can you guess what value we might use to generate a PDF document? Yep, it’s just <code>pdf</code>. As we work Quarto you will learn more about how to use the RStudio interface to change some of these key-value pairs and add others!</p>
+<p>The values for the first two keys are pretty straightforward and can be edited as needed. The value for the <code>format</code> attribute can also be edited to tell the <code>.qmd</code> file to generate other output types. Can you guess what value we might use to generate a PDF document? Yep, it's just <code>pdf</code>. As we work Quarto you will learn more about how to use the RStudio interface to change some of these key-value pairs and add others!</p>
 </div>
 <div class="section level4">
 <h4 id="prose">Prose<a class="anchor" aria-label="anchor" href="#prose"></a>
@@ -153,7 +153,7 @@ Figure 1: Quarto source (left) and output (right) example.
 <pre><code>```{r}
 1 + 1
 ```</code></pre>
-<p>A code block is bound by three backticks <code>```</code>. After the first backticks the curly brackets <code><a href="https://rdrr.io/r/base/Paren.html" class="external-link">{}</a></code> allow us to tell Quarto which programming language to use to evaluate (<em>i.e.</em> run) in the code block. In most cases this will be R, hence the the opening curly bracket <code>`{r}`</code>. In this example, R is used as a simple calculator adding <code>1 + 1</code>. Here’s what this code block produces.</p>
+<p>A code block is bound by three backticks <code>```</code>. After the first backticks the curly brackets <code><a href="https://rdrr.io/r/base/Paren.html" class="external-link">{}</a></code> allow us to tell Quarto which programming language to use to evaluate (<em>i.e.</em> run) in the code block. In most cases this will be R, hence the the opening curly bracket <code>`{r}`</code>. In this example, R is used as a simple calculator adding <code>1 + 1</code>. Here's what this code block produces.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fl">1</span> <span class="op">+</span> <span class="fl">1</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 2</span></span></code></pre>
@@ -190,7 +190,7 @@ Figure 1: Quarto source (left) and output (right) example.
 <div class="section level3">
 <h3 id="create-and-render-a-quarto-document">Create and render a Quarto document<a class="anchor" aria-label="anchor" href="#create-and-render-a-quarto-document"></a>
 </h3>
-<p>The easiest and most efficient way to create a Quarto source file is to use the RStudio point-and-click’ interface. Just use the toolbar to create a new file and select “Quarto Document…”, as seen in Figure <a href="#fig:image-quarto-create-1">2</a>.</p>
+<p>The easiest and most efficient way to create a Quarto source file is to use the RStudio point-and-click' interface. Just use the toolbar to create a new file and select "Quarto Document...", as seen in Figure <a href="#fig:image-quarto-create-1">2</a>.</p>
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:image-quarto-create-1"></span>
 <img src="assets/images/recipe-0/quarto-create-1.png" alt="Creating a new Quarto document in RStudio." width="100%"><p class="caption">
@@ -205,15 +205,15 @@ Figure 3: Dialogue box for creating a new Quarto document in RStudio.
 </p>
 </div>
 <p>Enter a title and author and leave the format set to HTML.</p>
-<p>On clicking ‘Create’ you will get a Quarto document, as in Figure <a href="#fig:image-quarto-create-3">4</a>, with some default/ boilerplate prose and code blocks. The prose and code blocks can be deleted, and we can start our own document.</p>
+<p>On clicking 'Create' you will get a Quarto document, as in Figure <a href="#fig:image-quarto-create-3">4</a>, with some default/ boilerplate prose and code blocks. The prose and code blocks can be deleted, and we can start our own document.</p>
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:image-quarto-create-3"></span>
 <img src="assets/images/recipe-0/quarto-create-3.png" alt="Quarto source in RStudio." width="100%"><p class="caption">
 Figure 4: Quarto source in RStudio.
 </p>
 </div>
-<p>But for now, let’s leave things as they are and see how to generate the output report from this document. Click “Render” in the RStudio toolbar. Before it will render, you will be asked to save the file and give it a name.</p>
-<p>Once you have done that the <code>.qmd</code> file will render in the format you have specified and open in the ‘Viewer’ pane, as seen in Figure <a href="#fig:image-quarto-create-4">5</a>.</p>
+<p>But for now, let's leave things as they are and see how to generate the output report from this document. Click "Render" in the RStudio toolbar. Before it will render, you will be asked to save the file and give it a name.</p>
+<p>Once you have done that the <code>.qmd</code> file will render in the format you have specified and open in the 'Viewer' pane, as seen in Figure <a href="#fig:image-quarto-create-4">5</a>.</p>
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:image-quarto-create-4"></span>
 <img src="assets/images/recipe-0/quarto-create-4.png" alt="Quarto source and HTML output side-by-side in RStudio." width="100%"><p class="caption">
@@ -230,6 +230,36 @@ Figure 5: Quarto source and HTML output side-by-side in RStudio.
 <p><strong><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M4.1 38.2C1.4 34.2 0 29.4 0 24.6C0 11 11 0 24.6 0H133.9c11.2 0 21.7 5.9 27.4 15.5l68.5 114.1c-48.2 6.1-91.3 28.6-123.4 61.9L4.1 38.2zm503.7 0L405.6 191.5c-32.1-33.3-75.2-55.8-123.4-61.9L350.7 15.5C356.5 5.9 366.9 0 378.1 0H487.4C501 0 512 11 512 24.6c0 4.8-1.4 9.6-4.1 13.6zM80 336a176 176 0 1 1 352 0A176 176 0 1 1 80 336zm184.4-94.9c-3.4-7-13.3-7-16.8 0l-22.4 45.4c-1.4 2.8-4 4.7-7 5.1L168 298.9c-7.7 1.1-10.7 10.5-5.2 16l36.3 35.4c2.2 2.2 3.2 5.2 2.7 8.3l-8.6 49.9c-1.3 7.6 6.7 13.5 13.6 9.9l44.8-23.6c2.7-1.4 6-1.4 8.7 0l44.8 23.6c6.9 3.6 14.9-2.2 13.6-9.9l-8.6-49.9c-.5-3 .5-6.1 2.7-8.3l36.3-35.4c5.6-5.4 2.5-14.8-5.2-16l-50.1-7.3c-3-.4-5.7-2.4-7-5.1l-22.4-45.4z"></path></svg> Dive deeper</strong></p>
 <p>Watch <a href="https://www.youtube.com/watch?v=_f3latmOhew" class="external-link">Getting Started with Quarto</a> for a guided tour of Quarto <span class="citation">(<a href="#ref-Cetinkaya-Rundel2023" role="doc-biblioref">Çetinkaya-Rundel 2023</a>)</span>.</p>
 </div>
+</div>
+<div class="section level2">
+<h2 id="check-your-understanding">Check your understanding<a class="anchor" aria-label="anchor" href="#check-your-understanding"></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li>
+<select class="webex-select"><option value="blank"></option>
+<option value="answer">TRUE</option>
+<option value="">FALSE</option></select> Literate Programming, first introduced by Donald Knuth in 1984, allows the combination of computer code and text prose in one document.</li>
+<li>The programming paradigm Literate Programming is implemented through <select class="webex-select"><option value="blank"></option>
+<option value="answer">Quarto</option>
+<option value="">R</option>
+<option value="">RStudio</option>
+<option value="">GitHub</option></select>, a platform that facilitates the creation of a variety of output documents based on the same source code.</li>
+<li>Which of the following components does a basic Quarto document <em>not</em> contain? <select class="webex-select"><option value="blank"></option>
+<option value="">Front-matter section</option>
+<option value="">Prose section</option>
+<option value="answer">Back-matter section</option>
+<option value="">Code block</option></select>
+</li>
+<li>To generate a PDF document in Quarto, you can edit the format attribute value in the front-matter section to <input class="webex-solveme nospaces ignorecase" size="4" data-answer='["pdf","html","word"]'>.</li>
+<li>
+<select class="webex-select"><option value="blank"></option>
+<option value="answer">TRUE</option>
+<option value="">FALSE</option></select> The code block options <code>echo</code> and <code>include</code> can be used to hide the code and output, respectively.</li>
+<li>
+<select class="webex-select"><option value="blank"></option>
+<option value="">TRUE</option>
+<option value="answer">FALSE</option></select> In Quarto, a code block, where the programming language code is entered, is bounded by three underscores (<code>_</code>).</li>
+</ol>
 </div>
 <div class="section level2 unnumbered">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
@@ -250,9 +280,212 @@ Knuth, Donald Ervin. 1984. <span>“Literate Programming.”</span> <em>The Comp
     </nav></aside>
 </div>
 
+<script>
 
+/* update total correct if #webex-total_correct exists */
+update_total_correct = function() {
+  console.log("webex: update total_correct");
 
-    <footer><div class="pkgdown-footer-left">
+  var t = document.getElementsByClassName("webex-total_correct");
+  for (var i = 0; i < t.length; i++) {
+    p = t[i].parentElement;
+    var correct = p.getElementsByClassName("webex-correct").length;
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    t[i].innerHTML = correct + " of " + (solvemes + radiogroups + selects) + " correct";
+  }
+}
+
+/* webex-solution button toggling function */
+b_func = function() {
+  console.log("webex: toggle hide");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('open')) {
+    cl.remove("open");
+  } else {
+    cl.add("open");
+  }
+}
+
+/* check answers */
+check_func = function() {
+  console.log("webex: check answers");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('unchecked')) {
+    cl.remove("unchecked");
+    this.innerHTML = "Hide Answers";
+  } else {
+    cl.add("unchecked");
+    this.innerHTML = "Show Answers";
+  }
+}
+
+/* function for checking solveme answers */
+solveme_func = function(e) {
+  console.log("webex: check solveme");
+
+  var real_answers = JSON.parse(this.dataset.answer);
+  var my_answer = this.value;
+  var cl = this.classList;
+  if (cl.contains("ignorecase")) {
+    my_answer = my_answer.toLowerCase();
+  }
+  if (cl.contains("nospaces")) {
+    my_answer = my_answer.replace(/ /g, "")
+  }
+
+  if (my_answer == "") {
+    cl.remove("webex-correct");
+    cl.remove("webex-incorrect");
+  } else if (real_answers.includes(my_answer)) {
+    cl.add("webex-correct");
+    cl.remove("webex-incorrect");
+  } else {
+    cl.add("webex-incorrect");
+    cl.remove("webex-correct");
+  }
+
+  // match numeric answers within a specified tolerance
+  if(this.dataset.tol > 0){
+    var tol = JSON.parse(this.dataset.tol);
+    var matches = real_answers.map(x => Math.abs(x - my_answer) < tol)
+    if (matches.reduce((a, b) => a + b, 0) > 0) {
+      cl.add("webex-correct");
+    } else {
+      cl.remove("webex-correct");
+    }
+  }
+
+  // added regex bit
+  if (cl.contains("regex")){
+    answer_regex = RegExp(real_answers.join("|"))
+    if (answer_regex.test(my_answer)) {
+      cl.add("webex-correct");
+    }
+  }
+
+  update_total_correct();
+}
+
+/* function for checking select answers */
+select_func = function(e) {
+  console.log("webex: check select");
+
+  var cl = this.classList
+
+  /* add style */
+  cl.remove("webex-incorrect");
+  cl.remove("webex-correct");
+  if (this.value == "answer") {
+    cl.add("webex-correct");
+  } else if (this.value != "blank") {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+/* function for checking radiogroups answers */
+radiogroups_func = function(e) {
+  console.log("webex: check radiogroups");
+
+  var checked_button = document.querySelector('input[name=' + this.id + ']:checked');
+  var cl = checked_button.parentElement.classList;
+  var labels = checked_button.parentElement.parentElement.children;
+
+  /* get rid of styles */
+  for (i = 0; i < labels.length; i++) {
+    labels[i].classList.remove("webex-incorrect");
+    labels[i].classList.remove("webex-correct");
+  }
+
+  /* add style */
+  if (checked_button.value == "answer") {
+    cl.add("webex-correct");
+  } else {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+window.onload = function() {
+  console.log("webex onload");
+  /* set up solution buttons */
+  var buttons = document.getElementsByTagName("button");
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].parentElement.classList.contains('webex-solution')) {
+      buttons[i].onclick = b_func;
+    }
+  }
+
+  var check_sections = document.getElementsByClassName("webex-check");
+  console.log("check:", check_sections.length);
+  for (var i = 0; i < check_sections.length; i++) {
+    check_sections[i].classList.add("unchecked");
+
+    let btn = document.createElement("button");
+    btn.innerHTML = "Show Answers";
+    btn.classList.add("webex-check-button");
+    btn.onclick = check_func;
+    check_sections[i].appendChild(btn);
+
+    let spn = document.createElement("span");
+    spn.classList.add("webex-total_correct");
+    check_sections[i].appendChild(spn);
+  }
+
+  /* set up webex-solveme inputs */
+  var solveme = document.getElementsByClassName("webex-solveme");
+
+  for (var i = 0; i < solveme.length; i++) {
+    /* make sure input boxes don't auto-anything */
+    solveme[i].setAttribute("autocomplete","off");
+    solveme[i].setAttribute("autocorrect", "off");
+    solveme[i].setAttribute("autocapitalize", "off");
+    solveme[i].setAttribute("spellcheck", "false");
+    solveme[i].value = "";
+
+    /* adjust answer for ignorecase or nospaces */
+    var cl = solveme[i].classList;
+    var real_answer = solveme[i].dataset.answer;
+    if (cl.contains("ignorecase")) {
+      real_answer = real_answer.toLowerCase();
+    }
+    if (cl.contains("nospaces")) {
+      real_answer = real_answer.replace(/ /g, "");
+    }
+    solveme[i].dataset.answer = real_answer;
+
+    /* attach checking function */
+    solveme[i].onkeyup = solveme_func;
+    solveme[i].onchange = solveme_func;
+
+    solveme[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  /* set up radiogroups */
+  var radiogroups = document.getElementsByClassName("webex-radiogroup");
+  for (var i = 0; i < radiogroups.length; i++) {
+    radiogroups[i].onchange = radiogroups_func;
+  }
+
+  /* set up selects */
+  var selects = document.getElementsByClassName("webex-select");
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].onchange = select_func;
+    selects[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  update_total_correct();
+}
+
+</script><footer><div class="pkgdown-footer-left">
   <p></p>
 <p>Developed by Jerid Francom.</p>
 </div>
