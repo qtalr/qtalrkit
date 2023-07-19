@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Overview 
 
+In this recipe, ...
 
 ## Project template
 
