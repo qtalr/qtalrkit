@@ -1,5 +1,5 @@
 ---
-title: "Literate Programming II"
+title: "Reading, inspecting, and writing data"
 pkgdown:
   as_is: true
 bibliography: [bibliography.bib, packages.bib]
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Overview
 
-In this Recipe we are going to explore additional functionality in Quarto. This will include how to number sections, add a table of contents, how to add in-line citations and a document-final references list, and cross-reference tables and figures. 
+In this Recipe we ...
 
 ## Summary
 

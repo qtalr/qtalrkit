@@ -1,0 +1,85 @@
+---
+title: "Project management"
+bibliography: [bibliography.bib, packages.bib]
+biblio-style: apalike
+link-citations: true
+pkgdown:
+  as_is: true
+---
+
+```{r, child="_common.Rmd"}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Overview 
+
+
+## Project template
+
+<!-- 
+- [ ] A docker container could contain all of the software and data needed to reproduce the project and facilitate this and the next portion of the research blueprint, for now. Late in the "Communication" section I will discuss how to create a docker container for your project.
+-->
+
+In this textbook, however, I have developed a project template ([available on GitHub](https://github.com/lin380/project_template)) which I believe simplifies and makes the process more transparent for beginning and intermediate R programmers, the directory structure is provided below.
+
+```{r}
+#| label: fr-project-template-tree
+
+# View the directory structure of the project template
+```
+
+Let me now describe how this template structure aligns with the seven principles of quality reproducible research. 
+
+1. All files are plain text (e.g. `.R`, `.Rmd`, `.csv`, `.txt`, etc.).
+2. There are three main directories `analysis/`, `data/`, and `ouput/`. 
+3. The `data/` directory contains sub-directories for `original` ('read-only') data and `derived` data. 
+4. The `analysis/` directory contains five scripts which are numbered to correspond with their sequential role in the research process.
+5. Each of these analysis scripts are designed to be modular; input and output must be explicit and no intermediate objects are carried over to other analysis scripts. Dataset output should be written to and read from the `data/derived/` directory. Figures and statistical results should be written to and read from `output/figures/` and `output/results` respectively.
+6. All of the analysis scripts, and therefore the entire project, are tied to the `_pipeline.R` script. To reproduce the entire project only this script need be run.
+7. Documentation takes place at many levels. The `README.md` file is the first file that a researcher will consult. It contains a brief description of the project goals and how to reproduce the analysis. Analysis scripts use the Rmarkdown format (`.Rmd`). This format allows researchers to interleave prose description and executable code in the same script. This ensures that the rationale for the steps taken are described in prose, the code is made available to consult, and that code comments can be added to every line. The `_sesssion-info.Rmd` script is merged with each analysis script to provide information about the computing environment and packages used to conduct each step analysis. As this is a template, no data or datasets appear. However, once data is acquired and that data is curated and transformed, documentation for these resources should be documented for each resource in a data dictionary along side the data(set) itself.
+
+The aspects of the project template described in points 1-7 together form the backbone for reproducible research. This template, however, includes additional functionality to enhance efficient and communicable research. The `_pipeline.R` script executes the analysis scripts in the `analysis` directory, but as a side effect also produces [a working website](https://lin380.github.io/project_template_demo/) and a journal-ready article for publishing your analysis, results, and findings to the web in [HTML](https://lin380.github.io/project_template_demo/5_generate_article.html) and [PDF](https://lin380.github.io/project_template_demo/article.pdf) format. The `index.Rmd` file is the splash page for the website and is a good place to house your pre-analysis investigative work including your research area, problem, aim, and question and to document your research blueprint including the identification of viable data resource(s), the key variables for the analysis, the analysis method, and the method of assessment. All Rmarkdown files provide functionality for citing and organizing references. The `references.bib` file is where references are stored and can be used to include citations that support your research throughout your project.
+
+## Scaffold
+
+- [ ] Consider removing the project template section and just link to the GitHub repo and/ or the qtalrkit package website.
+
+This template will allow you to organize your research design and align it with implementation steps to conduct quality reproducible research. To set the structure for you to conduct your analysis, you will need to download or fork and clone this template from the GitHub repository and then make some adjustments to personalize this template for your research. 
+
+To create a local copy of this project template either:
+
+1. Download and decompress the [.zip file](https://github.com/lin380/project_template/archive/refs/heads/main.zip)
+2. If you have [git](https://github.com/git-guides/install-git) installed on your machine and a [GitHub account](https://github.com/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F&source=header-home), [fork the repository](https://docs.github.com/en/get-started/quickstart/fork-a-repo#forking-a-repository) to your own GitHub account. Then open a terminal in the desired location and [clone the repository](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github/cloning-a-repository#cloning-a-repository). If you are using RStudio, you can setup a new RStudio Project with the clone using the 'New Project...' dialog, choosing 'Version Control', and following the steps.
+
+Before you begin configuring and adding your project-specific details to this template. Reproduce this project 'as-is' to confirm that it builds on your local machine. 
+
+In RStudio or in R session in a Terminal application, open the console in the root directory of the project. Then run: 
+
+```r
+source("_pipeline.R")
+```
+
+It will take some time to complete, when it does the prompt (`>`) in the console will return. Then navigate to and open `docs/index.html` in a browser.
+
+Once you have confirmed that the project template builds, then you can begin to configure the template to reflect your project. There a few files to consider first. These files are places where the title of your project should appear. 
+
+- `README.md` 
+- `_pipeline.R`
+- `analysis/index.Rmd` 
+
+After updating these files, build the project again and make sure that the new changes appear as you would like them. You are now ready to start your research project!
+
+## Summary
+
+... summary of the recipe ...
+
+## Check your understanding
+
+1. ...
+2. ...
+3. ...
+
+## References
