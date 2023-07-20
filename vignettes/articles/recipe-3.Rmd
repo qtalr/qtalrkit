@@ -16,6 +16,26 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Overview
 
+<!--  
+Purpose: To explore appropriate methods for summarizing variables in datasets given the number and informational values of the variable(s).
+
+Introduce: statistic and tabular summaries
+
+- glimpse(): dim() # nolint
+- summary():  mean(), median() # nolint
+- skimr::skim(): n(), mean(), median(), etc. # nolint
+
+Introduce: plots
+
+- Grammar of graphics
+  - Aesthetic mappings
+  - Geometric objects
+  - Attributes
+-->
+
+
+
+
 In this Recipe we ...
 
 ## Summary

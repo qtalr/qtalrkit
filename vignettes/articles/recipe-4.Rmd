@@ -16,6 +16,38 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Overview 
 
+<!--  
+Purpose: ? To set up a project template that will facilitate the seven principles of quality reproducible research.
+
+Principles: 
+
+1. All files are plain text
+2. A clear separation between data, code, and output
+3. A separation between original, derived, and analysis data/ datasets
+4. Each script performs a well-defined task
+5. Each script is modular
+6. All scripts are tied to a main script
+7. Documentation at many levels
+
+```
+project/
+├── data/
+│   ├── analysis/
+│   ├── derived/
+│   └── original/
+├── output/
+│   ├── figures/
+│   ├── reports/
+│   ├── results/
+│   └── tables/
+├── README
+└── scripts/
+    ├── _main.R
+    └── ...
+```
+-->
+
+
 In this recipe, ...
 
 ## Project template
