@@ -17,16 +17,28 @@ knitr::opts_chunk$set(echo = FALSE)
 ## Overview
 
 <!--  
+
 Purpose: To use literate programming in Quarto to work with R coding strategies for reading, inspecting, and writing datasets.
 
-Introduce: read data
+Introduce: read datasets
 - read_csv() 
 - read_delim() 
+
+Introduction: introspection
+- dim()
+- dplyr::glimpse()
+
 Expand: select and slice to drop columns and rows
-Introduce: transform data with dplyr::mutate() function
+- dplyr::pull()
+- dplyr::select()
+- dplyr::slice()
+- dplyr::filter()
+
+Introduce: basic data transformations with dplyr::mutate() function
 - str_to_lower() 
 - str_replace() 
 - case_when() 
+
 Introduce: write data
 - write_csv() 
 - write_rds() 

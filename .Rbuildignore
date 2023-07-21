@@ -9,3 +9,4 @@
 ^\.github$
 ^vignettes/articles$
 ^\.httr-oauth$
+^_.*\.md$

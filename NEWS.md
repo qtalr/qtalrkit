@@ -1,3 +1,7 @@
+# qtalrkit 0.0.1.9200
+
+* Adds project template for RStudio: "Minimal Reproducible Project" 
+
 # qtalrkit 0.0.1.9100
 
 * Adjusted `create_data_dictionary()` to produce results more in line with the QTALR textbook

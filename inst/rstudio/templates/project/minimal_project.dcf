@@ -1,0 +1,33 @@
+Template: Minimal Reproducible Project
+Title: Minimal Reproducible Project
+Description: A minimal reproducible project with a specific directory structure.
+Author: Jerid Francom
+OpenFiles: README, scripts/_main.R
+RightClick: 
+  Create Project
+SortOrder: 
+  999
+Parameters: 
+  text: Enter project name
+  code: if (!file.exists(text)) dir.create(text)
+
+Script: 
+  ## Create the data directory and subdirectories
+  dir.create(file.path(text, "data"))
+  dir.create(file.path(text, "data", "analysis"))
+  dir.create(file.path(text, "data", "derived"))
+  dir.create(file.path(text, "data", "original"))
+  
+  ## Create the output directory and subdirectories
+  dir.create(file.path(text, "output"))
+  dir.create(file.path(text, "output", "figures"))
+  dir.create(file.path(text, "output", "reports"))
+  dir.create(file.path(text, "output", "results"))
+  dir.create(file.path(text, "output", "tables"))
+  
+  ## Create the scripts directory and the _main.R script
+  dir.create(file.path(text, "scripts"))
+  file.create(file.path(text, "scripts", "_main.R"))
+  
+  ## Create the README file
+  file.create(file.path(text, "README"))

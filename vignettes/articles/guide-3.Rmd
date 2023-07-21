@@ -32,6 +32,83 @@ These are all questions that I had when I first started using Git and GitHub. I 
 
 Git is a version control system. It allows you to track changes to files and folders over time. It also allows you to collaborate with others on projects. Git is a command line tool, but there are also GUIs to interact with Git in both RStudio and VS Code.
 
+## What is GitHub?
+
+GitHub is a web-based hosting service for Git repositories. It allows you to store your Git repositories in the cloud. It also allows you to collaborate with others on projects. GitHub is a great place to store and share your code. It is also a great place to find code that others have shared.
+
+## Why should I use Git and GitHub?
+
+The Git software allows for version control. This means that you can track changes to files and folders over time. This is useful for tracking changes to code, but it is also useful for tracking changes to other types of files. For example, you can use Git to track changes to a manuscript or a presentation. Think of it as MS Word's "Track Changes" feature on steroids.
+
+Combining Git with GitHub allows you to store your Git repositories in the cloud. This means that you can access your repositories from anywhere. It also means that you can collaborate with others on projects. You can also use GitHub to share your code with others. This is useful for sharing code with collaborators, but it is also useful for sharing code with the world. This is especially useful for making your projects reproducible.
+
+## How do I set up Git?
+
+- [Posit Guide on Git with RStudio.](https://support.posit.co/hc/en-us/articles/200532077)
+
+Initalize a project with Git:
+
+- `git init` - initialize a new Git repository
+
+## How do I set up GitHub?
+
+To set up GitHub, you will need to create an account. You can do this at <github.com>. The service is free and there are extra features available for students and educators. Once you have created an account, you will need to create a repository. You can do this by clicking on the "New" button on the main page. You will need to give your repository a name and a description. You can also choose whether to make your repository public or private. If you make your repository public, anyone can see it. If you make your repository private, only you and people you invite can see it.
+
+In your local, remote, or virtual environment, you will need to connect to GitHub. You can also do this by using the `usethis` package. 
+
+```r
+library(usethis)
+```
+
+- `use_github()` - connect to GitHub
+- `use_git_remote()` - add a remote repository
+
+## How do I manage my project with Git and GitHub?
+
+Once your Git repository is set up, you can manage it from within your IDE. For most beginners, it is recommedable that you use the Git pane in RStudio to interface with Git and GitHub. Here you can perform various key operations.
+
+Let's introduce operations related to common tasks for this textbook.
+
+Download a lab to complete: 
+
+- Create a new project from a GitHub repository
+  - Login to GitHub
+  - Navigate to the repository on GitHub
+  - Click the 'Fork' button
+  - Copy the URL of the forked repository
+  - Open RStudio
+  - File > New Project > Version Control > Git
+    - Paste the URL of the forked repository
+    - Choose the directory location for the project
+    - Create Project
+
+- Create a new project and start version control
+  - Create a new project in RStudio
+    - File > New Project > New Directory > New Project
+    - Choose the directory location for the project
+    - Create Project
+  - Add the project to GitHub
+    - Tools > Version Control > Project Setup
+    - Choose Git
+
+- Edit and update your GitHub repository
+  - Edit the files in your project
+  - Save the files
+  - Commit the changes
+    - Tools > Version Control > Commit
+  - Add a commit message
+  - Commit
+  - Push the changes to GitHub
+    - Tools > Version Control > Push Branch
+
+Key operations to manage your project with Git and GitHub:
+
+- `git init` - initialize a new Git repository
+- `git add` - add files to the staging area
+- `git commit` - commit changes to the repository
+- `git push` - push changes to a remote repository
+
+
 What are some of the basic command concepts that you need to know to use Git?
 
 - `git init` - initialize a new Git repository
@@ -53,30 +130,6 @@ When working with R, you can use the `usethis` package to set up Git in your env
 @Bryan2020 is an excellent reference resource for all things Git and GitHub for R users.
 
 :::
-
-
-## What is GitHub?
-
-GitHub is a web-based hosting service for Git repositories. It allows you to store your Git repositories in the cloud. It also allows you to collaborate with others on projects. GitHub is a great place to store and share your code. It is also a great place to find code that others have shared.
-
-### How do I set up GitHub?
-
-To set up GitHub, you will need to create an account. You can do this at <github.com>. The service is free and there are extra features available for students and educators. Once you have created an account, you will need to create a repository. You can do this by clicking on the "New" button on the main page. You will need to give your repository a name and a description. You can also choose whether to make your repository public or private. If you make your repository public, anyone can see it. If you make your repository private, only you and people you invite can see it.
-
-In your local, remote, or virtual environment, you will need to connect to GitHub. You can also do this by using the `usethis` package. 
-
-- `use_github()` - connect to GitHub
-- `use_git_remote()` - add a remote repository
-
-## Why should I use Git and GitHub?
-
-The Git software allows for version control. This means that you can track changes to files and folders over time. This is useful for tracking changes to code, but it is also useful for tracking changes to other types of files. For example, you can use Git to track changes to a manuscript or a presentation. Think of it as MS Word's "Track Changes" feature on steroids.
-
-Combining Git with GitHub allows you to store your Git repositories in the cloud. This means that you can access your repositories from anywhere. It also means that you can collaborate with others on projects. You can also use GitHub to share your code with others. This is useful for sharing code with collaborators, but it is also useful for sharing code with the world. This is especially useful for making your projects reproducible.
-
-## How do I manage my project with Git and GitHub?
-
-Once your Git repository is set up, you can manage it with your IDE. For example, you can use the Git pane in RStudio to stage and commit changes. You can also use the Git pane to push and pull changes from a remote repository. In VS Code, you can use the Source Control pane to stage and commit changes. You can also use the Source Control pane to push and pull changes from a remote repository.
 
 
 

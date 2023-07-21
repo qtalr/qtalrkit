@@ -19,24 +19,38 @@ knitr::opts_chunk$set(echo = FALSE)
 <!--  
 Purpose: To explore appropriate methods for summarizing variables in datasets given the number and informational values of the variable(s).
 
-Introduce: statistic and tabular summaries
+Extend: statistic and tabular summaries
 
 - glimpse(): dim() # nolint
 - summary():  mean(), median() # nolint
 - skimr::skim(): n(), mean(), median(), etc. # nolint
 
-Introduce: plots
+Extend: ggplot2 plots
 
-- Grammar of graphics
-  - Aesthetic mappings
-  - Geometric objects
-  - Attributes
+- What are the main components of a plot?
+  - Data
+  - Aesthetics
+  - Geometries
+- What are other components of a plot?
+  - Facets: allow for multiple plots to be displayed in a grid
+    - `facet_wrap()`, `facet_grid()`
+  - Scales: allow manipulation of the axes
+    - `scale_x_continuous()`, `scale_y_continuous()`
+  - Coordinates: allow manipulation of the coordinate system
+    - `coord_flip()`, `coord_polar()`
+- How can I enhace the look of my plot?
+  - Themes: allow for manipulation of the look of the plot
+    - `theme_bw()`, `theme_classic()`, `theme_minimal()`, `theme_void()`
+  - Labels: allow for manipulation of the labels of the plot
+    - `labs()`
+  - Annotations: allow for manipulation of the annotations of the plot
+    - `annotate()`, `geom_text()`, `geom_label()`, `geom_segment()`
 -->
 
+In this Recipe we will explore appropriate methods for summarizing variables in datasets given the number and informational values of the variable(s). This will build on our understanding of how to summarize data using statistics, tables, and plots. We will dive deeper into the use of the `skimr` package to summarize data and the `ggplot2` package to create plots. We will reinforce our understanding of the `readr` package to read in data and the `dplyr` package to manipulate data.
 
+...
 
-
-In this Recipe we ...
 
 ## Summary
 

@@ -144,8 +144,6 @@ We have only mentioned selecting the coding language and labeling the code block
 
 - *etc.*
 
-
-
 ### Create and render a Quarto document
 
 The easiest and most efficient way to create a Quarto source file is to use the RStudio point-and-click' interface. Just use the toolbar to create a new file and select "Quarto Document...", as seen in Figure \@ref(fig:image-quarto-create-1). 
