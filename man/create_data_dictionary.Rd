@@ -2,35 +2,40 @@
 % Please edit documentation in R/create_data_dictionary.R
 \name{create_data_dictionary}
 \alias{create_data_dictionary}
-\title{Create a Data Dictionary for a Given Dataset}
+\title{Create a data dictionary for a given data frame.}
 \usage{
 create_data_dictionary(
   data,
   file_path,
+  model = NULL,
   sample_n = 5,
   grouping = NULL,
-  model = "gpt-3.5-turbo"
+  force = FALSE
 )
 }
 \arguments{
 \item{data}{A data frame to create a data dictionary for.}
 
-\item{file_path}{A character string specifying the file path to write the data dictionary to.}
+\item{file_path}{The file path to save the data dictionary to.}
 
-\item{sample_n}{An integer specifying the number of rows to sample from the data frame.}
+\item{model}{The ID of the OpenAI chat completion models to use for generating descriptions. If NULL (default), a scaffolding for the data dictionary is created.}
 
-\item{grouping}{A character vector specifying the grouping variables to use when sampling the data frame.}
+\item{sample_n}{The number of rows to sample from the data frame to use as input for the model. Default NULL.}
 
-\item{model}{A character vector specifying the OpenAI chat completion model to use for generating the variable descriptions. Defaults to "gpt-3.5-turbo". See \code{\link[openai]{create_chat_completion}} for more information.}
+\item{grouping}{A character vector of column names to group by when sampling rows from the data frame for the model. Default NULL.}
+
+\item{force}{If TRUE, overwrite the file at \code{file_path} if it already exists. Default FALSE.}
 }
 \value{
-A data frame containing the variable name, human-readable name, description, and variable type.
+A data frame containing the variable name, human-readable name, variable type, and description for each variable in the input data frame.
 }
 \description{
-The data dictionary returned includes the variable name, human-readable name, description, and variable type. The function uses OpenAI's chat completions models to generate the descriptions for each of the variables in the dataset. The data dictionary is returned as a data frame and written to a file in CSV format.
+This function takes a data frame and creates a data dictionary. The data dictionary includes the variable name, a human-readable name, the variable type, and a description. If a model is specified, the function uses OpenAI's API to generate the information based on the characteristics of the data frame.
 }
 \examples{
 \dontrun{
+data(mtcars)
 create_data_dictionary(mtcars, "mtcars_data_dictionary.csv")
 }
+
 }

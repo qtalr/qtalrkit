@@ -1,3 +1,6 @@
+# qtalrkit 0.0.1.9400
+
+* Updated `create_data_dictionary()` to provide default scaffold structure for data dictionary, in lieu of OpenAI model. This scaffold is to be updated manually by the user.
 # qtalrkit 0.0.1.9300
 
 * Added `create_data_origin()` function. This creates a .csv file to scaffold a data origin file
