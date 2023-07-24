@@ -1,6 +1,6 @@
 Package: qtalrkit
 Title: Quantitative Text Analysis for Linguists Resource Kit
-Version: 0.0.1.9200
+Version: 0.0.1.9300
 Authors@R: 
     person("Jerid", "Francom", , "francojc@wfu.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5972-6330"))
@@ -18,7 +18,8 @@ Imports:
     openai (>= 0.4.1),
     readr (>= 2.1.4),
     rlang (>= 1.1.1),
-    stringr (>= 1.5.0)
+    stringr (>= 1.5.0),
+    tibble (>= 3.2.1)
 Suggests: 
     bookdown,
     fontawesome,

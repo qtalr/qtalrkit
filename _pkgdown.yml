@@ -66,6 +66,7 @@ reference:
   - title: "Data functions"
     desc: "Functions to manage data"
     contents:
+      - create_data_origin
       - create_data_dictionary
       - get_compressed_data
       - get_outliers

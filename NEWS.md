@@ -1,3 +1,6 @@
+# qtalrkit 0.0.1.9300
+
+* Added `create_data_origin()` function. This creates a .csv file to scaffold a data origin file
 # qtalrkit 0.0.1.9200
 
 * Adds project template for RStudio: "Minimal Reproducible Project" 
