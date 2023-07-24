@@ -21,7 +21,7 @@ create_data_origin <- function(file_path) {
   # Check to see if file exists at `file_path`
   if (file.exists(file_path)) {
     message("File already exists at `file_path`. Use `force = TRUE` to overwrite.") #nolint
-    return(NULL) # end function early
+    invisible(NULL) # end function early
   }
 
   # Create a data frame with the data origin information
@@ -41,6 +41,6 @@ create_data_origin <- function(file_path) {
   # Write the data origin to a file
   data_origin |> readr::write_csv(file = file_path)
 
-  # Return the data origin
-  data_origin
+  # Return message
+  message("Data origin file created at `file_path`.")
 }
