@@ -19,7 +19,10 @@ create_data_origin <- function(file_path) {
   if (!is.character(file_path)) stop("`file_path` must be a character string.")
 
   # Check to see if file exists at `file_path`
-  if (file.exists(file_path)) stop("File already exists at `file_path`.")
+  if (file.exists(file_path)) {
+    message("File already exists at `file_path`. Use `force = TRUE` to overwrite.") #nolint
+    return(NULL) # end function early
+  }
 
   # Create a data frame with the data origin information
   data_origin <-
