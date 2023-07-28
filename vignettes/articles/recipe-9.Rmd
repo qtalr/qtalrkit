@@ -1,0 +1,25 @@
+---
+title: "Predictive Modeling"
+pkgdown:
+  as_is: true
+bibliography: [bibliography.bib, packages.bib]
+biblio-style: apalike
+link-citations: true
+---
+
+```{r, child="_common.Rmd"}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Overview
+
+
+
+## Summary
+
+## Check your understanding
+
+## References

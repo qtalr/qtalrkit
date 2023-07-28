@@ -1,0 +1,186 @@
+---
+title: "Using the `rtweet` package to access Twitter data"
+bibliography: [bibliography.bib, packages.bib]
+biblio-style: apalike
+link-citations: true
+pkgdown:
+  as_is: true
+---
+
+```{r, child="_common.Rmd"}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Authentication
+
+Some APIs and the R interfaces that provide access to them require authentication. This may either be through an interactive process that is mediated between R and the web service and/ or by visiting the developer website of the particular API. In either case, there is an extra step that is necessary to make the connect to the API to access the data.
+
+Let's take a look at the popular micro-blogging platform Twitter. The rtweet package [@R-rtweet] provides access to tweets in various ways. To get started install and/or load the rtweet package.
+
+```{r}
+#| label: ad-p-load-rtweet
+#| message: false
+
+pacman::p_load(rtweet) # install/load rtweet package
+```
+
+Now before a researcher can access data from Twitter with rtweet, [an authentication token must be setup and made accessible](https://docs.ropensci.org/rtweet/articles/auth.html). After following the steps for setting up an authentication token and saving it, that token can be accessed with the `auth_as()` function.
+
+```{r}
+#| label: ad-auth-as-rtweet
+#| eval: false
+
+auth_as(twitter_auth) # load the saved `twitter_auth` token
+```
+
+Now that we the R session is authenticated, we can explore a popular method for querying the Twitter API which searchs tweets (`search_tweets`) posted in the recent past (6-9 days).
+
+Let's look at a typical query using the `search_tweets()` function.
+
+```{r}
+#| label: ad-rtweet-search-latinx
+#| eval: false
+
+rt_latinx <-
+  search_tweets(
+    q = "latinx", # query term
+    n = 100, # number of tweets desired
+    type = "mixed", # a mix of `recent` and `popular` tweets
+    include_rts = FALSE
+  ) # do not include RTs
+```
+
+```{r}
+#| label: ad-rtweet-search-latinx-copy
+#| eval: false
+#| echo: false
+
+# copy the rt_latinx.rds file from the `project_implementation` R project to the local `resources/` directory #nolint
+fs::file_copy(
+  path = "../project_implementation/data/original/twitter/rt_latinx.rds",
+  new_path = "resources/06-acquire-data/rt_latinx.rds"
+)
+```
+
+```{r}
+#| label: ad-rtweet-search-latinx-read
+#| echo: false
+#| eval: false
+
+rt_latinx <- readr::read_rds(file = "data/acquire-data/rt_latinx.rds")
+```
+
+Looking at the arguments in this function, we see I've specified the query term to be 'latinx'. This is a single word query but if the query included multiple words, the spaces between would be interpreted as the logical `AND` (only match tweets with all the individual terms). If one would like to include multi-word expressions, the expressions should be enclosed by single quotes (i.e. `q = "'spanish speakers' AND latinx"`). Another approach would be to include the logical `OR` (match tweets with either of the terms). Multi-word expressions can be included as in the previous case. Of note, hashtags are acceptable terms, so `q = "#latinx"` would match tweets with this hashtag.
+
+The number of results has been set at '100', but this is the default, so I could have left it out. But you can increase the number of desired tweets. There are rate limits which cap the number of tweets you can access in a given 15-minute time period.
+
+Another argument of importance is the `type` argument. This argument has three possible attributes `popular`, `recent`, and `mixed`. When the `popular` attribute he Twitter API will tend to return fewer tweets than specified by `n`. With `recent` or `mixed` you will most likely get the `n` you specified (note that `mixed` is a mix of `popular` and `recent`).
+
+A final argument to note is the `include_rts` whose attribute is logical. If `FALSE` no retweets will be included in the results. This is often what a language researcher will want.
+
+Now, once the `search_tweets` query has been run, there a a large number of variables that are included in the resulting data frame. Here's an overview of the names of the variables and the vector types for each variable.
+
+```{r}
+#| label: ad-rtweet-rt-latinx-variables-prep
+#| include: false
+#| eval: false
+
+rt_variables <-
+  rt_latinx |>
+  map_df(typeof) |>
+  glimpse() |>
+  as.data.frame() |>
+  t()
+```
+
+```{r}
+#| label: tbl-ad-rtweet-variables-table
+#| tbl-cap: "Variables and variable types returned from Twitter API via rtweet's `search_tweets()` function."
+#| echo: false
+#| eval: false
+
+rt_variables |>
+  knitr::kable(booktabs = TRUE)
+```
+
+The [Twitter API documentation for the standard Search Tweets call](https://developer.twitter.com/en/docs/twitter-api/v1/tweets/search/api-reference/get-search-tweets), which is what `search_tweets()` interfaces with has quite a few variables (35 to be exact). For many purposes it is not necessary to keep all the variables. Furthermore, since we will want to write a plain-text file to disk as part of our project, we will need to either convert or eliminate any of the variables that are marked as type `list`. The most common variable to convert is the `coordinates` variable, as it will contain the geolocation codes for those Twitter users' tweets captured in the query that have geolocation enabled on their device. It is of note, however, that using `search_tweets()` without specifying that only tweets with geocodes should be captured (`geocode =`) will tend to return very few, if any, tweets with geolocation information as the majority of Twitter users do not have geolocation enabled.
+
+Let's assume that we want to keep all the variables that are not of type `list`. One option is to use `select()` and name each variable we want to keep. On the other hand we can use a combination of `select()` and negated `!where()` to select all the variables that are not lists (`is_list`). Let's do the later approach.
+
+```{r}
+#| label: ad-rtweet-select-not-list
+#| eval: false
+rt_latinx_subset <-
+  rt_latinx |> # dataset
+  select(!where(is_list)) # select all variables that are NOT lists
+
+rt_latinx_subset |> # subsetted dataset
+  glimpse() # overview
+```
+
+Now we have the 30 variables which can be written to disk as a plain-text file. Let's go ahead a do this, but wrap it in a function that does all the work we've just laid out in one function. In addition we will check to see if the same query has been run, and skip running the query if the dataset is on disk.
+
+```{r}
+#| label: ad-rtweet-write-search-tweets
+#| eval: false
+
+write_search_tweets <-
+  function(query, path, n = 100, type = "mixed", include_rts = FALSE) {
+    # Function
+    # Conduct a Twitter search query and write the results to a csv file
+
+    if (!file.exists(path)) { # check to see if the file already exists
+      cat("File does not exist \n") # message
+
+      library(rtweet) # to use Twitter API
+      library(tidyverse) # to manipulate data
+
+      auth_get() # get authentication token
+
+      results <- # query results
+        search_tweets(
+          q = query, # query term
+          n = n, # number of tweets desired (default 100)
+          type = type, # type of query
+          include_rts = include_rts
+        ) |> # to include RTs
+        select(!where(is_list)) # remove list variables
+
+      if (!dir.exists(dirname(path))) { # isolate directory and check if exists
+        cat("Creating directory \n") # message
+
+        dir.create(
+          path = dirname(path), # isolate and create directory (remove file name)
+          recursive = TRUE, # create embedded directories if necessary
+          showWarnings = FALSE
+        ) # do not report warnings
+      }
+
+      write_csv(x = results, file = path) # write results to csv file
+      cat("Twitter search results written to disk \n") # message
+    } else {
+      cat("File already exists! \n") # message
+    }
+  }
+```
+
+Let's run this function with the same query as above.
+
+```{r}
+#| label: ad-rtweet-latinx-function
+#| eval: false
+
+write_search_tweets(query = "latinx", path = "../data/original/twitter/rt_latinx.csv")
+```
+
+And the appropriate directory structure and file have been written to disk.
+
+``` bash
+data/original/twitter/
+└── rt_latinx.csv
+```
+
+In sum, this subsection provided an overview to acquiring data from web service APIs through R packages. We took at closer look at the `gutenbergr` package which provides programmatic access to works available on Projec t Gutenberg and the `rtweet` package which provides authenticated access to Twitter. Working with package interfaces requires more knowledge of R including loading/ installing packages, working with vectors and data frames, and exporting data from an R session. We touched on these programming concepts and also outlined a method to create a reproducible workflow.

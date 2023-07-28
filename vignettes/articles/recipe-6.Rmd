@@ -1,0 +1,46 @@
+---
+title: "Organizing and documenting data"
+pkgdown:
+  as_is: true
+bibliography: [bibliography.bib, packages.bib]
+biblio-style: apalike
+link-citations: true
+---
+
+```{r, child="_common.Rmd"}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Overview
+
+Skills:
+
+- Pattern Matching
+  - Regular Expressions (basics)
+    - Literal characters: `a`, `b`, `c`
+    - Special sequences: `\d`, `\w`, `\s`
+    - Metacharacters: `.`, `^`, `$`, `*`, `+`, `?`, `\`
+    - Sets: `[abc]`, `[^abc]`, `[a-z]`, `[a-zA-Z]`
+- Vectorized Operations
+- Iteration functions in R
+  - `purr::map()`
+
+
+Packages: 
+
+- `stringr`
+- `purrr`
+
+Cases: 
+- Unstructured: ANC (.txt) files
+- Structured: ?? Wordbank (.csv) files
+- Semi-structured: ENNTT (.tok) files
+
+## Summary
+
+## Check your understanding
+
+## References

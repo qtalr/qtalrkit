@@ -40,6 +40,14 @@ articles:
       - articles/recipe-2 # Chapter 2/ Reading, inspecting, and writing data
       - articles/recipe-3 # Chapter 3/ Descriptive assessment of datasets
       - articles/recipe-4 # Chapter 4/ Project Management
+      - articles/recipe-5 # Chapter 5/ Collecting and documenting data
+      - articles/recipe-6 # Chapter 6/ Organizing and documenting data
+      - articles/recipe-7 # Chapter 7/ Transforming and documenting data
+      - articles/recipe-8 # Chapter 8/ Exploratory data analysis
+      - articles/recipe-9 # Chapter 9/ Predictive modeling
+      - articles/recipe-10 # Chapter 10/ Inferential statistics
+      - articles/recipe-11 # Chapter 11/ Research write-ups
+      - articles/recipe-12 # Chapter 12/ Research sharing and collaboration
   - title: Guides
     desc: "A collection of guides for using R and related tools"
     contents:
@@ -49,11 +57,12 @@ articles:
       - articles/guide-3 # Git and GitHub
       - articles/guide-4 # Reproducible examples
       - articles/guide-5 # Data and data sources
+      - articles/guide-6 # Using `rtweet` package (edit/ remove)
   - title: Errata
     desc: "A collection of errata"
     contents:
       - articles/errata # Errata
-  - title: Instructor materials
+  - title: Materials
     desc: "A collection of materials for instructors"
     contents:
       - articles/instructor-guide # Instructor guide

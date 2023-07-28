@@ -1,0 +1,175 @@
+---
+title: "Collecting and documenting data"
+pkgdown:
+  as_is: true
+bibliography: [bibliography.bib, packages.bib]
+biblio-style: apalike
+link-citations: true
+---
+
+```{r, child="_common.Rmd"}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Overview
+
+
+In this recipe, we will take a closer look at the data collection and documentation process. Just as in Acquire data chapter, we will group the data collection process into three types of collection strategies: downloading, API, and webscraping. We will also discuss the importance of documenting the data collection process including the creation and completion of a data origin file.
+
+In the process we will employ the following R skills: 
+
+- control statements
+  - `if` statements
+  - `message` function
+  - `stop` function
+- custom functions
+  - required and optional arguments
+  - argument checks
+  - `return` function
+  - `invisible` function
+
+We will also use the following R packages:
+
+- `here` (?)
+- `readr`
+- `fs`
+- `dplyr`
+- `qtalrkit`
+- `gutenbergr`
+- `rvest`
+- `xml2`
+
+Cases: 
+
+- [ ] Integrate the **Santa Barbara Corpus of Spoken American English** (SBCSAE) into the discussion on downloading compressed files from the internet.
+  - [ ] This will provide the opportunity to discuss the `unzip()` function.
+  - [ ] Also an opportunity to discuss a custom function to download various types of compressed data, e.g. `.zip`, `.tar.gz`, `.tar.bz2`, etc.
+    - [ ] `qtalrkit::get_compressed_data()`
+      - [ ] Includes a `junkpaths` argument to discard the containing directory of the compressed file.
+      - [ ] Include `force = TRUE` argument to overwrite existing data.
+      - [ ] Includes `message()` and `stop()`/ `invisible()` functions to provide status messages and stop the function if the arguments are not specified correctly.
+- Literary genres data collection (API: `gutenbergr` package)
+  - [ ] **Project Gutenberg** (work on fixing or changing the data that is accessed)
+    - [ ] Write custom function to download data and metadata from Project Gutenberg
+- SOTU data collection/ Federalis Papers? (Webscrape: `rvest` package, Library of Congress)
+
+
+---
+
+Boilerplate information for the SBCSAE (Santa Barbara Corpus of Spoken American English): 
+
+```{r}
+#| label: ad-get-zip-data-function
+#| eval: false
+
+get_zip_data <- function(url, target_dir) {
+  # Function: to download and decompress a .zip file to a target directory
+
+  # Check to see if the data already exists
+  if (!dir.exists(target_dir)) { # if data does not exist, download/ decompress
+    cat("Creating target data directory \n") # print status message
+    dir.create(path = target_dir, recursive = TRUE, showWarnings = FALSE) # create target data directory
+    cat("Downloading data... \n") # print status message
+    temp <- tempfile() # create a temporary space for the file to be written to
+    download.file(url = url, destfile = temp) # download the data to the temp file
+    unzip(zipfile = temp, exdir = target_dir, junkpaths = TRUE) # decompress the temp file in the target directory
+    cat("Data downloaded! \n") # print status message
+  } else { # if data exists, don't download it again
+    cat("Data already exists \n") # print status message
+  }
+}
+```
+
+OK. You should have recognized the general steps in this function: the argument `url` and `target_dir` specify where to get the data and where to write the decompressed files, the `if()` statement evaluates whether the data already exists, if not (`!dir.exists(target_dir)`) then the data is downloaded and decompressed, if it does exist (`else`) then it is not downloaded.
+
+::: {.callout}
+**{{< fa regular hand-point-up >}} Tip**
+
+The prefixed `!` in the logical expression `dir.exists(target_dir)` returns the opposite logical value. This is needed in this case so when the target directory exists, the expression will return `FALSE`, not `TRUE`, and therefore not proceed in downloading the resource.
+:::
+
+There are a couple key tweaks I've added that provide some additional functionality. For one I've included the function `dir.create()` to create the target directory where the data will be written. I've also added an additional argument to the `unzip()` function, `junkpaths = TRUE`. Together these additions allow the user to create an arbitrary directory path where the files, and only the files, will be extracted to on our disk. This will discard the containing directory of the `.zip` file which can be helpful when we want to add multiple `.zip` files to the same target directory.
+
+A practical scenario where this applies is when we want to download data from a corpus that is contained in multiple `.zip` files but still maintain these files in a single primary data directory. Take for example the [Santa Barbara Corpus](http://www.linguistics.ucsb.edu/research/santa-barbara-corpus). This corpus resource includes a series of interviews in which there is one `.zip` file, `SBCorpus.zip` which contains the [transcribed interviews](http://www.linguistics.ucsb.edu/sites/secure.lsit.ucsb.edu.ling.d7/files/sitefiles/research/SBC/SBCorpus.zip) and another `.zip` file, `metadata.zip` which organizes the [meta-data](http://www.linguistics.ucsb.edu/sites/secure.lsit.ucsb.edu.ling.d7/files/sitefiles/research/SBC/metadata.zip) associated with each speaker. Applying our initial strategy to download and decompress the data will lead to the following directory structure:
+
+```
+data
+├── derived
+└── original
+    ├── SBCorpus
+    │   ├── TRN
+    │   └── __MACOSX
+    │       └── TRN
+    └── metadata
+        └── __MACOSX
+```
+
+By applying our new custom function `get_zip_data()` to the transcriptions and then the meta-data we can better organize the data.
+
+```{r}
+#| label: ad-get-zip-data-sbc
+#| eval: false
+
+# Download corpus transcriptions
+get_zip_data(
+  url = "http://www.linguistics.ucsb.edu/sites/secure.lsit.ucsb.edu.ling.d7/files/sitefiles/research/SBC/SBCorpus.zip", 
+  target_dir = "../data/original/sbc/transcriptions/"
+)
+
+# Download corpus meta-data
+get_zip_data(
+  url = "http://www.linguistics.ucsb.edu/sites/secure.lsit.ucsb.edu.ling.d7/files/sitefiles/research/SBC/metadata.zip", 
+  target_dir = "../data/original/sbc/meta-data/"
+)
+```
+
+```
+data
+├── derived
+└── original
+    └── sbc
+        ├── meta-data
+        └── transcriptions
+```
+
+If we add data from other sources we can keep them logical separate and allow our data collection to scale without creating unnecessary complexity. Let's add the Switchboard Corpus sample using our `get_zip_data()` function to see this in action.
+
+```{r}
+#| label: ad-get-zip-data-scs
+#| eval: false
+
+# Download corpus
+get_zip_data(
+  url = "https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/corpora/switchboard.zip", 
+  target_dir = "../data/original/scs/"
+)
+```
+
+```
+data
+├── derived
+└── original
+    ├── sbc
+    │   ├── meta-data
+    │   └── transcriptions
+    └── scs
+        ├── README
+        ├── discourse
+        ├── disfluency
+        ├── tagged
+        ├── timed-transcript
+        └── transcript
+```
+
+
+
+
+
+## Summary
+
+## Check your understanding
+
+## References
