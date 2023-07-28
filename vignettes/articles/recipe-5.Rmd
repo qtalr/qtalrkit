@@ -54,7 +54,7 @@ Cases:
 - Literary genres data collection (API: `gutenbergr` package)
   - [ ] **Project Gutenberg** (work on fixing or changing the data that is accessed)
     - [ ] Write custom function to download data and metadata from Project Gutenberg
-- SOTU data collection/ Federalis Papers? (Webscrape: `rvest` package, Library of Congress)
+- SOTU data collection/ Federalist Papers? (Webscrape: `rvest` package, Library of Congress)
 
 
 ---
@@ -181,7 +181,7 @@ pacman::p_load(tidyverse, gutenbergr)
 ```
 
 ::: {.callout}
-**{{< fa regular hand-point-up >}} Tip**
+**`r fontawesome::fa('hand-point-up')` Tip**
 
 Note that the arguments `tidyverse` and `gutenbergr` are comma-separated but not quoted when using `p_load()`. When using `install.packages()` to install, package names need to be quoted (character strings). `library()` can take quotes or no quotes, but only one package at a time.
 :::
@@ -331,6 +331,115 @@ works_pr <- read_rds(file = "data/acquire-data/gutenberg_works_pr.rds") # read r
 glimpse(works_pr) # summarize the dataset
 ```
 
+
+To avoid downloading dataset that already resides on disk, let's implement a similar strategy to the one used for direct downloads (`get_zip_data()`). I've incorporated the code for sampling and downloading data for a particular subject from Project Gutenberg with a control statement to check if the dataset file already exists into a function I named `get_gutenberg_subject()`. Take a look at this function below.
+
+```{r}
+#| label: ad-get-gutenberg-subject-fun
+#| eval: false
+get_gutenberg_subject <- function(subject, target_file, sample_size = 10) {
+  # Function: to download texts from Project Gutenberg with 
+  # a specific LCC subject and write the data to disk.
+  
+  pacman::p_load(tidyverse, gutenbergr) # install/load necessary packages
+  
+  # Check to see if the data already exists
+  if(!file.exists(target_file)) { # if data does not exist, download and write
+    target_dir <- dirname(target_file) # generate target directory for the .csv file
+    dir.create(path = target_dir, recursive = TRUE, showWarnings = FALSE) # create target data directory
+    cat("Downloading data... \n") # print status message
+    # Select all records with a particular LCC subject
+    ids <- 
+      filter(gutenberg_subjects, 
+             subject_type == "lcc", subject == subject) # select subject
+    # Select only those records with plain text available
+    set.seed(123) # make the sampling reproducible
+    ids_sample <- 
+      filter(gutenberg_metadata, 
+             gutenberg_id %in% ids$gutenberg_id, # select ids in both data frames 
+             has_text == TRUE) |> # select those ids that have text
+      slice_sample(n = sample_size) # sample N works 
+    # Download sample with associated `author` and `title` metadata
+    works_sample <- 
+      gutenberg_download(gutenberg_id = ids_sample$gutenberg_id, 
+                         meta_fields = c("author", "title"))
+    # Write the dataset to disk in .csv format
+    write_csv(works_sample, file = target_file)
+    cat("Data downloaded! \n") # print status message
+  } else { # if data exists, don't download it again
+    cat("Data already exists \n") # print status message
+  }
+}
+```
+
+Adding this function to our function script `functions/acquire_functions.R`, we can now source this function in our `analysis/1_acquire_data.Rmd` script to download multiple subjects and store them in on disk in their own file.
+
+Let's download American Literature now (LCC code "PQ").
+
+```{r}
+#| label: ad-get-am-lit
+#| eval: false
+
+# Download Project Gutenberg text for subject 'PQ' (American Literature)
+# and then write this dataset to disk in .rds format
+
+# Select all records with a particular LCC subject
+ids <-
+  filter(
+    gutenberg_subjects,
+    subject_type == "lcc", subject == "PQ"
+  ) # select subject
+# Select only those records with plain text available
+set.seed(123) # make the sampling reproducible
+ids_sample <-
+  filter(
+    gutenberg_metadata,
+    gutenberg_id %in% ids$gutenberg_id, # select ids in both data frames
+    has_text == TRUE
+  ) |> # select those ids that have text
+  slice_sample(n = sample_size) # sample N works
+# Download sample with associated `author` and `title` metadata
+works_pq <-
+  gutenberg_download(
+    gutenberg_id = ids_sample$gutenberg_id,
+    meta_fields = c("author", "title")
+  )
+
+write_rds(x = works_pq, file = "data/acquire-data/gutenberg_works_pq.rds")
+```
+
+```{r}
+#| label: ad-get-am-lit-show
+#| eval: false
+
+# Download Project Gutenberg text for subject 'PQ' (American Literature)
+# and then write this dataset to disk in .csv format
+get_gutenberg_subject(subject = "PQ", target_file = "../data/original/gutenberg/works_pq.csv")
+```
+
+Applying this function to both the English and American Literature datasets, our data directory structure now looks like this:
+
+``` bash
+data
+├── derived
+└── original
+    ├── gutenberg
+    │   ├── works_pq.csv
+    │   └── works_pr.csv
+    ├── sbc
+    │   ├── meta-data
+    │   └── transcriptions
+    └── scs
+        ├── README
+        ├── discourse
+        ├── disfluency
+        ├── documentation
+        ├── tagged
+        ├── timed-transcript
+        └── transcript
+```
+
+### Web Scraping
 
 
 

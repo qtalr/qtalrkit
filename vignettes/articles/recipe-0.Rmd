@@ -24,7 +24,7 @@ First introduced by Donald Knuth [-@Knuth1984], the aim of Literate Programming 
 
 ## Quarto
 
-[Quarto]() is a specific implementation of the literate programming paradigm. In Figure \@ref(fig:image-quarto-preview) we see an example of Quarto in action. On the left we see the Quarto source code, which is a combination of text and code. On the right we see the output of the Quarto source code as an HTML document. 
+[Quarto](https://quarto.org/) is a specific implementation of the literate programming paradigm. In Figure \@ref(fig:image-quarto-preview) we see an example of Quarto in action. On the left we see the Quarto source code, which is a combination of text and code. On the right we see the output of the Quarto source code as an HTML document. 
 
 ```{r image-quarto-preview, fig.cap="Quarto source (left) and output (right) example.", fig.alt = "An image with two document views. On the left is Quarto source code and on the right is Quarto HTML output."}
 knitr::include_graphics(
@@ -172,7 +172,6 @@ Once you have done that the `.qmd` file will render in the format you have speci
 ```{r image-quarto-create-4, fig.cap="Quarto source and HTML output side-by-side in RStudio."}
 knitr::include_graphics("assets/images/recipe-0/quarto-create-4.png")
 ```
-
 
 ## Summary 
 
