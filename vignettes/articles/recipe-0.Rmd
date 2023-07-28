@@ -12,7 +12,6 @@ pkgdown:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-library(webexercises)
 ```
 
 ## Overview {#overview}

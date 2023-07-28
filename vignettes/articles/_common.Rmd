@@ -1,6 +1,6 @@
 ```{r common, include=FALSE}
 # Install/ load packages
-pacman::p_load(tidyverse, rmarkdown, knitr, fontawesome)
+pacman::p_load(tidyverse, rmarkdown, knitr, fontawesome, webexercises)
 pacman::p_install_gh("qtalr/qtalrkit")
 
 theme_set(theme_minimal())

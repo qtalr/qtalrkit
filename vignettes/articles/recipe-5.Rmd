@@ -59,6 +59,9 @@ Cases:
 
 ---
 
+
+### Downloads
+
 Boilerplate information for the SBCSAE (Santa Barbara Corpus of Spoken American English): 
 
 ```{r}
@@ -164,6 +167,169 @@ data
         └── transcript
 ```
 
+### APIs
+
+
+Now that we have `pacman` installed and loaded into our R session, let's use the `p_load()` function to make sure to install/ load the two packages we will need for the upcoming tasks. If you are following along with the `project_template`, add this code within the SETUP section of the `1_acquire_data.Rmd` file.
+
+```{r}
+#| label: ad-p-load-packages
+#| eval: false
+
+# Script-specific options or packages
+pacman::p_load(tidyverse, gutenbergr)
+```
+
+::: {.callout}
+**{{< fa regular hand-point-up >}} Tip**
+
+Note that the arguments `tidyverse` and `gutenbergr` are comma-separated but not quoted when using `p_load()`. When using `install.packages()` to install, package names need to be quoted (character strings). `library()` can take quotes or no quotes, but only one package at a time.
+:::
+
+Project Gutenberg provides access to thousands of texts in the public domain. The `gutenbergr` package contains a set of tables, or **data frames** in R speak, that index the meta-data for these texts broken down by text (`gutenberg_metadata`), author (`gutenberg_authors`), and subject (`gutenberg_subjects`). I'll use the `glimpse()` function loaded in the [tidyverse](https://CRAN.R-project.org/package=tidyverse) package [^acquire-data-3] to summarize the structure of these data frames.
+
+[^acquire-data-3]: `tidyverse` is not a typical package. It is a set of packages: `ggplot2`, `dplyr`, `tidyr`, `readr`, `purrr`, and `tibble`. These packages are all installed/ loaded with `tidyverse` and form the backbone for the type of work you will typically do in most analyses.
+
+```{r}
+#| label: ad-glimpse-meta-data-gutenbergr
+#| eval: false
+glimpse(gutenberg_metadata) # summarize text meta-data
+glimpse(gutenberg_authors) # summarize authors meta-data
+glimpse(gutenberg_subjects) # summarize subjects meta-data
+```
+
+::: callout-warning
+**Tip**
+
+The `gutenberg_metadata`, `gutenberg_authors`, and `gutenberg_subjects` are periodically updated. To check to see when each data frame was last updated run:
+
+`attr(gutenberg_metadata, "date_updated")`
+:::
+
+To download the text itself we use the `gutenberg_download()` function which takes one required argument, `gutenberg_id`. The `gutenberg_download()` function is what is known as 'vectorized', that is, it can take a single value or multiple values for the argument `gutenberg_id`. Vectorization refers to the process of applying a function to each of the elements stored in a **vector** --a primary object type in R. A vector is a grouping of values of one of various types including character (`chr`), integer (`int`), double (`dbl`), and logical (`lgl`) and a data frame is a grouping of vectors. The `gutenberg_download()` function takes an integer vector which can be manually added or selected from the `gutenberg_metadata` or `gutenberg_subjects` data frames using the `$` operator (e.g. `gutenberg_metadata$gutenberg_id`).
+
+Let's first add them manually here as a toy example by generating a vector of integers from 1 to 5 assigned to the variable name `ids`.
+
+```{r}
+#| label: ad-int-vector-ex
+#| eval: false
+ids <- 1:5 # integer vector of values 1 to 5
+ids
+```
+
+To download the works from Project Gutenberg corresponding to the `gutenberg_id`s 1 to 5, we pass the `ids` object to the `gutenberg_download()` function.
+
+```{r}
+#| label: ad-download-ids-gutenbergr
+#| eval: false
+
+works_sample <- gutenberg_download(gutenberg_id = ids) # download works with `gutenberg_id` 1-5
+glimpse(works_sample) # summarize `works` dataset
+```
+
+Two attributes are returned: `gutenberg_id` and `text`. The `text` column contains values for each line of text (delimited by a carriage return) for each of the 5 works we downloaded. There are many more attributes available from the Project Gutenberg API that can be accessed by passing a character vector of the attribute names to the argument `meta_fields`. The column names of the `gutenberg_metadata` data frame contains the available attributes.
+
+```{r}
+#| label: ad-metadata-attributes-gutenbergr
+#| eval: false
+names(gutenberg_metadata) # print the column names of the `gutenberg_metadata` data frame
+```
+
+Let's augment our previous download with the title and author of each of the works. To create a character vector we use the `c()` function, then, quote and delimit the individual elements of the vector with a comma.
+
+```{r}
+#| label: ad-download-ids-meta-gutenbergr
+#| eval: false
+# download works with `gutenberg_id` 1-5 including `title` and `author` as attributes
+works_sample <-
+  gutenberg_download(
+    gutenberg_id = ids,
+    meta_fields = c("title", "author")
+  ) #
+
+glimpse(works_sample) # summarize dataset
+```
+
+Now, in a more practical scenario we would like to select the values of `gutenberg_id` by some principled query such as works from a specific author, language, or subject. To do this we first query either the `gutenberg_metadata` data frame or the `gutenberg_subjects` data frame. Let's say we want to download a random sample of 10 works from English Literature (Library of Congress Classification, "PR"). Using the `dplyr::filter()` function (`dplyr` is part of the `tidyverse` package set) we first extract all the Gutenberg ids from `gutenberg_subjects` where `subject_type == "lcc"` and `subject == "PR"` assigning the result to `ids`.[^acquire-data-4]
+
+[^acquire-data-4]: See [Library of Congress Classification](https://www.loc.gov/catdir/cpso/lcco/) documentation for a complete list of subject codes.
+
+```{r}
+#| label: ad-eng-lit-subjects-gutenbergr
+#| eval: false
+# filter for only English literature
+ids <-
+  filter(gutenberg_subjects, subject_type == "lcc", subject == "PR")
+glimpse(ids)
+```
+
+::: callout-warning
+**Tip**
+
+The operators `=` and `==` are not equivalents. `==` is used for logical evaluation and `=` is an alternate notation for variable assignment (`<-`).
+:::
+
+The `gutenberg_subjects` data frame does not contain information as to whether a `gutenberg_id` is associated with a plain-text version. To limit our query to only those English Literature works with text, we filter the `gutenberg_metadata` data frame by the ids we have selected in `ids` and the attribute `has_text` in the `gutenberg_metadata` data frame.
+
+```{r}
+#| label: ad-eng-lit-subjects-text-gutenbergr
+#| eval: false
+
+# Filter for only those works that have text
+ids_has_text <-
+  filter(
+    gutenberg_metadata,
+    gutenberg_id %in% ids$gutenberg_id,
+    has_text == TRUE
+  )
+glimpse(ids_has_text)
+```
+
+::: callout-warning
+**Tip**
+
+A couple R programming notes on the code phrase `gutenberg_id %in% ids$gutenberg_id`. First, the `$` symbol in `ids$gutenberg_id` is the programmatic way to target a particular column in an R data frame. In this example we select the `ids` data frame and the column `gutenberg_id`, which is a integer vector. The `gutenberg_id` variable that precedes the `%in%` operator does not need an explicit reference to a data frame because the primary argument of the `filter()` function is this data frame (`gutenberg_metadata`). Second, the `%in%` operator logically evaluates whether the vector elements in `gutenberg_metadata$gutenberg_ids` are also found in the vector `ids$gutenberg_id` returning `TRUE` and `FALSE` accordingly. This effectively filters those ids which are not in both vectors.
+:::
+
+As we can see the number of works with text is fewer than the number of works listed, `nrow(ids)` versus `nrow(ids_has_text)`. Now we can safely do our random selection of 10 works, with the function `slice_sample()` and be confident that the ids we select will contain text when we take the next step by downloading the data.
+
+```{r}
+#| label: ad-select-eng-lit-gutenbergr
+#| eval: false
+set.seed(123) # make the sampling reproducible
+ids_sample <- slice_sample(ids_has_text, n = 10) # sample 10 works
+glimpse(ids_sample) # summarize the dataset
+```
+
+```{r}
+#| label: ad-eng-lit-download-gutenbergr
+#| eval: false
+
+works_pr <- gutenberg_download(
+  gutenberg_id = ids_sample$gutenberg_id,
+  meta_fields = c("author", "title")
+)
+glimpse(works_pr) # summarize the dataset
+```
+
+```{r}
+#| label: ad-eng-lit-download-gutenbergr-save
+#| eval: false
+
+works_pr <- gutenberg_download(
+  gutenberg_id = ids_sample$gutenberg_id,
+  meta_fields = c("author", "title")
+)
+write_rds(works_pr, file = "data/acquire-data/gutenberg_works_pr.rds")
+```
+
+```{r}
+#| label: ad-eng-lit-download-gutenbergr-show
+#| echo: false
+#| eval: false
+works_pr <- read_rds(file = "data/acquire-data/gutenberg_works_pr.rds") # read rds file from disk
+glimpse(works_pr) # summarize the dataset
+```
 
 
 
@@ -171,5 +337,14 @@ data
 ## Summary
 
 ## Check your understanding
+
+(... examples ...)
+
+1. `r torf(TRUE)` Literate Programming, first introduced by Donald Knuth in 1984, allows the combination of computer code and text prose in one document. 
+2. The programming paradigm Literate Programming is implemented through `r mcq(c(answer = "Quarto", "R", "RStudio", "GitHub"))`, a platform that facilitates the creation of a variety of output documents based on the same source code.
+3. Which of the following components does a basic Quarto document *not* contain? `r mcq(c("Front-matter section", "Prose section", answer = "Back-matter section", "Code block"))`
+4. To generate a PDF document in Quarto, you can edit the format attribute value in the front-matter section to `r fitb(c(answer = "pdf", "html", "word"), ignore_case = TRUE)`.
+5. `r torf(TRUE)` The code block options `echo` and `include` can be used to hide the code and output, respectively.
+6. `r torf(FALSE)` In Quarto, a code block, where the programming language code is entered, is bounded by three underscores (`_`).
 
 ## References
