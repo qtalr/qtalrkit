@@ -12,18 +12,18 @@ License: GPL (>= 3) + file LICENSE
 URL: https://github.com/qtalr/qtalrkit, https://qtalr.github.io/qtalrkit/
 BugReports: https://github.com/qtalr/qtalrkit/issues
 Imports: 
-    dplyr (>= 1.1.2),
-    fs (>= 1.6.3),
-    glue (>= 1.6.2),
-    knitr (>= 1.43),
-    openai (>= 0.4.1),
-    purrr (>= 1.0.1),
-    readr (>= 2.1.4),
-    rlang (>= 1.1.1),
-    stringr (>= 1.5.0),
-    TBDBr (>= 0.1.0),
-    tibble (>= 3.2.1),
-    tidyr (>= 1.3.0)
+    dplyr,
+    fs,
+    TBDBr,
+    glue,
+    knitr,
+    openai,
+    purrr,
+    readr,
+    rlang,
+    stringr,
+    tibble,
+    tidyr
 Suggests: 
     bookdown,
     fontawesome,
@@ -31,6 +31,8 @@ Suggests:
     pacman,
     rmarkdown,
     webexercises
+Remotes:
+    TalkBank/TBDBr
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
