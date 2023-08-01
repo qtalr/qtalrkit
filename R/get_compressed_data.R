@@ -5,6 +5,9 @@
 #' @param url A character vector representing the full url to the compressed file
 #' @param target_dir The directory where the compressed file should be downloaded
 #' @param force An optional argument which forcefully overwrites existing data
+#' @param confirmed If `TRUE`, the user has confirmed that they have permission to use the data.
+#' If `FALSE`, the function will prompt the user to confirm permission.
+#' Setting this to `TRUE` is useful for reproducible workflows.
 #'
 #' @returns Download and extract the compressed data file
 #'
@@ -15,7 +18,15 @@
 #' get_compressed_data(url = "http://www.test.com/file.zip", target_dir = "./")
 #' }
 #' @export
-get_compressed_data <- function(url, target_dir, force = FALSE) {
+get_compressed_data <- function(url, target_dir, force = FALSE, confirmed = FALSE) {
+  # Confirm that the user has permission to use the data
+  if (!confirmed) {
+    confirmed <- confirm_permission()
+  }
+  # If not, stop the script
+  if (!confirmed) {
+    return(message("Aborted."))
+  }
   # Get the extension of the target file
   ext <- tools::file_ext(url)
   # Check to see if the target file is a compressed file

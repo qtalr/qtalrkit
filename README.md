@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Quantitative Text Analysis for Linguistics Resources
+# Quantitative Text Analysis for Linguistics Resources Kit
 
 <!-- badges: start -->
 
@@ -11,5 +11,5 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 <!-- badges: end -->
 
 The goal of `qtalrkit` is to provide supporting resources for the book
-[“An Introduction to Quantitative Text Analysis for Linguists:
+[“An Introduction to Quantitative Text Analysis for Linguistics:
 Reproducible Research using R”](https://qtalr.github.io/book/).

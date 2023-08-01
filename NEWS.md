@@ -1,9 +1,18 @@
+# qtalrkit 0.0.2.000
+
+* Added `get_talkbank_data()` function to import data from TalkBank
+* Added internal `confirm_permissions()` function to confirm that users are aware of the permissions required to use data
+* Updated `get_*()` functions to use `confirm_permissions()` internally
+* Changed `get_outliers()` to `find_outliers()` to be more consistent with other functions
+
 # qtalrkit 0.0.1.9400
 
 * Updated `create_data_dictionary()` to provide default scaffold structure for data dictionary, in lieu of OpenAI model. This scaffold is to be updated manually by the user.
+
 # qtalrkit 0.0.1.9300
 
 * Added `create_data_origin()` function. This creates a .csv file to scaffold a data origin file
+
 # qtalrkit 0.0.1.9200
 
 * Adds project template for RStudio: "Minimal Reproducible Project" 

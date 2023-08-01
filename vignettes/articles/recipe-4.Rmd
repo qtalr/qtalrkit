@@ -50,6 +50,23 @@ project/
 
 In this recipe, ...
 
+
+<!-- [ ] Consider discussing the _main.R file -->
+
+
+This approach works just fine, but luck has it that there is an R package for installing and loading packages! The [pacman](https://CRAN.R-project.org/package=pacman) package includes a set of functions for managing packages. A very useful one is `p_load()` which will look for a package on a system, load it if it is found, and install and then load it if it is not found. This helps potentially avoid using unnecessary bandwidth to install packages that may already exist on a user's system. But, to use `pacman` we need to include the code to install and load it with the functions `install.packages()` and `library()`. I've included some code that will mimic the behavior of `p_load()` for installing `pacman` itself, but as you can see it is not elegant, luckily it's only used once as we add it to the SETUP section of our master file, `_main.R`.
+
+```{r}
+#| label: install-load-pacman
+#| eval: false
+
+# Load `pacman`. If not installed, install then load.
+if (!require("pacman", character.only = TRUE)) {
+  install.packages("pacman")
+  library("pacman", character.only = TRUE)
+}
+```
+
 ## Project template
 
 <!-- 

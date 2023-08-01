@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ## Overview
 
 
-In this recipe, we will take a closer look at the data collection and documentation process. Just as in Acquire data chapter, we will group the data collection process into three types of collection strategies: downloading, API, and webscraping. We will also discuss the importance of documenting the data collection process including the creation and completion of a data origin file.
+In this recipe, we will take a closer look at the data collection and documentation process. Just as in Acquire data chapter, we will group the data collection process into three types of collection strategies: **downloading**, **APIs**, and **web scraping**. We will also discuss the importance of documenting the data collection process including the creation and completion of a data origin file.
 
 In the process we will employ the following R skills: 
 
@@ -44,6 +44,8 @@ We will also use the following R packages:
 
 Cases: 
 
+<!-- Programmatic downloads -->
+
 - [ ] Integrate the **Santa Barbara Corpus of Spoken American English** (SBCSAE) into the discussion on downloading compressed files from the internet.
   - [ ] This will provide the opportunity to discuss the `unzip()` function.
   - [ ] Also an opportunity to discuss a custom function to download various types of compressed data, e.g. `.zip`, `.tar.gz`, `.tar.bz2`, etc.
@@ -51,11 +53,31 @@ Cases:
       - [ ] Includes a `junkpaths` argument to discard the containing directory of the compressed file.
       - [ ] Include `force = TRUE` argument to overwrite existing data.
       - [ ] Includes `message()` and `stop()`/ `invisible()` functions to provide status messages and stop the function if the arguments are not specified correctly.
+
+
+<!-- APIs  -->
+
 - Literary genres data collection (API: `gutenbergr` package)
   - [ ] **Project Gutenberg** (work on fixing or changing the data that is accessed)
     - [ ] Write custom function to download data and metadata from Project Gutenberg
-- SOTU data collection/ Federalist Papers? (Webscrape: `rvest` package, Library of Congress)
 
+
+To get started let's install and/ or load the `gutenbergr` package. If a package is not part of the R base library, we cannot assume that the user will have the package in their library. The standard approach for installing and then loading a package is by using the `install.packages()` function and then calling `library()`.
+
+```{r}
+#| label: ad-standard-install-load-gutenbergr
+#| eval: false
+
+install.packages("gutenbergr") # install `gutenbergr` package
+library(gutenbergr) # load the `gutenbergr` package
+```
+
+
+<!-- Web scraping -->
+- [SOTU data collection (1790-2006)](https://www.gutenberg.org/ebooks/5050)
+  - Note that the Project Gutenberg site explicitly requests that [only human users access the site](https://www.gutenberg.org/policy/terms_of_use.html). There is a metadata catalog file here: https://www.gutenberg.org/cache/epub/feeds/
+  - Scraping one page may not be a problem, but scraping multiple pages (~100) may be a problem.
+    - > Blocks to Internet addresses (IP addresses) are applied automatically based on the volume of traffic and related factors. Such blocks automatically expire after a few days.
 
 ---
 

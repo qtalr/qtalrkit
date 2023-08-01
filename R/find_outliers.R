@@ -10,13 +10,13 @@
 #'
 #' @examples \dontrun{
 #' data(mtcars)
-#' get_outliers(mtcars, mpg)
-#' get_outliers(mtcars, wt)
+#' find_outliers(mtcars, mpg)
+#' find_outliers(mtcars, wt)
 #' }
 #' @import dplyr
 #' @importFrom rlang enquo quo_is_missing quo_is_symbol
 #' @importFrom stats quantile
-get_outliers <- function(data, variable_name) {
+find_outliers <- function(data, variable_name) {
   # Check if `data` is a data.frame
   tryCatch(
     {

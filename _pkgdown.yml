@@ -1,5 +1,5 @@
 url: https://qtalr.github.io/qtalrkit/
-title: "qtalr"
+title: "qtalrkit"
 template:
   bootstrap: 5  
   bslib:
@@ -72,15 +72,16 @@ reference:
     desc: "Functions to perform statistical analyses"
     contents:
       - calc_normalized_entropy
+      - find_outliers
   - title: "Data functions"
     desc: "Functions to manage data"
     contents:
       - create_data_origin
       - create_data_dictionary
       - get_compressed_data
-      - get_outliers
+      - get_talkbank_data
   - title: "Publishing functions"
-    desc: "Function to publish data"
+    desc: "Functions to publish data"
     contents:
       - add_pkg_to_bib
 
