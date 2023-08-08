@@ -35,8 +35,8 @@ create_data_dictionary <- function(data, file_path, model = NULL, sample_n = 5, 
 
   # Check to see if file exists at `file_path` and `force` is FALSE
   if (file.exists(file_path) && !force) {
-    message("File already exists at `file_path`. Use `force = TRUE` to overwrite.") # nolint
-    invisible(NULL) # end function early
+    # end function early
+    stop("File already exists at `file_path`. Use `force = TRUE` to overwrite.", call. = FALSE) # nolint
   }
 
   # Check to see if `model` is NULL. If so, create dictionary scaffolding.
