@@ -16,7 +16,6 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Overview
 
-
 In this recipe, we will take a closer look at the data collection and documentation process. Just as in Acquire data chapter, we will group the data collection process into three types of collection strategies: **downloading**, **APIs**, and **web scraping**. We will also discuss the importance of documenting the data collection process including the creation and completion of a data origin file.
 
 In the process we will employ the following R skills: 
@@ -24,12 +23,14 @@ In the process we will employ the following R skills:
 - control statements
   - `if` statements
   - `message` function
-  - `stop` function
+  - `stop` function (`.call = FALSE`)
 - custom functions
-  - required and optional arguments
-  - argument checks
+  - required and optional arguments (setting default values)
+  - argument checks (with `if` statements)
   - `return` function
-  - `invisible` function
+- Vectorized Operations
+  - Iteration functions in R
+    - `purr::map()`
 
 We will also use the following R packages:
 
@@ -42,7 +43,7 @@ We will also use the following R packages:
 - `rvest`
 - `xml2`
 
-Cases: 
+## Cases
 
 <!-- Programmatic downloads -->
 
@@ -71,7 +72,6 @@ To get started let's install and/ or load the `gutenbergr` package. If a package
 install.packages("gutenbergr") # install `gutenbergr` package
 library(gutenbergr) # load the `gutenbergr` package
 ```
-
 
 <!-- Web scraping -->
 - [SOTU data collection (1790-2006)](https://www.gutenberg.org/ebooks/5050)

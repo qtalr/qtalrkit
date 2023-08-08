@@ -1,5 +1,5 @@
 ---
-title: "Literate Programming I"
+title: "Literate Programming: writing with code"
 bibliography: [bibliography.bib, packages.bib]
 biblio-style: apalike
 link-citations: true
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Overview {#overview}
 
-In this Recipe, we will introduce the concept of Literate Programming and describe how to implement this concept through Quarto. I will provide a demonstration of some of the features of Quarto and describe the main structural characteristics of a Quarto document to help you get off and running!
+In this Recipe, we will introduce the concept of Literate Programming and describe how to implement this concept through Quarto. I will provide a demonstration of some of the features of Quarto and describe the main structural characteristics of a Quarto document to help you get off and running writing your own documents that combine code and prose.
 
 ## Literate Programming
 
@@ -27,9 +27,7 @@ First introduced by Donald Knuth [-@Knuth1984], the aim of Literate Programming 
 [Quarto](https://quarto.org/) is a specific implementation of the literate programming paradigm. In Figure \@ref(fig:image-quarto-preview) we see an example of Quarto in action. On the left we see the Quarto source code, which is a combination of text and code. On the right we see the output of the Quarto source code as an HTML document. 
 
 ```{r image-quarto-preview, fig.cap="Quarto source (left) and output (right) example.", fig.alt = "An image with two document views. On the left is Quarto source code and on the right is Quarto HTML output."}
-knitr::include_graphics(
-  c("assets/images/recipe-0/quarto-preview.png")
-)
+knitr::include_graphics("assets/images/recipe-0/quarto-preview.png")
 ```
 
 Quarto documents generate various types of output: web documents (HTML), PDFs, Word documents, and many other types of output formats all based on the same source code. While the interleaving of code and prose to create a variety of output documents is one of the most attractive aspects of literate programming and Quarto, it is also possible to create documents with no code at all. It is a very versatile technology as you will come to appreciate. 

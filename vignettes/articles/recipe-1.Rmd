@@ -1,5 +1,5 @@
 ---
-title: "Literate Programming II"
+title: "Academic writing with Quarto"
 pkgdown:
   as_is: true
 bibliography: [bibliography.bib, packages.bib]

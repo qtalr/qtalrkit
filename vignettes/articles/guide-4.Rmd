@@ -16,6 +16,9 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ---- 
 
+- [How to make a great R reproducible example](https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example)
+
+
 In this Guide, we will explore how to create reproducible examples using the `reprex` package [@R-reprex] in R. Reproducible examples are essential for effective communication and collaboration among data scientists and statisticians.
 
 ## Introduction

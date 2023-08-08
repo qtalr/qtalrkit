@@ -24,17 +24,19 @@ Skills:
     - Special sequences: `\d`, `\w`, `\s`
     - Metacharacters: `.`, `^`, `$`, `*`, `+`, `?`, `\`
     - Sets: `[abc]`, `[^abc]`, `[a-z]`, `[a-zA-Z]`
-- Vectorized Operations
-- Iteration functions in R
-  - `purr::map()`
-
+- Manipulate datasets
+  - `dplyr` verbs: `select()`, `filter()`, `arrange()`, `mutate()`, `summarise()`
+  - tidyselect: `starts_with()`, `ends_with()`, `contains()`, `matches()`, `one_of()`, `everything()`
+  - ...
 
 Packages: 
 
 - `stringr`
+- `dplyr`
+- `tidyselect`
 - `purrr`
 
-Cases: 
+## Cases: 
 - Unstructured: ANC (.txt) files
 - Structured: ?? Wordbank (.csv) files
 - Semi-structured: ENNTT (.tok) files
