@@ -19,14 +19,16 @@ pacman::p_load(
   rmarkdown,
   knitr,
   kableExtra,
-  qtalrkit
+  qtalrkit,
+  fontawesome,
+  webexercises
 )
 
 # automatically create a bib database for R packages
 write_bib(c(
   "tidyverse", "readr", "rmarkdown", "dplyr", "usethis", "gitcreds",
   "quanteda", "textdata", "tidycensus", "sf", "rtweet", "skimr", "janitor",
-  "ggplot2", "gridExtra", "reprex", "rvest", "fs", "purrr"
+  "ggplot2", "gridExtra", "reprex", "rvest", "fs", "purrr", "fontawesome", "webexercises"
 ), "packages.bib")
 
 
@@ -135,4 +137,6 @@ knitr::opts_chunk$set(
   out.width = "100%",
   fig.align = "center",
   tidy = TRUE
+)
+
 ```
