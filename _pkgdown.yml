@@ -58,6 +58,7 @@ articles:
       - articles/guide-4 # Reproducible examples
       - articles/guide-5 # Data and data sources
       - articles/guide-6 # Using `rtweet` package (edit/ remove)
+      - articles/guide-7 # Web scraping with R
   - title: Errata
     desc: "A collection of errata"
     contents:

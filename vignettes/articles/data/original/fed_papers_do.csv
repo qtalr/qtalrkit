@@ -1,0 +1,9 @@
+attribute,description
+Resource name,The Federalist Papers
+Data source,"https://guides.loc.gov/federalist-papers/full-text, Library of Congress Research Guides"
+Data sampling frame,"Full texts of the 85 Federalist Papers as available on the mentioned URL, including all documents authored by Alexander Hamilton, James Madison, and John Jay."
+Data collection date(s),"Web scrape performed August 9, 2023"
+Data format,Raw HTML files
+Data schema,The 85 papers are grouped in 9 HTML files (e.g. text-1-10.html)
+License,Public Domain
+Attribution,"Research Guides: Federalist Papers: Primary Documents in American History: Introduction. (n.d.). Library of Congress Research Guides. Retrieved August 9, 2023, from https://guides.loc.gov/federalist-papers/introduction"
