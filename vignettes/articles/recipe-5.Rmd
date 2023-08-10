@@ -199,13 +199,13 @@ Now that we have `pacman` installed and loaded into our R session, let's use the
 #| eval: false
 
 # Script-specific options or packages
-pacman::p_load(tidyverse, gutenbergr)
+pacman::p_load(dplyr, gutenbergr)
 ```
 
 ::: {.callout}
 **`r fontawesome::fa('hand-point-up')` Tip**
 
-Note that the arguments `tidyverse` and `gutenbergr` are comma-separated but not quoted when using `p_load()`. When using `install.packages()` to install, package names need to be quoted (character strings). `library()` can take quotes or no quotes, but only one package at a time.
+Note that the arguments `dplyr` and `gutenbergr` are comma-separated but not quoted when using `p_load()`. When using `install.packages()` to install, package names need to be quoted (character strings). `library()` can take quotes or no quotes, but only one package at a time.
 :::
 
 Project Gutenberg provides access to thousands of texts in the public domain. The `gutenbergr` package contains a set of tables, or **data frames** in R speak, that index the meta-data for these texts broken down by text (`gutenberg_metadata`), author (`gutenberg_authors`), and subject (`gutenberg_subjects`). I'll use the `glimpse()` function loaded in the [tidyverse](https://CRAN.R-project.org/package=tidyverse) package [^acquire-data-3] to summarize the structure of these data frames.
@@ -363,7 +363,7 @@ get_gutenberg_subject <- function(subject, target_file, sample_size = 10) {
   # Function: to download texts from Project Gutenberg with 
   # a specific LCC subject and write the data to disk.
   
-  pacman::p_load(tidyverse, gutenbergr) # install/load necessary packages
+  pacman::p_load(dplyr, gutenbergr) # install/load necessary packages
   
   # Check to see if the data already exists
   if(!file.exists(target_file)) { # if data does not exist, download and write

@@ -136,7 +136,7 @@ write_search_tweets <-
       cat("File does not exist \n") # message
 
       library(rtweet) # to use Twitter API
-      library(tidyverse) # to manipulate data
+      library(dplyr) # to manipulate data
 
       auth_get() # get authentication token
 

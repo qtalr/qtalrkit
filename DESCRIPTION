@@ -25,6 +25,8 @@ Imports:
     tibble,
     tidyr
 Suggests: 
+    xml2,
+    rvest,
     bookdown,
     fontawesome,
     formatR,

@@ -16,11 +16,11 @@ pkgdown:
 ```
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+opts_chunk$set(echo = FALSE)
 ```
 
 ```{r packages, include=FALSE}
-library(tidyverse) # for data manipulation
+library(readr) # for data manipulation
 ```
 
 ## Published
@@ -30,8 +30,8 @@ library(tidyverse) # for data manipulation
 Language-dedicated repositories are a great source of data for language research. Below I've included a listing of some of the more commonly used repositories.
 
 ```{r pinboard-repos}
-read_rds("assets/listings/data_repositories.rds") |> 
-  knitr::kable(caption = "Data repositories")
+read_rds("assets/listings/data_repositories.rds") |>
+  kable(caption = "Data repositories")
 ```
 
 ### Corpora and datasets
@@ -40,7 +40,7 @@ Below I've included a listing of corpora and datasets that are available for lan
 
 ```{r pinboard-datasets}
 read_rds("assets/listings/data_corpora.rds") |> 
-  knitr::kable(caption = "Corpora and language datasets")
+  kable(caption = "Corpora and language datasets")
 ```
 
 ### Data sharing platforms
@@ -64,7 +64,7 @@ The list of data available for language research is constantly growing. I've doc
 
 ```{r pinboard-listings}
 read_rds("assets/listings/data_listings.rds") |> 
-  knitr::kable(caption = "Aggregated listings of language corpora and datasets")
+  kable(caption = "Aggregated listings of language corpora and datasets")
 ```
 
 ## Custom-built
@@ -75,7 +75,7 @@ There are many APIs available for accessing language corpora and datasets. Below
 
 ```{r pinboard-apis}
 read_rds("assets/listings/data_apis.rds") |> 
-  knitr::kable(caption = "R Package APIs to language corpora and datasets.)")
+  kable(caption = "R Package APIs to language corpora and datasets.)")
 ```
 
 ## Other language resources
@@ -84,6 +84,5 @@ Data for language research is not limited to (primary) text sources. Other sourc
 
 ```{r pinboard-other}
 read_rds("assets/listings/data_experimental.rds") |> 
-  knitr::kable(caption = "Other language resources")
+  kable(caption = "Other language resources")
 ```
-
