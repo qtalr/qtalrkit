@@ -243,8 +243,6 @@ html
 #| label: fed-read-html-disk
 #| echo: false
 
-data/original/fed_papers/main.html
-
 # Read html from disk to avoid re-scraping
 html <- read_html("data/original/fed_papers/main.html")
 html
