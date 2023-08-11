@@ -122,11 +122,281 @@
 <div class="section level2">
 <h2 id="cases">Cases:<a class="anchor" aria-label="anchor" href="#cases"></a>
 </h2>
-<ul>
-<li>Unstructured: ANC (.txt) files</li>
-<li>Structured: ?? Wordbank (.csv) files</li>
-<li>Semi-structured: ENNTT (.tok) files</li>
+<div class="section level3">
+<h3 id="unstructured-anc--txt-files">Unstructured: ANC (.txt) files<a class="anchor" aria-label="anchor" href="#unstructured-anc--txt-files"></a>
+</h3>
+</div>
+<div class="section level3">
+<h3 id="structured-wordbank--csv-files">Structured: Wordbank (.csv) files<a class="anchor" aria-label="anchor" href="#structured-wordbank--csv-files"></a>
+</h3>
+</div>
+<div class="section level3">
+<h3 id="semi-structured-swda--utt-files">Semi-structured: SWDA (.utt) files<a class="anchor" aria-label="anchor" href="#semi-structured-swda--utt-files"></a>
+</h3>
+<div class="section level4">
+<h4 id="reading-data">Reading data<a class="anchor" aria-label="anchor" href="#reading-data"></a>
+</h4>
+<ul class="task-list">
+<li>
+<input type="checkbox" disabled>cover the basics of reading semi-structured data</li>
 </ul>
+</div>
+<div class="section level4">
+<h4 id="orientation">Orientation<a class="anchor" aria-label="anchor" href="#orientation"></a>
+</h4>
+<ul class="task-list">
+<li>
+<input type="checkbox" disabled>this SWDA data has been mentioned, reference is all that is needed.</li>
+</ul>
+<p>As an example we will work with the The Switchboard Dialog Act Corpus (SDAC) which extends the <a href="https://catalog.ldc.upenn.edu/LDC97S62" class="external-link">Switchboard Corpus</a> with speech act annotation. <strong>(ADD CITATION)</strong></p>
+<p>The main directory structure of the SDAC data looks like this:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">data/</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> derived/</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">└──</span> original/</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">└──</span> sdac/</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> README</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> doc/</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw00utt/</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw01utt/</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw02utt/</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw03utt/</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw04utt/</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw05utt/</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw06utt/</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw07utt/</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw08utt/</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw09utt/</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw10utt/</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw11utt/</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw12utt/</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        <span class="ex">└──</span> sw13utt/</span></code></pre></div>
+<p>The <code>README</code> file contains basic information about the resource, the <code>doc/</code> directory contains more detailed information about the dialog annotations, and each of the following directories prefixed with <code>sw...</code> contain individual conversation files. Here's a peek at internal structure of the first couple directories.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> README</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> doc</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   └── manual.august1.html</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> sw00utt</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   ├── sw_0001_4325.utt</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   ├── sw_0002_4330.utt</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   ├── sw_0003_4103.utt</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   ├── sw_0004_4327.utt</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   ├── sw_0005_4646.utt</span></code></pre></div>
+<p>Let's take a look at the first conversation file (<code>sw_0001_4325.utt</code>) to see how it is structured.</p>
+<p>There are few things to take note of here. First we see that the conversation files have a meta-data header offset from the conversation text by a line of <code>=</code> characters. Second the header contains meta-information of various types. Third, the text is interleaved with an annotation scheme.</p>
+<p>Some of the information may be readily understandable, such as the various pieces of meta-data in the header, but to get a better understanding of what information is encoded here let's take a look at the <code>README</code> file. In this file we get a birds eye view of what is going on. In short, the data includes 1155 telephone conversations between two people annotated with 42 'DAMSL' dialog act labels. The <code>README</code> file refers us to the <code>doc/manual.august1.html</code> file for more information on this scheme.</p>
+<p>At this point we open the the <code>doc/manual.august1.html</code> file in a browser and do some investigation. We find out that 'DAMSL' stands for 'Discourse Annotation and Markup System of Labeling' and that the first characters of each line of the conversation text correspond to one or a combination of labels for each utterance. So for our first utterances we have:</p>
+<pre class="plain"><code>o = "Other"
+qw = "Wh-Question"
+qy^d = "Declarative Yes-No-Question"
++ = "Segment (multi-utterance)"</code></pre>
+<p>Each utterance is also labeled for speaker ('A' or 'B'), speaker turn ('1', '2', '3', etc.), and each utterance within that turn ('utt1', 'utt2', etc.). There is other annotation provided withing each utterance, but this should be enough to get us started on the conversations.</p>
+<p>Now let's turn to the meta-data in the header. We see here that there is information about the creation of the file: 'FILENAME', 'TOPIC', 'DATE', etc. The <code>doc/manual.august1.html</code> file doesn't have much to say about this information so I returned to the <a href="https://catalog.ldc.upenn.edu/docs/LDC97S62/" class="external-link">LDC Documentation</a> and found more information in the <a href="https://catalog.ldc.upenn.edu/docs/LDC97S62/" class="external-link">Online Documentation</a> section. After some poking around in this documentation I discovered that that meta-data for each speaker in the corpus is found in the <code>caller_tab.csv</code> file. This tabular file does not contain column names, but the <code>caller_doc.txt</code> does. After inspecting these files manually and comparing them with the information in the conversation file I noticed that the 'FILENAME' information contained three pieces of useful information delimited by underscores <code>_</code>.</p>
+<pre class="plain"><code>*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*
+
+
+FILENAME:   4325_1632_1519
+TOPIC#:     323
+DATE:       920323
+TRANSCRIBER:    glp</code></pre>
+<p>The first information is the document id (<code>4325</code>), the second and third correspond to the speaker number: the first being speaker A (<code>1632</code>) and the second speaker B (<code>1519</code>).</p>
+<p>In sum, we have 1155 conversation files. Each file has two parts, a header and text section, separated by a line of <code>=</code> characters. The header section contains a 'FILENAME' line which has the document id, and ids for speaker A and speaker B. The text section is annotated with DAMSL tags beginning each line, followed by speaker, turn number, utterance number, and the utterance text. With this knowledge in hand, let's set out to create a tidy dataset with the following column structure:</p>
+<table class="table">
+<thead><tr>
+<th style="text-align:left;">
+doc_id
+</th>
+<th style="text-align:left;">
+damsl_tag
+</th>
+<th style="text-align:left;">
+speaker
+</th>
+<th style="text-align:left;">
+turn_num
+</th>
+<th style="text-align:left;">
+utterance_num
+</th>
+<th style="text-align:left;">
+utterance_text
+</th>
+<th style="text-align:left;">
+speaker_id
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+4325
+</td>
+<td style="text-align:left;">
+o
+</td>
+<td style="text-align:left;">
+A
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+Okay. /
+</td>
+<td style="text-align:left;">
+1632
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4325
+</td>
+<td style="text-align:left;">
+qw
+</td>
+<td style="text-align:left;">
+A
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+{D So, }
+</td>
+<td style="text-align:left;">
+1632
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4325
+</td>
+<td style="text-align:left;">
+qy^d
+</td>
+<td style="text-align:left;">
+B
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+[ [ I guess, +
+</td>
+<td style="text-align:left;">
+1519
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level4">
+<h4 id="tidy-the-data">Tidy the data<a class="anchor" aria-label="anchor" href="#tidy-the-data"></a>
+</h4>
+<ul class="task-list">
+<li>
+<input type="checkbox" disabled>Add idealized structure for the SWDA dataset</li>
+</ul>
+<p>Let's begin by reading one of the conversation files into R as a character vector using the <code>read_lines()</code> function from the readr package.</p>
+<p>To isolate the vector element that contains the document and speaker ids, we use <code>str_detect()</code> from the stringr package. This function takes two arguments, a string and a pattern, and returns a logical value, <code>TRUE</code> if the pattern is matched or <code>FALSE</code> if not. We can use the output of this function, then, to subset the <code>doc</code> character vector and only return the vector element (line) that contains <code>digits_digits_digits</code> with a regular expression. The expression combines the digit matching operator <code>\\d</code> with the <code>+</code> operator to match 1 or more contiguous digits. We then separate three groups of <code>\\d+</code> with underscores <code>_</code>. The result is <code>\\d+_\\d+_\\d+</code>.</p>
+<div class="callout">
+<p><strong>{{&lt; fa regular hand-point-up &gt;}} Tip</strong></p>
+<p>Regular Expressions are a powerful pattern matching syntax. They are used extensively in text manipulation and we will see them again and again.</p>
+<p>To develop regular expressions, it is helpful to have a tool that allows you to interactively test your pattern matching. The stringr package has a handy function <code>str_view()</code> and <code>str_view_all()</code> which allow for interactive pattern matching. A good website to practice Regular Expressions is <a href="https://regex101.com/" class="external-link">RegEx101</a>. You can also install the regexplain package in R to get access to a useful <a href="https://rstudio.github.io/rstudioaddins/" class="external-link">RStudio Addin</a>.</p>
+</div>
+<p>The next step is to extract the three digit sequences that correspond to the <code>doc_id</code>, <code>speaker_a_id</code>, and <code>speaker_b_id</code>. First we extract the pattern that we have identified with <code>str_extract()</code> and then we can break up the single character vector into multiple parts based on the underscore <code>_</code>. The <code>str_split()</code> function takes a string and then a pattern to use to split a character vector. It will return a list of character vectors.</p>
+<ul>
+<li>[] I will have introduced lists in earlier material (swirl Objects), at least.</li>
+</ul>
+<p>A <strong>list</strong> is a special object type in R. It is an unordered collection of objects whose lengths can differ (contrast this with a data frame which is a collection of objects whose lengths are the same --hence the tabular format). In this case we have a list of length 1, whose sole element is a character vector of length 3 --one element per segment returned from our split. This is a desired result in most cases as if we were to pass multiple character vectors to our <code>str_split()</code> function we don't want the results to be conflated as a single character vector blurring the distinction between the individual character vectors. If we <em>would</em> like to conflate, or <em>flatten</em> a list, we can use the <code><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist()</a></code> function.</p>
+<p>Let's flatten the list in this case, as we have a single character vector, and assign this result to <code>doc_speaker_info</code>.</p>
+<p><code>doc_speaker_info</code> is now a character vector of length three. Let's subset each of the elements and assign them to meaningful variable names so we can conveniently use them later on in the tidying process.</p>
+<p>The next step is to isolate the text section extracting it from rest of the document. As noted previously, a sequence of <code>=</code> separates the header section from the text section. What we need to do is to index the point in our character vector <code>doc</code> where that line occurs and then subset the <code>doc</code> from that point until the end of the character vector. Let's first find the point where the <code>=</code> sequence occurs. We will again use the <code>str_detect()</code> function to find the pattern we are looking for (a contiguous sequence of <code>=</code>), but then we will pass the logical result to the <code><a href="https://rdrr.io/r/base/which.html" class="external-link">which()</a></code> function which will return the element index number of this match.</p>
+<p>So for this file <code>31</code> is the index in <code>doc</code> where the <code>=</code> sequence occurs. Now it is important to keep in mind that we are working with a single file from the <code>sdac/</code> data. We need to be cautious to not create a pattern that may be matched multiple times in another document in the corpus. As the <code>=+</code> pattern will match <code>=</code>, or <code>==</code>, or <code>===</code>, etc. it is not implausible to believe that there might be a <code>=</code> character on some other line in one of the other files. Let's update our regular expression to avoid this potential scenario by only matching sequences of three or more <code>=</code>. In this case we will make use of the curly bracket operators <code><a href="https://rdrr.io/r/base/Paren.html" class="external-link">{}</a></code>.</p>
+<p>We will get the same result for this file, but will safeguard ourselves a bit as it is unlikely we will find multiple matches for <code>===</code>, <code>====</code>, etc.</p>
+<p><code>31</code> is the index for the <code>=</code> sequence, but we want the next line to be where we start reading the text section. To do this we increment the index by 1.</p>
+<p>The index for the end of the text is simply the length of the <code>doc</code> vector. We can use the <code><a href="https://rdrr.io/r/base/length.html" class="external-link">length()</a></code> function to get this index.</p>
+<p>We now have the bookends, so to speak, for our text section. To extract the text we subset the <code>doc</code> vector by these indices.</p>
+<p>The text has some extra whitespace on some lines and there are blank lines as well. We should do some cleaning up before moving forward to organize the data. To get rid of the whitespace we use the <code>str_trim()</code> function which by default will remove leading and trailing whitespace from each line.</p>
+<p>To remove blank lines we will use the a logical expression to subset the <code>text</code> vector. <code>text != ""</code> means return TRUE where lines are not blank, and FALSE where they are.</p>
+<p>Our first step towards a tidy dataset is to now combine the <code>doc_id</code> and each element of <code>text</code> in a data frame.</p>
+<p>With our data now in a data frame, its time to parse the <code>text</code> column and extract the damsl tags, speaker, speaker turn, utterance number, and the utterance text itself into separate columns. To do this we will make extensive use of regular expressions. Our aim is to find a consistent pattern that distinguishes each piece of information from other other text in a given row of <code>data$text</code> and extract it.</p>
+<p>The best way to learn regular expressions is to use them. To this end I've included a link to the interactive regular expression practice website <a href="https://regex101.com" class="external-link">regex101</a>.</p>
+<p>Open this site and copy the text below into the 'TEST STRING' field.</p>
+<pre class="plain"><code>o          A.1 utt1: Okay.  /
+qw          A.1 utt2: {D So, }
+qy^d          B.2 utt1: [ [ I guess, +
++          A.3 utt1: What kind of experience [ do you, + do you ] have, then with child care? /
++          B.4 utt1: I think, ] + {F uh, } I wonder ] if that worked. /
+qy          A.5 utt1: Does it say something? /
+sd          B.6 utt1: I think it usually does.  /
+ad          B.6 utt2: You might try, {F uh, }  /
+h          B.6 utt3: I don't know,  /
+ad          B.6 utt4: hold it down a little longer,  /</code></pre>
+<p>Now manually type the following regular expressions into the 'REGULAR EXPRESSION' field one-by-one (each is on a separate line). Notice what is matched as you type and when you've finished typing. You can find out exactly what the component parts of each expression are doing by toggling the top right icon in the window or hovering your mouse over the relevant parts of the expression.</p>
+<pre class="plain"><code>^.+?\s
+[AB]\.\d+
+utt\d+
+:.+$</code></pre>
+<p>As you can now see, we have regular expressions that will match the damsl tags, speaker and speaker turn, utterance number, and the utterance text. To apply these expressions to our data and extract this information into separate columns we will make use of the <code>mutate()</code> and <code>str_extract()</code> functions. <code>mutate()</code> will take our data frame and create new columns with values we match and extract from each row in the data frame with <code>str_extract()</code>. Notice that <code>str_extract()</code> is different than <code>str_extract_all()</code>. When we work with <code>mutate()</code> each row will be evaluated in turn, therefore we only need to make one match per row in <code>data$text</code>.</p>
+<p>I've chained each of these steps in the code below, dropping the original <code>text</code> column with <code>select(-text)</code>, and overwriting <code>data</code> with the results.</p>
+<div class="callout">
+<p><strong><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M64 64V241.6c5.2-1 10.5-1.6 16-1.6H96V208 64c0-8.8-7.2-16-16-16s-16 7.2-16 16zM80 288c-17.7 0-32 14.3-32 32c0 0 0 0 0 0v24c0 66.3 53.7 120 120 120h48c52.5 0 97.1-33.7 113.4-80.7c-3.1 .5-6.2 .7-9.4 .7c-20 0-37.9-9.2-49.7-23.6c-9 4.9-19.4 7.6-30.3 7.6c-15.1 0-29-5.3-40-14c-11 8.8-24.9 14-40 14H120c-13.3 0-24-10.7-24-24s10.7-24 24-24h40c8.8 0 16-7.2 16-16s-7.2-16-16-16H120 80zM0 320s0 0 0 0c0-18 6-34.6 16-48V64C16 28.7 44.7 0 80 0s64 28.7 64 64v82c5.1-1.3 10.5-2 16-2c25.3 0 47.2 14.7 57.6 36c7-2.6 14.5-4 22.4-4c20 0 37.9 9.2 49.7 23.6c9-4.9 19.4-7.6 30.3-7.6c35.3 0 64 28.7 64 64v64 24c0 92.8-75.2 168-168 168H168C75.2 512 0 436.8 0 344V320zm336-64c0-8.8-7.2-16-16-16s-16 7.2-16 16v48 16c0 8.8 7.2 16 16 16s16-7.2 16-16V256zM160 240c5.5 0 10.9 .7 16 2v-2V208c0-8.8-7.2-16-16-16s-16 7.2-16 16v32h16zm64 24v40c0 8.8 7.2 16 16 16s16-7.2 16-16V256 240c0-8.8-7.2-16-16-16s-16 7.2-16 16v24z"></path></svg> Tip</strong></p>
+<p>One twist you will notice is that regular expressions in R require double backslashes (<code>\\\\</code>) where other programming environments use a single backslash (<code>\\</code>).</p>
+</div>
+<p>There are a couple things left to do to the columns we extracted from the text before we move on to finishing up our tidy dataset. First, we need to separate the <code>speaker_turn</code> column into <code>speaker</code> and <code>turn_num</code> columns and second we need to remove unwanted characters from the <code>damsl_tag</code>, <code>utterance_num</code>, and <code>utterance_text</code> columns.</p>
+<p>To separate the values of a column into two columns we use the <code>separate()</code> function. It takes a column to separate and character vector of the names of the new columns to create. By default the values of the input column will be separated by non-alphanumeric characters. In our case this means the <code>.</code> will be our separator.</p>
+<p>To remove unwanted leading or trailing whitespace we apply the <code>str_trim()</code> function. For removing other characters we matching the character(s) and replace them with an empty string (<code>""</code>) with the <code>str_replace()</code> function. Again, I've chained these functions together and overwritten <code>data</code> with the results.</p>
+<p>To round out our tidy dataset for this single conversation file we will connect the <code>speaker_a_id</code> and <code>speaker_b_id</code> with speaker A and B in our current dataset adding a new column <code>speaker_id</code>. The <code>case_when()</code> function does exactly this: allows us to map rows of <code>speaker</code> with the value "A" to <code>speaker_a_id</code> and rows with value "B" to <code>speaker_b_id</code>.</p>
+<p>We now have the tidy dataset we set out to create. But this dataset only includes one conversation file! We want to apply this code to all 1155 conversation files in the <code>sdac/</code> corpus. The approach will be to create a custom function which groups the code we've done for this single file and then iterative send each file from the corpus through this function and combine the results into one data frame.</p>
+<p>Here's the custom function with some extra code to print a progress message for each file when it runs.</p>
+<p>As a sanity check we will run the <code>extract_sdac_metadata()</code> function on a the conversation file we were just working on to make sure it works as expected.</p>
+<p>Looks good!</p>
+<p>So now it's time to create a vector with the paths to all of the conversation files. <code><a href="https://fs.r-lib.org/reference/dir_ls.html" class="external-link">fs::dir_ls()</a></code> interfaces with our OS file system and will return the paths to the files in the specified directory. We also add a pattern to match conversation files (<code>regexp = \\.utt$</code>) so we don't accidentally include other files in the corpus. <code>recurse</code> set to <code>TRUE</code> means we will get the full path to each file.</p>
+<pre class="plain"><code><span><span class="va">..</span><span class="op">/</span><span class="va">data</span><span class="op">/</span><span class="va">original</span><span class="op">/</span><span class="va">sdac</span><span class="op">/</span><span class="va">sw00utt</span><span class="op">/</span><span class="va">sw_0001_4325.utt</span></span>
+<span><span class="va">..</span><span class="op">/</span><span class="va">data</span><span class="op">/</span><span class="va">original</span><span class="op">/</span><span class="va">sdac</span><span class="op">/</span><span class="va">sw00utt</span><span class="op">/</span><span class="va">sw_0002_4330.utt</span></span>
+<span><span class="va">..</span><span class="op">/</span><span class="va">data</span><span class="op">/</span><span class="va">original</span><span class="op">/</span><span class="va">sdac</span><span class="op">/</span><span class="va">sw00utt</span><span class="op">/</span><span class="va">sw_0003_4103.utt</span></span>
+<span><span class="va">..</span><span class="op">/</span><span class="va">data</span><span class="op">/</span><span class="va">original</span><span class="op">/</span><span class="va">sdac</span><span class="op">/</span><span class="va">sw00utt</span><span class="op">/</span><span class="va">sw_0004_4327.utt</span></span>
+<span><span class="va">..</span><span class="op">/</span><span class="va">data</span><span class="op">/</span><span class="va">original</span><span class="op">/</span><span class="va">sdac</span><span class="op">/</span><span class="va">sw00utt</span><span class="op">/</span><span class="va">sw_0005_4646.utt</span></span>
+<span><span class="va">..</span><span class="op">/</span><span class="va">data</span><span class="op">/</span><span class="va">original</span><span class="op">/</span><span class="va">sdac</span><span class="op">/</span><span class="va">sw00utt</span><span class="op">/</span><span class="va">sw_0006_4108.utt</span></span></code></pre>
+<p>o pass each conversation file in the vector of paths to our conversation files iteratively to the <code>extract_sdac_metadata()</code> function we use <code>map()</code>. This will apply the function to each conversation file and return a data frame for each. <code>bind_rows()</code> will then join the resulting data frames by rows to give us a single tidy dataset for all 1155 conversations. Note there is a lot of processing going on here we have to be patient.</p>
+<p>We now see that we have <code>nrow(sdac)</code> observations (individual utterances in this dataset).</p>
+</div>
+<div class="section level4">
+<h4 id="write-datasets">Write datasets<a class="anchor" aria-label="anchor" href="#write-datasets"></a>
+</h4>
+<p>Again as in the previous cases, we will write this dataset to disk to prepare for the next step in our text analysis project.</p>
+<p>The directory structure now looks like this:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">data/</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> derived/</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>   └── sdac/</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="ex">│</span>       └── sdac_curated.csv</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">└──</span> original/</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">└──</span> sdac/</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> README</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> doc/</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw00utt/</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw01utt/</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw02utt/</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw03utt/</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw04utt/</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw05utt/</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw06utt/</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw07utt/</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw08utt/</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw09utt/</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw10utt/</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw11utt/</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> sw12utt/</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>        <span class="ex">└──</span> sw13utt/</span></code></pre></div>
+</div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
