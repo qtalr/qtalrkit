@@ -7,6 +7,17 @@ biblio-style: apalike
 link-citations: true
 ---
 
+<!--  
+The goal will be to do one, more advanced example
+
+- `gutenbergr` example
+  - Literature: American and English Literature
+  - Metadata: `gutenberg_metadata`, `gutenberg_authors`, `gutenberg_subjects`
+  - Directory structure
+  - Data origin file
+-->
+
+
 ```{r, child="_common.Rmd"}
 ```
 

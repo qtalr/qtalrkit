@@ -7,6 +7,18 @@ biblio-style: apalike
 link-citations: true
 ---
 
+<!--  
+The goal will be to do one, more advanced example
+
+- SWDA: find words per utterance, per speaker
+  - Normalization
+  - Merge metadata
+  - Tokenize
+  - Data checks
+  - Data dictionary
+
+-->
+
 ```{r, child="_common.Rmd"}
 ```
 

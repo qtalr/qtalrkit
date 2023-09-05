@@ -1,6 +1,6 @@
 Package: qtalrkit
 Title: Quantitative Text Analysis for Linguists Resource Kit
-Version: 0.0.2.000
+Version: 0.0.3.000
 Authors@R: 
     person("Jerid", "Francom", , "francojc@wfu.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5972-6330"))
@@ -23,7 +23,9 @@ Imports:
     rlang,
     stringr,
     tibble,
-    tidyr
+    tidyr,
+    Matrix,
+    tidytext
 Suggests: 
     xml2,
     rvest,

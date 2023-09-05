@@ -7,6 +7,14 @@ biblio-style: apalike
 link-citations: true
 ---
 
+<!--  
+The goal will be to do one, more advanced example
+
+
+
+-->
+
+
 ```{r, child="_common.Rmd"}
 ```
 

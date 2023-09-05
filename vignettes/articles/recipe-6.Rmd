@@ -7,6 +7,16 @@ biblio-style: apalike
 link-citations: true
 ---
 
+<!--  
+The goal will be to do one, more advanced example
+
+- PELIC
+  - CSV file `compiled` with nested `tokens` column
+  - Data checks
+  - Data dictionary
+
+-->
+
 ```{r, child="_common.Rmd"}
 ```
 
