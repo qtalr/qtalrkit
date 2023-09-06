@@ -14,6 +14,7 @@
 #'   - `type`: The unique types from the input data.
 #'   - `n`: The frequency of each type across all documents.
 #'   - `df`: Document Frequency, if `metric = 'all'` or `metric = 'df'`.
+#'   - `idf`: Inverse Document Frequency, if `metric = 'all'` or `metric = 'idf'`.
 #'   - `dp`: Gries' Deviation of Proportions, if `metric = 'all'` or `metric = 'dp'`.
 #' @export
 #'
@@ -46,14 +47,14 @@ calc_dispersion_metrics <- function(data, type, documents, metric = "all") {
   }
 
   # Check if metric is a character and one of the allowed values
-  if (!is.character(metric) || !metric %in% c("all", "df", "dp")) {
-    stop("The argument 'metric' must be a character string: 'all', 'df', or 'dp'.")
+  if (!is.character(metric) || !metric %in% c("all", "df", "idf", "dp")) {
+    stop("The argument 'metric' must be a character string: 'all', 'df', 'idf', or 'dp'.")
   }
 
   # Create a Sparse Term-Document Matrix (TDM)
-  tdm <- 
-    data |> 
-    dplyr::count({{ type }}, {{ documents }}) |> 
+  tdm <-
+    data |>
+    dplyr::count({{ type }}, {{ documents }}) |>
     tidytext::cast_sparse({{ type }}, {{ documents }}, n)
 
   # Convert frequencies to row proportions
@@ -70,6 +71,10 @@ calc_dispersion_metrics <- function(data, type, documents, metric = "all") {
   # Calculate metrics based on user choice
   if (metric == "all" || metric == "df") {
     output_df$df <- calc_df(tdm)
+  }
+
+  if (metric == "all" || metric == "idf") {
+    output_df$df <- calc_idf(tdm)
   }
 
   if (metric == "all" || metric == "dp") {

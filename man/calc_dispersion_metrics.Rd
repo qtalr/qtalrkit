@@ -24,6 +24,7 @@ A data frame with columns:
 \item \code{type}: The unique types from the input data.
 \item \code{n}: The frequency of each type across all documents.
 \item \code{df}: Document Frequency, if \code{metric = 'all'} or \code{metric = 'df'}.
+\item \code{idf}: Inverse Document Frequency, if \code{metric = 'all'} or \code{metric = 'idf'}.
 \item \code{dp}: Gries' Deviation of Proportions, if \code{metric = 'all'} or \code{metric = 'dp'}.
 }
 }
