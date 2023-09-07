@@ -1,3 +1,15 @@
+# qtalrkit 0.0.3.200
+
+* Fixes bug in `get_compressed_data()` that caused the function to create dot file copies of the original files
+
+# qtalrkit 0.0.3.100
+
+* Adds `idf` measure to `calc_dispersion_metrics()`
+
+# qtalrkit 0.0.3.000
+
+* Adds `calc_dispersion_metrics()` function to calculate dispersion metrics
+
 # qtalrkit 0.0.2.000
 
 * Added `get_talkbank_data()` function to import data from TalkBank

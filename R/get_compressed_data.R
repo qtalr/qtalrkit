@@ -27,7 +27,7 @@ get_compressed_data <- function(url, target_dir, force = FALSE, confirmed = FALS
   ext <- tools::file_ext(url)
   validate_file_extension(ext)
 
-  if (!dir.exists(target_dir) | force) {
+  if (!dir.exists(target_dir) || force) {
     cat("Creating target data directory \n")
     dir.create(path = target_dir, recursive = TRUE, showWarnings = FALSE)
 
