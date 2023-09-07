@@ -69,14 +69,15 @@ calc_dispersion_metrics <- function(data, type, documents, metric = "all") {
   output_df <- tibble(type = rownames(tdm), n = row_sums)
 
   # Calculate metrics based on user choice
+  # Document Frequency (DF)
   if (metric == "all" || metric == "df") {
     output_df$df <- calc_df(tdm)
   }
-
+  # Inverse Document Frequency (IDF)
   if (metric == "all" || metric == "idf") {
     output_df$idf <- calc_idf(tdm)
   }
-
+  # Gries' Deviation of Proportions (DP)
   if (metric == "all" || metric == "dp") {
     output_df$dp <- calc_dp(tdm_normalized, corpus_parts)
   }
