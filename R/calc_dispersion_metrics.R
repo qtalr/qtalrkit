@@ -74,7 +74,7 @@ calc_dispersion_metrics <- function(data, type, documents, metric = "all") {
   }
 
   if (metric == "all" || metric == "idf") {
-    output_df$df <- calc_idf(tdm)
+    output_df$idf <- calc_idf(tdm)
   }
 
   if (metric == "all" || metric == "dp") {
