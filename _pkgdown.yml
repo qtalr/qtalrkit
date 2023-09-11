@@ -73,7 +73,7 @@ reference:
     desc: "Functions to perform statistical analyses"
     contents:
       - calc_normalized_entropy # dispersion for categorical data
-      - calc_dispersion_metrics # dispersion metrics
+      - calc_type_metrics       # type metrics (frequency, dispersion)
       - find_outliers           # outlier detection
   - title: "Data functions"
     desc: "Functions to manage data"
