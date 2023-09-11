@@ -1,3 +1,7 @@
+# qtalrkit 0.0.3.210
+
+* Removes `calc_dispersion_metrics()` function and replaces it with `calc_type_metric()` which includes frequency and dispersion metrics.
+  
 # qtalrkit 0.0.3.200
 
 * Fixes bug in `get_compressed_data()` that caused the function to create dot file copies of the original files
