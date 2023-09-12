@@ -72,14 +72,15 @@ reference:
   - title: "Statistical functions"
     desc: "Functions to perform statistical analyses"
     contents:
+      - calc_assoc_metrics      # association metrics (pmi, dice, G)
       - calc_normalized_entropy # dispersion for categorical data
       - calc_type_metrics       # type metrics (frequency, dispersion)
       - find_outliers           # outlier detection
   - title: "Data functions"
     desc: "Functions to manage data"
     contents:
-      - create_data_origin      # data origin file structure
       - create_data_dictionary  # data dictionary file structure/ contents
+      - create_data_origin      # data origin file structure
       - get_compressed_data     # download and decompress data
       - get_talkbank_data       # interface to TalkBank API
   - title: "Publishing functions"

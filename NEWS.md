@@ -1,3 +1,7 @@
+# qtalrkit 0.0.3.00
+
+* Adds `calc_assoc_metrics` to calculate (pmi, dice, G) for a given type bigram
+
 # qtalrkit 0.0.3.210
 
 * Removes `calc_dispersion_metrics()` function and replaces it with `calc_type_metric()` which includes frequency and dispersion metrics.
