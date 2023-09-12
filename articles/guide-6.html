@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">qtalrkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3.210</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3.300</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,7 +93,7 @@
 <p>A final argument to note is the <code>include_rts</code> whose attribute is logical. If <code>FALSE</code> no retweets will be included in the results. This is often what a language researcher will want.</p>
 <p>Now, once the <code>search_tweets</code> query has been run, there a a large number of variables that are included in the resulting data frame. Here's an overview of the names of the variables and the vector types for each variable.</p>
 <p>The <a href="https://developer.twitter.com/en/docs/twitter-api/v1/tweets/search/api-reference/get-search-tweets" class="external-link">Twitter API documentation for the standard Search Tweets call</a>, which is what <code>search_tweets()</code> interfaces with has quite a few variables (35 to be exact). For many purposes it is not necessary to keep all the variables. Furthermore, since we will want to write a plain-text file to disk as part of our project, we will need to either convert or eliminate any of the variables that are marked as type <code>list</code>. The most common variable to convert is the <code>coordinates</code> variable, as it will contain the geolocation codes for those Twitter users' tweets captured in the query that have geolocation enabled on their device. It is of note, however, that using <code>search_tweets()</code> without specifying that only tweets with geocodes should be captured (<code>geocode =</code>) will tend to return very few, if any, tweets with geolocation information as the majority of Twitter users do not have geolocation enabled.</p>
-<p>Let's assume that we want to keep all the variables that are not of type <code>list</code>. One option is to use <code>select()</code> and name each variable we want to keep. On the other hand we can use a combination of <code>select()</code> and negated <code>!where()</code> to select all the variables that are not lists (<code>is_list</code>). Let's do the later approach.</p>
+<p>Let's assume that we want to keep all the variables that are not of type <code>list</code>. One option is to use <code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select()</a></code> and name each variable we want to keep. On the other hand we can use a combination of <code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select()</a></code> and negated <code>!where()</code> to select all the variables that are not lists (<code>is_list</code>). Let's do the later approach.</p>
 <p>Now we have the 30 variables which can be written to disk as a plain-text file. Let's go ahead a do this, but wrap it in a function that does all the work we've just laid out in one function. In addition we will check to see if the same query has been run, and skip running the query if the dataset is on disk.</p>
 <p>Let's run this function with the same query as above.</p>
 <p>And the appropriate directory structure and file have been written to disk.</p>
@@ -102,7 +102,7 @@
 <p>In sum, this subsection provided an overview to acquiring data from web service APIs through R packages. We took at closer look at the <code>gutenbergr</code> package which provides programmatic access to works available on Projec t Gutenberg and the <code>rtweet</code> package which provides authenticated access to Twitter. Working with package interfaces requires more knowledge of R including loading/ installing packages, working with vectors and data frames, and exporting data from an R session. We touched on these programming concepts and also outlined a method to create a reproducible workflow.</p>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-R-rtweet" class="csl-entry">
-Kearney, Michael W., Lluís Revilla Sancho, and Hadley Wickham. 2023. <em>Rtweet: Collecting Twitter Data</em>.
+Kearney, Michael W., Lluís Revilla Sancho, and Hadley Wickham. 2023. <em>Rtweet: Collecting Twitter Data</em>. <a href="https://docs.ropensci.org/rtweet/" class="external-link">https://docs.ropensci.org/rtweet/</a>.
 </div>
 </div>
 </div>
