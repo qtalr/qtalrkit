@@ -1,4 +1,10 @@
-# qtalrkit 0.0.3.00
+# qtalrkit 0.0.3.400
+
+* Fixes warnings on `calc_assoc_metrics()` 
+* Updates Date on DESCRIPTION file
+* Adds test-add_pkg_to_bib.R 
+
+# qtalrkit 0.0.3.000
 
 * Adds `calc_assoc_metrics` to calculate (pmi, dice, G) for a given type bigram
 
