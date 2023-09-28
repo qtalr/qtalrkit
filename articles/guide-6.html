@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">qtalrkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3.300</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3.400</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,7 +83,7 @@
 <h2 id="authentication">Authentication<a class="anchor" aria-label="anchor" href="#authentication"></a>
 </h2>
 <p>Some APIs and the R interfaces that provide access to them require authentication. This may either be through an interactive process that is mediated between R and the web service and/ or by visiting the developer website of the particular API. In either case, there is an extra step that is necessary to make the connect to the API to access the data.</p>
-<p>Let's take a look at the popular micro-blogging platform Twitter. The rtweet package <span class="citation">(<a href="#ref-R-rtweet" role="doc-biblioref">Kearney, Revilla Sancho, and Wickham 2023</a>)</span> provides access to tweets in various ways. To get started install and/or load the rtweet package.</p>
+<p>Let's take a look at the popular micro-blogging platform Twitter. The rtweet package <span class="citation">(<a href="#ref-R-rtweet" role="doc-biblioref"><strong>R-rtweet?</strong></a>)</span> provides access to tweets in various ways. To get started install and/or load the rtweet package.</p>
 <p>Now before a researcher can access data from Twitter with rtweet, <a href="https://docs.ropensci.org/rtweet/articles/auth.html" class="external-link">an authentication token must be setup and made accessible</a>. After following the steps for setting up an authentication token and saving it, that token can be accessed with the <code>auth_as()</code> function.</p>
 <p>Now that we the R session is authenticated, we can explore a popular method for querying the Twitter API which searchs tweets (<code>search_tweets</code>) posted in the recent past (6-9 days).</p>
 <p>Let's look at a typical query using the <code>search_tweets()</code> function.</p>
@@ -100,11 +100,6 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">data/original/twitter/</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">└──</span> rt_latinx.csv</span></code></pre></div>
 <p>In sum, this subsection provided an overview to acquiring data from web service APIs through R packages. We took at closer look at the <code>gutenbergr</code> package which provides programmatic access to works available on Projec t Gutenberg and the <code>rtweet</code> package which provides authenticated access to Twitter. Working with package interfaces requires more knowledge of R including loading/ installing packages, working with vectors and data frames, and exporting data from an R session. We touched on these programming concepts and also outlined a method to create a reproducible workflow.</p>
-<div id="refs" class="references csl-bib-body hanging-indent">
-<div id="ref-R-rtweet" class="csl-entry">
-Kearney, Michael W., Lluís Revilla Sancho, and Hadley Wickham. 2023. <em>Rtweet: Collecting Twitter Data</em>. <a href="https://docs.ropensci.org/rtweet/" class="external-link">https://docs.ropensci.org/rtweet/</a>.
-</div>
-</div>
 </div>
   </main>
 </div>
