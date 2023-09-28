@@ -90,6 +90,13 @@ calc_assoc_metrics <- function(data, doc_index, token_index, type, association =
         ungroup(), # ungroup
       by = "y" # join p_xy.y with bigram_counts.y
     )
+  # Define variables for use in the rest of the function
+  x <- p_xy_x_y$x
+  y <- p_xy_x_y$y
+  total_x <- p_xy_x_y$total_x
+  total_y <- p_xy_x_y$total_y
+  p_x <- p_xy_x_y$p_x
+  p_y <- p_xy_x_y$p_y
 
   metrics <-
     p_xy_x_y |>
@@ -97,36 +104,31 @@ calc_assoc_metrics <- function(data, doc_index, token_index, type, association =
     mutate(across(!c(x, y), as.numeric))
 
   # Calculate metrics based on user choice
-  # PMI
   if ("all" %in% association || "pmi" %in% association) {
+    # Calculate the PMI of each bigram
     metrics <-
       metrics |>
-      # calculate the PMI of each bigram
-      # PMI(x,y) = log( P(x,y) / (P(x)*P(y)) )
       mutate(pmi = log(p_xy / (p_x * p_y)))
   }
 
-  # Dice's Coefficient
   if ("all" %in% association || "dice_coeff" %in% association) {
+    # Calculate Dice's Coefficient of each bigram
     metrics <-
       metrics |>
-      # calculate Dice's Coefficient of each bigram
-      # D(x,y) = 2*P(x,y) / (P(x) + P(y))
       mutate(dice_coeff = 2 * p_xy / (p_x + p_y))
   }
 
-  # G-Score
   if ("all" %in% association || "g_score" %in% association) {
+    # Calculate the G-Score of each bigram
     metrics <-
       metrics |>
-      # calculate the G-Score of each bigram
-      # G(x,y) = 2 * log(P(x,y)) - log(P(x)) - log(P(y))
       mutate(g_score = 2 * log(p_xy) - log(p_x) - log(p_y))
   }
 
   # Remove the intermediate columns
   metrics <- metrics |>
     select(-total_x, -total_y)
+
   if (!verbose) {
     metrics <- metrics |>
       select(-p_xy, -p_x, -p_y)
