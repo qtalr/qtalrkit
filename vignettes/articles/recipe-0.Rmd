@@ -1,5 +1,5 @@
 ---
-title: "Literate Programming: writing with code"
+title: "0. Writing with code"
 bibliography: [bibliography.bib, packages.bib]
 biblio-style: apalike
 link-citations: true
@@ -16,13 +16,17 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Overview {#overview}
 
+<!-- Goals for the Recipe/ Lab -->
+
 In this Recipe, we will introduce the concept of Literate Programming and describe how to implement this concept through Quarto. I will provide a demonstration of some of the features of Quarto and describe the main structural characteristics of a Quarto document to help you get off and running writing your own documents that combine code and prose.
 
-## Literate Programming
+## Concepts and strategies
+
+### Literate Programming
 
 First introduced by Donald Knuth [-@Knuth1984], the aim of Literate Programming is to be able to combine computer code and text prose in one document. This allows an analyst to run code, view the output of the code, view the code itself, and provide prose description all in one document. In this way, a literate programming document allows for presenting your analysis in a way that performs the computing steps desired and presents it in an easily readable format. Literate programming is now a key component of creating and sharing reproducible research [@Gandrud2015].
 
-## Quarto
+### Quarto
 
 [Quarto](https://quarto.org/) is a specific implementation of the literate programming paradigm. In Figure \@ref(fig:image-quarto-preview) we see an example of Quarto in action. On the left we see the Quarto source code, which is a combination of text and code. On the right we see the output of the Quarto source code as an HTML document. 
 
@@ -40,13 +44,18 @@ To see Quarto in action, please check out the [Quarto Gallery](https://quarto.or
 
 A Quarto source document is a plain-text file with the extension `.qmd` that can be opened in any plain text reader. We will be using the RStudio IDE (henceforth RStudio) to create, open, and edit, and generate output from `.qmd` files but any plain-text reader, such as TextEdit (MacOS) or Notepad (PC) can open these files. 
 
-With this in mind, let's now move on to the anatomy of an R Markdown document.
+With this in mind, let's now move on to the anatomy of a Quarto document.
 
-### Anatomy of a Quarto Document
+#### Anatomy of a Quarto Document
 
-At the most basic level a Quarto document contains two components: (1) a front-matter section and (2) a prose section. A third component, a code block, can be interleaved within the prose section to add code to the document. Let's look at each of these in turn. 
+At the most basic level a Quarto document contains two components: 
 
-#### Front-matter
+1. a front-matter section and 
+2. a prose section. 
+
+A third component, a code block, can be interleaved within the prose section to add code to the document. Let's look at each of these in turn. 
+
+##### Front-matter
 
 The front matter of a Quarto document appears, well, at the front of the document (or the top, rather). Referring back to Figure \@ref(fig:image-quarto-preview) we see the front matter at the top.   
 
@@ -62,7 +71,7 @@ When creating a Quarto document with RStudio the default attribute keys  are `ti
 
 The values for the first two keys are pretty straightforward and can be edited as needed. The value for the `format` attribute can also be edited to tell the `.qmd` file to generate other output types. Can you guess what value we might use to generate a PDF document? Yep, it's just `pdf`. As we work Quarto you will learn more about how to use the RStudio interface to change some of these key-value pairs and add others!
 
-#### Prose
+##### Prose
 
 
 Anywhere below the front matter and not contained within a code block (see below) is open for prose. The prose section(s) have an added functionality in that they are Markdown aware. What does that mean, you say? Well, Markdown refers to a set of plain-text formatting conventions to produce formatted text in the output document. To quote [Wikipedia](https://en.wikipedia.org/wiki/Markdown):
@@ -84,9 +93,10 @@ We can also do:
 
 Follow [this link find more information on basic Markdown syntax](https://quarto.org/docs/authoring/markdown-basics.html).
 
-#### Code blocks {#code-blocks}
+##### Code blocks {#code-blocks}
 
 Code blocks are where the R magic happens. Again, referring to Figure \@ref(fig:image-quarto-preview) we see that there is the following code block.
+
 
 ````
 ```{r}`r ''`
@@ -94,7 +104,9 @@ Code blocks are where the R magic happens. Again, referring to Figure \@ref(fig:
 ```
 ````
 
-A code block is bound by three backticks `` ``` ``. After the first backticks the curly brackets `{}` allow us to tell Quarto which programming language to use to evaluate (*i.e.* run) in the code block. In most cases this will be R, hence the the opening curly bracket `` `{r}` ``. In this example, R is used as a simple calculator adding `1 + 1`. Here's what this code block produces. 
+A code block is bound by three backticks `` ``` ``. After the first backticks the curly brackets `{}` allow us to tell Quarto which programming language to use to evaluate (*i.e.* run) in the code block. In most cases this will be R, hence the the opening curly bracket `` `{r}` ``. But there are other languages that can be used in Quarto, such as Python, SQL, and Bash.
+
+In the previous example, R is used as a simple calculator adding `1 + 1`. Here's what this code block produces. 
 
 ```{r add, echo=TRUE}
 1 + 1
@@ -141,9 +153,9 @@ We have only mentioned selecting the coding language and labeling the code block
 
 - *etc.*
 
-### Create and render a Quarto document
+#### Create and render a Quarto document
 
-The easiest and most efficient way to create a Quarto source file is to use the RStudio point-and-click' interface. Just use the toolbar to create a new file and select "Quarto Document...", as seen in Figure \@ref(fig:image-quarto-create-1). 
+The easiest and most efficient way to create a Quarto source file is to use the RStudio point-and-click interface. Just use the toolbar to create a new file and select "Quarto Document...", as seen in Figure \@ref(fig:image-quarto-create-1). 
 
 ```{r image-quarto-create-1, fig.cap="Creating a new Quarto document in RStudio."}
 knitr::include_graphics("assets/images/recipe-0/quarto-create-1.png")
@@ -171,24 +183,38 @@ Once you have done that the `.qmd` file will render in the format you have speci
 knitr::include_graphics("assets/images/recipe-0/quarto-create-4.png")
 ```
 
-## Summary 
-
-This concludes our introduction to literate programming using Quarto. We have covered the basics here but there is much more to explore. We will introduce more Quarto functionality in the next Recipe.
-
 ::: {.callout}
 **`r fontawesome::fa('medal')` Dive deeper**
 
 Watch [Getting Started with Quarto](https://www.youtube.com/watch?v=_f3latmOhew) for a guided tour of Quarto [@Cetinkaya-Rundel2023].
 :::
 
-
 ## Check your understanding
 
 1. `r torf(TRUE)` Literate Programming, first introduced by Donald Knuth in 1984, allows the combination of computer code and text prose in one document. 
 2. The programming paradigm Literate Programming is implemented through `r mcq(c(answer = "Quarto", "R", "RStudio", "GitHub"))`, a platform that facilitates the creation of a variety of output documents based on the same source code.
 3. Which of the following components does a basic Quarto document *not* contain? `r mcq(c("Front-matter section", "Prose section", answer = "Back-matter section", "Code block"))`
-4. To generate a PDF document in Quarto, you can edit the format attribute value in the front-matter section to `r fitb(c(answer = "pdf", "html", "word"), ignore_case = TRUE)`.
+4. To generate a PDF document in Quarto, you can edit the format attribute value in the front-matter section to `r fitb(c(answer = "pdf"), ignore_case = TRUE)`.
 5. `r torf(TRUE)` The code block options `echo` and `include` can be used to hide the code and output, respectively.
 6. `r torf(FALSE)` In Quarto, a code block, where the programming language code is entered, is bounded by three underscores (`_`).
+
+## Lab preparation 
+
+This concludes our introduction to literate programming using Quarto. We have covered the basics here but there is much more to explore. 
+
+In preparation for Lab 0, ensure that you have completed the following:
+
+- [ ] Setup your computing environment with R and RStudio
+- [ ] Installed the necessary packages:
+  - [ ] `quarto`
+  - [ ] `tinytex`
+
+and that you are prepared to do the following:
+
+- [ ] Open RStudio
+- [ ] Create, edit, and render Quarto documents
+- [ ] Use some basic Markdown syntax to format text
+
+With this in mind, you are ready to move on to Lab 0.
 
 ## References 
