@@ -6,13 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="qtalrkit">
-<title>Academic writing with Quarto • qtalrkit</title>
+<title>1. Academic writing with Quarto • qtalrkit</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<script src="../extra.js"></script><meta property="og:title" content="Academic writing with Quarto">
+<script src="../extra.js"></script><meta property="og:title" content="1. Academic writing with Quarto">
 <meta property="og:description" content="qtalrkit">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -70,7 +70,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Academic writing with Quarto</h1>
+      <img src="" class="logo" alt=""><h1>1. Academic writing with Quarto</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/qtalr/qtalrkit/blob/HEAD/vignettes/articles/recipe-1.Rmd" class="external-link"><code>vignettes/articles/recipe-1.Rmd</code></a></small>
@@ -82,42 +82,296 @@
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>In this Recipe we are going to explore additional functionality in Quarto. This will include how to number sections, add a table of contents, how to add in-line citations and a document-final references list, and cross-reference tables and figures.</p>
+<p>The implementation of literate programming we are using in this course is Quarto with R. As we have seen in previously, Quarto provides the ability to combine prose and code in a single document. This is a powerful strategy for creating reproducible documents that can be easily updated and shared.</p>
+<p>A common type of writing in academia is the research paper. In this recipe we will explore how to use Quarto to include common elements found in research papers. These include:</p>
+<ul>
+<li>Numbered sections</li>
+<li>Table of contents</li>
+<li>Cross-referencing tables and figures</li>
+<li>In-line citations and references list</li>
+</ul>
+<p>In Lab 1 you will have an opportunity to practice these concepts by doing an article summary which includes some of these features using Quarto.</p>
 </div>
 <div class="section level2">
-<h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
+<h2 id="concepts-and-strategies">Concepts and strategies<a class="anchor" aria-label="anchor" href="#concepts-and-strategies"></a>
 </h2>
+<p>For many of the style components that we use in Quarto, there is a part that is addressed in the front-matter section and a part that is addressed in the prose section and/ or code block sections.</p>
+<p>To refresh our memory, the front-matter is fenced by three dashes (<code>---</code>) and is where we set the document attributes. The prose section is where we write the text of the document. The code block section is where we write the code that will be executed and is fenced by three backticks (<code>```</code>) and the name of the code interpreter <code>{r}</code> (R for us).</p>
+<pre><code>---
+title: "My document title"
+format: pdf
+---
+
+This is the prose section.
+
+```{r}
+#| label: example-code-block
+1 + 1
+```</code></pre>
+<p>With this in mind let's look at each of these elements in turn.</p>
+<div class="section level3">
+<h3 id="numbered-sections">Numbered sections<a class="anchor" aria-label="anchor" href="#numbered-sections"></a>
+</h3>
+<p>To number sections in Quarto, we use the <code>number_sections</code> key with the value <code>yes</code>. This is set in the front-matter section, nested under the value for the document type to be rendered. For example, to number sections in a PDF document, we would set the <code>number-sections</code> key to <code>true</code> in the front-matter section as follows:</p>
+<pre><code>---
+title: "My document title"
+format: 
+  pdf:
+    number-sections: true
+---</code></pre>
+<p>Headers in the prose section are then numbered automatically. For example, the following markdown:</p>
+<pre><code><span><span class="co"># Section</span></span>
+<span></span>
+<span><span class="co">## Subsection</span></span>
+<span></span>
+<span><span class="co">### Subsubsection</span></span>
+<span></span>
+<span><span class="co">#### Subsubsubsection</span></span>
+<span></span>
+<span><span class="co">##### Subsubsubsubsection</span></span></code></pre>
+<p>would render as:</p>
+<p><img src="assets/images/recipe-1/quarto-num-sections.png" width="90%" style="display: block; margin: auto;"></p>
+<p>We can also control the depth of the numbering by setting the <code>number-depth</code> key in the front-matter section. For example, to number sections and subsections, but not subsubsections, we would set the <code>number-depth</code> key to <code>2</code> as follows:</p>
+<pre><code>---
+title: "My document title"
+format: 
+  pdf:
+    number-sections: true
+    number-depth: 2
+---</code></pre>
+<p>Now the first and second headers are numbered and formated but third and subsequent headers are only formatted.</p>
+<p>If for some reason you want to turn off numbering for a specific header, you can add <code>{.unnumbered}</code> to the end of the header. For example, the following markdown:</p>
+<pre><code><span><span class="co"># Section {.unnumbered}</span></span></code></pre>
+<p>This is particularly useful in academic writing when we want to add a reference, materials, or other section that is not numbered at the end of the document.</p>
+<div class="callout">
+<p><strong><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"></path></svg> Warning</strong></p>
+<p>Note that if you have a header that is unnumbered, the next header will be numbered as if the unnumbered header did not exist. This can have unexpected results if you have children of an unnumbered header.</p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="table-of-contents">Table of contents<a class="anchor" aria-label="anchor" href="#table-of-contents"></a>
+</h3>
+<p>For longer documents including a table of contents can be a useful way to help readers navigate the document. To include a table of contents in Quarto, we use the <code>toc</code> key with the value <code>true</code>. Again, in the front-matter section, nested under the format value, as seen below:</p>
+<pre><code>---
+title: "My document title"
+format: 
+  pdf:
+    toc: true
+---</code></pre>
+<div class="callout">
+<p><strong><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M64 64V241.6c5.2-1 10.5-1.6 16-1.6H96V208 64c0-8.8-7.2-16-16-16s-16 7.2-16 16zM80 288c-17.7 0-32 14.3-32 32c0 0 0 0 0 0v24c0 66.3 53.7 120 120 120h48c52.5 0 97.1-33.7 113.4-80.7c-3.1 .5-6.2 .7-9.4 .7c-20 0-37.9-9.2-49.7-23.6c-9 4.9-19.4 7.6-30.3 7.6c-15.1 0-29-5.3-40-14c-11 8.8-24.9 14-40 14H120c-13.3 0-24-10.7-24-24s10.7-24 24-24h40c8.8 0 16-7.2 16-16s-7.2-16-16-16H120 80zM0 320s0 0 0 0c0-18 6-34.6 16-48V64C16 28.7 44.7 0 80 0s64 28.7 64 64v82c5.1-1.3 10.5-2 16-2c25.3 0 47.2 14.7 57.6 36c7-2.6 14.5-4 22.4-4c20 0 37.9 9.2 49.7 23.6c9-4.9 19.4-7.6 30.3-7.6c35.3 0 64 28.7 64 64v64 24c0 92.8-75.2 168-168 168H168C75.2 512 0 436.8 0 344V320zm336-64c0-8.8-7.2-16-16-16s-16 7.2-16 16v48 16c0 8.8 7.2 16 16 16s16-7.2 16-16V256zM160 240c5.5 0 10.9 .7 16 2v-2V208c0-8.8-7.2-16-16-16s-16 7.2-16 16v32h16zm64 24v40c0 8.8 7.2 16 16 16s16-7.2 16-16V256 240c0-8.8-7.2-16-16-16s-16 7.2-16 16v24z"></path></svg> Tip</strong></p>
+<p>For PDF and Word document outputs, the table of contents will be automatically generated and placed at the beginning of the document. For HTML documents, the table of contents will be placed in the sidebar by default.</p>
+</div>
+<p>If if our headers are numbered, they will appeared numbered in the table of contents. If we unnnumbered a header, it will not appear with a section number. As with section numbering, we can also control the depth of the table of contents by setting the <code>toc-depth</code> key in the front-matter section. For example, to include sections and subsections, but not subsubsections, we would set the <code>toc-depth</code> key to <code>2</code> as follows:</p>
+<pre><code>---
+title: "My document title"
+format: 
+  pdf:
+    toc: true
+    toc-depth: 2
+---</code></pre>
+<p>And as with section numbering we can avoid listing a header in the table of contents by adding <code>{.unlisted}</code> to the end of the header.</p>
+</div>
+<div class="section level3">
+<h3 id="cross-referencing-tables-and-figures">Cross-referencing tables and figures<a class="anchor" aria-label="anchor" href="#cross-referencing-tables-and-figures"></a>
+</h3>
+<p>Another key element in academic writing are using cross-references to tables and figures. This allows us to refer to a table or figure by number without having to manually update the number if we add or remove a table or figure.</p>
+<p>In this case, we will not need to add anything to the front-matter section. Instead, we will modify keys in the code block section of a code-generated table or figure.</p>
+<p>To cross-reference a table or figure, we need to add a prefix to the <code>label</code> key's value. The prefix, either <code>tbl-</code> or <code>fig-</code>, indicates whether the label is for a table or figure. Additionally, table or figure captions can be added with the <code>tbl-cap</code> or <code>fig-cap</code> keys, respectively.</p>
+<p>Let's look at a basic figure that we can cross-reference. The following code block will generate a very simple scatterplot.</p>
+<pre><code>```{r}
+#| label: fig-scatterplot
+#| fig-cap: "A scatterplot"
+
+plot(x = 1:10, y = 1:10)
+```
+
+In @fig-scatterplot we see a scatterplot. ....
+</code></pre>
+<div class="callout">
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:scatterplot"></span>
+<img src="recipe-1_files/figure-html/scatterplot-1.png" alt="A scatterplot" width="100%"><p class="caption">
+Figure 1: A scatterplot
+</p>
+</div>
+<p>In Figure <a href="#fig:scatterplot">1</a> we see a scatterplot. ....</p>
+</div>
+<p>For tables generated by R, the process is very similar to that of figures. The only difference is that we use the <code>tbl-</code> prefix on the label value and the <code>tbl-cap</code> key instead of the <code>fig-cap</code> key for the caption.</p>
+<p>We can also create tables using markdown syntax. In this case, the format is a little different. Consider Table <a href="#tab:table-1">1</a>, for example.</p>
+<pre><code>| Column 1 | Column 2 | Column 3 |
+|----------|----------|----------|
+| A        | B        | C        |
+| D        | E        | F        |
+
+: A simple table {#tbl-table-1}</code></pre>
+<div class="callout">
+<table class="table">
+<caption>
+<span id="tab:table-1">Table 1: </span> A simple table</caption>
+<thead><tr class="header">
+<th>Column 1</th>
+<th>Column 2</th>
+<th>Column 3</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>B</td>
+<td>C</td>
+</tr>
+<tr class="even">
+<td>D</td>
+<td>E</td>
+<td>F</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section level3">
+<h3 id="in-line-citations-and-references-list">In-line citations and references list<a class="anchor" aria-label="anchor" href="#in-line-citations-and-references-list"></a>
+</h3>
+<p>The last element we will cover here is adding citations and a references list to a Quarto document. To add citations we need three things:</p>
+<ul>
+<li>A bibliography file</li>
+<li>A reference to the bibliography file in the front-matter section</li>
+<li>A citation in the prose section which is contained in the bibliography file</li>
+</ul>
+<p>The bibliography file is a plain text file that contains the citations that we want to use in our document. The file requires the extension <code>.bib</code> and is formatted using the BibTeX format. BibTeX is a reference syntax that is commonly used in academia.</p>
+<p>Let's take a look at a sample file, <code>bibliography.bib</code>, that contains a single reference.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bib"><code class="sourceCode bibtex"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">  </span><span class="va">@Article</span>{<span class="ot">R</span>-<span class="ot">tidyverse</span>,</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">title</span> = {Welcome to the {tidyverse}},</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">author</span> = {Hadley Wickham and Mara Averick and Jennifer Bryan and Winston Chang and Lucy D'Agostino McGowan and Romain François and Garrett Grolemund and Alex Hayes and Lionel Henry and Jim Hester and Max Kuhn and Thomas Lin Pedersen and Evan Miller and Stephan Milton Bache and Kirill Müller and Jeroen Ooms and David Robinson and Dana Paige Seidel and Vitalie Spinu and Kohske Takahashi and Davis Vaughan and Claus Wilke and Kara Woo and Hiroaki Yutani},</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">year</span> = {2019},</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">journal</span> = {Journal of Open Source Software},</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">volume</span> = {4},</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">number</span> = {43},</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">pages</span> = {1686},</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">doi</span> = {10.21105/joss.01686},</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
+<p>In this file we can see that the reference includes information about the type of publication, the title, the authors, the year, the journal, the volume, the number, the pages, and the DOI.</p>
+<p>You can find BibTeX formatted references almost everywhere you can find scholarly work. For example, Google Scholar, Web of Science, and Scopus all provide BibTeX formatted references. Additionally, many journals provide BibTeX formatted references for the articles they publish.</p>
+<div class="callout">
+<p><strong><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M4.1 38.2C1.4 34.2 0 29.4 0 24.6C0 11 11 0 24.6 0H133.9c11.2 0 21.7 5.9 27.4 15.5l68.5 114.1c-48.2 6.1-91.3 28.6-123.4 61.9L4.1 38.2zm503.7 0L405.6 191.5c-32.1-33.3-75.2-55.8-123.4-61.9L350.7 15.5C356.5 5.9 366.9 0 378.1 0H487.4C501 0 512 11 512 24.6c0 4.8-1.4 9.6-4.1 13.6zM80 336a176 176 0 1 1 352 0A176 176 0 1 1 80 336zm184.4-94.9c-3.4-7-13.3-7-16.8 0l-22.4 45.4c-1.4 2.8-4 4.7-7 5.1L168 298.9c-7.7 1.1-10.7 10.5-5.2 16l36.3 35.4c2.2 2.2 3.2 5.2 2.7 8.3l-8.6 49.9c-1.3 7.6 6.7 13.5 13.6 9.9l44.8-23.6c2.7-1.4 6-1.4 8.7 0l44.8 23.6c6.9 3.6 14.9-2.2 13.6-9.9l-8.6-49.9c-.5-3 .5-6.1 2.7-8.3l36.3-35.4c5.6-5.4 2.5-14.8-5.2-16l-50.1-7.3c-3-.4-5.7-2.4-7-5.1l-22.4-45.4z"></path></svg> Dive deeper</strong></p>
+<p>Managing your references can be a challenge if you begin to amass a large number of them. There are a number of tools that can help you manage your references. For example, <a href="https://www.zotero.org/" class="external-link">Zotero</a> is a free, open-source reference manager that can help you organize your references and generate BibTeX formatted references.</p>
+<p>Zotero also has a <a href="https://www.zotero.org/download/" class="external-link">browser extension</a> that allows you to easily add references to your Zotero library from your browser.</p>
+<p>Furthermore, Zotero can be connected to RStudio to facilitate the incorporation of BibTeX formatted references in a Quarto document. See the <a href="https://rstudio.github.io/visual-markdown-editing/citations.html" class="external-link">RStudio documentation</a> for more information.</p>
+</div>
+<p>In the front-matter of our Quarto document, we need to add a reference to the bibliography file. This is done using the <code>bibliography</code> key. For example, if our bibliography file is called <code>bibliography.bib</code> and is located in the same directory as our Quarto document, we would add the following to the front-matter section:</p>
+<pre><code>---
+title: "My document title"
+format: pdf
+bibliography: bibliography.bib
+---</code></pre>
+<p>With the bibliography file and the reference to the bibliography file in the front-matter section, we can now add citations to our document. To do this, we use the <code>@</code> symbol followed by the citation key in the prose section. For example, to cite the <code>R-tidyverse</code> reference from the <code>bibliography.bib</code> file, we would add <code>@R-tidyverse</code> to the prose section as follows:</p>
+<pre><code>This is a citation to @R-tidyverse.</code></pre>
+<p>The citation will appear as below in the rendered document.</p>
+<div class="callout">
+<p>This is a citation to <span class="citation">(<a href="#ref-R-tidyverse" role="doc-biblioref"><strong>R-tidyverse?</strong></a>)</span>.</p>
+</div>
+<p>And automatically, on rendering the document, a references list will be added to the end of the document. For this reason if you have citations in your document, it is a good idea to include a header section <code># References</code> at the end of your document.</p>
+<div class="callout">
+<p><strong><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M64 64V241.6c5.2-1 10.5-1.6 16-1.6H96V208 64c0-8.8-7.2-16-16-16s-16 7.2-16 16zM80 288c-17.7 0-32 14.3-32 32c0 0 0 0 0 0v24c0 66.3 53.7 120 120 120h48c52.5 0 97.1-33.7 113.4-80.7c-3.1 .5-6.2 .7-9.4 .7c-20 0-37.9-9.2-49.7-23.6c-9 4.9-19.4 7.6-30.3 7.6c-15.1 0-29-5.3-40-14c-11 8.8-24.9 14-40 14H120c-13.3 0-24-10.7-24-24s10.7-24 24-24h40c8.8 0 16-7.2 16-16s-7.2-16-16-16H120 80zM0 320s0 0 0 0c0-18 6-34.6 16-48V64C16 28.7 44.7 0 80 0s64 28.7 64 64v82c5.1-1.3 10.5-2 16-2c25.3 0 47.2 14.7 57.6 36c7-2.6 14.5-4 22.4-4c20 0 37.9 9.2 49.7 23.6c9-4.9 19.4-7.6 30.3-7.6c35.3 0 64 28.7 64 64v64 24c0 92.8-75.2 168-168 168H168C75.2 512 0 436.8 0 344V320zm336-64c0-8.8-7.2-16-16-16s-16 7.2-16 16v48 16c0 8.8 7.2 16 16 16s16-7.2 16-16V256zM160 240c5.5 0 10.9 .7 16 2v-2V208c0-8.8-7.2-16-16-16s-16 7.2-16 16v32h16zm64 24v40c0 8.8 7.2 16 16 16s16-7.2 16-16V256 240c0-8.8-7.2-16-16-16s-16 7.2-16 16v24z"></path></svg> Tip</strong></p>
+<p>There are a number of ways of having your inline citations appear. For example, in parentheses, with multiple citations, only with the year, adding a page number, <em>etc.</em>. For more information on how to format your citations, see the <a href="https://quarto.org/docs/authoring/footnotes-and-citations.html#sec-citations" class="external-link">Quarto documentation</a>.</p>
+</div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="check-your-understanding">Check your understanding<a class="anchor" aria-label="anchor" href="#check-your-understanding"></a>
 </h2>
-<p>(... examples ...)</p>
+<!-- here are some questions to check the reader's understanding of this recipe -->
+<p>Consider the following front-matter sections, A and B.</p>
+<div class="callout">
+<p><strong>A</strong></p>
+<pre><code>---
+title: "My document title"
+format: 
+  pdf:
+    number-sections: true
+    number-depth: 3
+    toc: false
+---</code></pre>
+</div>
+<div class="callout">
+<p><strong>B</strong></p>
+<pre><code>---
+title: "My document title"
+format: 
+  pdf:
+    number-sections: true
+    toc: true
+    toc-depth: 2
+---</code></pre>
+</div>
+<p>Choose whether the following statements are true or false.</p>
 <ol style="list-style-type: decimal">
 <li>
 <select class="webex-select"><option value="blank"></option>
 <option value="answer">TRUE</option>
-<option value="">FALSE</option></select> Literate Programming, first introduced by Donald Knuth in 1984, allows the combination of computer code and text prose in one document.</li>
-<li>The programming paradigm Literate Programming is implemented through <select class="webex-select"><option value="blank"></option>
-<option value="answer">Quarto</option>
-<option value="">R</option>
-<option value="">RStudio</option>
-<option value="">GitHub</option></select>, a platform that facilitates the creation of a variety of output documents based on the same source code.</li>
-<li>Which of the following components does a basic Quarto document <em>not</em> contain? <select class="webex-select"><option value="blank"></option>
-<option value="">Front-matter section</option>
-<option value="">Prose section</option>
-<option value="answer">Back-matter section</option>
-<option value="">Code block</option></select>
-</li>
-<li>To generate a PDF document in Quarto, you can edit the format attribute value in the front-matter section to <input class="webex-solveme nospaces ignorecase" size="4" data-answer='["pdf","html","word"]'>.</li>
-<li>
-<select class="webex-select"><option value="blank"></option>
-<option value="answer">TRUE</option>
-<option value="">FALSE</option></select> The code block options <code>echo</code> and <code>include</code> can be used to hide the code and output, respectively.</li>
+<option value="">FALSE</option></select> Section numbering will be included in the PDF output for both A and B.</li>
 <li>
 <select class="webex-select"><option value="blank"></option>
 <option value="">TRUE</option>
-<option value="answer">FALSE</option></select> In Quarto, a code block, where the programming language code is entered, is bounded by three underscores (<code>_</code>).</li>
+<option value="answer">FALSE</option></select> Section numbering will be applied to the first three levels of headers in the PDF output for both A and B.</li>
+<li>
+<select class="webex-select"><option value="blank"></option>
+<option value="">TRUE</option>
+<option value="answer">FALSE</option></select> A table of contents will be included in the PDF output for both A and B.</li>
+<li>
+<select class="webex-select"><option value="blank"></option>
+<option value="answer">TRUE</option>
+<option value="">FALSE</option></select> A table of contents will be included in the PDF output for B, but will only include the first two levels of headers.</li>
 </ol>
+<p>Now respond to the following questions.</p>
+<ol start="5" style="list-style-type: decimal">
+<li>
+<select class="webex-select"><option value="blank"></option>
+<option value="">@tbl-scatterplot</option>
+<option value="answer">@fig-scatterplot</option>
+<option value="">@scatterplot</option></select> will cross-reference a figure with the label <code>fig-scatterplot</code>.</li>
+<li>
+<input class="webex-solveme nospaces ignorecase" size="12" data-answer='["bibliography"]'> is the front-matter key to include a path to the file which contains the BibTeX formatted references.</li>
+</ol>
+</div>
+<div class="section level2">
+<h2 id="lab-preparation">Lab preparation<a class="anchor" aria-label="anchor" href="#lab-preparation"></a>
+</h2>
+<p>This rounds out our introduction to academic writing in Quarto. In Lab 1 you will have an opportunity to practice these concepts by doing an article summary which includes some of these features using Quarto.</p>
+<p>In preparation for Lab 1, ensure that you are prepared to do the following:</p>
+<ul>
+<li>Edit the front-matter section of a Quarto document to render:
+<ul class="task-list">
+<li>
+<input type="checkbox" disabled>a PDF document or a Word document</li>
+<li>
+<input type="checkbox" disabled>a document with numbered sections</li>
+<li>
+<input type="checkbox" disabled>a document with a table of contents</li>
+<li>
+<input type="checkbox" disabled>a document with a path to a bibliography file</li>
+</ul>
+</li>
+<li>
+<input type="checkbox" disabled>Add an inline citation to the prose section of a Quarto document</li>
+</ul>
+<p>Also, since you will do an article summary, you should be prepared with:</p>
+<ul>
+<li>an article of interest related to text analysis that you have read or at least skimmed for the following:
+<ul class="task-list">
+<li>
+<input type="checkbox" disabled>the research question</li>
+<li>
+<input type="checkbox" disabled>the data used</li>
+<li>
+<input type="checkbox" disabled>the methods used</li>
+<li>
+<input type="checkbox" disabled>the results/ findings of the study</li>
+</ul>
+</li>
+<li>
+<input type="checkbox" disabled>a BibTeX formatted reference for the article</li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
