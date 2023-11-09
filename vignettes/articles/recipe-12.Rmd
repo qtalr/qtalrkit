@@ -1,5 +1,5 @@
 ---
-title: "Research sharing and collaboration"
+title: "12. Research sharing and collaboration"
 pkgdown:
   as_is: true
 bibliography: [bibliography.bib, packages.bib]

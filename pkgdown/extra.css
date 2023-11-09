@@ -32,11 +32,6 @@ h4 {
   border-bottom: 1px solid #dee2e6
 }
 
-/* .navbar-default {
-  background-color: #c0c2c4;
-  border-color: #e7e7e7;
-} */
-
 /* Webexercises */
 
 :root {
@@ -158,3 +153,5 @@ input.webex-solveme.webex-correct,
 .webex-radiogroup {
   margin: 1em 0;
 }
+
+/* Input formatting */

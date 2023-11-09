@@ -1,5 +1,5 @@
 ---
-title: "Transforming and documenting data"
+title: "7. Transforming and documenting data"
 pkgdown:
   as_is: true
 bibliography: [bibliography.bib, packages.bib]

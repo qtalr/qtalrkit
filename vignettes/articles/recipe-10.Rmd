@@ -1,5 +1,5 @@
 ---
-title: "Inferential Statistics"
+title: "10. Inferential Statistics"
 pkgdown:
   as_is: true
 bibliography: [bibliography.bib, packages.bib]

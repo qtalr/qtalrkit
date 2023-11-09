@@ -1,10 +1,10 @@
 ---
 title: "0. Writing with code"
+pkgdown:
+  as_is: true
 bibliography: [bibliography.bib, packages.bib]
 biblio-style: apalike
 link-citations: true
-pkgdown:
-  as_is: true
 ---
 
 ```{r, child="_common.Rmd"}
@@ -14,11 +14,11 @@ pkgdown:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## Overview {#overview}
+## Overview
 
 <!-- Goals for the Recipe/ Lab -->
 
-In this Recipe, we will introduce the concept of Literate Programming and describe how to implement this concept through Quarto. I will provide a demonstration of some of the features of Quarto and describe the main structural characteristics of a Quarto document to help you get off and running writing your own documents that combine code and prose.
+In this recipe, we will introduce the concept of Literate Programming and describe how to implement this concept through Quarto. I will provide a demonstration of some of the features of Quarto and describe the main structural characteristics of a Quarto document to help you get off and running writing your own documents that combine code and prose.
 
 ## Concepts and strategies
 
@@ -199,6 +199,8 @@ Watch [Getting Started with Quarto](https://www.youtube.com/watch?v=_f3latmOhew)
 6. `r torf(FALSE)` In Quarto, a code block, where the programming language code is entered, is bounded by three underscores (`_`).
 
 ## Lab preparation 
+
+<!-- [ ] checkbox spacing -->
 
 This concludes our introduction to literate programming using Quarto. We have covered the basics here but there is much more to explore. 
 

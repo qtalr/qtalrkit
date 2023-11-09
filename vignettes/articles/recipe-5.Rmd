@@ -1,5 +1,5 @@
 ---
-title: "Collecting and documenting data"
+title: "5. Collecting and documenting data"
 pkgdown:
   as_is: true
 bibliography: [bibliography.bib, packages.bib]

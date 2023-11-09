@@ -138,5 +138,4 @@ knitr::opts_chunk$set(
   fig.align = "center",
   tidy = TRUE
 )
-
 ```

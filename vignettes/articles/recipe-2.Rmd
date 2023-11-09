@@ -1,5 +1,5 @@
 ---
-title: "Reading, inspecting, and writing data"
+title: "2. Reading, inspecting, and writing data"
 pkgdown:
   as_is: true
 bibliography: [bibliography.bib, packages.bib]

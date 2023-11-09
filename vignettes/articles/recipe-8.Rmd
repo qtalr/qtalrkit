@@ -1,5 +1,5 @@
 ---
-title: "Exploratory Data Analysis"
+title: "8. Exploratory Data Analysis"
 pkgdown:
   as_is: true
 bibliography: [bibliography.bib, packages.bib]

@@ -1,5 +1,5 @@
 ---
-title: "Research write-ups"
+title: "11. Research write-ups"
 pkgdown:
   as_is: true
 bibliography: [bibliography.bib, packages.bib]
