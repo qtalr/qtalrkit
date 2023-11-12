@@ -14,16 +14,39 @@ pkgdown:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Instructor Guide
+# Overview 
 
-...
 
-A guide for instructors that offers tips on: 
+# Course Design
 
-1. how to incorporate the textbook into a course syllabus. 
-2. possible assignment ideas.
-3. and suggestions for further reading.
+This book is designed to be used as a textbook for a course in quantitative text analysis. It is intended for readers who have little to no experience with quantitative text analysis, nor with the R programming language. 
 
+Depending on the experience level and expectations of your readers, however, you may want to consider adopting one of the following course designs for using this textbook.
+
+## Basic Introduction {#sec-p-basic-intro .unnumbered}
+
+- Cover chapters 1-5 in sequence to give your readers a foundational understanding of quantitative text analysis.
+- Culminate the course with a research proposal assignment that requires them to identify an interesting linguistic problem, propose ways of solving it using the methods covered in class, and identify potential data sources.
+- If your readers have little to no experience with R, you may want to consider using the RStudio Cloud platform to host the course. This will provide them with a pre-installed R environment and allow them to focus on learning the material rather than troubleshooting.
+
+## Intermediate Introduction {#sec-p-intermediate-intro .unnumbered}
+
+- Cover chapters 1, 5-10 in sequence to give your readers a deeper understanding of quantitative text analysis methods. Explore additional case studies or dataset examples throughout the course if you wish to supplement your lectures.
+- Culminate the course with a research project assignment that allows your readers to apply what they've learned to linguistic content of their choice.
+- You may consider using the RStudio Cloud platform to host the course, but ensure that your readers have access to R and RStudio on their own computers as well.
+
+## Advanced Introduction {#sec-p-advanced-intro .unnumbered}
+
+- Cover all 12 chapters to give your readers a thorough understanding of quantitative text analysis concepts and techniques. Devote more time chapters 5-10 providing demonstrations of how to approach different problems and evaluating alternative approaches.
+- Culminate the course with a collaborative research project that requires your readers to work in groups to conduct a comprehensive analysis of a given dataset.
+- Ensure that your readers install R and RStudio on their own computers as they will need full control over their coding environment.
+
+
+For all course designs, it is strongly recommend that you evaluate the readers' success in understanding the material by providing a combination of quizzes, lab assignments, programming exercises, and written reports. Additionally, encourage your readers to ask questions[^preface-4], collaborate with peers, and seek help from the ample resources available online when they encounter scope-limited programming problems.
+
+[^preface-4]: If you are using this textbook in a course, consider using a CMS (*e.g.* Canvas, Blackboard, etc.) or the web-based social annotation tool [Hypothes.is](https://hypothes.is/) to facilitate reader questions and discussion.
+
+# Instructor Resources
 
 ## Slides decks
 
@@ -40,3 +63,24 @@ A guide for instructors that offers tips on:
 10. Inferential Data Analysis (IDA)
 11. Reporting
 12. Collaboration
+
+## Lab exercises
+
+The following lab exercises are available for use in your course. Each exercise is designed to be completed in a 50-minute lab session.
+
+....
+
+## Data sets
+
+There are relatively few openly available datasets that are allowed to be shared directly with others. A few that are include: 
+
+- Project Gutenberg texts
+- [The Enron Email Dataset](https://www.cs.cmu.edu/~./enron/)
+- `languageR` package datasets. 
+- `quanteda` package datasets.
+
+For other data sets, you may be able to obtain permission to share them with students in your course. Please contact the data provider directly to inquire about sharing permissions. The process of obtaining permission to share data can be time consuming, so it is recommended that you begin this process well in advance of the start of your course.
+
+For most resources, however, you will need to instruct your students to download the data themselves. 
+
+...
