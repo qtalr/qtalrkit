@@ -1,7 +1,4 @@
-```{r}
-#| label: common
-#| include: false
-
+```{r common, include=FALSE}
 # Description: Common settings
 
 # Packages ---------------------------------------------------------------
@@ -28,8 +25,8 @@ pacman::p_load(
 write_bib(c(
   "tidyverse", "readr", "rmarkdown", "dplyr", "usethis", "gitcreds",
   "quanteda", "textdata", "tidycensus", "sf", "rtweet", "skimr", "janitor",
-  "ggplot2", "gridExtra", "reprex", "rvest", "fs", "purrr", "fontawesome", "webexercises"
-), "packages.bib")
+  "ggplot2", "gridExtra", "reprex", "rvest", "fs", "purrr", "fontawesome", "webexercises" # nolint: line_length_linter.
+), "packages.bib") 
 
 
 # Plots ------------------------------------------------------------------
@@ -37,7 +34,7 @@ write_bib(c(
 # Plot theme
 theme_qtalr <-
   function(font = "", font_size = 9) {
-    ggplot2::theme_minimal() %+replace%
+    ggplot2::theme_minimal() %+replace% # nolint: object_usage_linter.
 
       ggplot2::theme(
         plot.title = ggplot2::element_text(
@@ -78,28 +75,28 @@ ggplot2::theme_set(theme_qtalr())
 
 if (knitr::is_latex_output()) {
   # if output is latex, use greyscale palette
-  custom_pal <- c("#000000", "#525252", "#717171", "#929292", "#BABABA", "#DADADA") # print palette
+  custom_pal <- c("#000000", "#525252", "#717171", "#929292", "#BABABA", "#DADADA") # print palette # nolint: line_length_linter.
 } else {
   # if output is not latex, use colorblind palette
-  custom_pal <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7") # colorblind palette
+  custom_pal <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7") # colorblind palette #nolint
 }
 
 # Set color palettes
 scale_color_discrete <- function(...) {
-  ggplot2::scale_color_manual(..., values = custom_pal)
+  ggplot2::scale_color_manual(..., values = custom_pal) # nolint
 }
 
 # Set fill palettes
 scale_fill_discrete <- function(...) {
-  ggplot2::scale_fill_manual(..., values = custom_pal)
+  ggplot2::scale_fill_manual(..., values = custom_pal) # nolint
 }
 
-# Set linetype 
+# Set linetype
 scale_linetype_discrete <- function(...) {
-  ggplot2::scale_linetype_manual(..., values = c("solid", "dashed", "dotted", "dotdash", "longdash", "twodash"))
+  ggplot2::scale_linetype_manual(..., values = c("solid", "dashed", "dotted", "dotdash", "longdash", "twodash")) # nolint
 }
 
-# Geom defaults 
+# Geom defaults
 
 update_geom_defaults("smooth", list(colour = "#525252"))
 update_geom_defaults("point", list(colour = "#929292"))
@@ -112,24 +109,10 @@ options(digits = 3) # number of digits to print
 # Misc -------------------------------------------------------------------
 
 # Avoid conflict with stats::filter
-filter <- dplyr::filter 
+filter <- dplyr::filter
 
 # Avoid kableextra from outputting HTML on kable tables
 options(kableExtra.auto_format = FALSE)
-
-# # Adjust linewidth
-# hook_output <- knit_hooks$get("output") # get the default output hook
-
-# knit_hooks$set(output = function(x, options) {
-#   # this hook is used only when the linewidth option is not NULL
-#   if (!is.null(n <- options$linewidth)) { # if linewidth is not NULL
-#     x <- knitr:::split_lines(x) # split the output into lines
-#     # any lines wider than n should be wrapped
-#     x <- strwrap(x, width = n * getOption("width"))
-#     x <- paste(x, collapse = "\n")
-#   }
-#   hook_output(x, options)
-# })
 
 knitr::opts_chunk$set(
   message = FALSE,
