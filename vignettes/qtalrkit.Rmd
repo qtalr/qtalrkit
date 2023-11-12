@@ -45,8 +45,25 @@ The swirl lessons can be downloaded within an R console by running:
 ```r
 install.packages("swirl")
 library("swirl")
-install_course_github("qtalr", "swirl")
+install_course_github("qtalr", "lessons")
 ```
+
+
+::: {.callout}
+**Updating the lessons**
+
+If you need to update the lessons, run:
+
+```r
+library("swirl")
+
+# Uninstall the course
+uninstall_course("lessons")
+
+# Reinstall the course
+install_course_github("qtalr", "lessons")
+```
+:::
 
 ### Load and run
 
