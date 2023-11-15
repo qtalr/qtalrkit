@@ -4,5 +4,5 @@ output:
     toc: true
     toc_depth: 3
     highlight: tango
-    df_print: kable
+    df_print: tibble
     base_format: webexercises::webexercises_default

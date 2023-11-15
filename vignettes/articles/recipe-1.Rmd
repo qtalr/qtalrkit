@@ -307,7 +307,6 @@ Choose whether the following statements are true or false.
 3. `r torf(FALSE)` A table of contents will be included in the PDF output for both A and B.
 4. `r torf(TRUE)` A table of contents will be included in the PDF output for B, but will only include the first two levels of headers.
 
-
 Now respond to the following questions.
 
 5. `r mcq(c("\\@tbl-scatterplot",  answer = "\\@fig-scatterplot", "\\@scatterplot"))` will cross-reference a figure with the label `fig-scatterplot`.

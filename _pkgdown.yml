@@ -35,7 +35,7 @@ articles:
     desc: "A collection of programming demonstrations"
     contents:
       - qtalrkit
-      - articles/recipe-0 # Preface/ Literate Programming: writing with code
+      - articles/recipe-0 # Preface/ Writing with code
       - articles/recipe-1 # Chapter 1/ Academic writing with Quarto
       - articles/recipe-2 # Chapter 2/ Reading, inspecting, and writing data
       - articles/recipe-3 # Chapter 3/ Descriptive assessment of datasets

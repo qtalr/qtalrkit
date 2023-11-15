@@ -1,0 +1,6 @@
+variable,name,variable_type,description
+cat,Category,categorical,Genre categories represented by letters
+passive,Passive,numeric,Number of passive verb phrases in the genre
+n_w,Number of words,numeric,Number of words in the genre
+n_s,Number of sentences,numeric,Number of sentences in the genre
+name,Genre,categorical,Genre name

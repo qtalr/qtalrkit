@@ -1,0 +1,9 @@
+attribute,description
+Resource name,"Brown Corpus"
+Data source,"http://korpus.uib.no/icame/brown/bcm.html"
+Data sampling frame,"Edited American English prose from various genres, published in the United States during the calendar year 1961."
+Data collection date(s),"Originally published in 1964, revised in 1971 and 1979."
+Data format,"Multiple formats including Form A (original), Form B (stripped version), Form C (tagged version), Bergen Forms I and II, and Brown MARC Form."
+Data schema,"500 samples of approximately 2000 words each, covering a wide range of genres and styles. Includes coding for major and minor headings, special types (italics, bold, etc.), abbreviations, symbols, and other textual features."
+License,"Use restricted for scholarly research in linguistics, stylistics, and other disciplines. Specific copyright restrictions detailed in the manual."
+Attribution,"W. Nelson Francis and Henry Kucera, Brown University, 1964, revised 1971 and 1979."
