@@ -319,20 +319,20 @@ This rounds out our introduction to academic writing in Quarto. In Lab 1 you wil
 In preparation for Lab 1, ensure that you are prepared to do the following:
 
 - Edit the front-matter section of a Quarto document to render:
-  - [ ] a PDF document or a Word document
-  - [ ] a document with numbered sections
-  - [ ] a document with a table of contents
-  - [ ] a document with a path to a bibliography file
-- [ ] Add an inline citation to the prose section of a Quarto document
+  - a PDF document or a Word document
+  - a document with numbered sections
+  - a document with a table of contents
+  - a document with a path to a bibliography file
+- Add an inline citation to the prose section of a Quarto document
 
 Also, since you will do an article summary, you should be prepared with:
 
 - an article of interest related to text analysis that you have read or at least skimmed for the following: 
-  - [ ] the research question
-  - [ ] the data used
-  - [ ] the methods used
-  - [ ] the results/ findings of the study
-- [ ] a BibTeX formatted reference for the article
+  - the research question
+  - the data used
+  - the methods used
+  - the results/ findings of the study
+- a BibTeX formatted reference for the article
 
 ## References
 

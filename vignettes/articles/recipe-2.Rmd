@@ -14,6 +14,11 @@ link-citations: true
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+
+<!--  
+- [ ] Add unit of observation description to dataset? Lab-2?
+-->
+
 ## Overview
 
 <!--  
@@ -310,7 +315,7 @@ This is a good practice to follow when writing code. It makes the code more read
 
 Now that we have a sense of the data, we can subset the data to create a variations of our original data frame. We can subset the data frame by selecting columns and/ or rows. 
 
-In the R lesson, we saw that base R provides the bracket (`[]`) operator to subset data frames. The `dplyr` package provides functions to subset data frames which can be more readable and easier to use.
+In the [R lesson](https://github.com/qtalr/lessons) "Packages and Functions", we saw that base R provides the bracket (`[]`) operator to subset data frames. The `dplyr` package provides functions to subset data frames which can be more readable and easier to use.
 
 Let's first look a selecting columns. The `select()` function allows us to select columns by name. For example, the following code block will select the `passive` and `n_w` columns from the data frame:
 
@@ -437,14 +442,14 @@ In Lab 2 you will have the opportunity to apply the skills you learned in this R
 
 In addition to the knowledge and skills you have developed in Labs 0 and 1, to complete Lab 2, you will need to be able to:
 
-- [ ] Create code blocks in a Quarto document
-- [ ] Understand the purpose of the `label`, `echo`, `message`, and `include` options in a code block
-- [ ] Load packages into an R session with `library()`
-- [ ] Understand how to read and create file relative file paths
-- [ ] Read data into R with the `read_csv()` function
-- [ ] Inspect data frames with `dplyr` functions such as `glimpse()`, `slice_head()`, `slice_tail()`, `slice_sample()`, and `arrange()`.
-- [ ] Use the `|>` pipe operator to chain functions together.
-- [ ] Subset data frames with `dplyr` functions such as `select()` and `filter()`.
-- [ ] Write data frames to a file with the `write_csv()` function.
+- Create code blocks in a Quarto document
+- Understand the purpose of the `label`, `echo`, `message`, and `include` options in a code block
+- Load packages into an R session with `library()`
+- Understand how to read and create file relative file paths
+- Read data into R with the `read_csv()` function
+- Inspect data frames with `dplyr` functions such as `glimpse()`, `slice_head()`, `slice_tail()`, `slice_sample()`, and `arrange()`.
+- Use the `|>` pipe operator to chain functions together.
+- Subset data frames with `dplyr` functions such as `select()` and `filter()`.
+- Write data frames to a file with the `write_csv()` function.
 
 ## References

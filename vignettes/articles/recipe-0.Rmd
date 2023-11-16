@@ -200,22 +200,20 @@ Watch [Getting Started with Quarto](https://www.youtube.com/watch?v=_f3latmOhew)
 
 ## Lab preparation 
 
-<!-- [ ] checkbox spacing -->
-
 This concludes our introduction to literate programming using Quarto. We have covered the basics here but there is much more to explore. 
 
 In preparation for Lab 0, ensure that you have completed the following:
 
-- [ ] Setup your computing environment with R and RStudio
-- [ ] Installed the necessary packages:
-  - [ ] `quarto`
-  - [ ] `tinytex`
+- Setup your computing environment with R and RStudio
+- Installed the necessary packages:
+  - `quarto`
+  - `tinytex`
 
 and that you are prepared to do the following:
 
-- [ ] Open RStudio
-- [ ] Create, edit, and render Quarto documents
-- [ ] Use some basic Markdown syntax to format text
+- Open RStudio and understand the basic interface
+- Create, edit, and render Quarto documents
+- Use some basic Markdown syntax to format text
 
 With this in mind, you are ready to move on to Lab 0.
 
