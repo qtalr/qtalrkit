@@ -36,7 +36,9 @@ Suggests:
     pacman,
     rmarkdown,
     webexercises,
-    corpora
+    corpora,
+    janitor,
+    skimr
 Remotes:
     TalkBank/TBDBr
 Encoding: UTF-8
