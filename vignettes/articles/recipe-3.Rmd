@@ -11,16 +11,605 @@ link-citations: true
 ```
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 ```
+
+
+<!-- [ ] CSS edit for table font size -->
 
 ## Overview
 
 <!--  
 Purpose: To explore appropriate methods for summarizing variables in datasets given the number and informational values of the variable(s).
 
-Extend: statistic and tabular summaries
+Description: This will build on our understanding of how to summarize data using statistics, tables, and plots. We will dive deeper into the use of the `skimr` package to summarize data and the `ggplot2` package to create plots. We also introduce producing Quarto tables and figures with appropriate code block options. We will reinforce our understanding of the `readr` package to read in data and the `dplyr` package to manipulate data.
 
+Approach: We will use the `corpora::PassiveBrownFam` dataset. Using the `skimr` package we will use the `skim()` and `yank()` functions to summarize and extract summaries. We will also include the use of `group_by()` to summarize data by groups. Then we will dive into more targeted summaries using `group_by()` and `summarize()` to calculate summary statistics by groups. We will use `knitr` to create tables and `ggplot2` to create plots. We will reinforce our knowledge of cross-references, citations, and bibliographies.
+
+Prerequisites: It will be assumed that learners have a basic understanding of the `skimr`, `dplyr`, and `ggplot2` packages and general understanding of Quarto documents inlcuding code blocks, front-matter, and back-matter. Learners will also be expected to have a basic understanding of adding cross-references, citations, and bibliographies to Quarto documents.
+
+-->
+
+In this Recipe we will explore appropriate methods for summarizing variables in datasets given the number and informational values of the variable(s). We will build on our understanding of how to summarize data using statistics, tables, and plots. 
+
+We will cover the following topics:
+
+- Summary overviews of datasets with `skimr`
+- Summary statistics with `dplyr`
+- Creating Quarto tables with `knitr`
+- Creating Quarto plots with `ggplot2`
+
+In Lab 3, you will put these skills into practice to provide a descriptive assessment of dataset that includes statistics, tables, and plots using Quarto and R. 
+
+## Concepts and strategies
+
+<!-- Describe the dataset -->
+
+In this Recipe, we will use the `PassiveBrownFam` dataset from the `corpora` package [@R-corpora]. This dataset contains information on the passive voice usage in the Brown family of corpora. The dataset contains 11 variables and 2,449 observations. 
+
+I have assigned this dataset to the object `brown_fam_df` and have made minor modifications to the variable names to improve the readability of the dataset. 
+
+<!-- [ ] code folding/ hiding? -->
+
+```{r read-brown-fam, message=FALSE}
+# Load packages
+library(dplyr)
+
+# Read the dataset from the `corpora` package
+brown_fam_df <-
+  corpora::PassiveBrownFam |> # reference the dataset
+  as_tibble() # convert to a tibble
+
+# Rename variables
+brown_fam_df <-
+  brown_fam_df |> # pass the original dataset
+  rename( # rename variables: new_name = old_name
+    lang_variety = lang,
+    num_words = n.words,
+    active_verbs = act,
+    passive_verbs = pass,
+    total_verbs = verbs,
+    percent_passive = p.pass
+  )
+
+# Preview
+glimpse(brown_fam_df)
+```
+
+You can learn more about these variables by reading the dataset documentation with `?corpora::PassiveBrownFam`.
+
+### Statistical overviews
+
+<!--  
+
+- We can use the `skim()` function to create a statistical overview of the data
+- We can use the `yank()` function to extract the statistical overview of the data
+- We can use the `group_by()` function to create a statistical overview of the data by groups
+-->
+
+<!--  
+- Point out the importance of understanding the data before diving into analysis (recipe and lab 2)
+-->
+
+Understanding our data is of utmost importance before, during, and after analysis. After we get to know our data by inspecting the data origin, dictionary, and structure, we then move to summarizing the data. 
+
+<!--  
+- The next step to understanding the data is to summarize the data
+- A statistical overview of the data is a good place to start as it gives us a sense of all of the variables and variable types in the dataset 
+- We can use the `skimr` package to create a statistical overview of the data
+-->
+
+A statistical overview of the data is a good place to start as it gives us a sense of all of the variables and variable types in the dataset. We can use the `skimr` package to create a statistical overview of the data, using the very convienent `skim()` function. 
+
+Let's create a statistical overview of the `brown_fam_df` dataset.
+
+<!-- [ ] skim output in rmd show a Table for part, fix -->
+
+```{r skim-brown-fam, results="asis", tidy=FALSE}
+# Load packages
+library(skimr)
+
+# Create a statistical overview of the `brown_fam_df` dataset
+skim(brown_fam_df)
+```
+
+The output of the `skim()` function contains a lot of information but it essentially has two parts: a summary of the dataset and a summary of each variable in the dataset. The summary of each of the variables, however, is grouped by variable type. Remember, each of our variables in a data frame is a vector and each vector has a type. 
+
+We have already learned about different types of vectors in R, including character, numeric, and logical. In this dataset, we are presented with a new type of vector: a factor. A factor is essentially a character vector that contains a set of discrete values, or levels. Factors can be ordered or unordered and can contain levels that are not present in the data. 
+
+Now, looking at each of the variable types, we can see that we have 1 character variable, 5 factor variables, and 5 numeric variables. Each of these variable types assume a different set of summary statistics. For example, we can calculate the mean of a numeric variable but not of a character variable. Or, we can count the number of unique values in a character variable but not in a numeric variable.
+
+For all variables, `skim()` will also provide the number of missing values and the percent of non-missing values. 
+
+Inspecting the entire dataset is a good place to start but at some point we often want focus in on a set of variables. We can add the `yank()` function to extract the statistical overview of a set of variables by their variable types. 
+
+Let's extract the statistical overview of the numeric variables in the `brown_fam_df` dataset.
+
+```{r yank-brown-fam}
+# Extract the statistical overview of the numeric variables
+brown_fam_df |>
+  skim() |>
+  yank("numeric")
+```
+
+<!-- [ ] add more about how skim objects are and are not tibbles? And how they work with `dplyr` functions: select, filter, and group_by? -->
+
+### Summary statistics of particular variables
+
+<!--  
+- For a more targeted summary of the data we can use `dplyr` to calculate summary statistics
+- We can use the `group_by()` function to group the data by a particular variable or variables
+  - We can use the `ungroup()` function to remove the grouping
+- We can use the `summarize()` function to calculate summary statistics for the grouped data
+  - Summary functions: 
+    - Numeric: `mean()`, `median()`, `sd()`, `var()`, `min()`, `max()`, `IQR()`, `mad()`, `quantile()`
+    - Character: `n()`, `n_distinct()`, ...
+- For cross-tabulations we can use the `table() function or `count()` function from `dplyr` or `tabyl()` function from `janitor`
+-->
+
+These summary statistics are useful but for a preliminary and interactive use, but it is oftent the case that we will want to focus in on a particular variable or set of variables and their potential relationships to other variables.
+
+We can use the `dplyr` package to calculate summary statistics for a particular variable or set of variables. We can use the `group_by()` function to group the data by a particular variable or variables. Then we can use the `summarize()` function to calculate summary statistics for the grouped data. 
+
+For example, let's calculate the mean and median of the `percent_passive` variable in the `brown_fam_df` dataset grouped by the `lang_variety` variable.
+
+```{r summarize-brown-fam-lang-variety}
+# Mean and median of `percent_passive` grouped by `lang_variety`
+brown_fam_df |>
+  group_by(lang_variety) |>
+  summarize(
+    mean_percent_passive = mean(percent_passive),
+    median_percent_passive = median(percent_passive)
+  )
+```
+
+The result is a 2x3 data frame which includes both the mean and median of the `percent_passive` variable for each of the two levels of the `lang_variety` variable.
+
+The `group_by()` function can also be used to group by multiple variables. For example, let's calculate the mean and median of the `percent_passive` variable in the `brown_fam_df` dataset grouped by the `lang_variety` and `genre` variables.
+
+```{r summarize-brown-fam-lang-variety-genre}
+# Mean and median of `percent_passive` grouped by `lang_variety` and `genre`
+brown_fam_df |>
+  group_by(lang_variety, genre) |>
+  summarize(
+    mean_percent_passive = mean(percent_passive),
+    median_percent_passive = median(percent_passive)
+  )
+```
+
+For numeric variables, such as `percent_passive`, there are a number of summary statistics that we can calculate. We've seen the R functions for mean and median but we can also calculate the standard deviation (`sd()`), variance (`var()`), minimum (`min()`), maximum (`max()`), interquartile range (`IQR()`), median absolute deviation (`mad()`), and quantiles (`quantile()`). All these calculations make sense for numeric variables but not for character variables.
+
+For character variables, and factors, the summary statistics are more limited. We can calculate the number of observations (`n()`) and/ or the number of unique values (`n_distinct()`). Let's now summarize the number of observations `n()` grouped by the `genre` variable in the `brown_fam_df` dataset.
+
+```{r summarize-brown-fam-genre-n-distinct}
+# Frequency table for `genre`
+brown_fam_df |>
+  group_by(genre) |>
+  summarize(
+    n = n(),
+  )
+```
+
+Just as before, we can add multiple grouping variables to `group_by()`. Let's add `lang_variety` to the grouping and calculate the number of observations `n()` grouped by the `genre` and `lang_variety` variables in the `brown_fam_df` dataset.
+
+```{r summarize-brown-fam-genre-lang-variety-n-distinct}
+# Cross-tabulation for `genre` and `lang_variety`
+brown_fam_df |>
+  group_by(genre, lang_variety) |>
+  summarize(
+    n = n(),
+  )
+```
+
+::: {.callout}
+**`r fontawesome::fa('hand-point-up')` Tip**
+
+The result of calculating the number of observations for a character or factor variable is known as a frequency table. Grouping two or more categorical variables is known as a cross-tabulation or a contingency table. 
+:::
+
+Now, we can also pipe the results of a `group_by()` and `summarize()` to another function. This can be to say sort, select, or filter the results. It can also be to perform another summary function. It is important, however, to remember that the result of a `group_by()` produces a grouped data frame. Subsequent functions will be applied to the grouped data frame. This can lead to unexpected results of the original grouping is not relevant for the subsequent function. To avoid this, we can use the `ungroup()` function to remove the grouping after the relevant grouped summary statistics have been calculated.
+
+Let's return to calculating the number of observations `n()` grouped by the `genre` and `lang_variety` variables in the `brown_fam_df` dataset. But let's add another summary which uses the `n` variable to calculate the mean and median number of observations. 
+
+If we do not use the `ungroup()` function, the mean and median will be calculated for each `genre` collapsed across `lang_variety`. 
+
+```{r summarize-brown-fam-genre-n-distinct-mean-median}
+# Mean and median of `n` grouped by `genre`
+brown_fam_df |>
+  group_by(genre, lang_variety) |>
+  summarize(
+    n = n(),
+  ) |>
+  summarize(
+    mean_n = mean(n),
+    median_n = median(n)
+  )
+```
+
+Therefore we see that we have a mean and median calculated for the number of documents in the corpus for each of the 15 genres.
+
+If we use the `ungroup()` function, the mean and median will be calculated for all genres. Note we will use the `ungroup()` function between these summaries to clear the grouping before calculating the mean and median.
+
+```{r summarize-brown-fam-genre-n-mean-median}
+# Number of observations for each `genre` and `lang_variety`
+brown_fam_df |>
+  group_by(genre, lang_variety) |>
+  summarize(
+    n = n(),
+  ) |>
+  ungroup() |>
+  summarize(
+    mean_n = mean(n),
+    median_n = median(n)
+  )
+```
+
+Now we see that we have a mean and median calculated across all genres.
+
+----
+
+Before we leave this section, let's look some other ways to create frequency and contingency tables for character and factor variables. A shortcut to calculate a frequency table for a character or factor variable is to use the `count()` function from the `dplyr` package. 
+
+Let's calculate the number of observations `n()` grouped by the `genre` variable in the `brown_fam_df` dataset.
+
+```{r count-brown-fam-genre}
+# Frequency table for `genre`
+brown_fam_df |>
+  count(genre)
+```
+
+We can also add multiple grouping variables to `count()` and create contingency tables. 
+
+Let's add `lang_variety` to the grouping and calculate the number of observations `n()` grouped by the `genre` and `lang_variety` variables in the `brown_fam_df` dataset.
+
+```{r count-brown-fam-genre-lang-variety}
+# Cross-tabulation for `genre` and `lang_variety`
+brown_fam_df |>
+  count(genre, lang_variety)
+```
+
+Note that the results of `count()` are not grouped so we do not need to use the `ungroup()` function before calculating subsequent summary statistics.
+
+Another way to create frequency and contingency tables is to use the `tabyl()` function from the `janitor` package [@R-janitor]. Let's calculate the number of observations `n()` grouped by the `genre` variable in the `brown_fam_df` dataset.
+
+```{r tabyl-brown-fam-genre}
+# Frequency table for `genre`
+
+# Load packages
+library(janitor)
+
+brown_fam_df |>
+  tabyl(genre)
+```
+
+In addition to providing frequency counts, the `tabyl()` function also provides the percent of observations for each level of the variable. And, we can add up to three grouping variables to `tabyl()` as well. 
+
+Let's add `lang_variety` to the grouping and calculate the number of observations `n()` grouped by the `genre` and `lang_variety` variables in the `brown_fam_df` dataset.
+
+```{r tabyl-brown-fam-genre-lang-variety}
+# Cross-tabulation for `genre` and `lang_variety`
+brown_fam_df |>
+  tabyl(genre, lang_variety)
+```
+
+The results do not include the percent of observations for each level of the variable as it is not clear how to calculate the percent of observations for each level of the variable when there are multiple grouping variables. We must specify if we want to calculate the percent of observations by row or by column. 
+
+The `janitor` package includes a variety of `adorn_*()` functions to add additional information to the results of `tabyl()`, including percentages, number of observations, and totals.
+
+- `adorn_percentages()`: add percentages to the results of `tabyl()`
+- `adorn_pct_formatting()`: format percentages to include a `%` sign
+- `adorn_ns()`: add the number of observations to the results of `tabyl()`
+- `adorn_rounding()`: round the results of `tabyl()`
+- `adorn_totals()`: add totals to the results of `tabyl()`
+
+So, let's return to adding percentages to our results from the `genre` and `lang_variety` cross-tabulation. Let's calculate the by-column percentages of observations which will give ue the percent of observations for each level of the `genre` variable in each level of the `lang_varity` variable. In other words, we are aiming to assess to what degree the distribution of `genre` is similar or different across `lang_variety`.
+
+```{r tabyl-brown-fam-genre-lang-variety-adorn-perc}
+# Cross-tabulation for `genre` and `lang_variety`
+brown_genre_lang_ct <-
+  brown_fam_df |>
+  tabyl(genre, lang_variety) |> # genre x lang_variety
+  adorn_percentages("col") |> # by-column percentages
+  adorn_pct_formatting() |> # format percentages
+  adorn_ns("front") # add number of observations (in front)
+
+# View
+brown_genre_lang_ct
+```
+
+You can see that I assigned the results of the cross-tabulation to the object `brown_genre_lang_ct`. It is important to note that the results of `tabyl()` are data frames, albeit with a special class `tabyl`. 
+
+```{r class-brown-genre-lang-ct-inspect}
+# Class of `brown_genre_lang_ct`
+class(brown_genre_lang_ct)
+```
+
+Therefore, we can apply subsequent operations to the results of `tabyl()` as we would any other data frame. However, we must pay attention to the variable types of the results of `tabyl()`. 
+
+```{r class-brown-genre-lang-ct-inspect-variables}
+# Variable types of `brown_genre_lang_ct`
+glimpse(brown_genre_lang_ct)
+```
+
+We see that what look like numeric values in the results of `tabyl()` are actually character values. Just something to be aware of when working with the results of `tabyl()`.
+
+### Creating Quarto tables
+
+<!--  
+- Summarizing data is not only for understanding the data but also for communicating the data in reports, manuscripts, and presentations
+- We can use the `knitr` package to create tables in Quarto
+- We can use the `kable()` function to create tables in Quarto
+  - `kable()` takes a data frame (or matrix) as an argument
+  - the `format` argument will be derived from the Quarto document format
+- To cross-reference and add a caption to a table in Quarto we use the code block options `label` and `tbl-cap`
+  - `label` a label prefixed with `tbl-` is used to create a cross-reference to the table
+  - `tbl-cap` is used to create a caption for the table, in quotation marks
+-->
+
+Summarizing the data is not only useful for our understanding of the data as part of our analysis but also for communicating the data in reports, manuscripts, and presentations. 
+
+One way to communicate summary statistics is with tables. In Quarto, we can use the `knitr` package [@R-knitr] in combination with code block options to produce formatted tables which we can cross-reference in our prose sections. 
+
+Let's work with the `brown_genre_lang_ct` object we created in the previous section. 
+
+To create a table in Quarto, we use the `kable()` function. The `kable()` function takes a data frame (or matrix) as an argument. The `format` argument will be derived from the Quarto document format ('html', 'pdf', *etc.*).
+
+```{r kable-brown-genre-lang-ct}
+# Load packages
+library(knitr)
+
+# Create a table in Quarto
+kable(brown_genre_lang_ct)
+```
+
+To add a caption to the table and to enable cross-referencing, we use the code block options `label` and `tbl-cap`. The `label` option takes a label prefixed with `tbl-` to create a cross-reference to the table. The `tbl-cap` option takes a caption for the table, in quotation marks.
+
+````
+```{r kable-brown-genre-lang-ct-label-tbl-cap}`r ''`
+#| label: tbl-brown-genre-lang-ct
+#| tbl-cap: "Cross-tabulation of `genre` and `lang_variety`"
+
+# Create a table in Quarto
+kable(brown_genre_lang_ct)
+```
+````
+
+Now we can cross-reference the table with the `@tbl-brown-genre-lang-ct` syntax. So the following Quarto document will produce the following prose with a cross-reference to the formatted table output.
+
+````
+
+As we see in @tbl-brown-genre-lang-ct, the distribution of `genre` is similar across `lang_variety`.
+
+```{r kable-brown-genre-lang-ct-label-tbl-cap}`r ''`
+#| label: tbl-brown-genre-lang-ct
+#| tbl-cap: "Cross-tabulation of `genre` and `lang_variety`"
+
+# Print cross-tabulation
+kable(brown_genre_lang_ct)
+```
+
+````
+
+----
+
+As we see in Table \@ref(tab:kable-brown-genre-lang-ct-example), the distribution of `genre` is similar across `lang_variety`.
+
+```{r kable-brown-genre-lang-ct-example, echo=FALSE, out.width="100%"}
+kable(
+  brown_genre_lang_ct,
+  caption = "Cross-tabulation of `genre` and `lang_variety`"
+)
+```
+
+----
+
+> **`r fontawesome::fa('medal')` Dive deeper**
+>
+> The `kableExtra` package [@R-kableExtra] provides additional functionality for formatting tables in Quarto.
+
+
+### Creating Quarto plots
+
+<!--  
+- Communicating data and relationships in data is often best done with plots
+- We can use the `ggplot2` package to create plots in Quarto
+- To cross-reference and add a caption to a plot in Quarto we use the code block options `label` and `fig-cap`
+  - `label` a label prefixed with `fig-` is used to create a cross-reference to the plot
+  - `fig-cap` is used to create a caption for the plot, in quotation marks
+
+-->
+
+Where tables are useful for communicating summary statistics for numeric and character variables, plots are useful for communicating relationships between variables especially when one or more of the variables is numeric. Furthermore, for complex relationships, plots can be more effective than tables. 
+
+In Quarto, we can use the `ggplot2` package [@R-ggplot2] in combination with code block options to produce formatted plots which we can cross-reference in our prose sections.
+
+Let's see this in action with a simple histogram of the `percent_passive` variable in the `brown_fam_df` dataset. The Quarto document will produce the following prose with a cross-reference to the formatted plot output.
+
+````
+As we see in @fig-brown-fam-percent-passive-hist, the distribution of `percent_passive` is skewed to the right.
+
+```{r ggplot2-brown-fam-percent-passive-hist-label-fig-cap}`r ''`
+#| label: fig-brown-fam-percent-passive-hist
+#| fig-cap: "Histogram of `percent_passive`"
+
+# Create a histogram in Quarto
+ggplot(brown_fam_df) +
+  geom_histogram(aes(x = percent_passive))
+```
+
+````
+
+----
+
+As we see in Figure \@ref(fig:ggplot2-brown-fam-percent-passive-hist-example), the distribution of `percent_passive` is skewed to the right.
+
+```{r ggplot2-brown-fam-percent-passive-hist-example, echo=FALSE, out.width="100%", fig.cap="Histogram of `percent_passive`"}
+ggplot(brown_fam_df) +
+  geom_histogram(aes(x = percent_passive))
+```
+
+----
+
+The `ggplot2` package implements the 'Grammar of Graphics' approach to creating plots. This approach is based on the idea that plots can be broken down into components, or layers, and that each layer can be manipulated independently. 
+
+The main components are data, aesthetics, and geometries. Data is the data frame that contains the variables to be plotted. Aesthetics are the variables that will be mapped to the x-axis, y-axis (as well as color, shape, size, *etc.*). Geometries are the visual elements that will be used to represent the data, such as points, lines, bars, *etc.*.
+
+As discussed in the R lesson "Visual Summaries", the `aes()` function is used to map variables to aesthetics and can be added to the `ggplot()` function or to the `geom_*()` function depending on whether the aesthetic is mapped to all geometries or to a specific geometry, respectively.
+
+Take a look at the following stages of the earlier plot in each of the tabs below. 
+
+#### Stages {.tabset .tabset-pills}
+
+##### Data
+
+The data layer does not produce a plot but it is the foundation of the plot.
+
+```{r ggplot2-brown-fam-percent-passive-hist-data}
+# Data layer
+ggplot(brown_fam_df)
+```
+
+##### Aesthetics
+
+The aesthetics layer does not produce a plot but it maps the variables to the aesthetics to be used in the plot.
+
+```{r ggplot2-brown-fam-percent-passive-hist-aes}
+# Aesthetics layer
+ggplot(brown_fam_df, aes(x = percent_passive))
+```
+
+##### Geometries
+
+The geometries layer produces the plot connecting the data and aesthetics layers in the particular way specified by the geometries, in this case a histogram.
+
+```{r ggplot2-brown-fam-percent-passive-hist-geom} 
+# Geometries layer
+ggplot(brown_fam_df, aes(x = percent_passive)) +
+  geom_histogram()
+```
+
+#### Choosing the right plot
+
+Just as with tables, the type of summary we choose to communicate with a plot depends on the type of variables we are working with and the relationships between those variables. 
+
+Below I've included a few examples of plots that can be used to communicate different types of variables and relationships.
+
+#### Single numeric variable {.tabset .tabset-pills}
+
+##### Histogram
+```{r plot-single-hist}
+# Histogram
+ggplot(brown_fam_df) +
+  geom_histogram(aes(x = percent_passive))
+```
+
+##### Density plot
+```{r plot-single-density}
+# Density plot
+ggplot(brown_fam_df) +
+  geom_density(aes(x = percent_passive))
+```
+
+#### Numeric and categorical variables {.tabset .tabset-pills}
+
+##### Density plot
+```{r plot-numeric-categorical-density}
+# Density plot
+ggplot(brown_fam_df) +
+  geom_density(
+    aes(
+      x = percent_passive,
+      fill = lang_variety
+    ),
+    alpha = 0.5 # adds transparency
+  )
+```
+
+##### Boxplot
+```{r plot-numeric-categorical-boxplot}
+# Boxplot
+ggplot(brown_fam_df) +
+  geom_boxplot(
+    aes(
+      x = lang_variety,
+      y = percent_passive
+    )
+  )
+```
+
+##### Violin plot
+```{r plot-numeric-categorical-violin}
+# Violin plot
+ggplot(brown_fam_df) +
+  geom_violin(
+    aes(
+      x = lang_variety,
+      y = percent_passive
+    )
+  )
+```
+
+
+#### Two numeric variables {.tabset .tabset-pills}
+
+##### Scatterplot
+```{r plot-two-scatter}
+# Scatterplot
+ggplot(brown_fam_df) +
+  geom_point(
+    aes(
+      x = active_verbs,
+      y = passive_verbs
+    )
+  )
+```
+
+##### Scatterplot with regression line
+```{r plot-two-scatter-regression}
+# Scatterplot with regression line
+ggplot(
+  brown_fam_df,
+  aes(
+    x = active_verbs,
+    y = passive_verbs
+  )
+) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+#### Other variable combinations
+
+In these examples, we have only looked at the most common variable combinations for one and two variable plots. There are more sophisticated plots that can be used for other variable combinations using `ggplot2`. For now, we will leave these for another time.
+
+## Check your understanding
+
+1. A factor is a character vector augmented to include information about the discrete values, or levels, of the vector. `r torf(TRUE)`
+2. What is the difference between a frequency table and a contingency table? `r mcq(c("A frequency table is a cross-tabulation of two or more categorical variables.", answer = "A contingency table is a cross-tabulation of two or more categorical variables."))`
+3. The `r mcq(c("skimr", "dplyr", "ggplot2", answer = "knitr"))` package is used to create formatted tables in R.
+4. To add a geometry layer, such as `geom_histogram()`, to a ggplot object the `|>` operator is used. `r torf(FALSE)`
+5. To visualize the relationship between two numeric variables, a `r mcq(c("histogram", "density plot", "boxplot", "violin plot", answer = "scatterplot"))` is often used.
+6. When the `aes()` function is added to the `ggplot()` function, the aesthetic is mapped to all geometries. `r torf(TRUE)`
+
+## Lab preparation
+
+<!-- Provide a checklist of knowledge and skills that learners should be comfortable with before beginning the lab -->
+
+Before beginning Lab 3, learners should be comfortable with the skills and knowledge developed in the previous recipes and labs. In this lab, you will have a chance to use these skills and those introduced in this Recipe to provide a descriptive assessment of a dataset that includes statistics, tables, and plots using Quarto and R.
+
+The additional skills and knowledge you will need to complete Lab 3 include:
+
+- Summarizing data with `skimr`
+- Summarizing data with `dplyr`
+- Creating Quarto tables with `knitr`
+- Creating Quarto plots with `ggplot2`
+
+## References
+
+
+
+
+<!--
 - glimpse(): dim() # nolint
 - summary():  mean(), median() # nolint
 - skimr::skim(): n(), mean(), median(), etc. # nolint
@@ -46,24 +635,3 @@ Extend: ggplot2 plots
   - Annotations: allow for manipulation of the annotations of the plot
     - `annotate()`, `geom_text()`, `geom_label()`, `geom_segment()`
 -->
-
-In this Recipe we will explore appropriate methods for summarizing variables in datasets given the number and informational values of the variable(s). This will build on our understanding of how to summarize data using statistics, tables, and plots. We will dive deeper into the use of the `skimr` package to summarize data and the `ggplot2` package to create plots. We will reinforce our understanding of the `readr` package to read in data and the `dplyr` package to manipulate data.
-
-...
-
-
-## Summary
-
-## Check your understanding
-
-(... examples ...)
-
-1. `r torf(TRUE)` Literate Programming, first introduced by Donald Knuth in 1984, allows the combination of computer code and text prose in one document. 
-2. The programming paradigm Literate Programming is implemented through `r mcq(c(answer = "Quarto", "R", "RStudio", "GitHub"))`, a platform that facilitates the creation of a variety of output documents based on the same source code.
-3. Which of the following components does a basic Quarto document *not* contain? `r mcq(c("Front-matter section", "Prose section", answer = "Back-matter section", "Code block"))`
-4. To generate a PDF document in Quarto, you can edit the format attribute value in the front-matter section to `r fitb(c(answer = "pdf", "html", "word"), ignore_case = TRUE)`.
-5. `r torf(TRUE)` The code block options `echo` and `include` can be used to hide the code and output, respectively.
-6. `r torf(FALSE)` In Quarto, a code block, where the programming language code is entered, is bounded by three underscores (`_`).
-
-## References
-

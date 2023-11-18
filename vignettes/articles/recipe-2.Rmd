@@ -112,9 +112,9 @@ If you interested in learning about safeguarding package loading in a reproducib
 
 Now that we have our environment set up, we can read the data into R. But before we do, we should make sure that we understand the data by looking at the data documentation.
 
-The dataset that we will read into our R session based on the Brown Corpus [@Francis1961]. I've created a data origin file that contains the data documentation for the Brown Corpus, as we can see in Table \@ref(tab:brown-lob-passives-do). 
+The dataset that we will read into our R session based on the Brown Corpus [@Francis1961]. I've created a data origin file that contains the data documentation for the Brown Corpus, as we can see in Table \@ref(tab:brow-passives-do). 
 
-```{r brown-lob-passives-do, echo=FALSE, message=FALSE}
+```{r brow-passives-do, echo=FALSE, message=FALSE}
 # Read and display the data origin file
 read_csv(file = "data/original/brown_passives_do.csv") |>
   kable(caption = "Data origin file for the Brown Corpus.") |>
@@ -123,9 +123,9 @@ read_csv(file = "data/original/brown_passives_do.csv") |>
 
 This data origin file provides an overview of the original data source. In this case, the dataset we will read into R is a subset of the Brown Corpus which is an aggregate of the use of passive voice. This data was developed by the authors of the `corpora` package [@R-corpora]. I've exported the data to a CSV file, which we will read into R. 
 
-The data dictionary which describes the dataset we will read appears in Table \@ref(tab:brown-lob-passives-dd).
+The data dictionary which describes the dataset we will read appears in Table \@ref(tab:brow-passives-dd).
 
-```{r brown-lob-passives-dd, echo=FALSE, message=FALSE}
+```{r brow-passives-dd, echo=FALSE, message=FALSE}
 # Read and display the data documentation file
 read_csv(file = "data/derived/brown_passives_curated_dd.csv") |>
   kable(caption = "Data dictionary file for the Brown Corpus.") |>
