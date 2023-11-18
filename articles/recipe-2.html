@@ -166,10 +166,10 @@ library(dplyr) # for inspecting and transforming data
 <h3 id="understanding-the-data">Understanding the data<a class="anchor" aria-label="anchor" href="#understanding-the-data"></a>
 </h3>
 <p>Now that we have our environment set up, we can read the data into R. But before we do, we should make sure that we understand the data by looking at the data documentation.</p>
-<p>The dataset that we will read into our R session based on the Brown Corpus <span class="citation">(<a href="#ref-Francis1961" role="doc-biblioref">Francis and Kuçera 1961</a>)</span>. I've created a data origin file that contains the data documentation for the Brown Corpus, as we can see in Table <a href="#tab:brown-lob-passives-do">1</a>.</p>
+<p>The dataset that we will read into our R session based on the Brown Corpus <span class="citation">(<a href="#ref-Francis1961" role="doc-biblioref">Francis and Kuçera 1961</a>)</span>. I've created a data origin file that contains the data documentation for the Brown Corpus, as we can see in Table <a href="#tab:brow-passives-do">1</a>.</p>
 <table class="table table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:brown-lob-passives-do">Table 1: </span>Data origin file for the Brown Corpus.
+<span id="tab:brow-passives-do">Table 1: </span>Data origin file for the Brown Corpus.
 </caption>
 <thead><tr>
 <th style="text-align:left;">
@@ -246,11 +246,11 @@ W. Nelson Francis and Henry Kucera, Brown University, 1964, revised 1971 and 197
 </tr>
 </tbody>
 </table>
-<p>This data origin file provides an overview of the original data source. In this case, the dataset we will read into R is a subset of the Brown Corpus which is an aggregate of the use of passive voice. This data was developed by the authors of the <code>corpora</code> package <span class="citation">(<a href="#ref-R-corpora" role="doc-biblioref"><strong>R-corpora?</strong></a>)</span>. I've exported the data to a CSV file, which we will read into R.</p>
-<p>The data dictionary which describes the dataset we will read appears in Table <a href="#tab:brown-lob-passives-dd">2</a>.</p>
+<p>This data origin file provides an overview of the original data source. In this case, the dataset we will read into R is a subset of the Brown Corpus which is an aggregate of the use of passive voice. This data was developed by the authors of the <code>corpora</code> package <span class="citation">(<a href="#ref-R-corpora" role="doc-biblioref">Evert 2023</a>)</span>. I've exported the data to a CSV file, which we will read into R.</p>
+<p>The data dictionary which describes the dataset we will read appears in Table <a href="#tab:brow-passives-dd">2</a>.</p>
 <table class="table table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:brown-lob-passives-dd">Table 2: </span>Data dictionary file for the Brown Corpus.
+<span id="tab:brow-passives-dd">Table 2: </span>Data dictionary file for the Brown Corpus.
 </caption>
 <thead><tr>
 <th style="text-align:left;">
@@ -481,11 +481,11 @@ brown_passives_df &lt;-
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 5 × 5</span></span></span>
 <span><span class="co">##   cat   passive    n_w   n_s name           </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> C         283  <span style="text-decoration: underline;">40</span>749  <span style="text-decoration: underline;">1</span>459 press reviews  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> L         265  <span style="text-decoration: underline;">57</span>624  <span style="text-decoration: underline;">3</span>673 detective      </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> D         351  <span style="text-decoration: underline;">39</span>029  <span style="text-decoration: underline;">1</span>372 religion       </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> M         104  <span style="text-decoration: underline;">14</span>433   873 science fiction</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span> A         892 <span style="text-decoration: underline;">101</span>196  <span style="text-decoration: underline;">3</span>684 press reportage</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> M         104  <span style="text-decoration: underline;">14</span>433   873 science fiction</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> N         290  <span style="text-decoration: underline;">69</span>909  <span style="text-decoration: underline;">4</span>438 adventure      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> A         892 <span style="text-decoration: underline;">101</span>196  <span style="text-decoration: underline;">3</span>684 press reportage</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> L         265  <span style="text-decoration: underline;">57</span>624  <span style="text-decoration: underline;">3</span>673 detective      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">5</span> K         352  <span style="text-decoration: underline;">68</span>599  <span style="text-decoration: underline;">3</span>983 general fiction</span></span></code></pre>
 <p>These functions can be helpful to get a sense of the data in different ways. In combination with <code><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange()</a></code> function, we can also sort the data frame by a column or columns and then select the first or last rows.</p>
 <p>For example, the following code block will sort the data frame by the <code>passive</code> column in ascending order and then select the first 5 rows:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
@@ -734,6 +734,9 @@ brown_passives_df &lt;-
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-R-corpora" class="csl-entry">
+Evert, Stephanie. 2023. <em>Corpora: Statistics and Data Sets for Corpus Frequency Data</em>. <a href="http://SIGIL.R-Forge.R-Project.org/" class="external-link">http://SIGIL.R-Forge.R-Project.org/</a>.
+</div>
 <div id="ref-Francis1961" class="csl-entry">
 Francis, W. Nelson, and Henry Kuçera. 1961. <span>“Brown Corpus of Present Day American English.”</span>
 </div>

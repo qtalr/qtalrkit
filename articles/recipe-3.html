@@ -79,14 +79,1786 @@
 
     
     
+<!-- [ ] CSS edit for table font size -->
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
 <!--  
 Purpose: To explore appropriate methods for summarizing variables in datasets given the number and informational values of the variable(s).
 
-Extend: statistic and tabular summaries
+Description: This will build on our understanding of how to summarize data using statistics, tables, and plots. We will dive deeper into the use of the `skimr` package to summarize data and the `ggplot2` package to create plots. We also introduce producing Quarto tables and figures with appropriate code block options. We will reinforce our understanding of the `readr` package to read in data and the `dplyr` package to manipulate data.
 
+Approach: We will use the `corpora::PassiveBrownFam` dataset. Using the `skimr` package we will use the `skim()` and `yank()` functions to summarize and extract summaries. We will also include the use of `group_by()` to summarize data by groups. Then we will dive into more targeted summaries using `group_by()` and `summarize()` to calculate summary statistics by groups. We will use `knitr` to create tables and `ggplot2` to create plots. We will reinforce our knowledge of cross-references, citations, and bibliographies.
+
+Prerequisites: It will be assumed that learners have a basic understanding of the `skimr`, `dplyr`, and `ggplot2` packages and general understanding of Quarto documents inlcuding code blocks, front-matter, and back-matter. Learners will also be expected to have a basic understanding of adding cross-references, citations, and bibliographies to Quarto documents.
+
+-->
+<p>In this Recipe we will explore appropriate methods for summarizing variables in datasets given the number and informational values of the variable(s). We will build on our understanding of how to summarize data using statistics, tables, and plots.</p>
+<p>We will cover the following topics:</p>
+<ul>
+<li>Summary overviews of datasets with <code>skimr</code>
+</li>
+<li>Summary statistics with <code>dplyr</code>
+</li>
+<li>Creating Quarto tables with <code>knitr</code>
+</li>
+<li>Creating Quarto plots with <code>ggplot2</code>
+</li>
+</ul>
+<p>In Lab 3, you will put these skills into practice to provide a descriptive assessment of dataset that includes statistics, tables, and plots using Quarto and R.</p>
+</div>
+<div class="section level2">
+<h2 id="concepts-and-strategies">Concepts and strategies<a class="anchor" aria-label="anchor" href="#concepts-and-strategies"></a>
+</h2>
+<!-- Describe the dataset -->
+<p>In this Recipe, we will use the <code>PassiveBrownFam</code> dataset from the <code>corpora</code> package <span class="citation">(<a href="#ref-R-corpora" role="doc-biblioref">Evert 2023</a>)</span>. This dataset contains information on the passive voice usage in the Brown family of corpora. The dataset contains 11 variables and 2,449 observations.</p>
+<p>I have assigned this dataset to the object <code>brown_fam_df</code> and have made minor modifications to the variable names to improve the readability of the dataset.</p>
+<!-- [ ] code folding/ hiding? -->
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Load packages</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Read the dataset from the `corpora` package</span></span>
+<span><span class="va">brown_fam_df</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu">corpora</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/corpora/man/PassiveBrownFam.html" class="external-link">PassiveBrownFam</a></span> <span class="op">|&gt;</span> <span class="co"># reference the dataset</span></span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># convert to a tibble</span></span>
+<span></span>
+<span><span class="co"># Rename variables</span></span>
+<span><span class="va">brown_fam_df</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">brown_fam_df</span> <span class="op">|&gt;</span> <span class="co"># pass the original dataset</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span> <span class="co"># rename variables: new_name = old_name</span></span>
+<span>    lang_variety <span class="op">=</span> <span class="va">lang</span>,</span>
+<span>    num_words <span class="op">=</span> <span class="va">n.words</span>,</span>
+<span>    active_verbs <span class="op">=</span> <span class="va">act</span>,</span>
+<span>    passive_verbs <span class="op">=</span> <span class="va">pass</span>,</span>
+<span>    total_verbs <span class="op">=</span> <span class="va">verbs</span>,</span>
+<span>    percent_passive <span class="op">=</span> <span class="va">p.pass</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Preview</span></span>
+<span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Rows: 2,499</span></span>
+<span><span class="co">## Columns: 11</span></span>
+<span><span class="co">## $ id              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "brown_A01", "brown_A02", "brown_A03", "brown_A04", "b…</span></span>
+<span><span class="co">## $ corpus          <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> Brown, Brown, Brown, Brown, Brown, Brown, Brown, Brown…</span></span>
+<span><span class="co">## $ section         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, …</span></span>
+<span><span class="co">## $ genre           <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> press reportage, press reportage, press reportage, pre…</span></span>
+<span><span class="co">## $ period          <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> 1960, 1960, 1960, 1960, 1960, 1960, 1960, 1960, 1960, …</span></span>
+<span><span class="co">## $ lang_variety    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> AmE, AmE, AmE, AmE, AmE, AmE, AmE, AmE, AmE, AmE, AmE,…</span></span>
+<span><span class="co">## $ num_words       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 2080, 2116, 2051, 2095, 2111, 2102, 2099, 2069, 2058, …</span></span>
+<span><span class="co">## $ active_verbs    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 164, 154, 135, 128, 170, 166, 165, 163, 153, 169, 132,…</span></span>
+<span><span class="co">## $ passive_verbs   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 40, 25, 34, 25, 32, 21, 31, 19, 39, 23, 17, 10, 15, 26…</span></span>
+<span><span class="co">## $ total_verbs     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 204, 179, 169, 153, 202, 187, 196, 182, 192, 192, 149,…</span></span>
+<span><span class="co">## $ percent_passive <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 19.61, 13.97, 20.12, 16.34, 15.84, 11.23, 15.82, 10.44…</span></span></code></pre>
+<p>You can learn more about these variables by reading the dataset documentation with <code><a href="https://rdrr.io/pkg/corpora/man/PassiveBrownFam.html" class="external-link">?corpora::PassiveBrownFam</a></code>.</p>
+<div class="section level3">
+<h3 id="statistical-overviews">Statistical overviews<a class="anchor" aria-label="anchor" href="#statistical-overviews"></a>
+</h3>
+<!--  
+
+- We can use the `skim()` function to create a statistical overview of the data
+- We can use the `yank()` function to extract the statistical overview of the data
+- We can use the `group_by()` function to create a statistical overview of the data by groups
+-->
+<!--  
+- Point out the importance of understanding the data before diving into analysis (recipe and lab 2)
+-->
+<p>Understanding our data is of utmost importance before, during, and after analysis. After we get to know our data by inspecting the data origin, dictionary, and structure, we then move to summarizing the data.</p>
+<!--  
+- The next step to understanding the data is to summarize the data
+- A statistical overview of the data is a good place to start as it gives us a sense of all of the variables and variable types in the dataset 
+- We can use the `skimr` package to create a statistical overview of the data
+-->
+<p>A statistical overview of the data is a good place to start as it gives us a sense of all of the variables and variable types in the dataset. We can use the <code>skimr</code> package to create a statistical overview of the data, using the very convienent <code><a href="https://docs.ropensci.org/skimr/reference/skim.html" class="external-link">skim()</a></code> function.</p>
+<p>Let's create a statistical overview of the <code>brown_fam_df</code> dataset.</p>
+<!-- [ ] skim output in rmd show a Table for part, fix -->
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Load packages</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/skimr/" class="external-link">skimr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Create a statistical overview of the `brown_fam_df` dataset</span></span>
+<span><span class="fu"><a href="https://docs.ropensci.org/skimr/reference/skim.html" class="external-link">skim</a></span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span></span></code></pre></div>
+<table style="width: auto;" class="table table table-condensed">
+<caption>
+<span id="tab:skim-brown-fam">Table 1: </span>Data summary
+</caption>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Name
+</td>
+<td style="text-align:left;">
+brown_fam_df
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Number of rows
+</td>
+<td style="text-align:left;">
+2499
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Number of columns
+</td>
+<td style="text-align:left;">
+11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+_______________________
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Column type frequency:
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+character
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+factor
+</td>
+<td style="text-align:left;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+________________________
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Group variables
+</td>
+<td style="text-align:left;">
+None
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table class="table">
+<thead><tr>
+<th style="text-align:left;">
+skim_variable
+</th>
+<th style="text-align:right;">
+n_missing
+</th>
+<th style="text-align:right;">
+complete_rate
+</th>
+<th style="text-align:right;">
+min
+</th>
+<th style="text-align:right;">
+max
+</th>
+<th style="text-align:right;">
+empty
+</th>
+<th style="text-align:right;">
+n_unique
+</th>
+<th style="text-align:right;">
+whitespace
+</th>
+</tr></thead>
+<tbody><tr>
+<td style="text-align:left;">
+id
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2499
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr></tbody>
+</table>
+<p><strong>Variable type: factor</strong></p>
+<table class="table">
+<thead><tr>
+<th style="text-align:left;">
+skim_variable
+</th>
+<th style="text-align:right;">
+n_missing
+</th>
+<th style="text-align:right;">
+complete_rate
+</th>
+<th style="text-align:left;">
+ordered
+</th>
+<th style="text-align:right;">
+n_unique
+</th>
+<th style="text-align:left;">
+top_counts
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+corpus
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:left;">
+BLO: 500, Bro: 500, LOB: 500, FLO: 500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+section
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:left;">
+J: 400, G: 381, F: 228, A: 220
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genre
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:left;">
+lea: 400, bel: 381, pop: 228, pre: 220
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+period
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+196: 1000, 199: 999, 193: 500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lang_variety
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+BrE: 1500, AmE: 999
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="table">
+<thead><tr>
+<th style="text-align:left;">
+skim_variable
+</th>
+<th style="text-align:right;">
+n_missing
+</th>
+<th style="text-align:right;">
+complete_rate
+</th>
+<th style="text-align:right;">
+mean
+</th>
+<th style="text-align:right;">
+sd
+</th>
+<th style="text-align:right;">
+p0
+</th>
+<th style="text-align:right;">
+p25
+</th>
+<th style="text-align:right;">
+p50
+</th>
+<th style="text-align:right;">
+p75
+</th>
+<th style="text-align:right;">
+p100
+</th>
+<th style="text-align:left;">
+hist
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+num_words
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2165.2
+</td>
+<td style="text-align:right;">
+97.75
+</td>
+<td style="text-align:right;">
+1406.00
+</td>
+<td style="text-align:right;">
+2127.00
+</td>
+<td style="text-align:right;">
+2163.0
+</td>
+<td style="text-align:right;">
+2200.0
+</td>
+<td style="text-align:right;">
+4397.0
+</td>
+<td style="text-align:left;">
+▁▇▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+active_verbs
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+178.7
+</td>
+<td style="text-align:right;">
+56.56
+</td>
+<td style="text-align:right;">
+39.00
+</td>
+<td style="text-align:right;">
+139.00
+</td>
+<td style="text-align:right;">
+170.0
+</td>
+<td style="text-align:right;">
+214.0
+</td>
+<td style="text-align:right;">
+551.0
+</td>
+<td style="text-align:left;">
+▃▇▂▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+passive_verbs
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+25.7
+</td>
+<td style="text-align:right;">
+12.91
+</td>
+<td style="text-align:right;">
+2.00
+</td>
+<td style="text-align:right;">
+16.00
+</td>
+<td style="text-align:right;">
+23.0
+</td>
+<td style="text-align:right;">
+32.0
+</td>
+<td style="text-align:right;">
+86.0
+</td>
+<td style="text-align:left;">
+▆▇▂▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+total_verbs
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+204.4
+</td>
+<td style="text-align:right;">
+49.09
+</td>
+<td style="text-align:right;">
+66.00
+</td>
+<td style="text-align:right;">
+170.00
+</td>
+<td style="text-align:right;">
+196.0
+</td>
+<td style="text-align:right;">
+234.0
+</td>
+<td style="text-align:right;">
+571.0
+</td>
+<td style="text-align:left;">
+▃▇▂▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+percent_passive
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+14.1
+</td>
+<td style="text-align:right;">
+9.13
+</td>
+<td style="text-align:right;">
+0.61
+</td>
+<td style="text-align:right;">
+7.39
+</td>
+<td style="text-align:right;">
+12.1
+</td>
+<td style="text-align:right;">
+18.2
+</td>
+<td style="text-align:right;">
+67.7
+</td>
+<td style="text-align:left;">
+▇▅▁▁▁
+</td>
+</tr>
+</tbody>
+</table>
+<p>The output of the <code><a href="https://docs.ropensci.org/skimr/reference/skim.html" class="external-link">skim()</a></code> function contains a lot of information but it essentially has two parts: a summary of the dataset and a summary of each variable in the dataset. The summary of each of the variables, however, is grouped by variable type. Remember, each of our variables in a data frame is a vector and each vector has a type.</p>
+<p>We have already learned about different types of vectors in R, including character, numeric, and logical. In this dataset, we are presented with a new type of vector: a factor. A factor is essentially a character vector that contains a set of discrete values, or levels. Factors can be ordered or unordered and can contain levels that are not present in the data.</p>
+<p>Now, looking at each of the variable types, we can see that we have 1 character variable, 5 factor variables, and 5 numeric variables. Each of these variable types assume a different set of summary statistics. For example, we can calculate the mean of a numeric variable but not of a character variable. Or, we can count the number of unique values in a character variable but not in a numeric variable.</p>
+<p>For all variables, <code><a href="https://docs.ropensci.org/skimr/reference/skim.html" class="external-link">skim()</a></code> will also provide the number of missing values and the percent of non-missing values.</p>
+<p>Inspecting the entire dataset is a good place to start but at some point we often want focus in on a set of variables. We can add the <code><a href="https://docs.ropensci.org/skimr/reference/partition.html" class="external-link">yank()</a></code> function to extract the statistical overview of a set of variables by their variable types.</p>
+<p>Let's extract the statistical overview of the numeric variables in the <code>brown_fam_df</code> dataset.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Extract the statistical overview of the numeric variables</span></span>
+<span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://docs.ropensci.org/skimr/reference/skim.html" class="external-link">skim</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://docs.ropensci.org/skimr/reference/partition.html" class="external-link">yank</a></span><span class="op">(</span><span class="st">"numeric"</span><span class="op">)</span></span></code></pre></div>
+<p><strong>Variable type: numeric</strong></p>
+<table class="table">
+<thead><tr>
+<th style="text-align:left;">
+skim_variable
+</th>
+<th style="text-align:right;">
+n_missing
+</th>
+<th style="text-align:right;">
+complete_rate
+</th>
+<th style="text-align:right;">
+mean
+</th>
+<th style="text-align:right;">
+sd
+</th>
+<th style="text-align:right;">
+p0
+</th>
+<th style="text-align:right;">
+p25
+</th>
+<th style="text-align:right;">
+p50
+</th>
+<th style="text-align:right;">
+p75
+</th>
+<th style="text-align:right;">
+p100
+</th>
+<th style="text-align:left;">
+hist
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+num_words
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2165.2
+</td>
+<td style="text-align:right;">
+97.75
+</td>
+<td style="text-align:right;">
+1406.00
+</td>
+<td style="text-align:right;">
+2127.00
+</td>
+<td style="text-align:right;">
+2163.0
+</td>
+<td style="text-align:right;">
+2200.0
+</td>
+<td style="text-align:right;">
+4397.0
+</td>
+<td style="text-align:left;">
+▁▇▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+active_verbs
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+178.7
+</td>
+<td style="text-align:right;">
+56.56
+</td>
+<td style="text-align:right;">
+39.00
+</td>
+<td style="text-align:right;">
+139.00
+</td>
+<td style="text-align:right;">
+170.0
+</td>
+<td style="text-align:right;">
+214.0
+</td>
+<td style="text-align:right;">
+551.0
+</td>
+<td style="text-align:left;">
+▃▇▂▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+passive_verbs
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+25.7
+</td>
+<td style="text-align:right;">
+12.91
+</td>
+<td style="text-align:right;">
+2.00
+</td>
+<td style="text-align:right;">
+16.00
+</td>
+<td style="text-align:right;">
+23.0
+</td>
+<td style="text-align:right;">
+32.0
+</td>
+<td style="text-align:right;">
+86.0
+</td>
+<td style="text-align:left;">
+▆▇▂▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+total_verbs
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+204.4
+</td>
+<td style="text-align:right;">
+49.09
+</td>
+<td style="text-align:right;">
+66.00
+</td>
+<td style="text-align:right;">
+170.00
+</td>
+<td style="text-align:right;">
+196.0
+</td>
+<td style="text-align:right;">
+234.0
+</td>
+<td style="text-align:right;">
+571.0
+</td>
+<td style="text-align:left;">
+▃▇▂▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+percent_passive
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+14.1
+</td>
+<td style="text-align:right;">
+9.13
+</td>
+<td style="text-align:right;">
+0.61
+</td>
+<td style="text-align:right;">
+7.39
+</td>
+<td style="text-align:right;">
+12.1
+</td>
+<td style="text-align:right;">
+18.2
+</td>
+<td style="text-align:right;">
+67.7
+</td>
+<td style="text-align:left;">
+▇▅▁▁▁
+</td>
+</tr>
+</tbody>
+</table>
+<!-- [ ] add more about how skim objects are and are not tibbles? And how they work with `dplyr` functions: select, filter, and group_by? -->
+</div>
+<div class="section level3">
+<h3 id="summary-statistics-of-particular-variables">Summary statistics of particular variables<a class="anchor" aria-label="anchor" href="#summary-statistics-of-particular-variables"></a>
+</h3>
+<!--  
+- For a more targeted summary of the data we can use `dplyr` to calculate summary statistics
+- We can use the `group_by()` function to group the data by a particular variable or variables
+  - We can use the `ungroup()` function to remove the grouping
+- We can use the `summarize()` function to calculate summary statistics for the grouped data
+  - Summary functions: 
+    - Numeric: `mean()`, `median()`, `sd()`, `var()`, `min()`, `max()`, `IQR()`, `mad()`, `quantile()`
+    - Character: `n()`, `n_distinct()`, ...
+- For cross-tabulations we can use the `table() function or `count()` function from `dplyr` or `tabyl()` function from `janitor`
+-->
+<p>These summary statistics are useful but for a preliminary and interactive use, but it is oftent the case that we will want to focus in on a particular variable or set of variables and their potential relationships to other variables.</p>
+<p>We can use the <code>dplyr</code> package to calculate summary statistics for a particular variable or set of variables. We can use the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by()</a></code> function to group the data by a particular variable or variables. Then we can use the <code><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize()</a></code> function to calculate summary statistics for the grouped data.</p>
+<p>For example, let's calculate the mean and median of the <code>percent_passive</code> variable in the <code>brown_fam_df</code> dataset grouped by the <code>lang_variety</code> variable.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Mean and median of `percent_passive` grouped by `lang_variety`</span></span>
+<span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">lang_variety</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>    mean_percent_passive <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">percent_passive</span><span class="op">)</span>,</span>
+<span>    median_percent_passive <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">percent_passive</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 3</span></span></span>
+<span><span class="co">##   lang_variety mean_percent_passive median_percent_passive</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> AmE                          12.9                   11.0</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> BrE                          14.8                   13.3</span></span></code></pre>
+<p>The result is a 2x3 data frame which includes both the mean and median of the <code>percent_passive</code> variable for each of the two levels of the <code>lang_variety</code> variable.</p>
+<p>The <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by()</a></code> function can also be used to group by multiple variables. For example, let's calculate the mean and median of the <code>percent_passive</code> variable in the <code>brown_fam_df</code> dataset grouped by the <code>lang_variety</code> and <code>genre</code> variables.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Mean and median of `percent_passive` grouped by `lang_variety` and `genre`</span></span>
+<span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">lang_variety</span>, <span class="va">genre</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>    mean_percent_passive <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">percent_passive</span><span class="op">)</span>,</span>
+<span>    median_percent_passive <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">percent_passive</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 30 × 4</span></span></span>
+<span><span class="co">##    lang_variety genre            mean_percent_passive median_percent_passive</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> AmE          press reportage                 11.5                   11.0 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> AmE          press editorial                 10.6                   10.1 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> AmE          press reviews                    9.54                   9.77</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> AmE          religion                        14.3                   14.3 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> AmE          skills / hobbies                14.9                   13.9 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> AmE          popular lore                    14.0                   12.7 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> AmE          belles lettres                  12.0                   11.7 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> AmE          miscellaneous                   23.5                   23.3 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> AmE          learned                         21.3                   18.3 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> AmE          general fiction                  6.22                   5.89</span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 20 more rows</span></span></span></code></pre>
+<p>For numeric variables, such as <code>percent_passive</code>, there are a number of summary statistics that we can calculate. We've seen the R functions for mean and median but we can also calculate the standard deviation (<code><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd()</a></code>), variance (<code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var()</a></code>), minimum (<code><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min()</a></code>), maximum (<code><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max()</a></code>), interquartile range (<code><a href="https://rdrr.io/r/stats/IQR.html" class="external-link">IQR()</a></code>), median absolute deviation (<code><a href="https://rdrr.io/r/stats/mad.html" class="external-link">mad()</a></code>), and quantiles (<code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile()</a></code>). All these calculations make sense for numeric variables but not for character variables.</p>
+<p>For character variables, and factors, the summary statistics are more limited. We can calculate the number of observations (<code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n()</a></code>) and/ or the number of unique values (<code><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct()</a></code>). Let's now summarize the number of observations <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n()</a></code> grouped by the <code>genre</code> variable in the <code>brown_fam_df</code> dataset.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Frequency table for `genre`</span></span>
+<span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">genre</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>    n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 15 × 2</span></span></span>
+<span><span class="co">##    genre                n</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> press reportage    220</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> press editorial    135</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> press reviews       85</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> religion            85</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> skills / hobbies   186</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> popular lore       228</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> belles lettres     381</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> miscellaneous      150</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> learned            400</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> general fiction    145</span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 5 more rows</span></span></span></code></pre>
+<p>Just as before, we can add multiple grouping variables to <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by()</a></code>. Let's add <code>lang_variety</code> to the grouping and calculate the number of observations <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n()</a></code> grouped by the <code>genre</code> and <code>lang_variety</code> variables in the <code>brown_fam_df</code> dataset.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Cross-tabulation for `genre` and `lang_variety`</span></span>
+<span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">genre</span>, <span class="va">lang_variety</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>    n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 30 × 3</span></span></span>
+<span><span class="co">##    genre            lang_variety     n</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> press reportage  AmE             88</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> press reportage  BrE            132</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> press editorial  AmE             54</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> press editorial  BrE             81</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> press reviews    AmE             34</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> press reviews    BrE             51</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> religion         AmE             34</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> religion         BrE             51</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> skills / hobbies AmE             72</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> skills / hobbies BrE            114</span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 20 more rows</span></span></span></code></pre>
+<div class="callout">
+<p><strong><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M64 64V241.6c5.2-1 10.5-1.6 16-1.6H96V208 64c0-8.8-7.2-16-16-16s-16 7.2-16 16zM80 288c-17.7 0-32 14.3-32 32c0 0 0 0 0 0v24c0 66.3 53.7 120 120 120h48c52.5 0 97.1-33.7 113.4-80.7c-3.1 .5-6.2 .7-9.4 .7c-20 0-37.9-9.2-49.7-23.6c-9 4.9-19.4 7.6-30.3 7.6c-15.1 0-29-5.3-40-14c-11 8.8-24.9 14-40 14H120c-13.3 0-24-10.7-24-24s10.7-24 24-24h40c8.8 0 16-7.2 16-16s-7.2-16-16-16H120 80zM0 320s0 0 0 0c0-18 6-34.6 16-48V64C16 28.7 44.7 0 80 0s64 28.7 64 64v82c5.1-1.3 10.5-2 16-2c25.3 0 47.2 14.7 57.6 36c7-2.6 14.5-4 22.4-4c20 0 37.9 9.2 49.7 23.6c9-4.9 19.4-7.6 30.3-7.6c35.3 0 64 28.7 64 64v64 24c0 92.8-75.2 168-168 168H168C75.2 512 0 436.8 0 344V320zm336-64c0-8.8-7.2-16-16-16s-16 7.2-16 16v48 16c0 8.8 7.2 16 16 16s16-7.2 16-16V256zM160 240c5.5 0 10.9 .7 16 2v-2V208c0-8.8-7.2-16-16-16s-16 7.2-16 16v32h16zm64 24v40c0 8.8 7.2 16 16 16s16-7.2 16-16V256 240c0-8.8-7.2-16-16-16s-16 7.2-16 16v24z"></path></svg> Tip</strong></p>
+<p>The result of calculating the number of observations for a character or factor variable is known as a frequency table. Grouping two or more categorical variables is known as a cross-tabulation or a contingency table.</p>
+</div>
+<p>Now, we can also pipe the results of a <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize()</a></code> to another function. This can be to say sort, select, or filter the results. It can also be to perform another summary function. It is important, however, to remember that the result of a <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by()</a></code> produces a grouped data frame. Subsequent functions will be applied to the grouped data frame. This can lead to unexpected results of the original grouping is not relevant for the subsequent function. To avoid this, we can use the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup()</a></code> function to remove the grouping after the relevant grouped summary statistics have been calculated.</p>
+<p>Let's return to calculating the number of observations <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n()</a></code> grouped by the <code>genre</code> and <code>lang_variety</code> variables in the <code>brown_fam_df</code> dataset. But let's add another summary which uses the <code>n</code> variable to calculate the mean and median number of observations.</p>
+<p>If we do not use the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup()</a></code> function, the mean and median will be calculated for each <code>genre</code> collapsed across <code>lang_variety</code>.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Mean and median of `n` grouped by `genre`</span></span>
+<span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">genre</span>, <span class="va">lang_variety</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>    n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>    mean_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>,</span>
+<span>    median_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 15 × 3</span></span></span>
+<span><span class="co">##    genre            mean_n median_n</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> press reportage   110      110  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> press editorial    67.5     67.5</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> press reviews      42.5     42.5</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> religion           42.5     42.5</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> skills / hobbies   93       93  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> popular lore      114      114  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> belles lettres    190.     190. </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> miscellaneous      75       75  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> learned           200      200  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> general fiction    72.5     72.5</span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 5 more rows</span></span></span></code></pre>
+<p>Therefore we see that we have a mean and median calculated for the number of documents in the corpus for each of the 15 genres.</p>
+<p>If we use the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup()</a></code> function, the mean and median will be calculated for all genres. Note we will use the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup()</a></code> function between these summaries to clear the grouping before calculating the mean and median.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Number of observations for each `genre` and `lang_variety`</span></span>
+<span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">genre</span>, <span class="va">lang_variety</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>    n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>    mean_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>,</span>
+<span>    median_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 2</span></span></span>
+<span><span class="co">##   mean_n median_n</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span>   83.3       72</span></span></code></pre>
+<p>Now we see that we have a mean and median calculated across all genres.</p>
+<hr>
+<p>Before we leave this section, let's look some other ways to create frequency and contingency tables for character and factor variables. A shortcut to calculate a frequency table for a character or factor variable is to use the <code><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count()</a></code> function from the <code>dplyr</code> package.</p>
+<p>Let's calculate the number of observations <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n()</a></code> grouped by the <code>genre</code> variable in the <code>brown_fam_df</code> dataset.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Frequency table for `genre`</span></span>
+<span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">genre</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 15 × 2</span></span></span>
+<span><span class="co">##    genre                n</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> press reportage    220</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> press editorial    135</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> press reviews       85</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> religion            85</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> skills / hobbies   186</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> popular lore       228</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> belles lettres     381</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> miscellaneous      150</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> learned            400</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> general fiction    145</span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 5 more rows</span></span></span></code></pre>
+<p>We can also add multiple grouping variables to <code><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count()</a></code> and create contingency tables.</p>
+<p>Let's add <code>lang_variety</code> to the grouping and calculate the number of observations <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n()</a></code> grouped by the <code>genre</code> and <code>lang_variety</code> variables in the <code>brown_fam_df</code> dataset.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Cross-tabulation for `genre` and `lang_variety`</span></span>
+<span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">genre</span>, <span class="va">lang_variety</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 30 × 3</span></span></span>
+<span><span class="co">##    genre            lang_variety     n</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> press reportage  AmE             88</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> press reportage  BrE            132</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> press editorial  AmE             54</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> press editorial  BrE             81</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> press reviews    AmE             34</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> press reviews    BrE             51</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> religion         AmE             34</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> religion         BrE             51</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> skills / hobbies AmE             72</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> skills / hobbies BrE            114</span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 20 more rows</span></span></span></code></pre>
+<p>Note that the results of <code><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count()</a></code> are not grouped so we do not need to use the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup()</a></code> function before calculating subsequent summary statistics.</p>
+<p>Another way to create frequency and contingency tables is to use the <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code> function from the <code>janitor</code> package <span class="citation">(<a href="#ref-R-janitor" role="doc-biblioref">Firke 2023</a>)</span>. Let's calculate the number of observations <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n()</a></code> grouped by the <code>genre</code> variable in the <code>brown_fam_df</code> dataset.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Frequency table for `genre`</span></span>
+<span></span>
+<span><span class="co"># Load packages</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sfirke/janitor" class="external-link">janitor</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl</a></span><span class="op">(</span><span class="va">genre</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 15 × 3</span></span></span>
+<span><span class="co">##    genre                n percent</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> press reportage    220  0.088<span style="text-decoration: underline;">0</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> press editorial    135  0.054<span style="text-decoration: underline;">0</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> press reviews       85  0.034<span style="text-decoration: underline;">0</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> religion            85  0.034<span style="text-decoration: underline;">0</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> skills / hobbies   186  0.074<span style="text-decoration: underline;">4</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> popular lore       228  0.091<span style="text-decoration: underline;">2</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> belles lettres     381  0.152 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> miscellaneous      150  0.060<span style="text-decoration: underline;">0</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> learned            400  0.160 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> general fiction    145  0.058<span style="text-decoration: underline;">0</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 5 more rows</span></span></span></code></pre>
+<p>In addition to providing frequency counts, the <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code> function also provides the percent of observations for each level of the variable. And, we can add up to three grouping variables to <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code> as well.</p>
+<p>Let's add <code>lang_variety</code> to the grouping and calculate the number of observations <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n()</a></code> grouped by the <code>genre</code> and <code>lang_variety</code> variables in the <code>brown_fam_df</code> dataset.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Cross-tabulation for `genre` and `lang_variety`</span></span>
+<span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl</a></span><span class="op">(</span><span class="va">genre</span>, <span class="va">lang_variety</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 15 × 3</span></span></span>
+<span><span class="co">##    genre              AmE   BrE</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> press reportage     88   132</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> press editorial     54    81</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> press reviews       34    51</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> religion            34    51</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> skills / hobbies    72   114</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> popular lore        96   132</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> belles lettres     150   231</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> miscellaneous       60    90</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> learned            160   240</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> general fiction     58    87</span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 5 more rows</span></span></span></code></pre>
+<p>The results do not include the percent of observations for each level of the variable as it is not clear how to calculate the percent of observations for each level of the variable when there are multiple grouping variables. We must specify if we want to calculate the percent of observations by row or by column.</p>
+<p>The <code>janitor</code> package includes a variety of <code>adorn_*()</code> functions to add additional information to the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>, including percentages, number of observations, and totals.</p>
+<ul>
+<li>
+<code><a href="https://sfirke.github.io/janitor/reference/adorn_percentages.html" class="external-link">adorn_percentages()</a></code>: add percentages to the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>
+</li>
+<li>
+<code><a href="https://sfirke.github.io/janitor/reference/adorn_pct_formatting.html" class="external-link">adorn_pct_formatting()</a></code>: format percentages to include a <code>%</code> sign</li>
+<li>
+<code><a href="https://sfirke.github.io/janitor/reference/adorn_ns.html" class="external-link">adorn_ns()</a></code>: add the number of observations to the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>
+</li>
+<li>
+<code><a href="https://sfirke.github.io/janitor/reference/adorn_rounding.html" class="external-link">adorn_rounding()</a></code>: round the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>
+</li>
+<li>
+<code><a href="https://sfirke.github.io/janitor/reference/adorn_totals.html" class="external-link">adorn_totals()</a></code>: add totals to the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>
+</li>
+</ul>
+<p>So, let's return to adding percentages to our results from the <code>genre</code> and <code>lang_variety</code> cross-tabulation. Let's calculate the by-column percentages of observations which will give ue the percent of observations for each level of the <code>genre</code> variable in each level of the <code>lang_varity</code> variable. In other words, we are aiming to assess to what degree the distribution of <code>genre</code> is similar or different across <code>lang_variety</code>.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Cross-tabulation for `genre` and `lang_variety`</span></span>
+<span><span class="va">brown_genre_lang_ct</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl</a></span><span class="op">(</span><span class="va">genre</span>, <span class="va">lang_variety</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># genre x lang_variety</span></span>
+<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/adorn_percentages.html" class="external-link">adorn_percentages</a></span><span class="op">(</span><span class="st">"col"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># by-column percentages</span></span>
+<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/adorn_pct_formatting.html" class="external-link">adorn_pct_formatting</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># format percentages</span></span>
+<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/adorn_ns.html" class="external-link">adorn_ns</a></span><span class="op">(</span><span class="st">"front"</span><span class="op">)</span> <span class="co"># add number of observations (in front)</span></span>
+<span></span>
+<span><span class="co"># View</span></span>
+<span><span class="va">brown_genre_lang_ct</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 15 × 3</span></span></span>
+<span><span class="co">##    genre            AmE         BrE        </span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> press reportage  88  (8.8%)  132  (8.8%)</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> press editorial  54  (5.4%)  81  (5.4%) </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> press reviews    34  (3.4%)  51  (3.4%) </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> religion         34  (3.4%)  51  (3.4%) </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> skills / hobbies 72  (7.2%)  114  (7.6%)</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> popular lore     96  (9.6%)  132  (8.8%)</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> belles lettres   150 (15.0%) 231 (15.4%)</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> miscellaneous    60  (6.0%)  90  (6.0%) </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> learned          160 (16.0%) 240 (16.0%)</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> general fiction  58  (5.8%)  87  (5.8%) </span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 5 more rows</span></span></span></code></pre>
+<p>You can see that I assigned the results of the cross-tabulation to the object <code>brown_genre_lang_ct</code>. It is important to note that the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code> are data frames, albeit with a special class <code>tabyl</code>.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Class of `brown_genre_lang_ct`</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">brown_genre_lang_ct</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "tabyl"      "data.frame"</span></span></code></pre>
+<p>Therefore, we can apply subsequent operations to the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code> as we would any other data frame. However, we must pay attention to the variable types of the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Variable types of `brown_genre_lang_ct`</span></span>
+<span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">brown_genre_lang_ct</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Rows: 15</span></span>
+<span><span class="co">## Columns: 3</span></span>
+<span><span class="co">## $ genre <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> press reportage, press editorial, press reviews, religion, skill…</span></span>
+<span><span class="co">## $ AmE   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "88  (8.8%)", "54  (5.4%)", "34  (3.4%)", "34  (3.4%)", "72  (7.…</span></span>
+<span><span class="co">## $ BrE   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "132  (8.8%)", "81  (5.4%)", "51  (3.4%)", "51  (3.4%)", "114  (…</span></span></code></pre>
+<p>We see that what look like numeric values in the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code> are actually character values. Just something to be aware of when working with the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>.</p>
+</div>
+<div class="section level3">
+<h3 id="creating-quarto-tables">Creating Quarto tables<a class="anchor" aria-label="anchor" href="#creating-quarto-tables"></a>
+</h3>
+<!--  
+- Summarizing data is not only for understanding the data but also for communicating the data in reports, manuscripts, and presentations
+- We can use the `knitr` package to create tables in Quarto
+- We can use the `kable()` function to create tables in Quarto
+  - `kable()` takes a data frame (or matrix) as an argument
+  - the `format` argument will be derived from the Quarto document format
+- To cross-reference and add a caption to a table in Quarto we use the code block options `label` and `tbl-cap`
+  - `label` a label prefixed with `tbl-` is used to create a cross-reference to the table
+  - `tbl-cap` is used to create a caption for the table, in quotation marks
+-->
+<p>Summarizing the data is not only useful for our understanding of the data as part of our analysis but also for communicating the data in reports, manuscripts, and presentations.</p>
+<p>One way to communicate summary statistics is with tables. In Quarto, we can use the <code>knitr</code> package <span class="citation">(<a href="#ref-R-knitr" role="doc-biblioref">Xie 2023</a>)</span> in combination with code block options to produce formatted tables which we can cross-reference in our prose sections.</p>
+<p>Let's work with the <code>brown_genre_lang_ct</code> object we created in the previous section.</p>
+<p>To create a table in Quarto, we use the <code><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable()</a></code> function. The <code><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable()</a></code> function takes a data frame (or matrix) as an argument. The <code>format</code> argument will be derived from the Quarto document format ('html', 'pdf', <em>etc.</em>).</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Load packages</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/" class="external-link">knitr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Create a table in Quarto</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">brown_genre_lang_ct</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr>
+<th style="text-align:left;">
+genre
+</th>
+<th style="text-align:left;">
+AmE
+</th>
+<th style="text-align:left;">
+BrE
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+press reportage
+</td>
+<td style="text-align:left;">
+88 (8.8%)
+</td>
+<td style="text-align:left;">
+132 (8.8%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+press editorial
+</td>
+<td style="text-align:left;">
+54 (5.4%)
+</td>
+<td style="text-align:left;">
+81 (5.4%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+press reviews
+</td>
+<td style="text-align:left;">
+34 (3.4%)
+</td>
+<td style="text-align:left;">
+51 (3.4%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+religion
+</td>
+<td style="text-align:left;">
+34 (3.4%)
+</td>
+<td style="text-align:left;">
+51 (3.4%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+skills / hobbies
+</td>
+<td style="text-align:left;">
+72 (7.2%)
+</td>
+<td style="text-align:left;">
+114 (7.6%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+popular lore
+</td>
+<td style="text-align:left;">
+96 (9.6%)
+</td>
+<td style="text-align:left;">
+132 (8.8%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+belles lettres
+</td>
+<td style="text-align:left;">
+150 (15.0%)
+</td>
+<td style="text-align:left;">
+231 (15.4%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+miscellaneous
+</td>
+<td style="text-align:left;">
+60 (6.0%)
+</td>
+<td style="text-align:left;">
+90 (6.0%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+learned
+</td>
+<td style="text-align:left;">
+160 (16.0%)
+</td>
+<td style="text-align:left;">
+240 (16.0%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+general fiction
+</td>
+<td style="text-align:left;">
+58 (5.8%)
+</td>
+<td style="text-align:left;">
+87 (5.8%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+detective
+</td>
+<td style="text-align:left;">
+48 (4.8%)
+</td>
+<td style="text-align:left;">
+72 (4.8%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+science fiction
+</td>
+<td style="text-align:left;">
+12 (1.2%)
+</td>
+<td style="text-align:left;">
+18 (1.2%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+adventure
+</td>
+<td style="text-align:left;">
+57 (5.7%)
+</td>
+<td style="text-align:left;">
+87 (5.8%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+romance
+</td>
+<td style="text-align:left;">
+58 (5.8%)
+</td>
+<td style="text-align:left;">
+87 (5.8%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+humour
+</td>
+<td style="text-align:left;">
+18 (1.8%)
+</td>
+<td style="text-align:left;">
+27 (1.8%)
+</td>
+</tr>
+</tbody>
+</table>
+<p>To add a caption to the table and to enable cross-referencing, we use the code block options <code>label</code> and <code>tbl-cap</code>. The <code>label</code> option takes a label prefixed with <code>tbl-</code> to create a cross-reference to the table. The <code>tbl-cap</code> option takes a caption for the table, in quotation marks.</p>
+<pre><code>```{r kable-brown-genre-lang-ct-label-tbl-cap}
+#| label: tbl-brown-genre-lang-ct
+#| tbl-cap: "Cross-tabulation of `genre` and `lang_variety`"
+
+# Create a table in Quarto
+kable(brown_genre_lang_ct)
+```</code></pre>
+<p>Now we can cross-reference the table with the <code>@tbl-brown-genre-lang-ct</code> syntax. So the following Quarto document will produce the following prose with a cross-reference to the formatted table output.</p>
+<pre><code>
+As we see in @tbl-brown-genre-lang-ct, the distribution of `genre` is similar across `lang_variety`.
+
+```{r kable-brown-genre-lang-ct-label-tbl-cap}
+#| label: tbl-brown-genre-lang-ct
+#| tbl-cap: "Cross-tabulation of `genre` and `lang_variety`"
+
+# Print cross-tabulation
+kable(brown_genre_lang_ct)
+```
+</code></pre>
+<hr>
+<p>As we see in Table <a href="#tab:kable-brown-genre-lang-ct-example">2</a>, the distribution of <code>genre</code> is similar across <code>lang_variety</code>.</p>
+<table class="table">
+<caption>
+<span id="tab:kable-brown-genre-lang-ct-example">Table 2: </span>Cross-tabulation of <code>genre</code> and <code>lang_variety</code>
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+genre
+</th>
+<th style="text-align:left;">
+AmE
+</th>
+<th style="text-align:left;">
+BrE
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+press reportage
+</td>
+<td style="text-align:left;">
+88 (8.8%)
+</td>
+<td style="text-align:left;">
+132 (8.8%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+press editorial
+</td>
+<td style="text-align:left;">
+54 (5.4%)
+</td>
+<td style="text-align:left;">
+81 (5.4%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+press reviews
+</td>
+<td style="text-align:left;">
+34 (3.4%)
+</td>
+<td style="text-align:left;">
+51 (3.4%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+religion
+</td>
+<td style="text-align:left;">
+34 (3.4%)
+</td>
+<td style="text-align:left;">
+51 (3.4%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+skills / hobbies
+</td>
+<td style="text-align:left;">
+72 (7.2%)
+</td>
+<td style="text-align:left;">
+114 (7.6%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+popular lore
+</td>
+<td style="text-align:left;">
+96 (9.6%)
+</td>
+<td style="text-align:left;">
+132 (8.8%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+belles lettres
+</td>
+<td style="text-align:left;">
+150 (15.0%)
+</td>
+<td style="text-align:left;">
+231 (15.4%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+miscellaneous
+</td>
+<td style="text-align:left;">
+60 (6.0%)
+</td>
+<td style="text-align:left;">
+90 (6.0%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+learned
+</td>
+<td style="text-align:left;">
+160 (16.0%)
+</td>
+<td style="text-align:left;">
+240 (16.0%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+general fiction
+</td>
+<td style="text-align:left;">
+58 (5.8%)
+</td>
+<td style="text-align:left;">
+87 (5.8%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+detective
+</td>
+<td style="text-align:left;">
+48 (4.8%)
+</td>
+<td style="text-align:left;">
+72 (4.8%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+science fiction
+</td>
+<td style="text-align:left;">
+12 (1.2%)
+</td>
+<td style="text-align:left;">
+18 (1.2%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+adventure
+</td>
+<td style="text-align:left;">
+57 (5.7%)
+</td>
+<td style="text-align:left;">
+87 (5.8%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+romance
+</td>
+<td style="text-align:left;">
+58 (5.8%)
+</td>
+<td style="text-align:left;">
+87 (5.8%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+humour
+</td>
+<td style="text-align:left;">
+18 (1.8%)
+</td>
+<td style="text-align:left;">
+27 (1.8%)
+</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<blockquote>
+<p><strong><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M4.1 38.2C1.4 34.2 0 29.4 0 24.6C0 11 11 0 24.6 0H133.9c11.2 0 21.7 5.9 27.4 15.5l68.5 114.1c-48.2 6.1-91.3 28.6-123.4 61.9L4.1 38.2zm503.7 0L405.6 191.5c-32.1-33.3-75.2-55.8-123.4-61.9L350.7 15.5C356.5 5.9 366.9 0 378.1 0H487.4C501 0 512 11 512 24.6c0 4.8-1.4 9.6-4.1 13.6zM80 336a176 176 0 1 1 352 0A176 176 0 1 1 80 336zm184.4-94.9c-3.4-7-13.3-7-16.8 0l-22.4 45.4c-1.4 2.8-4 4.7-7 5.1L168 298.9c-7.7 1.1-10.7 10.5-5.2 16l36.3 35.4c2.2 2.2 3.2 5.2 2.7 8.3l-8.6 49.9c-1.3 7.6 6.7 13.5 13.6 9.9l44.8-23.6c2.7-1.4 6-1.4 8.7 0l44.8 23.6c6.9 3.6 14.9-2.2 13.6-9.9l-8.6-49.9c-.5-3 .5-6.1 2.7-8.3l36.3-35.4c5.6-5.4 2.5-14.8-5.2-16l-50.1-7.3c-3-.4-5.7-2.4-7-5.1l-22.4-45.4z"></path></svg> Dive deeper</strong></p>
+<p>The <code>kableExtra</code> package <span class="citation">(<a href="#ref-R-kableExtra" role="doc-biblioref">Zhu 2021</a>)</span> provides additional functionality for formatting tables in Quarto.</p>
+</blockquote>
+</div>
+<div class="section level3">
+<h3 id="creating-quarto-plots">Creating Quarto plots<a class="anchor" aria-label="anchor" href="#creating-quarto-plots"></a>
+</h3>
+<!--  
+- Communicating data and relationships in data is often best done with plots
+- We can use the `ggplot2` package to create plots in Quarto
+- To cross-reference and add a caption to a plot in Quarto we use the code block options `label` and `fig-cap`
+  - `label` a label prefixed with `fig-` is used to create a cross-reference to the plot
+  - `fig-cap` is used to create a caption for the plot, in quotation marks
+
+-->
+<p>Where tables are useful for communicating summary statistics for numeric and character variables, plots are useful for communicating relationships between variables especially when one or more of the variables is numeric. Furthermore, for complex relationships, plots can be more effective than tables.</p>
+<p>In Quarto, we can use the <code>ggplot2</code> package <span class="citation">(<a href="#ref-R-ggplot2" role="doc-biblioref">Wickham et al. 2023</a>)</span> in combination with code block options to produce formatted plots which we can cross-reference in our prose sections.</p>
+<p>Let's see this in action with a simple histogram of the <code>percent_passive</code> variable in the <code>brown_fam_df</code> dataset. The Quarto document will produce the following prose with a cross-reference to the formatted plot output.</p>
+<pre><code>As we see in @fig-brown-fam-percent-passive-hist, the distribution of `percent_passive` is skewed to the right.
+
+```{r ggplot2-brown-fam-percent-passive-hist-label-fig-cap}
+#| label: fig-brown-fam-percent-passive-hist
+#| fig-cap: "Histogram of `percent_passive`"
+
+# Create a histogram in Quarto
+ggplot(brown_fam_df) +
+  geom_histogram(aes(x = percent_passive))
+```
+</code></pre>
+<hr>
+<p>As we see in Figure <a href="#fig:ggplot2-brown-fam-percent-passive-hist-example">1</a>, the distribution of <code>percent_passive</code> is skewed to the right.</p>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:ggplot2-brown-fam-percent-passive-hist-example"></span>
+<img src="recipe-3_files/figure-html/ggplot2-brown-fam-percent-passive-hist-example-1.png" alt="Histogram of `percent_passive`" width="100%"><p class="caption">
+Figure 1: Histogram of <code>percent_passive</code>
+</p>
+</div>
+<hr>
+<p>The <code>ggplot2</code> package implements the 'Grammar of Graphics' approach to creating plots. This approach is based on the idea that plots can be broken down into components, or layers, and that each layer can be manipulated independently.</p>
+<p>The main components are data, aesthetics, and geometries. Data is the data frame that contains the variables to be plotted. Aesthetics are the variables that will be mapped to the x-axis, y-axis (as well as color, shape, size, <em>etc.</em>). Geometries are the visual elements that will be used to represent the data, such as points, lines, bars, <em>etc.</em>.</p>
+<p>As discussed in the R lesson "Visual Summaries", the <code>aes()</code> function is used to map variables to aesthetics and can be added to the <code>ggplot()</code> function or to the <code>geom_*()</code> function depending on whether the aesthetic is mapped to all geometries or to a specific geometry, respectively.</p>
+<p>Take a look at the following stages of the earlier plot in each of the tabs below.</p>
+<div class="section level4 tabset tabset-pills">
+<h4 id="stages">Stages<a class="anchor" aria-label="anchor" href="#stages"></a>
+</h4>
+
+
+
+<ul class="nav nav-pills" id="stages" role="tablist">
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#data" id="data-tab" type="button" role="tab" aria-controls="data" aria-selected="true" class="active nav-link">Data</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#aesthetics" id="aesthetics-tab" type="button" role="tab" aria-controls="aesthetics" aria-selected="false" class="nav-link">Aesthetics</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#geometries" id="geometries-tab" type="button" role="tab" aria-controls="geometries" aria-selected="false" class="nav-link">Geometries</button></li>
+</ul>
+<div class="tab-content">
+<div class="active  tab-pane" id="data" role="tabpanel" aria-labelledby="data-tab">
+
+<p>The data layer does not produce a plot but it is the foundation of the plot.</p>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Data layer</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span></span></code></pre></div>
+<p><img src="recipe-3_files/figure-html/ggplot2-brown-fam-percent-passive-hist-data-1.png" width="100%" style="display: block; margin: auto;"></p>
+</div>
+<div class="tab-pane" id="aesthetics" role="tabpanel" aria-labelledby="aesthetics-tab">
+
+<p>The aesthetics layer does not produce a plot but it maps the variables to the aesthetics to be used in the plot.</p>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Aesthetics layer</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="recipe-3_files/figure-html/ggplot2-brown-fam-percent-passive-hist-aes-1.png" width="100%" style="display: block; margin: auto;"></p>
+</div>
+<div class="tab-pane" id="geometries" role="tabpanel" aria-labelledby="geometries-tab">
+
+<p>The geometries layer produces the plot connecting the data and aesthetics layers in the particular way specified by the geometries, in this case a histogram.</p>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Geometries layer</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="recipe-3_files/figure-html/ggplot2-brown-fam-percent-passive-hist-geom-1.png" width="100%" style="display: block; margin: auto;"></p>
+</div>
+</div>
+</div>
+<div class="section level4">
+<h4 id="choosing-the-right-plot">Choosing the right plot<a class="anchor" aria-label="anchor" href="#choosing-the-right-plot"></a>
+</h4>
+<p>Just as with tables, the type of summary we choose to communicate with a plot depends on the type of variables we are working with and the relationships between those variables.</p>
+<p>Below I've included a few examples of plots that can be used to communicate different types of variables and relationships.</p>
+</div>
+<div class="section level4 tabset tabset-pills">
+<h4 id="single-numeric-variable">Single numeric variable<a class="anchor" aria-label="anchor" href="#single-numeric-variable"></a>
+</h4>
+
+
+<ul class="nav nav-pills" id="single-numeric-variable" role="tablist">
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#histogram" id="histogram-tab" type="button" role="tab" aria-controls="histogram" aria-selected="true" class="active nav-link">Histogram</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#density-plot" id="density-plot-tab" type="button" role="tab" aria-controls="density-plot" aria-selected="false" class="nav-link">Density plot</button></li>
+</ul>
+<div class="tab-content">
+<div class="active  tab-pane" id="histogram" role="tabpanel" aria-labelledby="histogram-tab">
+
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Histogram</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="recipe-3_files/figure-html/plot-single-hist-1.png" width="100%" style="display: block; margin: auto;"></p>
+</div>
+<div class="tab-pane" id="density-plot" role="tabpanel" aria-labelledby="density-plot-tab">
+
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Density plot</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_density</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="recipe-3_files/figure-html/plot-single-density-1.png" width="100%" style="display: block; margin: auto;"></p>
+</div>
+</div>
+</div>
+<div class="section level4 tabset tabset-pills">
+<h4 id="numeric-and-categorical-variables">Numeric and categorical variables<a class="anchor" aria-label="anchor" href="#numeric-and-categorical-variables"></a>
+</h4>
+
+
+
+<ul class="nav nav-pills" id="numeric-and-categorical-variables" role="tablist">
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#density-plot-1" id="density-plot-1-tab" type="button" role="tab" aria-controls="density-plot-1" aria-selected="true" class="active nav-link">Density plot</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#boxplot" id="boxplot-tab" type="button" role="tab" aria-controls="boxplot" aria-selected="false" class="nav-link">Boxplot</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#violin-plot" id="violin-plot-tab" type="button" role="tab" aria-controls="violin-plot" aria-selected="false" class="nav-link">Violin plot</button></li>
+</ul>
+<div class="tab-content">
+<div class="active  tab-pane" id="density-plot-1" role="tabpanel" aria-labelledby="density-plot-1-tab">
+
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Density plot</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_density</span><span class="op">(</span></span>
+<span>    <span class="fu">aes</span><span class="op">(</span></span>
+<span>      x <span class="op">=</span> <span class="va">percent_passive</span>,</span>
+<span>      fill <span class="op">=</span> <span class="va">lang_variety</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    alpha <span class="op">=</span> <span class="fl">0.5</span> <span class="co"># adds transparency</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="recipe-3_files/figure-html/plot-numeric-categorical-density-1.png" width="100%" style="display: block; margin: auto;"></p>
+</div>
+<div class="tab-pane" id="boxplot" role="tabpanel" aria-labelledby="boxplot-tab">
+
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Boxplot</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_boxplot</span><span class="op">(</span></span>
+<span>    <span class="fu">aes</span><span class="op">(</span></span>
+<span>      x <span class="op">=</span> <span class="va">lang_variety</span>,</span>
+<span>      y <span class="op">=</span> <span class="va">percent_passive</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="recipe-3_files/figure-html/plot-numeric-categorical-boxplot-1.png" width="100%" style="display: block; margin: auto;"></p>
+</div>
+<div class="tab-pane" id="violin-plot" role="tabpanel" aria-labelledby="violin-plot-tab">
+
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Violin plot</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_violin</span><span class="op">(</span></span>
+<span>    <span class="fu">aes</span><span class="op">(</span></span>
+<span>      x <span class="op">=</span> <span class="va">lang_variety</span>,</span>
+<span>      y <span class="op">=</span> <span class="va">percent_passive</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="recipe-3_files/figure-html/plot-numeric-categorical-violin-1.png" width="100%" style="display: block; margin: auto;"></p>
+</div>
+</div>
+</div>
+<div class="section level4 tabset tabset-pills">
+<h4 id="two-numeric-variables">Two numeric variables<a class="anchor" aria-label="anchor" href="#two-numeric-variables"></a>
+</h4>
+
+
+<ul class="nav nav-pills" id="two-numeric-variables" role="tablist">
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#scatterplot" id="scatterplot-tab" type="button" role="tab" aria-controls="scatterplot" aria-selected="true" class="active nav-link">Scatterplot</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#scatterplot-with-regression-line" id="scatterplot-with-regression-line-tab" type="button" role="tab" aria-controls="scatterplot-with-regression-line" aria-selected="false" class="nav-link">Scatterplot with regression line</button></li>
+</ul>
+<div class="tab-content">
+<div class="active  tab-pane" id="scatterplot" role="tabpanel" aria-labelledby="scatterplot-tab">
+
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Scatterplot</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span></span>
+<span>    <span class="fu">aes</span><span class="op">(</span></span>
+<span>      x <span class="op">=</span> <span class="va">active_verbs</span>,</span>
+<span>      y <span class="op">=</span> <span class="va">passive_verbs</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="recipe-3_files/figure-html/plot-two-scatter-1.png" width="100%" style="display: block; margin: auto;"></p>
+</div>
+<div class="tab-pane" id="scatterplot-with-regression-line" role="tabpanel" aria-labelledby="scatterplot-with-regression-line-tab">
+
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Scatterplot with regression line</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span></span>
+<span>  <span class="va">brown_fam_df</span>,</span>
+<span>  <span class="fu">aes</span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="va">active_verbs</span>,</span>
+<span>    y <span class="op">=</span> <span class="va">passive_verbs</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_smooth</span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="recipe-3_files/figure-html/plot-two-scatter-regression-1.png" width="100%" style="display: block; margin: auto;"></p>
+</div>
+</div>
+</div>
+<div class="section level4">
+<h4 id="other-variable-combinations">Other variable combinations<a class="anchor" aria-label="anchor" href="#other-variable-combinations"></a>
+</h4>
+<p>In these examples, we have only looked at the most common variable combinations for one and two variable plots. There are more sophisticated plots that can be used for other variable combinations using <code>ggplot2</code>. For now, we will leave these for another time.</p>
+</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="check-your-understanding">Check your understanding<a class="anchor" aria-label="anchor" href="#check-your-understanding"></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li>A factor is a character vector augmented to include information about the discrete values, or levels, of the vector. <select class="webex-select"><option value="blank"></option>
+<option value="answer">TRUE</option>
+<option value="">FALSE</option></select>
+</li>
+<li>What is the difference between a frequency table and a contingency table? <select class="webex-select"><option value="blank"></option>
+<option value="">A frequency table is a cross-tabulation of two or more categorical variables.</option>
+<option value="answer">A contingency table is a cross-tabulation of two or more categorical variables.</option></select>
+</li>
+<li>The <select class="webex-select"><option value="blank"></option>
+<option value="">skimr</option>
+<option value="">dplyr</option>
+<option value="">ggplot2</option>
+<option value="answer">knitr</option></select> package is used to create formatted tables in R.</li>
+<li>To add a geometry layer, such as <code>geom_histogram()</code>, to a ggplot object the <code>|&gt;</code> operator is used. <select class="webex-select"><option value="blank"></option>
+<option value="">TRUE</option>
+<option value="answer">FALSE</option></select>
+</li>
+<li>To visualize the relationship between two numeric variables, a <select class="webex-select"><option value="blank"></option>
+<option value="">histogram</option>
+<option value="">density plot</option>
+<option value="">boxplot</option>
+<option value="">violin plot</option>
+<option value="answer">scatterplot</option></select> is often used.</li>
+<li>When the <code>aes()</code> function is added to the <code>ggplot()</code> function, the aesthetic is mapped to all geometries. <select class="webex-select"><option value="blank"></option>
+<option value="answer">TRUE</option>
+<option value="">FALSE</option></select>
+</li>
+</ol>
+</div>
+<div class="section level2">
+<h2 id="lab-preparation">Lab preparation<a class="anchor" aria-label="anchor" href="#lab-preparation"></a>
+</h2>
+<!-- Provide a checklist of knowledge and skills that learners should be comfortable with before beginning the lab -->
+<p>Before beginning Lab 3, learners should be comfortable with the skills and knowledge developed in the previous recipes and labs. In this lab, you will have a chance to use these skills and those introduced in this Recipe to provide a descriptive assessment of a dataset that includes statistics, tables, and plots using Quarto and R.</p>
+<p>The additional skills and knowledge you will need to complete Lab 3 include:</p>
+<ul>
+<li>Summarizing data with <code>skimr</code>
+</li>
+<li>Summarizing data with <code>dplyr</code>
+</li>
+<li>Creating Quarto tables with <code>knitr</code>
+</li>
+<li>Creating Quarto plots with <code>ggplot2</code>
+</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<!--
 - glimpse(): dim() # nolint
 - summary():  mean(), median() # nolint
 - skimr::skim(): n(), mean(), median(), etc. # nolint
@@ -112,47 +1884,23 @@ Extend: ggplot2 plots
   - Annotations: allow for manipulation of the annotations of the plot
     - `annotate()`, `geom_text()`, `geom_label()`, `geom_segment()`
 -->
-<p>In this Recipe we will explore appropriate methods for summarizing variables in datasets given the number and informational values of the variable(s). This will build on our understanding of how to summarize data using statistics, tables, and plots. We will dive deeper into the use of the <code>skimr</code> package to summarize data and the <code>ggplot2</code> package to create plots. We will reinforce our understanding of the <code>readr</code> package to read in data and the <code>dplyr</code> package to manipulate data.</p>
-<p>...</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-R-corpora" class="csl-entry">
+Evert, Stephanie. 2023. <em>Corpora: Statistics and Data Sets for Corpus Frequency Data</em>. <a href="http://SIGIL.R-Forge.R-Project.org/" class="external-link">http://SIGIL.R-Forge.R-Project.org/</a>.
 </div>
-<div class="section level2">
-<h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
-</h2>
+<div id="ref-R-janitor" class="csl-entry">
+Firke, Sam. 2023. <em>Janitor: Simple Tools for Examining and Cleaning Dirty Data</em>. <a href="https://github.com/sfirke/janitor" class="external-link">https://github.com/sfirke/janitor</a>.
 </div>
-<div class="section level2">
-<h2 id="check-your-understanding">Check your understanding<a class="anchor" aria-label="anchor" href="#check-your-understanding"></a>
-</h2>
-<p>(... examples ...)</p>
-<ol style="list-style-type: decimal">
-<li>
-<select class="webex-select"><option value="blank"></option>
-<option value="answer">TRUE</option>
-<option value="">FALSE</option></select> Literate Programming, first introduced by Donald Knuth in 1984, allows the combination of computer code and text prose in one document.</li>
-<li>The programming paradigm Literate Programming is implemented through <select class="webex-select"><option value="blank"></option>
-<option value="answer">Quarto</option>
-<option value="">R</option>
-<option value="">RStudio</option>
-<option value="">GitHub</option></select>, a platform that facilitates the creation of a variety of output documents based on the same source code.</li>
-<li>Which of the following components does a basic Quarto document <em>not</em> contain? <select class="webex-select"><option value="blank"></option>
-<option value="">Front-matter section</option>
-<option value="">Prose section</option>
-<option value="answer">Back-matter section</option>
-<option value="">Code block</option></select>
-</li>
-<li>To generate a PDF document in Quarto, you can edit the format attribute value in the front-matter section to <input class="webex-solveme nospaces ignorecase" size="4" data-answer='["pdf","html","word"]'>.</li>
-<li>
-<select class="webex-select"><option value="blank"></option>
-<option value="answer">TRUE</option>
-<option value="">FALSE</option></select> The code block options <code>echo</code> and <code>include</code> can be used to hide the code and output, respectively.</li>
-<li>
-<select class="webex-select"><option value="blank"></option>
-<option value="">TRUE</option>
-<option value="answer">FALSE</option></select> In Quarto, a code block, where the programming language code is entered, is bounded by three underscores (<code>_</code>).</li>
-</ol>
+<div id="ref-R-ggplot2" class="csl-entry">
+Wickham, Hadley, Winston Chang, Lionel Henry, Thomas Lin Pedersen, Kohske Takahashi, Claus Wilke, Kara Woo, Hiroaki Yutani, and Dewey Dunnington. 2023. <em>Ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics</em>. <a href="https://ggplot2.tidyverse.org" class="external-link">https://ggplot2.tidyverse.org</a>.
 </div>
-<div class="section level2">
-<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h2>
+<div id="ref-R-knitr" class="csl-entry">
+Xie, Yihui. 2023. <em>Knitr: A General-Purpose Package for Dynamic Report Generation in r</em>. <a href="https://yihui.org/knitr/" class="external-link">https://yihui.org/knitr/</a>.
+</div>
+<div id="ref-R-kableExtra" class="csl-entry">
+Zhu, Hao. 2021. <em>kableExtra: Construct Complex Table with Kable and Pipe Syntax</em>. <a href="http://haozhu233.github.io/kableExtra/" class="external-link">http://haozhu233.github.io/kableExtra/</a>.
+</div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
