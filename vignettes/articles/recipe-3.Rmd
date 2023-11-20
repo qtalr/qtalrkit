@@ -105,12 +105,47 @@ Let's create a statistical overview of the `brown_fam_df` dataset.
 
 <!-- [ ] skim output in rmd show a Table for part, fix -->
 
-```{r skim-brown-fam, results="asis", tidy=FALSE}
+```{r skim-brown-fam, eval=FALSE}
 # Load packages
 library(skimr)
 
 # Create a statistical overview of the `brown_fam_df` dataset
 skim(brown_fam_df)
+```
+
+```plain
+── Data Summary ────────────────────────
+                           Values      
+Name                       brown_fam_df
+Number of rows             2499        
+Number of columns          11          
+_______________________                
+Column type frequency:                 
+  character                1           
+  factor                   5           
+  numeric                  5           
+________________________               
+Group variables            None        
+
+── Variable type: character ───────────────────────────────────────────────────────────────────────
+  skim_variable n_missing complete_rate min max empty n_unique whitespace
+1 id                    0             1   7   9     0     2499          0
+
+── Variable type: factor ──────────────────────────────────────────────────────────────────────────
+  skim_variable n_missing complete_rate ordered n_unique top_counts                            
+1 corpus                0             1 FALSE          5 BLO: 500, Bro: 500, LOB: 500, FLO: 500
+2 section               0             1 FALSE         15 J: 400, G: 381, F: 228, A: 220        
+3 genre                 0             1 FALSE         15 lea: 400, bel: 381, pop: 228, pre: 220
+4 period                0             1 FALSE          3 196: 1000, 199: 999, 193: 500         
+5 lang_variety          0             1 FALSE          2 BrE: 1500, AmE: 999                   
+
+── Variable type: numeric ─────────────────────────────────────────────────────────────────────────
+  skim_variable   n_missing complete_rate   mean    sd       p0     p25    p50    p75   p100 hist 
+1 num_words               0             1 2165.  97.8  1406     2127    2163   2200   4397   ▁▇▁▁▁
+2 active_verbs            0             1  179.  56.6    39      139     170    214    551   ▃▇▂▁▁
+3 passive_verbs           0             1   25.7 12.9     2       16      23     32     86   ▆▇▂▁▁
+4 total_verbs             0             1  204.  49.1    66      170     196    234    571   ▃▇▂▁▁
+5 percent_passive         0             1   14.0  9.13    0.612    7.39   12.1   18.2   67.7 ▇▅▁▁▁
 ```
 
 The output of the `skim()` function contains a lot of information but it essentially has two parts: a summary of the dataset and a summary of each variable in the dataset. The summary of each of the variables, however, is grouped by variable type. Remember, each of our variables in a data frame is a vector and each vector has a type. 
@@ -125,11 +160,21 @@ Inspecting the entire dataset is a good place to start but at some point we ofte
 
 Let's extract the statistical overview of the numeric variables in the `brown_fam_df` dataset.
 
-```{r yank-brown-fam}
+```{r yank-brown-fam, eval=FALSE}
 # Extract the statistical overview of the numeric variables
 brown_fam_df |>
   skim() |>
   yank("numeric")
+```
+
+```plain
+── Variable type: numeric ─────────────────────────────────────────────────────────────────────────
+  skim_variable   n_missing complete_rate   mean    sd       p0     p25    p50    p75   p100 hist 
+1 num_words               0             1 2165.  97.8  1406     2127    2163   2200   4397   ▁▇▁▁▁
+2 active_verbs            0             1  179.  56.6    39      139     170    214    551   ▃▇▂▁▁
+3 passive_verbs           0             1   25.7 12.9     2       16      23     32     86   ▆▇▂▁▁
+4 total_verbs             0             1  204.  49.1    66      170     196    234    571   ▃▇▂▁▁
+5 percent_passive         0             1   14.0  9.13    0.612    7.39   12.1   18.2   67.7 ▇▅▁▁▁
 ```
 
 <!-- [ ] add more about how skim objects are and are not tibbles? And how they work with `dplyr` functions: select, filter, and group_by? -->
@@ -365,7 +410,7 @@ kable(brown_genre_lang_ct)
 To add a caption to the table and to enable cross-referencing, we use the code block options `label` and `tbl-cap`. The `label` option takes a label prefixed with `tbl-` to create a cross-reference to the table. The `tbl-cap` option takes a caption for the table, in quotation marks.
 
 ````
-```{r kable-brown-genre-lang-ct-label-tbl-cap}`r ''`
+```{r}`r ''`
 #| label: tbl-brown-genre-lang-ct
 #| tbl-cap: "Cross-tabulation of `genre` and `lang_variety`"
 
@@ -380,7 +425,7 @@ Now we can cross-reference the table with the `@tbl-brown-genre-lang-ct` syntax.
 
 As we see in @tbl-brown-genre-lang-ct, the distribution of `genre` is similar across `lang_variety`.
 
-```{r kable-brown-genre-lang-ct-label-tbl-cap}`r ''`
+```{r}`r ''`
 #| label: tbl-brown-genre-lang-ct
 #| tbl-cap: "Cross-tabulation of `genre` and `lang_variety`"
 
@@ -428,7 +473,7 @@ Let's see this in action with a simple histogram of the `percent_passive` variab
 ````
 As we see in @fig-brown-fam-percent-passive-hist, the distribution of `percent_passive` is skewed to the right.
 
-```{r ggplot2-brown-fam-percent-passive-hist-label-fig-cap}`r ''`
+```{r}`r ''`
 #| label: fig-brown-fam-percent-passive-hist
 #| fig-cap: "Histogram of `percent_passive`"
 
