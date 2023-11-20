@@ -29,7 +29,8 @@
 #'   - `n`: The frequency of each type across all documents.
 #'   Optionally (based on the `frequency` and `dispersion` arguments):
 #'   - `rf`: The relative frequency of each type across all documents.
-#'   - `orf`: The observed relative frequency (per 100) of each type across all documents.
+#'   - `orf`: The observed relative frequency (per 100) of each
+#'            type across all documents.
 #'   - `df`: The document frequency of each type.
 #'   - `idf`: The inverse document frequency of each type.
 #'   - `dp`: Gries' Deviation of Proportions of each type.
@@ -38,7 +39,8 @@
 #'
 #' @references
 #' Gries, Stefan Th. (2023). Statistical Methods in Corpus Linguistics.
-#' In Readings in Corpus Linguistics: A Teaching and Research Guide for Scholars in Nigeria and Beyond, pp. 78-114.
+#' In Readings in Corpus Linguistics: A Teaching and Research Guide
+#' for Scholars in Nigeria and Beyond, pp. 78-114.
 #'
 #' @examples
 #' \dontrun{
@@ -59,7 +61,7 @@
 #' @importFrom dplyr count
 #' @importFrom tidytext cast_sparse
 #' @importFrom tibble tibble
-calc_type_metrics <- function(data, type, documents, frequency = NULL, dispersion = NULL) {
+calc_type_metrics <- function(data, type, documents, frequency = NULL, dispersion = NULL) { # nolint
   # Check if data is a data.frame
   if (!is.data.frame(data)) {
     stop("The argument 'data' must be a data frame.")
@@ -96,6 +98,7 @@ calc_type_metrics <- function(data, type, documents, frequency = NULL, dispersio
 
   # Initialize an empty data frame
   output_df <- tibble(type = rownames(tdm), n = row_sums)
+  
   # Calculate metrics based on user choice
 
   # Relative Frequency (RF)
