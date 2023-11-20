@@ -178,711 +178,56 @@ Prerequisites: It will be assumed that learners have a basic understanding of th
 <span></span>
 <span><span class="co"># Create a statistical overview of the `brown_fam_df` dataset</span></span>
 <span><span class="fu"><a href="https://docs.ropensci.org/skimr/reference/skim.html" class="external-link">skim</a></span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span></span></code></pre></div>
-<table style="width: auto;" class="table table table-condensed">
-<caption>
-<span id="tab:skim-brown-fam">Table 1: </span>Data summary
-</caption>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Name
-</td>
-<td style="text-align:left;">
-brown_fam_df
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Number of rows
-</td>
-<td style="text-align:left;">
-2499
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Number of columns
-</td>
-<td style="text-align:left;">
-11
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-_______________________
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Column type frequency:
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-character
-</td>
-<td style="text-align:left;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-factor
-</td>
-<td style="text-align:left;">
-5
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-5
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-________________________
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Group variables
-</td>
-<td style="text-align:left;">
-None
-</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Variable type: character</strong></p>
-<table class="table">
-<thead><tr>
-<th style="text-align:left;">
-skim_variable
-</th>
-<th style="text-align:right;">
-n_missing
-</th>
-<th style="text-align:right;">
-complete_rate
-</th>
-<th style="text-align:right;">
-min
-</th>
-<th style="text-align:right;">
-max
-</th>
-<th style="text-align:right;">
-empty
-</th>
-<th style="text-align:right;">
-n_unique
-</th>
-<th style="text-align:right;">
-whitespace
-</th>
-</tr></thead>
-<tbody><tr>
-<td style="text-align:left;">
-id
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-7
-</td>
-<td style="text-align:right;">
-9
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-2499
-</td>
-<td style="text-align:right;">
-0
-</td>
-</tr></tbody>
-</table>
-<p><strong>Variable type: factor</strong></p>
-<table class="table">
-<thead><tr>
-<th style="text-align:left;">
-skim_variable
-</th>
-<th style="text-align:right;">
-n_missing
-</th>
-<th style="text-align:right;">
-complete_rate
-</th>
-<th style="text-align:left;">
-ordered
-</th>
-<th style="text-align:right;">
-n_unique
-</th>
-<th style="text-align:left;">
-top_counts
-</th>
-</tr></thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-corpus
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:left;">
-BLO: 500, Bro: 500, LOB: 500, FLO: 500
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-section
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-15
-</td>
-<td style="text-align:left;">
-J: 400, G: 381, F: 228, A: 220
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-genre
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-15
-</td>
-<td style="text-align:left;">
-lea: 400, bel: 381, pop: 228, pre: 220
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-period
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:left;">
-196: 1000, 199: 999, 193: 500
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-lang_variety
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-BrE: 1500, AmE: 999
-</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Variable type: numeric</strong></p>
-<table class="table">
-<thead><tr>
-<th style="text-align:left;">
-skim_variable
-</th>
-<th style="text-align:right;">
-n_missing
-</th>
-<th style="text-align:right;">
-complete_rate
-</th>
-<th style="text-align:right;">
-mean
-</th>
-<th style="text-align:right;">
-sd
-</th>
-<th style="text-align:right;">
-p0
-</th>
-<th style="text-align:right;">
-p25
-</th>
-<th style="text-align:right;">
-p50
-</th>
-<th style="text-align:right;">
-p75
-</th>
-<th style="text-align:right;">
-p100
-</th>
-<th style="text-align:left;">
-hist
-</th>
-</tr></thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-num_words
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2165.2
-</td>
-<td style="text-align:right;">
-97.75
-</td>
-<td style="text-align:right;">
-1406.00
-</td>
-<td style="text-align:right;">
-2127.00
-</td>
-<td style="text-align:right;">
-2163.0
-</td>
-<td style="text-align:right;">
-2200.0
-</td>
-<td style="text-align:right;">
-4397.0
-</td>
-<td style="text-align:left;">
-▁▇▁▁▁
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-active_verbs
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-178.7
-</td>
-<td style="text-align:right;">
-56.56
-</td>
-<td style="text-align:right;">
-39.00
-</td>
-<td style="text-align:right;">
-139.00
-</td>
-<td style="text-align:right;">
-170.0
-</td>
-<td style="text-align:right;">
-214.0
-</td>
-<td style="text-align:right;">
-551.0
-</td>
-<td style="text-align:left;">
-▃▇▂▁▁
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-passive_verbs
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-25.7
-</td>
-<td style="text-align:right;">
-12.91
-</td>
-<td style="text-align:right;">
-2.00
-</td>
-<td style="text-align:right;">
-16.00
-</td>
-<td style="text-align:right;">
-23.0
-</td>
-<td style="text-align:right;">
-32.0
-</td>
-<td style="text-align:right;">
-86.0
-</td>
-<td style="text-align:left;">
-▆▇▂▁▁
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-total_verbs
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-204.4
-</td>
-<td style="text-align:right;">
-49.09
-</td>
-<td style="text-align:right;">
-66.00
-</td>
-<td style="text-align:right;">
-170.00
-</td>
-<td style="text-align:right;">
-196.0
-</td>
-<td style="text-align:right;">
-234.0
-</td>
-<td style="text-align:right;">
-571.0
-</td>
-<td style="text-align:left;">
-▃▇▂▁▁
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-percent_passive
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-14.1
-</td>
-<td style="text-align:right;">
-9.13
-</td>
-<td style="text-align:right;">
-0.61
-</td>
-<td style="text-align:right;">
-7.39
-</td>
-<td style="text-align:right;">
-12.1
-</td>
-<td style="text-align:right;">
-18.2
-</td>
-<td style="text-align:right;">
-67.7
-</td>
-<td style="text-align:left;">
-▇▅▁▁▁
-</td>
-</tr>
-</tbody>
-</table>
+<pre class="plain"><code>── Data Summary ────────────────────────
+                           Values      
+Name                       brown_fam_df
+Number of rows             2499        
+Number of columns          11          
+_______________________                
+Column type frequency:                 
+  character                1           
+  factor                   5           
+  numeric                  5           
+________________________               
+Group variables            None        
+
+── Variable type: character ───────────────────────────────────────────────────────────────────────
+  skim_variable n_missing complete_rate min max empty n_unique whitespace
+1 id                    0             1   7   9     0     2499          0
+
+── Variable type: factor ──────────────────────────────────────────────────────────────────────────
+  skim_variable n_missing complete_rate ordered n_unique top_counts                            
+1 corpus                0             1 FALSE          5 BLO: 500, Bro: 500, LOB: 500, FLO: 500
+2 section               0             1 FALSE         15 J: 400, G: 381, F: 228, A: 220        
+3 genre                 0             1 FALSE         15 lea: 400, bel: 381, pop: 228, pre: 220
+4 period                0             1 FALSE          3 196: 1000, 199: 999, 193: 500         
+5 lang_variety          0             1 FALSE          2 BrE: 1500, AmE: 999                   
+
+── Variable type: numeric ─────────────────────────────────────────────────────────────────────────
+  skim_variable   n_missing complete_rate   mean    sd       p0     p25    p50    p75   p100 hist 
+1 num_words               0             1 2165.  97.8  1406     2127    2163   2200   4397   ▁▇▁▁▁
+2 active_verbs            0             1  179.  56.6    39      139     170    214    551   ▃▇▂▁▁
+3 passive_verbs           0             1   25.7 12.9     2       16      23     32     86   ▆▇▂▁▁
+4 total_verbs             0             1  204.  49.1    66      170     196    234    571   ▃▇▂▁▁
+5 percent_passive         0             1   14.0  9.13    0.612    7.39   12.1   18.2   67.7 ▇▅▁▁▁</code></pre>
 <p>The output of the <code><a href="https://docs.ropensci.org/skimr/reference/skim.html" class="external-link">skim()</a></code> function contains a lot of information but it essentially has two parts: a summary of the dataset and a summary of each variable in the dataset. The summary of each of the variables, however, is grouped by variable type. Remember, each of our variables in a data frame is a vector and each vector has a type.</p>
 <p>We have already learned about different types of vectors in R, including character, numeric, and logical. In this dataset, we are presented with a new type of vector: a factor. A factor is essentially a character vector that contains a set of discrete values, or levels. Factors can be ordered or unordered and can contain levels that are not present in the data.</p>
 <p>Now, looking at each of the variable types, we can see that we have 1 character variable, 5 factor variables, and 5 numeric variables. Each of these variable types assume a different set of summary statistics. For example, we can calculate the mean of a numeric variable but not of a character variable. Or, we can count the number of unique values in a character variable but not in a numeric variable.</p>
 <p>For all variables, <code><a href="https://docs.ropensci.org/skimr/reference/skim.html" class="external-link">skim()</a></code> will also provide the number of missing values and the percent of non-missing values.</p>
 <p>Inspecting the entire dataset is a good place to start but at some point we often want focus in on a set of variables. We can add the <code><a href="https://docs.ropensci.org/skimr/reference/partition.html" class="external-link">yank()</a></code> function to extract the statistical overview of a set of variables by their variable types.</p>
 <p>Let's extract the statistical overview of the numeric variables in the <code>brown_fam_df</code> dataset.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Extract the statistical overview of the numeric variables</span></span>
 <span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://docs.ropensci.org/skimr/reference/skim.html" class="external-link">skim</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://docs.ropensci.org/skimr/reference/partition.html" class="external-link">yank</a></span><span class="op">(</span><span class="st">"numeric"</span><span class="op">)</span></span></code></pre></div>
-<p><strong>Variable type: numeric</strong></p>
-<table class="table">
-<thead><tr>
-<th style="text-align:left;">
-skim_variable
-</th>
-<th style="text-align:right;">
-n_missing
-</th>
-<th style="text-align:right;">
-complete_rate
-</th>
-<th style="text-align:right;">
-mean
-</th>
-<th style="text-align:right;">
-sd
-</th>
-<th style="text-align:right;">
-p0
-</th>
-<th style="text-align:right;">
-p25
-</th>
-<th style="text-align:right;">
-p50
-</th>
-<th style="text-align:right;">
-p75
-</th>
-<th style="text-align:right;">
-p100
-</th>
-<th style="text-align:left;">
-hist
-</th>
-</tr></thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-num_words
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2165.2
-</td>
-<td style="text-align:right;">
-97.75
-</td>
-<td style="text-align:right;">
-1406.00
-</td>
-<td style="text-align:right;">
-2127.00
-</td>
-<td style="text-align:right;">
-2163.0
-</td>
-<td style="text-align:right;">
-2200.0
-</td>
-<td style="text-align:right;">
-4397.0
-</td>
-<td style="text-align:left;">
-▁▇▁▁▁
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-active_verbs
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-178.7
-</td>
-<td style="text-align:right;">
-56.56
-</td>
-<td style="text-align:right;">
-39.00
-</td>
-<td style="text-align:right;">
-139.00
-</td>
-<td style="text-align:right;">
-170.0
-</td>
-<td style="text-align:right;">
-214.0
-</td>
-<td style="text-align:right;">
-551.0
-</td>
-<td style="text-align:left;">
-▃▇▂▁▁
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-passive_verbs
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-25.7
-</td>
-<td style="text-align:right;">
-12.91
-</td>
-<td style="text-align:right;">
-2.00
-</td>
-<td style="text-align:right;">
-16.00
-</td>
-<td style="text-align:right;">
-23.0
-</td>
-<td style="text-align:right;">
-32.0
-</td>
-<td style="text-align:right;">
-86.0
-</td>
-<td style="text-align:left;">
-▆▇▂▁▁
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-total_verbs
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-204.4
-</td>
-<td style="text-align:right;">
-49.09
-</td>
-<td style="text-align:right;">
-66.00
-</td>
-<td style="text-align:right;">
-170.00
-</td>
-<td style="text-align:right;">
-196.0
-</td>
-<td style="text-align:right;">
-234.0
-</td>
-<td style="text-align:right;">
-571.0
-</td>
-<td style="text-align:left;">
-▃▇▂▁▁
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-percent_passive
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-14.1
-</td>
-<td style="text-align:right;">
-9.13
-</td>
-<td style="text-align:right;">
-0.61
-</td>
-<td style="text-align:right;">
-7.39
-</td>
-<td style="text-align:right;">
-12.1
-</td>
-<td style="text-align:right;">
-18.2
-</td>
-<td style="text-align:right;">
-67.7
-</td>
-<td style="text-align:left;">
-▇▅▁▁▁
-</td>
-</tr>
-</tbody>
-</table>
+<pre class="plain"><code>── Variable type: numeric ─────────────────────────────────────────────────────────────────────────
+  skim_variable   n_missing complete_rate   mean    sd       p0     p25    p50    p75   p100 hist 
+1 num_words               0             1 2165.  97.8  1406     2127    2163   2200   4397   ▁▇▁▁▁
+2 active_verbs            0             1  179.  56.6    39      139     170    214    551   ▃▇▂▁▁
+3 passive_verbs           0             1   25.7 12.9     2       16      23     32     86   ▆▇▂▁▁
+4 total_verbs             0             1  204.  49.1    66      170     196    234    571   ▃▇▂▁▁
+5 percent_passive         0             1   14.0  9.13    0.612    7.39   12.1   18.2   67.7 ▇▅▁▁▁</code></pre>
 <!-- [ ] add more about how skim objects are and are not tibbles? And how they work with `dplyr` functions: select, filter, and group_by? -->
 </div>
 <div class="section level3">
@@ -901,7 +246,7 @@ percent_passive
 <p>These summary statistics are useful but for a preliminary and interactive use, but it is oftent the case that we will want to focus in on a particular variable or set of variables and their potential relationships to other variables.</p>
 <p>We can use the <code>dplyr</code> package to calculate summary statistics for a particular variable or set of variables. We can use the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by()</a></code> function to group the data by a particular variable or variables. Then we can use the <code><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize()</a></code> function to calculate summary statistics for the grouped data.</p>
 <p>For example, let's calculate the mean and median of the <code>percent_passive</code> variable in the <code>brown_fam_df</code> dataset grouped by the <code>lang_variety</code> variable.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Mean and median of `percent_passive` grouped by `lang_variety`</span></span>
 <span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">lang_variety</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -916,7 +261,7 @@ percent_passive
 <span><span class="co">## <span style="color: #BCBCBC;">2</span> BrE                          14.8                   13.3</span></span></code></pre>
 <p>The result is a 2x3 data frame which includes both the mean and median of the <code>percent_passive</code> variable for each of the two levels of the <code>lang_variety</code> variable.</p>
 <p>The <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by()</a></code> function can also be used to group by multiple variables. For example, let's calculate the mean and median of the <code>percent_passive</code> variable in the <code>brown_fam_df</code> dataset grouped by the <code>lang_variety</code> and <code>genre</code> variables.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Mean and median of `percent_passive` grouped by `lang_variety` and `genre`</span></span>
 <span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">lang_variety</span>, <span class="va">genre</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -940,7 +285,7 @@ percent_passive
 <span><span class="co">## <span style="color: #949494;"># ℹ 20 more rows</span></span></span></code></pre>
 <p>For numeric variables, such as <code>percent_passive</code>, there are a number of summary statistics that we can calculate. We've seen the R functions for mean and median but we can also calculate the standard deviation (<code><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd()</a></code>), variance (<code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var()</a></code>), minimum (<code><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min()</a></code>), maximum (<code><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max()</a></code>), interquartile range (<code><a href="https://rdrr.io/r/stats/IQR.html" class="external-link">IQR()</a></code>), median absolute deviation (<code><a href="https://rdrr.io/r/stats/mad.html" class="external-link">mad()</a></code>), and quantiles (<code><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile()</a></code>). All these calculations make sense for numeric variables but not for character variables.</p>
 <p>For character variables, and factors, the summary statistics are more limited. We can calculate the number of observations (<code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n()</a></code>) and/ or the number of unique values (<code><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct()</a></code>). Let's now summarize the number of observations <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n()</a></code> grouped by the <code>genre</code> variable in the <code>brown_fam_df</code> dataset.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Frequency table for `genre`</span></span>
 <span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">genre</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -962,7 +307,7 @@ percent_passive
 <span><span class="co">## <span style="color: #BCBCBC;">10</span> general fiction    145</span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 5 more rows</span></span></span></code></pre>
 <p>Just as before, we can add multiple grouping variables to <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by()</a></code>. Let's add <code>lang_variety</code> to the grouping and calculate the number of observations <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n()</a></code> grouped by the <code>genre</code> and <code>lang_variety</code> variables in the <code>brown_fam_df</code> dataset.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Cross-tabulation for `genre` and `lang_variety`</span></span>
 <span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">genre</span>, <span class="va">lang_variety</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -990,7 +335,7 @@ percent_passive
 <p>Now, we can also pipe the results of a <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize()</a></code> to another function. This can be to say sort, select, or filter the results. It can also be to perform another summary function. It is important, however, to remember that the result of a <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by()</a></code> produces a grouped data frame. Subsequent functions will be applied to the grouped data frame. This can lead to unexpected results if the original grouping is not relevant for the subsequent function. To avoid this, we can use the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup()</a></code> function to remove the grouping after the relevant grouped summary statistics have been calculated.</p>
 <p>Let's return to calculating the number of observations <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n()</a></code> grouped by the <code>genre</code> and <code>lang_variety</code> variables in the <code>brown_fam_df</code> dataset. But let's add another summary which uses the <code>n</code> variable to calculate the mean and median number of observations.</p>
 <p>If we do not use the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup()</a></code> function, the mean and median will be calculated for each <code>genre</code> collapsed across <code>lang_variety</code>.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Mean and median of `n` grouped by `genre`</span></span>
 <span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">genre</span>, <span class="va">lang_variety</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -1017,7 +362,7 @@ percent_passive
 <span><span class="co">## <span style="color: #949494;"># ℹ 5 more rows</span></span></span></code></pre>
 <p>Therefore we see that we have a mean and median calculated for the number of documents in the corpus for each of the 15 genres.</p>
 <p>If we use the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup()</a></code> function, the mean and median will be calculated for all genres. Note we will use the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup()</a></code> function between these summaries to clear the grouping before calculating the mean and median.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Number of observations for each `genre` and `lang_variety`</span></span>
 <span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">genre</span>, <span class="va">lang_variety</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -1037,7 +382,7 @@ percent_passive
 <hr>
 <p>Before we leave this section, let's look some other ways to create frequency and contingency tables for character and factor variables. A shortcut to calculate a frequency table for a character or factor variable is to use the <code><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count()</a></code> function from the <code>dplyr</code> package.</p>
 <p>Let's calculate the number of observations grouped by the <code>genre</code> variable in the <code>brown_fam_df</code> dataset.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Frequency table for `genre`</span></span>
 <span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">genre</span><span class="op">)</span></span></code></pre></div>
@@ -1057,7 +402,7 @@ percent_passive
 <span><span class="co">## <span style="color: #949494;"># ℹ 5 more rows</span></span></span></code></pre>
 <p>We can also add multiple grouping variables to <code><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count()</a></code> and create contingency tables.</p>
 <p>Let's add <code>lang_variety</code> to the grouping and create a cross-tabulation for <code>genre</code> and <code>lang_variety</code> variables in the <code>brown_fam_df</code> dataset.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Cross-tabulation for `genre` and `lang_variety`</span></span>
 <span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">genre</span>, <span class="va">lang_variety</span><span class="op">)</span></span></code></pre></div>
@@ -1077,7 +422,7 @@ percent_passive
 <span><span class="co">## <span style="color: #949494;"># ℹ 20 more rows</span></span></span></code></pre>
 <p>Note that the results of <code><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count()</a></code> are not grouped so we do not need to use the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup()</a></code> function before calculating subsequent summary statistics.</p>
 <p>Another way to create frequency and contingency tables is to use the <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code> function from the <code>janitor</code> package <span class="citation">(<a href="#ref-R-janitor" role="doc-biblioref">Firke 2023</a>)</span>. Let's create a frequency table for the <code>genre</code> variable in the <code>brown_fam_df</code> dataset.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Frequency table for `genre`</span></span>
 <span></span>
 <span><span class="co"># Load packages</span></span>
@@ -1101,7 +446,7 @@ percent_passive
 <span><span class="co">## <span style="color: #949494;"># ℹ 5 more rows</span></span></span></code></pre>
 <p>In addition to providing frequency counts, the <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code> function also provides the percent of observations for each level of the variable. And, we can add up to three grouping variables to <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code> as well.</p>
 <p>Let's add <code>lang_variety</code> to the grouping and create a contingency table for the <code>genre</code> and <code>lang_variety</code> variables in the <code>brown_fam_df</code> dataset.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Cross-tabulation for `genre` and `lang_variety`</span></span>
 <span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl</a></span><span class="op">(</span><span class="va">genre</span>, <span class="va">lang_variety</span><span class="op">)</span></span></code></pre></div>
@@ -1138,7 +483,7 @@ percent_passive
 </li>
 </ul>
 <p>So, let's return to adding percentages to our results from the <code>genre</code> and <code>lang_variety</code> cross-tabulation. Let's calculate the by-column percentages of observations which will give ue the percent of observations for each level of the <code>genre</code> variable in each level of the <code>lang_varity</code> variable. In other words, we are aiming to assess to what degree the distribution of <code>genre</code> is similar or different across <code>lang_variety</code>.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Cross-tabulation for `genre` and `lang_variety`</span></span>
 <span><span class="va">brown_genre_lang_ct</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
@@ -1164,12 +509,12 @@ percent_passive
 <span><span class="co">## <span style="color: #BCBCBC;">10</span> general fiction  58  (5.8%)  87  (5.8%) </span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 5 more rows</span></span></span></code></pre>
 <p>You can see that I assigned the results of the cross-tabulation to the object <code>brown_genre_lang_ct</code>. It is important to note that the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code> are data frames, albeit with a special class <code>tabyl</code>.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Class of `brown_genre_lang_ct`</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">brown_genre_lang_ct</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "tabyl"      "data.frame"</span></span></code></pre>
 <p>Therefore, we can apply subsequent operations to the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code> as we would any other data frame. However, we must pay attention to the variable types of the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Variable types of `brown_genre_lang_ct`</span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">brown_genre_lang_ct</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Rows: 15</span></span>
@@ -1196,7 +541,7 @@ percent_passive
 <p>One way to communicate summary statistics is with tables. In Quarto, we can use the <code>knitr</code> package <span class="citation">(<a href="#ref-R-knitr" role="doc-biblioref">Xie 2023</a>)</span> in combination with code block options to produce formatted tables which we can cross-reference in our prose sections.</p>
 <p>Let's work with the <code>brown_genre_lang_ct</code> object we created in the previous section.</p>
 <p>To create a table in Quarto, we use the <code><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable()</a></code> function. The <code><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable()</a></code> function takes a data frame (or matrix) as an argument. The <code>format</code> argument will be derived from the Quarto document format ('html', 'pdf', <em>etc.</em>).</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load packages</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/" class="external-link">knitr</a></span><span class="op">)</span></span>
 <span></span>
@@ -1383,7 +728,7 @@ humour
 </tbody>
 </table>
 <p>To add a caption to the table and to enable cross-referencing, we use the code block options <code>label</code> and <code>tbl-cap</code>. The <code>label</code> option takes a label prefixed with <code>tbl-</code> to create a cross-reference to the table. The <code>tbl-cap</code> option takes a caption for the table, in quotation marks.</p>
-<pre><code>```{r kable-brown-genre-lang-ct-label-tbl-cap}
+<pre><code>```{r}
 #| label: tbl-brown-genre-lang-ct
 #| tbl-cap: "Cross-tabulation of `genre` and `lang_variety`"
 
@@ -1394,7 +739,7 @@ kable(brown_genre_lang_ct)
 <pre><code>
 As we see in @tbl-brown-genre-lang-ct, the distribution of `genre` is similar across `lang_variety`.
 
-```{r kable-brown-genre-lang-ct-label-tbl-cap}
+```{r}
 #| label: tbl-brown-genre-lang-ct
 #| tbl-cap: "Cross-tabulation of `genre` and `lang_variety`"
 
@@ -1403,10 +748,10 @@ kable(brown_genre_lang_ct)
 ```
 </code></pre>
 <hr>
-<p>As we see in Table <a href="#tab:kable-brown-genre-lang-ct-example">2</a>, the distribution of <code>genre</code> is similar across <code>lang_variety</code>.</p>
+<p>As we see in Table <a href="#tab:kable-brown-genre-lang-ct-example">1</a>, the distribution of <code>genre</code> is similar across <code>lang_variety</code>.</p>
 <table class="table">
 <caption>
-<span id="tab:kable-brown-genre-lang-ct-example">Table 2: </span>Cross-tabulation of <code>genre</code> and <code>lang_variety</code>
+<span id="tab:kable-brown-genre-lang-ct-example">Table 1: </span>Cross-tabulation of <code>genre</code> and <code>lang_variety</code>
 </caption>
 <thead><tr>
 <th style="text-align:left;">
@@ -1609,7 +954,7 @@ humour
 <p>Let's see this in action with a simple histogram of the <code>percent_passive</code> variable in the <code>brown_fam_df</code> dataset. The Quarto document will produce the following prose with a cross-reference to the formatted plot output.</p>
 <pre><code>As we see in @fig-brown-fam-percent-passive-hist, the distribution of `percent_passive` is skewed to the right.
 
-```{r ggplot2-brown-fam-percent-passive-hist-label-fig-cap}
+```{r}
 #| label: fig-brown-fam-percent-passive-hist
 #| fig-cap: "Histogram of `percent_passive`"
 
@@ -1646,7 +991,7 @@ Figure 1: Histogram of <code>percent_passive</code>
 <div class="active  tab-pane" id="data" role="tabpanel" aria-labelledby="data-tab">
 
 <p>The data layer does not produce a plot but it is the foundation of the plot.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Data layer</span></span>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span></span></code></pre></div>
 <p><img src="recipe-3_files/figure-html/ggplot2-brown-fam-percent-passive-hist-data-1.png" width="100%" style="display: block; margin: auto;"></p>
@@ -1654,7 +999,7 @@ Figure 1: Histogram of <code>percent_passive</code>
 <div class="tab-pane" id="aesthetics" role="tabpanel" aria-labelledby="aesthetics-tab">
 
 <p>The aesthetics layer does not produce a plot but it maps the variables to the aesthetics to be used in the plot.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Aesthetics layer</span></span>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="recipe-3_files/figure-html/ggplot2-brown-fam-percent-passive-hist-aes-1.png" width="100%" style="display: block; margin: auto;"></p>
@@ -1662,7 +1007,7 @@ Figure 1: Histogram of <code>percent_passive</code>
 <div class="tab-pane" id="geometries" role="tabpanel" aria-labelledby="geometries-tab">
 
 <p>The geometries layer produces the plot connecting the data and aesthetics layers in the particular way specified by the geometries, in this case a histogram.</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Geometries layer</span></span>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_histogram</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -1688,7 +1033,7 @@ Figure 1: Histogram of <code>percent_passive</code>
 <div class="tab-content">
 <div class="active  tab-pane" id="histogram" role="tabpanel" aria-labelledby="histogram-tab">
 
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Histogram</span></span>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_histogram</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -1696,7 +1041,7 @@ Figure 1: Histogram of <code>percent_passive</code>
 </div>
 <div class="tab-pane" id="density-plot" role="tabpanel" aria-labelledby="density-plot-tab">
 
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Density plot</span></span>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_density</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -1718,7 +1063,7 @@ Figure 1: Histogram of <code>percent_passive</code>
 <div class="tab-content">
 <div class="active  tab-pane" id="density-plot-1" role="tabpanel" aria-labelledby="density-plot-1-tab">
 
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Density plot</span></span>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_density</span><span class="op">(</span></span>
@@ -1732,7 +1077,7 @@ Figure 1: Histogram of <code>percent_passive</code>
 </div>
 <div class="tab-pane" id="boxplot" role="tabpanel" aria-labelledby="boxplot-tab">
 
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Boxplot</span></span>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_boxplot</span><span class="op">(</span></span>
@@ -1745,7 +1090,7 @@ Figure 1: Histogram of <code>percent_passive</code>
 </div>
 <div class="tab-pane" id="violin-plot" role="tabpanel" aria-labelledby="violin-plot-tab">
 
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Violin plot</span></span>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_violin</span><span class="op">(</span></span>
@@ -1770,7 +1115,7 @@ Figure 1: Histogram of <code>percent_passive</code>
 <div class="tab-content">
 <div class="active  tab-pane" id="scatterplot" role="tabpanel" aria-labelledby="scatterplot-tab">
 
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Scatterplot</span></span>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span></span>
@@ -1783,7 +1128,7 @@ Figure 1: Histogram of <code>percent_passive</code>
 </div>
 <div class="tab-pane" id="scatterplot-with-regression-line" role="tabpanel" aria-labelledby="scatterplot-with-regression-line-tab">
 
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Scatterplot with regression line</span></span>
 <span><span class="fu">ggplot</span><span class="op">(</span></span>
 <span>  <span class="va">brown_fam_df</span>,</span>
