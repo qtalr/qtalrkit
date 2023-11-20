@@ -207,7 +207,7 @@ brown_fam_df |>
 The result of calculating the number of observations for a character or factor variable is known as a frequency table. Grouping two or more categorical variables is known as a cross-tabulation or a contingency table. 
 :::
 
-Now, we can also pipe the results of a `group_by()` and `summarize()` to another function. This can be to say sort, select, or filter the results. It can also be to perform another summary function. It is important, however, to remember that the result of a `group_by()` produces a grouped data frame. Subsequent functions will be applied to the grouped data frame. This can lead to unexpected results of the original grouping is not relevant for the subsequent function. To avoid this, we can use the `ungroup()` function to remove the grouping after the relevant grouped summary statistics have been calculated.
+Now, we can also pipe the results of a `group_by()` and `summarize()` to another function. This can be to say sort, select, or filter the results. It can also be to perform another summary function. It is important, however, to remember that the result of a `group_by()` produces a grouped data frame. Subsequent functions will be applied to the grouped data frame. This can lead to unexpected results if the original grouping is not relevant for the subsequent function. To avoid this, we can use the `ungroup()` function to remove the grouping after the relevant grouped summary statistics have been calculated.
 
 Let's return to calculating the number of observations `n()` grouped by the `genre` and `lang_variety` variables in the `brown_fam_df` dataset. But let's add another summary which uses the `n` variable to calculate the mean and median number of observations. 
 
@@ -250,7 +250,7 @@ Now we see that we have a mean and median calculated across all genres.
 
 Before we leave this section, let's look some other ways to create frequency and contingency tables for character and factor variables. A shortcut to calculate a frequency table for a character or factor variable is to use the `count()` function from the `dplyr` package. 
 
-Let's calculate the number of observations `n()` grouped by the `genre` variable in the `brown_fam_df` dataset.
+Let's calculate the number of observations grouped by the `genre` variable in the `brown_fam_df` dataset.
 
 ```{r count-brown-fam-genre}
 # Frequency table for `genre`
@@ -260,7 +260,7 @@ brown_fam_df |>
 
 We can also add multiple grouping variables to `count()` and create contingency tables. 
 
-Let's add `lang_variety` to the grouping and calculate the number of observations `n()` grouped by the `genre` and `lang_variety` variables in the `brown_fam_df` dataset.
+Let's add `lang_variety` to the grouping and create a cross-tabulation for `genre` and `lang_variety` variables in the `brown_fam_df` dataset.
 
 ```{r count-brown-fam-genre-lang-variety}
 # Cross-tabulation for `genre` and `lang_variety`
@@ -270,7 +270,7 @@ brown_fam_df |>
 
 Note that the results of `count()` are not grouped so we do not need to use the `ungroup()` function before calculating subsequent summary statistics.
 
-Another way to create frequency and contingency tables is to use the `tabyl()` function from the `janitor` package [@R-janitor]. Let's calculate the number of observations `n()` grouped by the `genre` variable in the `brown_fam_df` dataset.
+Another way to create frequency and contingency tables is to use the `tabyl()` function from the `janitor` package [@R-janitor]. Let's create a frequency table for the `genre` variable in the `brown_fam_df` dataset.
 
 ```{r tabyl-brown-fam-genre}
 # Frequency table for `genre`
@@ -284,7 +284,7 @@ brown_fam_df |>
 
 In addition to providing frequency counts, the `tabyl()` function also provides the percent of observations for each level of the variable. And, we can add up to three grouping variables to `tabyl()` as well. 
 
-Let's add `lang_variety` to the grouping and calculate the number of observations `n()` grouped by the `genre` and `lang_variety` variables in the `brown_fam_df` dataset.
+Let's add `lang_variety` to the grouping and create a contingency table for the `genre` and `lang_variety` variables in the `brown_fam_df` dataset.
 
 ```{r tabyl-brown-fam-genre-lang-variety}
 # Cross-tabulation for `genre` and `lang_variety`
@@ -294,11 +294,11 @@ brown_fam_df |>
 
 The results do not include the percent of observations for each level of the variable as it is not clear how to calculate the percent of observations for each level of the variable when there are multiple grouping variables. We must specify if we want to calculate the percent of observations by row or by column. 
 
-The `janitor` package includes a variety of `adorn_*()` functions to add additional information to the results of `tabyl()`, including percentages, number of observations, and totals.
+The `janitor` package includes a variety of `adorn_*()` functions to add additional information to the results of `tabyl()`, including percentages, frequency, and totals.
 
 - `adorn_percentages()`: add percentages to the results of `tabyl()`
 - `adorn_pct_formatting()`: format percentages to include a `%` sign
-- `adorn_ns()`: add the number of observations to the results of `tabyl()`
+- `adorn_ns()`: add the frequency to the results of `tabyl()`
 - `adorn_rounding()`: round the results of `tabyl()`
 - `adorn_totals()`: add totals to the results of `tabyl()`
 
@@ -311,7 +311,7 @@ brown_genre_lang_ct <-
   tabyl(genre, lang_variety) |> # genre x lang_variety
   adorn_percentages("col") |> # by-column percentages
   adorn_pct_formatting() |> # format percentages
-  adorn_ns("front") # add number of observations (in front)
+  adorn_ns("front") # add frequency (in front)
 
 # View
 brown_genre_lang_ct
@@ -606,32 +606,3 @@ The additional skills and knowledge you will need to complete Lab 3 include:
 
 ## References
 
-
-
-
-<!--
-- glimpse(): dim() # nolint
-- summary():  mean(), median() # nolint
-- skimr::skim(): n(), mean(), median(), etc. # nolint
-
-Extend: ggplot2 plots
-
-- What are the main components of a plot?
-  - Data
-  - Aesthetics
-  - Geometries
-- What are other components of a plot?
-  - Facets: allow for multiple plots to be displayed in a grid
-    - `facet_wrap()`, `facet_grid()`
-  - Scales: allow manipulation of the axes
-    - `scale_x_continuous()`, `scale_y_continuous()`
-  - Coordinates: allow manipulation of the coordinate system
-    - `coord_flip()`, `coord_polar()`
-- How can I enhace the look of my plot?
-  - Themes: allow for manipulation of the look of the plot
-    - `theme_bw()`, `theme_classic()`, `theme_minimal()`, `theme_void()`
-  - Labels: allow for manipulation of the labels of the plot
-    - `labs()`
-  - Annotations: allow for manipulation of the annotations of the plot
-    - `annotate()`, `geom_text()`, `geom_label()`, `geom_segment()`
--->
