@@ -987,7 +987,7 @@ percent_passive
 <p><strong><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M64 64V241.6c5.2-1 10.5-1.6 16-1.6H96V208 64c0-8.8-7.2-16-16-16s-16 7.2-16 16zM80 288c-17.7 0-32 14.3-32 32c0 0 0 0 0 0v24c0 66.3 53.7 120 120 120h48c52.5 0 97.1-33.7 113.4-80.7c-3.1 .5-6.2 .7-9.4 .7c-20 0-37.9-9.2-49.7-23.6c-9 4.9-19.4 7.6-30.3 7.6c-15.1 0-29-5.3-40-14c-11 8.8-24.9 14-40 14H120c-13.3 0-24-10.7-24-24s10.7-24 24-24h40c8.8 0 16-7.2 16-16s-7.2-16-16-16H120 80zM0 320s0 0 0 0c0-18 6-34.6 16-48V64C16 28.7 44.7 0 80 0s64 28.7 64 64v82c5.1-1.3 10.5-2 16-2c25.3 0 47.2 14.7 57.6 36c7-2.6 14.5-4 22.4-4c20 0 37.9 9.2 49.7 23.6c9-4.9 19.4-7.6 30.3-7.6c35.3 0 64 28.7 64 64v64 24c0 92.8-75.2 168-168 168H168C75.2 512 0 436.8 0 344V320zm336-64c0-8.8-7.2-16-16-16s-16 7.2-16 16v48 16c0 8.8 7.2 16 16 16s16-7.2 16-16V256zM160 240c5.5 0 10.9 .7 16 2v-2V208c0-8.8-7.2-16-16-16s-16 7.2-16 16v32h16zm64 24v40c0 8.8 7.2 16 16 16s16-7.2 16-16V256 240c0-8.8-7.2-16-16-16s-16 7.2-16 16v24z"></path></svg> Tip</strong></p>
 <p>The result of calculating the number of observations for a character or factor variable is known as a frequency table. Grouping two or more categorical variables is known as a cross-tabulation or a contingency table.</p>
 </div>
-<p>Now, we can also pipe the results of a <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize()</a></code> to another function. This can be to say sort, select, or filter the results. It can also be to perform another summary function. It is important, however, to remember that the result of a <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by()</a></code> produces a grouped data frame. Subsequent functions will be applied to the grouped data frame. This can lead to unexpected results of the original grouping is not relevant for the subsequent function. To avoid this, we can use the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup()</a></code> function to remove the grouping after the relevant grouped summary statistics have been calculated.</p>
+<p>Now, we can also pipe the results of a <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize()</a></code> to another function. This can be to say sort, select, or filter the results. It can also be to perform another summary function. It is important, however, to remember that the result of a <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by()</a></code> produces a grouped data frame. Subsequent functions will be applied to the grouped data frame. This can lead to unexpected results if the original grouping is not relevant for the subsequent function. To avoid this, we can use the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup()</a></code> function to remove the grouping after the relevant grouped summary statistics have been calculated.</p>
 <p>Let's return to calculating the number of observations <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n()</a></code> grouped by the <code>genre</code> and <code>lang_variety</code> variables in the <code>brown_fam_df</code> dataset. But let's add another summary which uses the <code>n</code> variable to calculate the mean and median number of observations.</p>
 <p>If we do not use the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup()</a></code> function, the mean and median will be calculated for each <code>genre</code> collapsed across <code>lang_variety</code>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
@@ -1036,7 +1036,7 @@ percent_passive
 <p>Now we see that we have a mean and median calculated across all genres.</p>
 <hr>
 <p>Before we leave this section, let's look some other ways to create frequency and contingency tables for character and factor variables. A shortcut to calculate a frequency table for a character or factor variable is to use the <code><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count()</a></code> function from the <code>dplyr</code> package.</p>
-<p>Let's calculate the number of observations <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n()</a></code> grouped by the <code>genre</code> variable in the <code>brown_fam_df</code> dataset.</p>
+<p>Let's calculate the number of observations grouped by the <code>genre</code> variable in the <code>brown_fam_df</code> dataset.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Frequency table for `genre`</span></span>
 <span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
@@ -1056,7 +1056,7 @@ percent_passive
 <span><span class="co">## <span style="color: #BCBCBC;">10</span> general fiction    145</span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 5 more rows</span></span></span></code></pre>
 <p>We can also add multiple grouping variables to <code><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count()</a></code> and create contingency tables.</p>
-<p>Let's add <code>lang_variety</code> to the grouping and calculate the number of observations <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n()</a></code> grouped by the <code>genre</code> and <code>lang_variety</code> variables in the <code>brown_fam_df</code> dataset.</p>
+<p>Let's add <code>lang_variety</code> to the grouping and create a cross-tabulation for <code>genre</code> and <code>lang_variety</code> variables in the <code>brown_fam_df</code> dataset.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Cross-tabulation for `genre` and `lang_variety`</span></span>
 <span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
@@ -1076,7 +1076,7 @@ percent_passive
 <span><span class="co">## <span style="color: #BCBCBC;">10</span> skills / hobbies BrE            114</span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 20 more rows</span></span></span></code></pre>
 <p>Note that the results of <code><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count()</a></code> are not grouped so we do not need to use the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup()</a></code> function before calculating subsequent summary statistics.</p>
-<p>Another way to create frequency and contingency tables is to use the <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code> function from the <code>janitor</code> package <span class="citation">(<a href="#ref-R-janitor" role="doc-biblioref">Firke 2023</a>)</span>. Let's calculate the number of observations <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n()</a></code> grouped by the <code>genre</code> variable in the <code>brown_fam_df</code> dataset.</p>
+<p>Another way to create frequency and contingency tables is to use the <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code> function from the <code>janitor</code> package <span class="citation">(<a href="#ref-R-janitor" role="doc-biblioref">Firke 2023</a>)</span>. Let's create a frequency table for the <code>genre</code> variable in the <code>brown_fam_df</code> dataset.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Frequency table for `genre`</span></span>
 <span></span>
@@ -1100,7 +1100,7 @@ percent_passive
 <span><span class="co">## <span style="color: #BCBCBC;">10</span> general fiction    145  0.058<span style="text-decoration: underline;">0</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 5 more rows</span></span></span></code></pre>
 <p>In addition to providing frequency counts, the <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code> function also provides the percent of observations for each level of the variable. And, we can add up to three grouping variables to <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code> as well.</p>
-<p>Let's add <code>lang_variety</code> to the grouping and calculate the number of observations <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n()</a></code> grouped by the <code>genre</code> and <code>lang_variety</code> variables in the <code>brown_fam_df</code> dataset.</p>
+<p>Let's add <code>lang_variety</code> to the grouping and create a contingency table for the <code>genre</code> and <code>lang_variety</code> variables in the <code>brown_fam_df</code> dataset.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Cross-tabulation for `genre` and `lang_variety`</span></span>
 <span><span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
@@ -1120,7 +1120,7 @@ percent_passive
 <span><span class="co">## <span style="color: #BCBCBC;">10</span> general fiction     58    87</span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 5 more rows</span></span></span></code></pre>
 <p>The results do not include the percent of observations for each level of the variable as it is not clear how to calculate the percent of observations for each level of the variable when there are multiple grouping variables. We must specify if we want to calculate the percent of observations by row or by column.</p>
-<p>The <code>janitor</code> package includes a variety of <code>adorn_*()</code> functions to add additional information to the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>, including percentages, number of observations, and totals.</p>
+<p>The <code>janitor</code> package includes a variety of <code>adorn_*()</code> functions to add additional information to the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>, including percentages, frequency, and totals.</p>
 <ul>
 <li>
 <code><a href="https://sfirke.github.io/janitor/reference/adorn_percentages.html" class="external-link">adorn_percentages()</a></code>: add percentages to the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>
@@ -1128,7 +1128,7 @@ percent_passive
 <li>
 <code><a href="https://sfirke.github.io/janitor/reference/adorn_pct_formatting.html" class="external-link">adorn_pct_formatting()</a></code>: format percentages to include a <code>%</code> sign</li>
 <li>
-<code><a href="https://sfirke.github.io/janitor/reference/adorn_ns.html" class="external-link">adorn_ns()</a></code>: add the number of observations to the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>
+<code><a href="https://sfirke.github.io/janitor/reference/adorn_ns.html" class="external-link">adorn_ns()</a></code>: add the frequency to the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>
 </li>
 <li>
 <code><a href="https://sfirke.github.io/janitor/reference/adorn_rounding.html" class="external-link">adorn_rounding()</a></code>: round the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>
@@ -1145,7 +1145,7 @@ percent_passive
 <span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl</a></span><span class="op">(</span><span class="va">genre</span>, <span class="va">lang_variety</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># genre x lang_variety</span></span>
 <span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/adorn_percentages.html" class="external-link">adorn_percentages</a></span><span class="op">(</span><span class="st">"col"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># by-column percentages</span></span>
 <span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/adorn_pct_formatting.html" class="external-link">adorn_pct_formatting</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># format percentages</span></span>
-<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/adorn_ns.html" class="external-link">adorn_ns</a></span><span class="op">(</span><span class="st">"front"</span><span class="op">)</span> <span class="co"># add number of observations (in front)</span></span>
+<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/adorn_ns.html" class="external-link">adorn_ns</a></span><span class="op">(</span><span class="st">"front"</span><span class="op">)</span> <span class="co"># add frequency (in front)</span></span>
 <span></span>
 <span><span class="co"># View</span></span>
 <span><span class="va">brown_genre_lang_ct</span></span></code></pre></div>
@@ -1855,35 +1855,9 @@ Figure 1: Histogram of <code>percent_passive</code>
 </li>
 </ul>
 </div>
-<div class="section level2">
+<div class="section level2 unnumbered">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<!--
-- glimpse(): dim() # nolint
-- summary():  mean(), median() # nolint
-- skimr::skim(): n(), mean(), median(), etc. # nolint
-
-Extend: ggplot2 plots
-
-- What are the main components of a plot?
-  - Data
-  - Aesthetics
-  - Geometries
-- What are other components of a plot?
-  - Facets: allow for multiple plots to be displayed in a grid
-    - `facet_wrap()`, `facet_grid()`
-  - Scales: allow manipulation of the axes
-    - `scale_x_continuous()`, `scale_y_continuous()`
-  - Coordinates: allow manipulation of the coordinate system
-    - `coord_flip()`, `coord_polar()`
-- How can I enhace the look of my plot?
-  - Themes: allow for manipulation of the look of the plot
-    - `theme_bw()`, `theme_classic()`, `theme_minimal()`, `theme_void()`
-  - Labels: allow for manipulation of the labels of the plot
-    - `labs()`
-  - Annotations: allow for manipulation of the annotations of the plot
-    - `annotate()`, `geom_text()`, `geom_label()`, `geom_segment()`
--->
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-R-corpora" class="csl-entry">
 Evert, Stephanie. 2023. <em>Corpora: Statistics and Data Sets for Corpus Frequency Data</em>. <a href="http://SIGIL.R-Forge.R-Project.org/" class="external-link">http://SIGIL.R-Forge.R-Project.org/</a>.
