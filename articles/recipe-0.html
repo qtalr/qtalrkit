@@ -8,8 +8,8 @@
 <meta name="description" content="qtalrkit">
 <title>0. Writing with code • qtalrkit</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <script src="../extra.js"></script><meta property="og:title" content="0. Writing with code">
@@ -287,6 +287,18 @@ Figure 5: Quarto source and HTML output side-by-side in RStudio.
 <li>Create, edit, and render Quarto documents</li>
 <li>Use some basic Markdown syntax to format text</li>
 </ul>
+<!-- [ ] possible options for accessing? Github clone and/ or Posit cloud, Dockerfile --><div class="callout">
+<p>As this is the first lab, I will provide guidance on how to access the lab materials. The lab materials are hosted on GitHub. GitHub is a platform for hosting code and other files. To access the lab materials, you will not need to create a GitHub account, but you may sign up for a free account if you wish<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;Note, if you use an education email (&lt;code&gt;.edu&lt;/code&gt;) you will be able to advantage of the &lt;a href="https://education.github.com/benefits" class="external-link"&gt;Student Education Benefits&lt;/a&gt;.&lt;/p&gt;'><sup>1</sup></a>. You will, however, need to verify that Git is installed on your computer, and if not, install it.</p>
+<p>Let's start with Git.</p>
+<p>If you are on a Windows machine, you will most likely need to install Git. <a href="https://gitforwindows.org/" class="external-link">Download and install Git</a>. Go to the "Assests" section of the page and click on the link for the latest <code>.exe</code> version. This will download an executable file. Run the executable file and follow the instructions to install Git.</p>
+<p>If you are on a Mac, you will first verify that Git is installed. Open the Terminal application (you can search for it using Spotlight). In the Terminal window, type <code>git --version</code> and press enter. If Git is installed, you will see a message that says something like <code>git version 2.43.0</code>. If you do not see this message, you will need to install Git.</p>
+<p>Once you have Git installed, you will need to clone the lab repository. Cloning a repository means that you will download the files from the repository to your computer. To clone the lab repository, follow these steps:</p>
+<ol style="list-style-type: decimal">
+<li>You will navigate to <a href="https://github.com/qtalr/lab-0" class="external-link">the lab repository on GitHub</a> and identify the blue button that says "Code". Make sure that in this dropdown menu you have selected "Clone" and "HTTPS". Copy the URL that appears in the box.</li>
+<li>Open RStudio and select "New Project..." from the "File" menu. Select "Version Control" and then "Git". Paste the URL you copied from GitHub into the "Repository URL" box. Select a location on your computer where you would like to save the lab materials. Click "Create Project".</li>
+</ol>
+<p>This process will create a folder on your computer with the lab materials. You will be able to open and edit the lab materials in RStudio.</p>
+</div>
 <p>With this in mind, you are ready to move on to Lab 0.</p>
 </div>
 <div class="section level2 unnumbered">
@@ -304,6 +316,7 @@ Knuth, Donald Ervin. 1984. <span>“Literate Programming.”</span> <em>The Comp
 </div>
 </div>
 </div>
+
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
 </div>

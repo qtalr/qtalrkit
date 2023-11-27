@@ -6,13 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="qtalrkit">
-<title>4. Project management • qtalrkit</title>
+<title>4. Scaffolding a research project • qtalrkit</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<script src="../extra.js"></script><meta property="og:title" content="4. Project management">
+<script src="../extra.js"></script><meta property="og:title" content="4. Scaffolding a research project">
 <meta property="og:description" content="qtalrkit">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -70,7 +70,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>4. Project management</h1>
+      <img src="" class="logo" alt=""><h1>4. Scaffolding a research project</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/qtalr/qtalrkit/blob/HEAD/vignettes/articles/recipe-4.Rmd" class="external-link"><code>vignettes/articles/recipe-4.Rmd</code></a></small>
@@ -83,120 +83,215 @@
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
 <!--  
-Purpose: ? To set up a project template that will facilitate the seven principles of quality reproducible research.
 
-Principles: 
+Purpose: To introduce the concept of scaffolding a research project which includes understanding the computing environment, the project structure, and the workflow.
 
-1. All files are plain text
-2. A clear separation between data, code, and output
-3. A separation between original, derived, and analysis data/ datasets
-4. Each script performs a well-defined task
-5. Each script is modular
-6. All scripts are tied to a main script
-7. Documentation at many levels
+Description: This will build on learners' experience with R and RStudio, cloning a GitHub repository, and recent experience with understanding the computing environment. The goal will be to bring students up to speed such that they can begin to work on their own research projects and understand how to use the tools and resources available to them to manage their projects.
 
-```
-project/
-├── data/
-│   ├── analysis/
-│   ├── derived/
-│   └── original/
-├── output/
-│   ├── figures/
-│   ├── reports/
-│   ├── results/
-│   └── tables/
-├── README
-└── scripts/
-    ├── _main.R
-    └── ...
-```
+Approach: We will first review and refresh learners' understanding of the computing environment: hardware, operating system, and software. We will then connect the chapter content on reproducible project management to the computing environment. We will then turn to the workflow and project structure, and how to use Git and Github to manage a project. At the end, leaners will be prepared for lab 4 where they will scaffold their own research project by forking, cloning, editing, commiting, and pushing a repository to GitHub.
+
+Prerequisites: Learners should have a basic understanding of the computing environment, R, RStudio, and Git/GitHub. They should also have a basic understanding of the workflow and project structure.
+
 -->
-<p>In this recipe, ...</p>
-<!-- [ ] Consider discussing the _main.R file -->
-<p>This approach works just fine, but luck has it that there is an R package for installing and loading packages! The <a href="https://CRAN.R-project.org/package=pacman" class="external-link">pacman</a> package includes a set of functions for managing packages. A very useful one is <code>p_load()</code> which will look for a package on a system, load it if it is found, and install and then load it if it is not found. This helps potentially avoid using unnecessary bandwidth to install packages that may already exist on a user's system. But, to use <code>pacman</code> we need to include the code to install and load it with the functions <code><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages()</a></code> and <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code>. I've included some code that will mimic the behavior of <code>p_load()</code> for installing <code>pacman</code> itself, but as you can see it is not elegant, luckily it's only used once as we add it to the SETUP section of our master file, <code>_main.R</code>.</p>
-</div>
-<div class="section level2">
-<h2 id="project-template">Project template<a class="anchor" aria-label="anchor" href="#project-template"></a>
-</h2>
-<!-- 
-- [ ] A docker container could contain all of the software and data needed to reproduce the project and facilitate this and the next portion of the research blueprint, for now. Late in the "Communication" section I will discuss how to create a docker container for your project.
--->
-<p>In this textbook, however, I have developed a project template (<a href="https://github.com/lin380/project_template" class="external-link">available on GitHub</a>) which I believe simplifies and makes the process more transparent for beginning and intermediate R programmers, the directory structure is provided below.</p>
-<p>Let me now describe how this template structure aligns with the seven principles of quality reproducible research.</p>
-<ol style="list-style-type: decimal">
-<li>All files are plain text (e.g. <code>.R</code>, <code>.Rmd</code>, <code>.csv</code>, <code>.txt</code>, etc.).</li>
-<li>There are three main directories <code>analysis/</code>, <code>data/</code>, and <code>ouput/</code>.</li>
-<li>The <code>data/</code> directory contains sub-directories for <code>original</code> ('read-only') data and <code>derived</code> data.</li>
-<li>The <code>analysis/</code> directory contains five scripts which are numbered to correspond with their sequential role in the research process.</li>
-<li>Each of these analysis scripts are designed to be modular; input and output must be explicit and no intermediate objects are carried over to other analysis scripts. Dataset output should be written to and read from the <code>data/derived/</code> directory. Figures and statistical results should be written to and read from <code>output/figures/</code> and <code>output/results</code> respectively.</li>
-<li>All of the analysis scripts, and therefore the entire project, are tied to the <code>_pipeline.R</code> script. To reproduce the entire project only this script need be run.</li>
-<li>Documentation takes place at many levels. The <code>README.md</code> file is the first file that a researcher will consult. It contains a brief description of the project goals and how to reproduce the analysis. Analysis scripts use the Rmarkdown format (<code>.Rmd</code>). This format allows researchers to interleave prose description and executable code in the same script. This ensures that the rationale for the steps taken are described in prose, the code is made available to consult, and that code comments can be added to every line. The <code>_sesssion-info.Rmd</code> script is merged with each analysis script to provide information about the computing environment and packages used to conduct each step analysis. As this is a template, no data or datasets appear. However, once data is acquired and that data is curated and transformed, documentation for these resources should be documented for each resource in a data dictionary along side the data(set) itself.</li>
-</ol>
-<p>The aspects of the project template described in points 1-7 together form the backbone for reproducible research. This template, however, includes additional functionality to enhance efficient and communicable research. The <code>_pipeline.R</code> script executes the analysis scripts in the <code>analysis</code> directory, but as a side effect also produces <a href="https://lin380.github.io/project_template_demo/" class="external-link">a working website</a> and a journal-ready article for publishing your analysis, results, and findings to the web in <a href="https://lin380.github.io/project_template_demo/5_generate_article.html" class="external-link">HTML</a> and <a href="https://lin380.github.io/project_template_demo/article.pdf" class="external-link">PDF</a> format. The <code>index.Rmd</code> file is the splash page for the website and is a good place to house your pre-analysis investigative work including your research area, problem, aim, and question and to document your research blueprint including the identification of viable data resource(s), the key variables for the analysis, the analysis method, and the method of assessment. All Rmarkdown files provide functionality for citing and organizing references. The <code>references.bib</code> file is where references are stored and can be used to include citations that support your research throughout your project.</p>
-</div>
-<div class="section level2">
-<h2 id="scaffold">Scaffold<a class="anchor" aria-label="anchor" href="#scaffold"></a>
-</h2>
-<ul class="task-list">
-<li>
-<input type="checkbox" disabled>Consider removing the project template section and just link to the GitHub repo and/ or the qtalrkit package website.</li>
-</ul>
-<p>This template will allow you to organize your research design and align it with implementation steps to conduct quality reproducible research. To set the structure for you to conduct your analysis, you will need to download or fork and clone this template from the GitHub repository and then make some adjustments to personalize this template for your research.</p>
-<p>To create a local copy of this project template either:</p>
-<ol style="list-style-type: decimal">
-<li>Download and decompress the <a href="https://github.com/lin380/project_template/archive/refs/heads/main.zip" class="external-link">.zip file</a>
-</li>
-<li>If you have <a href="https://github.com/git-guides/install-git" class="external-link">git</a> installed on your machine and a <a href="https://github.com/signup?ref_cta=Sign+up&amp;ref_loc=header+logged+out&amp;ref_page=%2F&amp;source=header-home" class="external-link">GitHub account</a>, <a href="https://docs.github.com/en/get-started/quickstart/fork-a-repo#forking-a-repository" class="external-link">fork the repository</a> to your own GitHub account. Then open a terminal in the desired location and <a href="https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github/cloning-a-repository#cloning-a-repository" class="external-link">clone the repository</a>. If you are using RStudio, you can setup a new RStudio Project with the clone using the 'New Project...' dialog, choosing 'Version Control', and following the steps.</li>
-</ol>
-<p>Before you begin configuring and adding your project-specific details to this template. Reproduce this project 'as-is' to confirm that it builds on your local machine.</p>
-<p>In RStudio or in R session in a Terminal application, open the console in the root directory of the project. Then run:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"_pipeline.R"</span><span class="op">)</span></span></code></pre></div>
-<p>It will take some time to complete, when it does the prompt (<code>&gt;</code>) in the console will return. Then navigate to and open <code>docs/index.html</code> in a browser.</p>
-<p>Once you have confirmed that the project template builds, then you can begin to configure the template to reflect your project. There a few files to consider first. These files are places where the title of your project should appear.</p>
+<p>In this recipe, we will learn how to scaffold a research project and how to use the tools and resources available to us to manage research projects. We will build on our understanding of the computing environment and the structure of reproducible projects and introduce new features of Git and GitHub.</p>
+<p>We will cover the following topics:</p>
 <ul>
-<li><code>README.md</code></li>
-<li><code>_pipeline.R</code></li>
-<li><code>analysis/index.Rmd</code></li>
+<li>Understanding the components of a reproducible project</li>
+<li>Connecting the computing environment to reproducible project management</li>
+<li>Understanding the workflow and project structure</li>
+<li>Using Git and GitHub to manage a project</li>
 </ul>
-<p>After updating these files, build the project again and make sure that the new changes appear as you would like them. You are now ready to start your research project!</p>
+<p>In Lab 4, we will apply what we have learned in this recipe to scaffold our own research project by forking, cloning, editing, commiting, and pushing a repository to GitHub.</p>
+</div>
+<div class="section level2">
+<h2 id="concepts-and-strategies">Concepts and strategies<a class="anchor" aria-label="anchor" href="#concepts-and-strategies"></a>
+</h2>
+<div class="section level3">
+<h3 id="understanding-components-of-a-reproducible-project">Understanding components of a reproducible project<a class="anchor" aria-label="anchor" href="#understanding-components-of-a-reproducible-project"></a>
+</h3>
+<p>Reproducible projects are composed of two main components: the computing environment and the project structure. The computing environment is the hardware, operating system, and software that we use to do our work and the project structure is the organization of the files and folders that make up our project. As we can see in Figure <a href="#fig:nested-project">1</a>, each of these components and subcomponents are nested within each other.</p>
+<!-- Insert graphic with nested boxes: hardware, operating system, software, R packages, project structure -->
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:nested-project"></span>
+<img src="assets/images/recipe-4/nested-project.drawio.png" alt="Components of a reproducible project" width="50%"><p class="caption">
+Figure 1: Components of a reproducible project
+</p>
+</div>
+<p>In the lesson on the computing environment, we learned about the importance of understanding the computing environment and how to find out information about our computing environment inspecting an R session, as we see below.</p>
+<pre class="plain"><code>─ Session info ──────────────────────────────────────────────────────
+ setting  value
+ version  R version 4.3.2 (2023-10-31)
+ os       macOS Ventura 13.6.1
+ system   x86_64, darwin22.6.0
+ ui       unknown
+ language (EN)
+ collate  en_US.UTF-8
+ ctype    en_US.UTF-8
+ tz       America/New_York
+ date     2023-11-26
+ pandoc   3.1.9 @ /usr/local/bin/pandoc
+
+─ Packages ──────────────────────────────────────────────────────
+ package     * version date (UTC) lib source
+ cli           3.6.1   2023-03-23 [1] CRAN (R 4.3.2)
+ jsonlite      1.8.7   2023-06-29 [1] CRAN (R 4.3.2)
+ rlang         1.1.2   2023-11-04 [1] CRAN (R 4.3.2)
+
+ [1] /Users/francojc/R/Library
+ [2] /usr/local/Cellar/r/4.3.2/lib/R/library</code></pre>
+<p>As we learned, when the computing environment that is used to create a project is different from the computing environment that is used to reproduce the project, there is a risk that the project will not be reproducible. We will not tackle all the components in Figure <a href="#fig:nested-project">1</a> at once, however, but instead we will focus here on the project structure. Later on, with more experience, we will address the other components.</p>
+</div>
+<div class="section level3">
+<h3 id="approaching-reproducible-project-management">Approaching reproducible project management<a class="anchor" aria-label="anchor" href="#approaching-reproducible-project-management"></a>
+</h3>
+<p>The project structure is the organization of the files and folders that make up our project. A minimal project structure includes separation for input, process, and output of research, documentation about the project, how to reproduce the project, and the project files themselves. The project structure is important because it helps us organize our work and it helps others understand it.</p>
+<p>There is no concensus about what the best project structure is. However, the principles covered in Chapter 4 can guide us in developing a project structure that both organizes our work and makes that work understandable to others. With these principles met, we can add additional structure to our project to meet our project-specific needs.</p>
+<p>To create a reproducible project structure, we need no more than to create a directory and set of files that meet the principles for a minimal reproducible framework. During or after the project, would could back up these directories and files and/ or share them with others in a number of ways.</p>
+<p>Although this approach is already a good step in the right direction, it is error prone and will likely lead to inconsistencies across projects. A better approach is to develop, or adopt, a project structure template that can be used for all projects, use version control to track changes to your project, and upload your project to a remote repository where it is backed up (including the version history) and can be shared with others efficiently.</p>
+<p>This later approach is the one that we will use in subsequent lessons, recipes, and labs in this course.</p>
+</div>
+<div class="section level3">
+<h3 id="leveraging-git-and-github-for-reproducible-project-management">Leveraging Git and GitHub for reproducible project management<a class="anchor" aria-label="anchor" href="#leveraging-git-and-github-for-reproducible-project-management"></a>
+</h3>
+<p>At this point, you are somewhat familiar with Git and Github. You have likely used Git to copy and download a repository from GitHub, say for example the labs for this course. However, what is going on behind the scenes is likely still a bit of a mystery. In this section, we will demystify Git and GitHub, a bit, and learn how to use them together to manage a project in different scenarios.</p>
+<div class="callout">
+<p><strong><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M64 64V241.6c5.2-1 10.5-1.6 16-1.6H96V208 64c0-8.8-7.2-16-16-16s-16 7.2-16 16zM80 288c-17.7 0-32 14.3-32 32c0 0 0 0 0 0v24c0 66.3 53.7 120 120 120h48c52.5 0 97.1-33.7 113.4-80.7c-3.1 .5-6.2 .7-9.4 .7c-20 0-37.9-9.2-49.7-23.6c-9 4.9-19.4 7.6-30.3 7.6c-15.1 0-29-5.3-40-14c-11 8.8-24.9 14-40 14H120c-13.3 0-24-10.7-24-24s10.7-24 24-24h40c8.8 0 16-7.2 16-16s-7.2-16-16-16H120 80zM0 320s0 0 0 0c0-18 6-34.6 16-48V64C16 28.7 44.7 0 80 0s64 28.7 64 64v82c5.1-1.3 10.5-2 16-2c25.3 0 47.2 14.7 57.6 36c7-2.6 14.5-4 22.4-4c20 0 37.9 9.2 49.7 23.6c9-4.9 19.4-7.6 30.3-7.6c35.3 0 64 28.7 64 64v64 24c0 92.8-75.2 168-168 168H168C75.2 512 0 436.8 0 344V320zm336-64c0-8.8-7.2-16-16-16s-16 7.2-16 16v48 16c0 8.8 7.2 16 16 16s16-7.2 16-16V256zM160 240c5.5 0 10.9 .7 16 2v-2V208c0-8.8-7.2-16-16-16s-16 7.2-16 16v32h16zm64 24v40c0 8.8 7.2 16 16 16s16-7.2 16-16V256 240c0-8.8-7.2-16-16-16s-16 7.2-16 16v24z"></path></svg> Tip</strong></p>
+<p>Verify that you have a working version of Git on your computing environment and make sure that you have a GitHub account. You can refer to <a href="guide-2.html">Guide 2</a> for more information on how to do this.</p>
+</div>
+<p>So let's rewind a bit and review what Git and Github are and how they work together. Git is a version control system that allows us to track changes to our project files. It is a command line tool, much like R, that is installed as software. Also like R, we can interact with Git through a graphical user interface (GUI), such as RStudio.</p>
+<p>Directory and file tracking with Git can be added to a project at any time. A tracked project is called a repository, or repo for short. When used on our computing environment, the repo is called a local repository. There are many benefits to using Git to track changes to local repository, including the ability to revert to previous versions of files, create and edit parallel copies of files and then selectively integrate them, and much more.</p>
+<p>But the real power of Git is realized in combination with GitHub. Github is a cloud-based remote repository that allows us to store our git-tracked projects. It is a web-based platform which requires an account to use. Once you are signed up, you can connect Git and Github to create remote repositories and upload your local repositories to them. You can also download remote repositories to your computing environment. There are many, many features that Github offers, but for now we will focus a few key features that will help us manage our projects.</p>
+<p>In Figure <a href="#fig:github-features">2</a>, I provide a schematic look at the relationship between Github and Git for three common scenarios.</p>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:github-features"></span>
+<img src="assets/images/recipe-4/github-features-drawio.png" alt="Key features of GitHub" width="100%"><p class="caption">
+Figure 2: Key features of GitHub
+</p>
+</div>
+<p><strong>Scenario A:</strong> Clone a remote repository</p>
+<p>In this scenario, we locate a remote repository on Github that someone has made publically available. Then we <strong>clone</strong> (copy and download) the repository to our computing environment. Once the repository is cloned locally, we can edit the files as we see fit.</p>
+<p>In essence, we are just downloading a group of files and folders to our computing environment from Github. This is the scenario that we have been using in this course to download the lab repositories.</p>
+<p>Steps:</p>
+<ol style="list-style-type: decimal">
+<li>Locate a remote repository on Github that someone has made publically available and copy the clone URL.</li>
+<li>Open RStudio and create a new project from version control.</li>
+<li>Paste the clone URL into the repository URL field.</li>
+<li>Choose a project parent directory (where the project will be saved).</li>
+<li>(optional) Rename the project directory.</li>
+</ol>
+<p><strong>Scenario B:</strong> Fork and clone a remote repository</p>
+<p>This scenario differs from A in two respects. First, we first <strong>fork</strong> (copy to) the remote repository to our Github account before cloning it to our computing environment. Second, we <strong>commit</strong> (log edits) changes to the git tracking system and then <strong>push</strong> (sync to) the changes to our remote repository.</p>
+<p>In this case, we are doing more than just downloading a group of files and folders. We are setting up a link between the other person's remote repository and our own remote repository. We do not have to use this link, but if we do want to, we can <strong>pull</strong> (sync from) any changes that are made to the other person's remote repository to our remote repository. This can be useful if we want to keep our remote repository up to date with the other person's remote repository. Furthermore, this link allows us to propose changes to the other person's remote repository with a <strong>pull request</strong> --a request for the other person to pull our changes into their remote repository. This can be useful if we want to collaborate with the other person on the project. Pull and pull request are more advanced features that we will not address at this point.</p>
+<p>The second difference is that we are using Git to track changes to our local repository and then push those changes to our remote repository. This is a key feature because it allows us to keep track of changes to our project files and folders and revert to previous versions if needed. It also allows us to share our project with others and collaborate with them.</p>
+<p>Steps:</p>
+<ol style="list-style-type: decimal">
+<li>Locate a remote repository on Github that someone has made publically available and click the fork button.</li>
+<li>Still on Github, choose new account as the owner of the forked repository.</li>
+<li>In the forked repository, copy the clone URL.</li>
+<li>Open RStudio and create a new project from version control.</li>
+<li>Paste the clone URL into the repository URL field.</li>
+<li>Choose a project parent directory (where the project will be saved).</li>
+<li>(optional) Rename the project directory.</li>
+<li>Make changes to the project files and folders.</li>
+<li>Commit the changes to the git tracking system.</li>
+<li>Push the changes to the remote repository.</li>
+</ol>
+<p><strong>Scenario C:</strong> Create/ Join and clone a remote repository</p>
+<p>This scenario is similar to B, but instead of forking a remote repository, we create a new remote repository on Github and then clone it to our computing environment. We then commit and push changes to our remote repository. In this case, we are creating a new remote repository and then using Git to track changes to our local repository and push those changes to our remote repository.</p>
+<p>This scenario is common when we work on our own projects or when we want to collaborate with others on a project. In the latter case, we would create a remote repository and then invite others to collaborate on it. Everyone with permissions to the remote repository can clone it to their computing environment, make changes, and then push those changes to the same remote repository. This allows everyone to work on the same project and keep track of changes to the project files and folders.</p>
+<p>When working with multiple people on a project, you can imagine that if I'm working on the project locally and you are working on the project locally, we might make changes to the same files and folders. If we both push our changes to the remote repository, there is a risk that the changes will conflict with each other. Git and Github have features that help us manage these conflicts (pull, fetch, merge, <em>etc.</em>), but we will not address them at this point either.</p>
+<p>Steps:</p>
+<ol style="list-style-type: decimal">
+<li>Create a new remote repository on Github or accept an invitation to collaborate on a remote repository.</li>
+<li>Copy the clone URL.</li>
+<li>Open RStudio and create a new project from version control.</li>
+<li>Paste the clone URL into the repository URL field.</li>
+<li>Choose a project parent directory (where the project will be saved).</li>
+<li>(optional) Rename the project directory.</li>
+<li>Make changes to the project files and folders.</li>
+<li>Commit the changes to the git tracking system.</li>
+<li>Push the changes to the remote repository.</li>
+</ol>
+</div>
 </div>
 <div class="section level2">
 <h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h2>
-<p>... summary of the recipe ...</p>
+<p>In this recipe, we reviewed the components of reproducible research projects: the computing environment and the project structure. The computing environment is the hardware, operating system, and software that we use to do our work and the project structure is the organization of the files and folders that make up our project. Furthermore, we learned more about Git and Github and how they can be used together to manage a project in different scenarios.</p>
 </div>
 <div class="section level2">
 <h2 id="check-your-understanding">Check your understanding<a class="anchor" aria-label="anchor" href="#check-your-understanding"></a>
 </h2>
-<p>(... examples ...)</p>
+<!--  
+Example question types: 
+
+- Multiple choice: single answer `mcq(c("answer 1", "answer 2", answer = "answer 3", "answer 4"))`
+- True or false: `torf(TRUE)`
+- Fill in the blank: `fitb(c(answer = "answer 1"))`
+-->
+<p>Select the component of the computing environment that of the following are related to:</p>
 <ol style="list-style-type: decimal">
 <li>
-<select class="webex-select"><option value="blank"></option>
-<option value="answer">TRUE</option>
-<option value="">FALSE</option></select> Literate Programming, first introduced by Donald Knuth in 1984, allows the combination of computer code and text prose in one document.</li>
-<li>The programming paradigm Literate Programming is implemented through <select class="webex-select"><option value="blank"></option>
-<option value="answer">Quarto</option>
-<option value="">R</option>
-<option value="">RStudio</option>
-<option value="">GitHub</option></select>, a platform that facilitates the creation of a variety of output documents based on the same source code.</li>
-<li>Which of the following components does a basic Quarto document <em>not</em> contain? <select class="webex-select"><option value="blank"></option>
-<option value="">Front-matter section</option>
-<option value="">Prose section</option>
-<option value="answer">Back-matter section</option>
-<option value="">Code block</option></select>
+<code>Windows 10</code> <select class="webex-select"><option value="blank"></option>
+<option value="">hardware</option>
+<option value="answer">operating system</option>
+<option value="">software</option></select>
 </li>
-<li>To generate a PDF document in Quarto, you can edit the format attribute value in the front-matter section to <input class="webex-solveme nospaces ignorecase" size="4" data-answer='["pdf","html","word"]'>.</li>
 <li>
-<select class="webex-select"><option value="blank"></option>
-<option value="answer">TRUE</option>
-<option value="">FALSE</option></select> The code block options <code>echo</code> and <code>include</code> can be used to hide the code and output, respectively.</li>
+<code>R version 4.3.1</code> <select class="webex-select"><option value="blank"></option>
+<option value="">hardware</option>
+<option value="">operating system</option>
+<option value="answer">software</option></select>
+</li>
 <li>
-<select class="webex-select"><option value="blank"></option>
-<option value="">TRUE</option>
-<option value="answer">FALSE</option></select> In Quarto, a code block, where the programming language code is entered, is bounded by three underscores (<code>_</code>).</li>
+<code>dplyr_1.1.4</code> <select class="webex-select"><option value="blank"></option>
+<option value="">hardware</option>
+<option value="">operating system</option>
+<option value="answer">software</option></select>
+</li>
 </ol>
+<p>Select the Git name for the following actions:</p>
+<ol start="4" style="list-style-type: decimal">
+<li>Copy and download a remote repository to your computing environment <select class="webex-select"><option value="blank"></option>
+<option value="answer">clone</option>
+<option value="">fork</option>
+<option value="">commit</option>
+<option value="">push</option></select>
+</li>
+<li>Log edits to the git tracking system <select class="webex-select"><option value="blank"></option>
+<option value="">clone</option>
+<option value="">fork</option>
+<option value="answer">commit</option>
+<option value="">push</option></select>
+</li>
+<li>Sync changes to the remote repository <select class="webex-select"><option value="blank"></option>
+<option value="">clone</option>
+<option value="">fork</option>
+<option value="">commit</option>
+<option value="answer">push</option></select>
+</li>
+</ol>
+</div>
+<div class="section level2">
+<h2 id="lab-preparation">Lab preparation<a class="anchor" aria-label="anchor" href="#lab-preparation"></a>
+</h2>
+<!-- Provide a checklist of knowledge and skills that learners should be comfortable with before beginning the lab -->
+<p>In lab 4, we will apply what we have learned in this recipe to scaffold our own research project by forking and cloning a research project template repository on Github. We will then edit the project files and folders, commit the changes to the git tracking system, and push the changes to our remote repository on Github.</p>
+<p>Before beginning the lab, make sure that you are comfortable with the following:</p>
+<ul>
+<li>Cloning a remote repository to your computing environment</li>
+<li>Creating and editing files and folders, in particular Quarto documents.</li>
+</ul>
+<p>The additional knowledge and skills that you will need to complete the lab are covered in this recipe which include:</p>
+<ul>
+<li>Understanding the components of a reproducible project</li>
+<li>Understanding the importance of project structure for reproducible project management</li>
+<li>Using Git, GitHub, and RStudio to manage a project using:
+<ul>
+<li>Forking, cloning, editing, commiting, and pushing a repository</li>
+</ul>
+</li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>

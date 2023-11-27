@@ -6,13 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="qtalrkit">
-<title>Identifying data and data sources • qtalrkit</title>
+<title>Web scraping with R • qtalrkit</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<script src="../extra.js"></script><meta property="og:title" content="Identifying data and data sources">
+<script src="../extra.js"></script><meta property="og:title" content="Web scraping with R">
 <meta property="og:description" content="qtalrkit">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -70,7 +70,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Identifying data and data sources</h1>
+      <img src="" class="logo" alt=""><h1>Web scraping with R</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/qtalr/qtalrkit/blob/HEAD/vignettes/articles/guide-5.Rmd" class="external-link"><code>vignettes/articles/guide-5.Rmd</code></a></small>
@@ -79,519 +79,841 @@
 
     
     
-<!--  
-- [ ] Revise the pinboard tags to reflect these groupings
-- [ ] Check pinboard for dead links
--->
+<p>There are many resources available through downloads and APIs. There are, however, cases in which you want to acquire data from the public-facing web. R can be used to access the web programmatically through a process known as web scraping. The complexity of web scrapes can vary but in general it requires more advanced knowledge of R as well as the structure of the language of the web: HTML (Hypertext Markup Language).</p>
 <div class="section level2">
-<h2 id="published">Published<a class="anchor" aria-label="anchor" href="#published"></a>
+<h2 id="html-language-of-the-web">HTML: language of the web<a class="anchor" aria-label="anchor" href="#html-language-of-the-web"></a>
+</h2>
+<p>HTML is a cousin of XML (eXtensible Markup Language) and as such organizes web documents in a hierarchical format that is read by your browser as you navigate the web. Take for example the toy webpage I created as a demonstration in <span class="citation">(<a href="#ref-fig-example-webpage" role="doc-biblioref"><strong>fig-example-webpage?</strong></a>)</span>.</p>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:fig-example-webpage"></span>
+<img src="assets/images/guide-7/test-html.png" alt="Example web page." width="100%"><p class="caption">
+Figure 1: Example web page.
+</p>
+</div>
+<p>The file accessed by my browser to render this webpage is <code>test.html</code> and in plain-text format as seen in <span class="citation">(<a href="#ref-exm-html-structure" role="doc-biblioref"><strong>exm-html-structure?</strong></a>)</span>.</p>
+<div id="exm-html-structure">
+<div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE </span>html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"<span class="dt">&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;html&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;head&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;meta</span> <span class="er">http-equiv</span><span class="ot">=</span><span class="st">"Content-Type"</span> <span class="er">content</span><span class="ot">=</span><span class="st">"text/html; charset=UTF-8"</span> <span class="kw">/&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;title&gt;</span>My website<span class="kw">&lt;/title&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/head&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;body&gt;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">"intro"</span><span class="kw">&gt;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;p&gt;</span>Welcome!<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;p&gt;</span>This is my first website.<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;/div&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;table&gt;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;tr&gt;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="kw">&lt;td&gt;</span>Contact me:<span class="kw">&lt;/td&gt;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="kw">&lt;td&gt;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>          <span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">"mailto:francojc@wfu.edu"</span><span class="kw">&gt;</span>francojc@wfu.edu<span class="kw">&lt;/a&gt;</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">&lt;/td&gt;</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;/tr&gt;</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;/table&gt;</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">"conc"</span><span class="kw">&gt;</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;p&gt;</span>Good-bye!<span class="kw">&lt;/p&gt;</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;/div&gt;</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/body&gt;</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/html&gt;</span></span></code></pre></div>
+</div>
+<p>Each element in this file is delineated by an opening and closing HTML tag, <code>&lt;head&gt;&lt;/head&gt;</code>. Tags are nested within other tags to create the structural hierarchy. Tags can take class and id labels to distinguish them from other tags and often contain other attributes that dictate how the tag is to behave according to Cascading Style Sheet (CSS) rules when rendered visually by a browser. For example, there are two <code>&lt;div&gt;</code> tags in our toy example: one has the label <code>class = "intro"</code> and the other <code>class = "conc"</code>. <code>&lt;div&gt;</code> tags are often used to separate sections of a webpage that may require special visual formatting. The <code>&lt;a&gt;</code> tag, on the other hand, creates a web link. As part of this tag's function, it requires the attribute <code>href=</code> and a web protocol --in this case it is a link to an email address <code>mailto:francojc@wfu.edu</code>. More often than not, however, the <code>href=</code> contains a URL (Uniform Resource Locator). A working example might look like this: <code>&lt;a href="https://francojc.github.io/"&gt;My homepage&lt;/a&gt;</code>.</p>
+<div class="callout">
+<p><strong>{{&lt; fa medal &gt;}} Dive deeper</strong></p>
+<p>Cascading Style Sheets (CSS) are used to dictate how HTML elements are rendered visually by a browser. For example, the <code>div</code> tag with the class attribute <code>intro</code> could be targeted by a CSS rule to render the text in a larger font size and in bold. CSS rules are often written in a separate file and linked to the HTML file. For web scraping purposes, however, we are not interested in the visual rendering of the HTML file, but rather the structure of the HTML file. These tag attributes can provide useful information for parsing HTML files.</p>
+</div>
+<p>The aim of a web scrape is to download the HTML file(s) that contain the data we are interested in. This will include more information that we may ultimately need, but by downloading the raw source HTML we are effectively creating a local archive, or copy, of the webpage. Thus, if the webpage is updated or removed from the web, we will still have access to the data we accessed.</p>
+<p>Later in the curation process we will parse (<em>i.e.</em> read and extract) target information that is relevant for the research at hand. However, it often useful to parse the raw HTML in the process of acquiring data if we are interested in harvesting data from multiple pages and we would like to use the HTML structure to guide our data extraction (<em>i.e.</em> URLs to other pages)</p>
+<p>To provide some preliminary background on working with HTML, we will use the toy example above to demonstrate how to read and parse HTML using R. To do this we will use the <a href="https://CRAN.R-project.org/package=rvest" class="external-link">rvest</a><span class="citation">(<a href="#ref-R-rvest" role="doc-biblioref">Wickham 2022</a>)</span> package. First, install/load the package, then, read and parse the HTML from the character vector named <code>web_file</code> assigning the result to <code>html</code>.</p>
+<div id="exm-read-html-toy">
+<pre><code><span><span class="co">## {html_document}</span></span>
+<span><span class="co">## &lt;html&gt;</span></span>
+<span><span class="co">## [1] &lt;head&gt;\n&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8 ...</span></span>
+<span><span class="co">## [2] &lt;body&gt;\n    &lt;div class="intro"&gt;\n      &lt;p&gt;Welcome!&lt;/p&gt;\n      &lt;p&gt;This is  ...</span></span></code></pre>
+</div>
+<p>In <span class="citation">(<a href="#ref-exm-read-html-toy" role="doc-biblioref"><strong>exm-read-html-toy?</strong></a>)</span> <code>read_html()</code> retrieves the raw HTML and it makes it accessible to parsing in R. Being a subtype of XML, <code>read_html()</code> converts the raw HTML into an object of class <code>xml_document</code>, as we can see by calling <code><a href="https://rdrr.io/r/base/class.html" class="external-link">class()</a></code> on the <code>html</code> object in <span class="citation">(<a href="#ref-exm-class-html-toy-class" role="doc-biblioref"><strong>exm-class-html-toy-class?</strong></a>)</span>.</p>
+<div id="exm-class-html-toy-class">
+<pre><code><span><span class="co">## [1] "xml_document" "xml_node"</span></span></code></pre>
+</div>
+<p>An object of class <code>xml_document</code> represents each HTML tag as a node. The tag nodes are elements can be accessed by using the <code>html_elements()</code> function by specifying the tag/node/element to isolate.</p>
+<div id="exm-parse-html-toy-1">
+<pre><code><span><span class="co">## {xml_nodeset (2)}</span></span>
+<span><span class="co">## [1] &lt;div class="intro"&gt;\n      &lt;p&gt;Welcome!&lt;/p&gt;\n      &lt;p&gt;This is my first web ...</span></span>
+<span><span class="co">## [2] &lt;div class="conc"&gt;\n      &lt;p&gt;Good-bye!&lt;/p&gt;\n    &lt;/div&gt;</span></span></code></pre>
+</div>
+<p>Notice that the output of <span class="citation">(<a href="#ref-exm-parse-html-toy-1" role="doc-biblioref"><strong>exm-parse-html-toy-1?</strong></a>)</span> has returned both <code>div</code> tags and their respective children, tags contained within. To isolate one of tags by its class, we add the class name to the tag separating it with a <code>.</code>.</p>
+<div id="exm-parse-html-toy-2">
+<pre><code><span><span class="co">## {xml_nodeset (1)}</span></span>
+<span><span class="co">## [1] &lt;div class="intro"&gt;\n      &lt;p&gt;Welcome!&lt;/p&gt;\n      &lt;p&gt;This is my first web ...</span></span></code></pre>
+</div>
+<p>Great. Now say we want to drill down and isolate the subordinate <code>&lt;p&gt;</code> nodes. We can add <code>p</code> to our node filter, as in <span class="citation">(<a href="#ref-exm-parse-html-toy-3" role="doc-biblioref"><strong>exm-parse-html-toy-3?</strong></a>)</span>.</p>
+<div id="exm-parse-html-toy-3">
+<pre><code><span><span class="co">## {xml_nodeset (2)}</span></span>
+<span><span class="co">## [1] &lt;p&gt;Welcome!&lt;/p&gt;</span></span>
+<span><span class="co">## [2] &lt;p&gt;This is my first website.&lt;/p&gt;</span></span></code></pre>
+</div>
+<p>To extract the text contained within a node we use the <code>html_text()</code> function.</p>
+<div id="exm-parse-html-toy-4">
+<pre><code><span><span class="co">## [1] "Welcome!"                  "This is my first website."</span></span></code></pre>
+</div>
+<p>The result of <span class="citation">(<a href="#ref-exm-parse-html-toy-4" role="doc-biblioref"><strong>exm-parse-html-toy-4?</strong></a>)</span> is a character vector with two elements corresponding to the text contained in each <code>&lt;p&gt;</code> tag. If you were paying close attention you might have noticed that the second element in our vector includes extra whitespace after the period. To trim leading and trailing whitespace from text we can add the <code>trim = TRUE</code> argument to <code>html_text()</code>, as in <span class="citation">(<a href="#ref-exm-parse-html-toy-5" role="doc-biblioref"><strong>exm-parse-html-toy-5?</strong></a>)</span>.</p>
+<div id="exm-parse-html-toy-5">
+<pre><code><span><span class="co">## [1] "Welcome!"                  "This is my first website."</span></span></code></pre>
+</div>
+<p>With this basic understanding of how to read and parse HTML, we can now turn to a more realistic example.</p>
+</div>
+<div class="section level2">
+<h2 id="acquire-data-from-the-web">Acquire data from the web<a class="anchor" aria-label="anchor" href="#acquire-data-from-the-web"></a>
 </h2>
 <div class="section level3">
-<h3 id="repositories">Repositories<a class="anchor" aria-label="anchor" href="#repositories"></a>
+<h3 id="federalist-papers">Federalist Papers<a class="anchor" aria-label="anchor" href="#federalist-papers"></a>
 </h3>
-<p>Language-dedicated repositories are a great source of data for language research. Below I've included a listing of some of the more commonly used repositories.</p>
-<table class="table">
-<caption>
-<span id="tab:pinboard-repos">Table 1: </span>Data repositories
-</caption>
-<thead><tr>
-<th style="text-align:left;">
-Resource
-</th>
-<th style="text-align:left;">
-Description
-</th>
-</tr></thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="https://corpus.byu.edu/%22%3EBYU" class="external-link uri">https://corpus.byu.edu/"&gt;BYU</a> corpora&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-A repository of corpora that includes billions of words of data.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="http://corporafromtheweb.org/%22%3ECOW" class="external-link uri">http://corporafromtheweb.org/"&gt;COW</a> (COrpora from the Web)&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-A collection of linguistically processed gigatoken web corpora
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="http://www.resourcebook.eu/searchll.php%22%3ELRE" class="external-link uri">http://www.resourcebook.eu/searchll.php"&gt;LRE</a> Map&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-Repository of language resources collected during the submission process for the Language Resource and Evaluation Conference (LREC).
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="http://wortschatz.uni-leipzig.de/en/download/%22%3ELeipzig" class="external-link uri">http://wortschatz.uni-leipzig.de/en/download/"&gt;Leipzig</a> Corpora Collection&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-Corpora in different languages using the same format and comparable sources.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="https://www.ldc.upenn.edu/%22%3ELinguistic" class="external-link uri">https://www.ldc.upenn.edu/"&gt;Linguistic</a> Data Consortium&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-Repository of language corpora
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="http://www.nltk.org/nltk_data/%22%3ENLTK" class="external-link uri">http://www.nltk.org/nltk_data/"&gt;NLTK</a> language data&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-Repository of corpora and language datasets included with the Python package NLTK.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="http://opus.lingfil.uu.se/%22%3EOPUS" class="external-link uri">http://opus.lingfil.uu.se/"&gt;OPUS</a> - an open source parallel corpus&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-Repository of translated texts from the web.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="http://talkbank.org/%22%3ETalkBank%3C/a%3E" class="external-link uri">http://talkbank.org/"&gt;TalkBank&lt;/a&gt;</a>;
-</td>
-<td style="text-align:left;">
-Repository of language collections dealing with conversation, acquisition, multilingualism, and clinical contexts.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="https://corpus1.mpi.nl/ds/asv/?4%22%3EThe" class="external-link uri">https://corpus1.mpi.nl/ds/asv/?4"&gt;The</a> Language Archive&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-Various corpora and language datasets
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="http://ota.ox.ac.uk/%22%3EThe" class="external-link uri">http://ota.ox.ac.uk/"&gt;The</a> Oxford Text Archive (OTA)&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-A collection of thousands of texts in more than 25 different languages.
-</td>
-</tr>
-</tbody>
-</table>
+<p>Say we investigate the authorship question of the the Federalist Papers following in the footsteps of <span class="citation">Mosteller and Wallace (<a href="#ref-Mosteller1963" role="doc-biblioref">1963</a>)</span>. We want to scrape the text of the Federalist Papers from the Library of Congress website. The main page for the Federalist Papers is located at <em><a href="https://guides.loc.gov/federalist-papers/full-text" class="external-link uri">https://guides.loc.gov/federalist-papers/full-text</a></em> and can be seen in <span class="citation">(<a href="#ref-fig-web-scrape-screenshot" role="doc-biblioref"><strong>fig-web-scrape-screenshot?</strong></a>)</span>.</p>
+<!-- screenshot of page to scrape -->
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:fig-web-scrape-screenshot"></span>
+<img src="assets/images/guide-7/fed-papers-loc-main.png" alt="Screenshot of the Library of Congress website for the Federalist Papers" width="100%"><p class="caption">
+Figure 2: Screenshot of the Library of Congress website for the Federalist Papers
+</p>
 </div>
-<div class="section level3">
-<h3 id="corpora-and-datasets">Corpora and datasets<a class="anchor" aria-label="anchor" href="#corpora-and-datasets"></a>
-</h3>
-<p>Below I've included a listing of corpora and datasets that are available for language research. This list is not exhaustive, but includes a few of the more common corpora and datasets used in language research.</p>
-<table class="table">
-<caption>
-<span id="tab:pinboard-datasets">Table 2: </span>Corpora and language datasets
-</caption>
-<thead><tr>
-<th style="text-align:left;">
-Resource
-</th>
-<th style="text-align:left;">
-Description
-</th>
-</tr></thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="https://atariemailarchive.org/%22%3EAtari" class="external-link uri">https://atariemailarchive.org/"&gt;Atari</a> Email Archive&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-A collection of messages sent at Atari from 1983 to 1992.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="http://www.socsci.uci.edu/~lpearl/CoLaLab/CHILDESTreebank/childestreebank.html%22%3ECHILDES" class="external-link uri">http://www.socsci.uci.edu/~lpearl/CoLaLab/CHILDESTreebank/childestreebank.html"&gt;CHILDES</a> Treebank&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-A corpus derived from several corpora from the American English section of CHILDES with the goal to annotate child-directed speech utterance transcriptions with phrase structure tree information.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="http://www.cs.cornell.edu/~cristian/Cornell_Movie-Dialogs_Corpus.html%22%3ECornell" class="external-link uri">http://www.cs.cornell.edu/~cristian/Cornell_Movie-Dialogs_Corpus.html"&gt;Cornell</a> Movie-Dialogs Corpus&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-A corpus containing a large metadata-rich collection of fictional conversations extracted from raw movie scripts.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="http://www.lllf.uam.es/~fmarcos/informes/corpus/coarginl.html%22%3ECorpus" class="external-link uri">http://www.lllf.uam.es/~fmarcos/informes/corpus/coarginl.html"&gt;Corpus</a> Argentino&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-Corpus of Argentine Spanish
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="https://cesa.arizona.edu/%22%3ECorpus" class="external-link uri">https://cesa.arizona.edu/"&gt;Corpus</a> of Spanish in Southern Arizona&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-Spanish varieties spoken in Arizona.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="https://www.statmt.org/europarl/%22%3EEuroparl" class="external-link uri">https://www.statmt.org/europarl/"&gt;Europarl</a> Parallel Corpus&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-A parallel corpus extracted from the proceedings of the European Parliament Proceedings between 1996-2011.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="http://storage.googleapis.com/books/ngrams/books/datasetsv2.html%22%3EGoogle" class="external-link uri">http://storage.googleapis.com/books/ngrams/books/datasetsv2.html"&gt;Google</a> Ngram Viewer&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-Google web corpus
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="http://ice-corpora.net/ice/%22%3EInternational" class="external-link uri">http://ice-corpora.net/ice/"&gt;International</a> Corpus of English (ICE)&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-The International Corpus of English (ICE) began in 1990 with the primary aim of collecting material for comparative studies of English worldwide.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="http://opus.lingfil.uu.se/OpenSubtitles_v2.php%22%3EOpenSubtitles2011%3C/a%3E" class="external-link uri">http://opus.lingfil.uu.se/OpenSubtitles_v2.php"&gt;OpenSubtitles2011&lt;/a&gt;</a>;
-</td>
-<td style="text-align:left;">
-A collection of documents from <a href="http://www.opensubtitles.org/" class="external-link uri">http://www.opensubtitles.org/</a>.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="http://www.ruscorpora.ru/en/%22%3ERussian" class="external-link uri">http://www.ruscorpora.ru/en/"&gt;Russian</a> National Corpus&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-A corpus of modern Russian language incorporating over 300 million words.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="https://quantumstat.com//dataset%22%3EThe" class="external-link uri">https://quantumstat.com//dataset"&gt;The</a> Big Bad NLP Database - Quantum Stat&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-NLP datasets
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="https://catalog.ldc.upenn.edu/docs/LDC97S62/%22%3EThe" class="external-link uri">https://catalog.ldc.upenn.edu/docs/LDC97S62/"&gt;The</a> Switchboard Dialog Act Corpus&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-A corpus of 1155 5-minute conversations in American English, comprising 205,000 utterances and 1.4 million words, from the Switchboard corpus of telephone conversations.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="http://langsnap.soton.ac.uk/%22%3EWelcome" class="external-link uri">http://langsnap.soton.ac.uk/"&gt;Welcome</a> to LANGSNAP - LANGSNAP&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-The aim of this repository is to promote research on the learning of French and Spanish as L2, by making parallel learner corpora for each language freely available to the research community.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="http://www.psych.ualberta.ca/~westburylab/downloads/usenetcorpus.download.html%22%3EWestbury" class="external-link uri">http://www.psych.ualberta.ca/~westburylab/downloads/usenetcorpus.download.html"&gt;Westbury</a> Lab Web Site: Usenet Corpus Download&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-This corpus is a collection of public USENET postings. This corpus was collected between Oct 2005 and Jan 2011, and covers 47,860 English language, non-binary-file news groups (see list of newsgroups included with the corpus for details)
-</td>
-</tr>
-</tbody>
-</table>
+<p>The main page contains links to the text of each of the 85 papers. Our goal will be to scrape and archive the raw HTML for this page and then parse the HTML to extract the links to each of the papers. We will then scrape and archive the raw HTML for each of the 85 papers.</p>
+<p>The first step in any web scrape is to investigate the site and page(s) we want to scrape to ascertain if there any licensing restrictions. Many, but not all websites, will include a plain text file <a href="https://www.cloudflare.com/learning/bots/what-is-robots.txt/" class="external-link"><code>robots.txt</code></a> at the root of the main URL. This file is declares which webpages a 'robot' (including web scraping scripts) can and cannot access. We can use the <code>robotstxt</code> package to find out which URLs are accessible <a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;It is important to check the paths of sub-domains as some website allow access in some areas and not in others&lt;/p&gt;"><sup>1</sup></a>.</p>
+<!-- check domain -->
+<div id="exm-fed-permissions">
+<pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
 </div>
-<div class="section level3">
-<h3 id="data-sharing-platforms">Data sharing platforms<a class="anchor" aria-label="anchor" href="#data-sharing-platforms"></a>
-</h3>
-<!--  
-- [ ] Add data sharing platforms to pinboard
-- [ ] Create a listing of data sharing platforms
-- [ ] Include the listing here
--->
-<ul>
-<li><a href="https://dataverse.org/" class="external-link uri">https://dataverse.org/</a></li>
-<li><a href="https://osf.io/" class="external-link uri">https://osf.io/</a></li>
-<li><a href="https://www.zenodo.org/" class="external-link uri">https://www.zenodo.org/</a></li>
-<li><a href="https://figshare.com/" class="external-link uri">https://figshare.com/</a></li>
-<li><a href="https://www.researchgate.net/" class="external-link uri">https://www.researchgate.net/</a></li>
-<li><a href="https://www.researchsquare.com/" class="external-link uri">https://www.researchsquare.com/</a></li>
-</ul>
+<!-- rvest::read_html() -->
+<p>The next step is to read and parse the raw HTML. We can do this using the <code>read_html()</code> function.</p>
+<div id="exm-fed-read-html">
+
 </div>
-<div class="section level3">
-<h3 id="aggregated-listings">Aggregated listings<a class="anchor" aria-label="anchor" href="#aggregated-listings"></a>
-</h3>
-<p>The list of data available for language research is constantly growing. I've document very few of the wide variety of resources. In Table <a href="#tab:pinboard-listings">3</a> I've included attempts by others to provide a summary of the corpus data and language resources available.</p>
-<table class="table">
-<caption>
-<span id="tab:pinboard-listings">Table 3: </span>Aggregated listings of language corpora and datasets
-</caption>
-<thead><tr>
-<th style="text-align:left;">
-Resource
-</th>
-<th style="text-align:left;">
-Description
-</th>
-</tr></thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="https://www.clarin.eu/resource-families/reference-corpora%22%3ECLARIN" class="external-link uri">https://www.clarin.eu/resource-families/reference-corpora"&gt;CLARIN</a> Reference corpora&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-The CLARIN infrastructure offers access to 30 reference corpora for 21 languages. Most of the corpora are available through easy-to-use concordancers such as KonText and NoSketch Engine; the reference corpora are also well annotated, typically displaying rich morphosyntactic annotation.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="https://uclouvain.be/en/research-institutes/ilc/cecl/learner-corpora-around-the-world.html%22%3ELearner" class="external-link uri">https://uclouvain.be/en/research-institutes/ilc/cecl/learner-corpora-around-the-world.html"&gt;Learner</a> corpora around the world&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-A listing of learner corpora around the world
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="https://paperswithcode.com/datasets%22%3EMachine" class="external-link uri">https://paperswithcode.com/datasets"&gt;Machine</a> Learning Datasets | Papers With Code&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-A free and open resource with Machine Learning papers, code, and evaluation tables.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="http://nlp.stanford.edu/links/statnlp.html#Corpora%22%3EStanford" class="external-link uri">http://nlp.stanford.edu/links/statnlp.html#Corpora"&gt;Stanford</a> NLP corpora&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-Listing of corpora and language resources aimed at the NLP community.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="https://makingnoiseandhearingthings.com/2017/09/20/where-can-you-find-language-data-on-the-web/%22%3EWhere" class="external-link uri">https://makingnoiseandhearingthings.com/2017/09/20/where-can-you-find-language-data-on-the-web/"&gt;Where</a> can you find language data on the web?&lt;/a&gt;
-</td>
-<td style="text-align:left;">
-Listing of various corpora and language datasets.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="http://wordbank.stanford.edu/%22%3EWordbank%3C/a%3E" class="external-link uri">http://wordbank.stanford.edu/"&gt;Wordbank&lt;/a&gt;</a>;
-</td>
-<td style="text-align:left;">
-An open database of children's vocabulary development.
-</td>
-</tr>
-</tbody>
-</table>
+<pre><code><span><span class="co">## {html_document}</span></span>
+<span><span class="co">## &lt;html lang="en"&gt;</span></span>
+<span><span class="co">## [1] &lt;head&gt;\n&lt;meta http-equiv="X-UA-Compatible" content="IE=Edge"&gt;\n&lt;meta http ...</span></span>
+<span><span class="co">## [2] &lt;body class="s-lg-guide-body"&gt;\r\n&lt;a id="s-lg-public-skiplink" class="ale ...</span></span></code></pre>
+<p>At this point we have captured the raw HTML assigning it to the object named <code>html</code>. Let's archive the raw HTML to a file in our project directory. We can do this using the <code>write_html()</code> function from the <code>xml2</code> package <span class="citation">(<a href="#ref-R-xml2" role="doc-biblioref"><strong>R-xml2?</strong></a>)</span>.</p>
+<div id="exm-fed-write-html">
+
+</div>
+<p>Our update project directory structure can be seen in <span class="citation">(<a href="#ref-exm-fed-project-dir" role="doc-biblioref"><strong>exm-fed-project-dir?</strong></a>)</span>.</p>
+<div id="exm-fed-project-dir">
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">data/</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span><span class="ex">──</span> analysis/</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> derived/</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ex">└──</span> original/</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">└──</span> federalist_papers/</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>        <span class="ex">└──</span> main.html</span></code></pre></div>
+</div>
+<!-- Scraping URLs -->
+<p>Now, we also want to scrape the HTML that contains of the pages corresponding to the 85 Federalist Papers. Perusing the main page we can see that papers are organized into nine groups, <em>e.g.</em> "Federalist Nos. 1-10". So our aim will be to scrape the HTML for each of these nine pages. We can do this using the <code>rvest</code> package, but we need to identify the HTML elements that contain the URLs first in the main webpage we have in <code>html</code>.</p>
+<!-- Inspect HTML -->
+<p>To do this it is helpful to use a browser to inspect specific elements of the webpage, much as we did in the toy example in <span class="citation">(<a href="#ref-exm-html-structure" role="doc-biblioref"><strong>exm-html-structure?</strong></a>)</span>. To view the raw and displayed HTML, your browser will be equipped with a command that you can enable by hovering your mouse over the element of the page you want to target and using a right click to select "Inspect" (Chrome) or "Inspect Element" (Safari, Brave). This will split your browser window vertical or horizontally showing you the displayed and raw HTML underlying the webpage.</p>
+<p>We can see the HTML elements that contain the URLs in <span class="citation">(<a href="#ref-fig-fed-inspect" role="doc-biblioref"><strong>fig-fed-inspect?</strong></a>)</span>.</p>
+<!-- screenshot of inspecting HTML -->
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:fig-fed-inspect"></span>
+<img src="assets/images/guide-7/fed-papers-loc-inspect.png" alt="Screenshot of the HTML elements containing the URLs for the Federalist Papers" width="100%"><p class="caption">
+Figure 3: Screenshot of the HTML elements containing the URLs for the Federalist Papers
+</p>
+</div>
+<p>Let's take a closer look at the source HTML in <span class="citation">(<a href="#ref-fig-fed-inspect-source" role="doc-biblioref"><strong>fig-fed-inspect-source?</strong></a>)</span> so we can inspect the elements that contain the URLs and divise a strategy for isolating them to be extracted.</p>
+<!-- screenshot of inpecting source HTML -->
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:fig-fed-inspect-source"></span>
+<img src="assets/images/guide-7/fed-papers-loc-inspect-source.png" alt="Screenshot of the source HTML for the Federalist Papers" width="100%"><p class="caption">
+Figure 4: Screenshot of the source HTML for the Federalist Papers
+</p>
+</div>
+<p>In <span class="citation">(<a href="#ref-fig-fed-inspect-source" role="doc-biblioref"><strong>fig-fed-inspect-source?</strong></a>)</span> we can see that the HTML elements that contain the URLs are nested within a <code>&lt;ul&gt;</code> element. The <code>&lt;ul&gt;</code> element has a set of class attributes (<code>.s-lg-subtab-ul</code>, <code>nav</code>, <code>nav-pills</code>, <code>nav-stacked</code>). If one of these is unique to this <code>&lt;ul&gt;</code> element we can use it to isolate the element. Let's search the HTML for all the <code>&lt;ul&gt;</code> elements on the page.</p>
+<div id="exm-fed-papers-loc-url-ul">
+<pre><code><span><span class="co">## {xml_nodeset (4)}</span></span>
+<span><span class="co">## [1] &lt;ul class="nav nav-pills nav-stacked split-button-nav" role="menu"&gt;\n&lt;li  ...</span></span>
+<span><span class="co">## [2] &lt;ul class="s-lg-subtab-ul nav nav-pills nav-stacked"&gt;\n&lt;li class=""&gt;&lt;a ti ...</span></span>
+<span><span class="co">## [3] &lt;ul id="s-lg-page-prevnext" class="pager s-lib-hide"&gt;\n&lt;li class="previou ...</span></span>
+<span><span class="co">## [4] &lt;ul id="s-lg-guide-header-attributes" class=""&gt;\n&lt;li id="s-lg-guide-heade ...</span></span></code></pre>
+</div>
+<p>The output from <span class="citation">(<a href="#ref-exm-fed-papers-loc-url-ul" role="doc-biblioref"><strong>exm-fed-papers-loc-url-ul?</strong></a>)</span> shows that there are 4 <code>&lt;ul&gt;</code> elements on the page. It's a little hard to see in the output, but the second <code>&lt;ul&gt;</code> element is the one we are targeting, as it contains the class attributes we identified in <span class="citation">(<a href="#ref-fig-fed-inspect-source" role="doc-biblioref"><strong>fig-fed-inspect-source?</strong></a>)</span>. We can use the <code>html_attr()</code> function to extract the <code>class</code> attribute from the <code>&lt;ul&gt;</code> elements to see if one of them is unique to the <code>&lt;ul&gt;</code> element we want to isolate.</p>
+<div id="exm-fed-papers-loc-url-ul-class">
+<pre><code><span><span class="co">## [1] "nav nav-pills nav-stacked split-button-nav"</span></span>
+<span><span class="co">## [2] "s-lg-subtab-ul nav nav-pills nav-stacked"  </span></span>
+<span><span class="co">## [3] "pager s-lib-hide"                          </span></span>
+<span><span class="co">## [4] ""</span></span></code></pre>
+</div>
+<p>Effectively this is the case, as the second <code>&lt;ul&gt;</code> element in the output of <span class="citation">(<a href="#ref-exm-fed-papers-loc-url-ul-class" role="doc-biblioref"><strong>exm-fed-papers-loc-url-ul-class?</strong></a>)</span> has a unique class attribute, <code>.s-lg-subtab-ul</code>. We can use this to isolate the element using the <code>html_nodes()</code> function. We then pipe this to another <code>html_nodes()</code> function to isolate the <code>&lt;li&gt;</code> elements nested within the <code>&lt;ul&gt;</code> element. See <span class="citation">(<a href="#ref-exm-fed-papers-loc-url-ul-class-s-lg-subtab-ul" role="doc-biblioref"><strong>exm-fed-papers-loc-url-ul-class-s-lg-subtab-ul?</strong></a>)</span>.</p>
+<div id="exm-fed-papers-loc-url-ul-class-s-lg-subtab-ul">
+<pre><code><span><span class="co">## {xml_nodeset (9)}</span></span>
+<span><span class="co">## [1] &lt;li class=""&gt;&lt;a title="" href="https://guides.loc.gov/federalist-papers/t ...</span></span>
+<span><span class="co">## [2] &lt;li class=""&gt;&lt;a title="" href="https://guides.loc.gov/federalist-papers/t ...</span></span>
+<span><span class="co">## [3] &lt;li class=""&gt;&lt;a title="" href="https://guides.loc.gov/federalist-papers/t ...</span></span>
+<span><span class="co">## [4] &lt;li class=""&gt;&lt;a title="" href="https://guides.loc.gov/federalist-papers/t ...</span></span>
+<span><span class="co">## [5] &lt;li class=""&gt;&lt;a title="" href="https://guides.loc.gov/federalist-papers/t ...</span></span>
+<span><span class="co">## [6] &lt;li class=""&gt;&lt;a title="" href="https://guides.loc.gov/federalist-papers/t ...</span></span>
+<span><span class="co">## [7] &lt;li class=""&gt;&lt;a title="" href="https://guides.loc.gov/federalist-papers/t ...</span></span>
+<span><span class="co">## [8] &lt;li class=""&gt;&lt;a title="" href="https://guides.loc.gov/federalist-papers/t ...</span></span>
+<span><span class="co">## [9] &lt;li class=""&gt;&lt;a title="" href="https://guides.loc.gov/federalist-papers/t ...</span></span></code></pre>
+</div>
+<p>Great. Now, to get the URLs we add another <code>html_nodes()</code> function to <span class="citation">(<a href="#ref-exm-fed-papers-loc-url-ul-class-s-lg-subtab-ul" role="doc-biblioref"><strong>exm-fed-papers-loc-url-ul-class-s-lg-subtab-ul?</strong></a>)</span> to isolate the <code>&lt;a&gt;</code> elements nested within the <code>&lt;li&gt;</code> elements and then a function <code>html_attr()</code> to extract the value of an attribute. In this case, the attribute of the <code>&lt;a&gt;</code> elements we want is <code>href</code>. See <span class="citation">(<a href="#ref-exm-fed-papers-loc-url-ul-li-a" role="doc-biblioref"><strong>exm-fed-papers-loc-url-ul-li-a?</strong></a>)</span>.</p>
+<div id="exm-fed-papers-loc-url-ul-li-a">
+<pre><code><span><span class="co">## [1] "https://guides.loc.gov/federalist-papers/text-1-10" </span></span>
+<span><span class="co">## [2] "https://guides.loc.gov/federalist-papers/text-11-20"</span></span>
+<span><span class="co">## [3] "https://guides.loc.gov/federalist-papers/text-21-30"</span></span>
+<span><span class="co">## [4] "https://guides.loc.gov/federalist-papers/text-31-40"</span></span>
+<span><span class="co">## [5] "https://guides.loc.gov/federalist-papers/text-41-50"</span></span>
+<span><span class="co">## [6] "https://guides.loc.gov/federalist-papers/text-51-60"</span></span>
+<span><span class="co">## [7] "https://guides.loc.gov/federalist-papers/text-61-70"</span></span>
+<span><span class="co">## [8] "https://guides.loc.gov/federalist-papers/text-71-80"</span></span>
+<span><span class="co">## [9] "https://guides.loc.gov/federalist-papers/text-81-85"</span></span></code></pre>
+</div>
+<p>We can assign the URLs to a variable, <code>fed_urls</code>.</p>
+<p>With the URLs in hand, we can now retrieve the HTML for each of the nine pages. We can, of course, do this manually, as in <span class="citation">(<a href="#ref-exm-fed-papers-rewrite-html-manual" role="doc-biblioref"><strong>exm-fed-papers-rewrite-html-manual?</strong></a>)</span>.</p>
+<div id="exm-fed-papers-rewrite-html-manual">
+
+</div>
+<p>But this is tedious and error prone, furthermore, it doesn't scale well. If we had 1000 URLs to retrieve the HTML from, we would have to write 1000 lines of code. Instead, we can write a function to do this for us. See <span class="citation">(<a href="#ref-exm-fed-papers-rewrite-function" role="doc-biblioref"><strong>exm-fed-papers-rewrite-function?</strong></a>)</span>.</p>
+<div id="exm-fed-papers-rewrite-function">
+
+</div>
+<p>The function in <span class="citation">(<a href="#ref-exm-fed-papers-rewrite-function" role="doc-biblioref"><strong>exm-fed-papers-rewrite-function?</strong></a>)</span> takes a URL as it's only argument. It then creates a file name and path from the URL. The file name is the last part of the URL, with the extension <code>.html</code>. The file path is the path to the <code>federalist_papers</code> directory in the <code>data/original</code> directory. The function then reads the HTML from the URL and writes it to the file.</p>
+<p><span class="citation">(<a href="#ref-exm-fed-papers-rewrite-function" role="doc-biblioref"><strong>exm-fed-papers-rewrite-function?</strong></a>)</span> might not seem like a step up from <span class="citation">(<a href="#ref-exm-fed-papers-rewrite-html-manual" role="doc-biblioref"><strong>exm-fed-papers-rewrite-html-manual?</strong></a>)</span>, but it is. We can now use the <code>walk()</code> function from <code>purrr</code> to iterate over the URLs in <code>fed_urls</code> and apply the <code>read_write_html()</code> function to each URL. See <span class="citation">(<a href="#ref-exm-fed-papers-rewrite-map" role="doc-biblioref"><strong>exm-fed-papers-rewrite-map?</strong></a>)</span>.</p>
+<div id="exm-fed-papers-rewrite-map">
+
+</div>
+<div class="callout">
+<p><strong>{{&lt; fa regular hand-point-up &gt;}} Tip</strong></p>
+<p>When processing multiple webpages, it's often important to manage the load on the server. In R, we can use the <code><a href="https://rdrr.io/r/base/Sys.sleep.html" class="external-link">Sys.sleep()</a></code> to introduce short delays between requests. This helps reduce server load when iterating over a list of webpages.</p>
+<p>For example, we can use <code>Sys.sleep(1)</code> in our function to introduce a 1 second delay between requests.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">read_write_html</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">url</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html" class="external-link">Sys.sleep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="co"># 1 second delay</span></span>
+<span>  <span class="co"># ...</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>Another tip is to use the <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code> function to print a status message to the console. This can be helpful when processing a large number of webpages.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">read_write_html</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">url</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html" class="external-link">Sys.sleep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="co"># 1 second delay</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Processing "</span>, <span class="va">url</span><span class="op">)</span> <span class="co"># Prints: "Processing https://www.example.com"</span></span>
+<span>  <span class="co"># ...</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<p>The result of <span class="citation">(<a href="#ref-exm-fed-papers-rewrite-map" role="doc-biblioref"><strong>exm-fed-papers-rewrite-map?</strong></a>)</span> can be seen in the project directory in <span class="citation">(<a href="#ref-exm-fed-papers-directory" role="doc-biblioref"><strong>exm-fed-papers-directory?</strong></a>)</span>.</p>
+<div id="exm-fed-papers-directory">
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">data/</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span><span class="ex">--</span> analysis/</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">|</span><span class="ex">--</span> derived/</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="ex">└──</span> original/</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">└──</span> federalist_papers/</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">|</span><span class="ex">--</span> main.html</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">|</span><span class="ex">--</span> text-1-10.html</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>        <span class="kw">|</span><span class="ex">--</span> text-11-20.html</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">|</span><span class="ex">--</span> text-21-30.html</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">|</span><span class="ex">--</span> text-31-40.html</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>        <span class="kw">|</span><span class="ex">--</span> text-41-50.html</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>        <span class="kw">|</span><span class="ex">--</span> text-51-60.html</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>        <span class="kw">|</span><span class="ex">--</span> text-61-70.html</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>        <span class="kw">|</span><span class="ex">--</span> text-71-80.html</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>        <span class="ex">└──</span> text-81-85.html</span></code></pre></div>
+</div>
+<p>And of course, to finish the acquisition process, we need to ensure we have documented the code and created a data origin file. Since we have created this resource it much of the information will be up to use to document. Keep in mind that the data origin file should be written in a way that is transparent to the researcher and to would-be collaborators and the general research community.</p>
+<!-- Summary: tech and help -->
+<p>In this section, we have built on previously introduced R coding concepts and employed various others in the process of acquiring data from the web. We have also considered topics that are more general in nature and concern interacting with data found on the internet. As you likely appreciate, web scraping often requires more knowledge of and familiarity with R as well as other web technologies. Rest assured, however, practice will increase confidence in your abilities. I encourage you to practice on your own with other websites.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="custom-built">Custom-built<a class="anchor" aria-label="anchor" href="#custom-built"></a>
+<h2 id="curate-data">Curate data<a class="anchor" aria-label="anchor" href="#curate-data"></a>
 </h2>
 <div class="section level3">
-<h3 id="application-programming-interfaces-apis">Application programming interfaces (APIs)<a class="anchor" aria-label="anchor" href="#application-programming-interfaces-apis"></a>
+<h3 id="orientation">Orientation<a class="anchor" aria-label="anchor" href="#orientation"></a>
 </h3>
-<p>There are many APIs available for accessing language corpora and datasets. Below I've included a few of the R packages that provide access to these resources.</p>
-<table class="table">
-<caption>
-<span id="tab:pinboard-apis">Table 4: </span>R Package APIs to language corpora and datasets.)
-</caption>
+<p>To provide an example of the curation process using semi-structured data, we will work with the Federalist Papers data acquired from a web scrape of the Library of Congress website in <span class="citation">(<a href="#ref-sec-acquire-data" role="doc-biblioref"><strong>sec-acquire-data?</strong></a>)</span>. The data is stored in a series of HTML files, as seen in <span class="citation">(<a href="#ref-exm-cd-federalist-data-files" role="doc-biblioref"><strong>exm-cd-federalist-data-files?</strong></a>)</span>.</p>
+<div id="exm-cd-federalist-data-files">
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">data/</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> analysis/</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> derived/</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="ex">└──</span> original/</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│──</span> fed_papers_do.csv</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">└──</span> federalist_papers/</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> main.html</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> text-1-10.html</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> text-11-20.html</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> text-21-30.html</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> text-31-40.html</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> text-41-50.html</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> text-51-60.html</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> text-61-70.html</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> text-71-80.html</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>        <span class="ex">└──</span> text-81-85.html</span></code></pre></div>
+</div>
+<p>Our data origin file, <em>fed_papers_do.csv</em> in <span class="citation">(<a href="#ref-tbl-cd-fed-data-origin" role="doc-biblioref"><strong>tbl-cd-fed-data-origin?</strong></a>)</span>, gives us an overview of the data.</p>
+<table class="table table" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
-Resource
+attribute
 </th>
 <th style="text-align:left;">
-Description
+description
 </th>
 </tr></thead>
 <tbody>
 <tr>
 <td style="text-align:left;">
-&lt;a href="<a href="https://langcog.github.io/wordbankr/index.html%22%3EAccessing" class="external-link uri">https://langcog.github.io/wordbankr/index.html"&gt;Accessing</a> the Wordbank Database • wordbankr&lt;/a&gt;
+Resource name
 </td>
 <td style="text-align:left;">
-Connecting to Wordbank, an open repository for developmental vocabulary data.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="https://ropensci.org/tutorials/arxiv_tutorial.html%22%3EaRxiv%3C/a%3E" class="external-link uri">https://ropensci.org/tutorials/arxiv_tutorial.html"&gt;aRxiv&lt;/a&gt;</a>;
-</td>
-<td style="text-align:left;">
-R package interface to query arXiv, a repository of electronic preprints for computer science, mathematics, physics, quantitative biology, quantitative finance, and statistics.
+The Federalist Papers
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-&lt;a href="<a href="https://github.com/ropensci/crminer%22%3Ecrminer%3C/a%3E" class="external-link uri">https://github.com/ropensci/crminer"&gt;crminer&lt;/a&gt;</a>;
+Data source
 </td>
 <td style="text-align:left;">
-R package interface focusing on getting the user full text via the Crossref search API.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="https://github.com/ropensci/dvn%22%3Edvn%3C/a%3E" class="external-link uri">https://github.com/ropensci/dvn"&gt;dvn&lt;/a&gt;</a>;
-</td>
-<td style="text-align:left;">
-R package interface to access to the Dataverse Network APIs.
+<a href="https://guides.loc.gov/federalist-papers/full-text" class="external-link uri">https://guides.loc.gov/federalist-papers/full-text</a>, Library of Congress Research Guides
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-&lt;a href="<a href="https://ropensci.org/tutorials/fulltext_tutorial.html%22%3Efulltext%3C/a%3E" class="external-link uri">https://ropensci.org/tutorials/fulltext_tutorial.html"&gt;fulltext&lt;/a&gt;</a>;
+Data sampling frame
 </td>
 <td style="text-align:left;">
-R package interface to query open access journals, such as PLOS.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="https://ropensci.org/tutorials/gutenbergr_tutorial.html%22%3Egutenbergr%3C/a%3E" class="external-link uri">https://ropensci.org/tutorials/gutenbergr_tutorial.html"&gt;gutenbergr&lt;/a&gt;</a>;
-</td>
-<td style="text-align:left;">
-R package interface to download and process public domain works from the Project Gutenberg collection.
+Full texts of the 85 Federalist Papers as available on the mentioned URL, including all documents authored by Alexander Hamilton, James Madison, and John Jay.
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-&lt;a href="<a href="https://ropensci.org/tutorials/internetarchive_tutorial.html%22%3Einternetarchive%3C/a%3E" class="external-link uri">https://ropensci.org/tutorials/internetarchive_tutorial.html"&gt;internetarchive&lt;/a&gt;</a>;
+Data collection date(s)
 </td>
 <td style="text-align:left;">
-R package interface to query the Internet Archive.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="https://github.com/hrbrmstr/newsflash%22%3Enewsflash%3C/a%3E" class="external-link uri">https://github.com/hrbrmstr/newsflash"&gt;newsflash&lt;/a&gt;</a>;
-</td>
-<td style="text-align:left;">
-R package interface to query the Internet Archive and GDELT Television Explorer
+Web scrape performed August 9, 2023
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-&lt;a href="<a href="https://github.com/ropensci/oai%22%3Eoai%3C/a%3E" class="external-link uri">https://github.com/ropensci/oai"&gt;oai&lt;/a&gt;</a>;
+Data format
 </td>
 <td style="text-align:left;">
-R package interface to query any OAI-PMH repository, including Zenodo.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="https://github.com/ropensci/rfigshare%22%3Erfigshare%3C/a%3E" class="external-link uri">https://github.com/ropensci/rfigshare"&gt;rfigshare&lt;/a&gt;</a>;
-</td>
-<td style="text-align:left;">
-R package interface to query the data sharing platform FigShare.
+Raw HTML files
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-&lt;a href="<a href="https://github.com/ropensci/rtweet%22%3Ertweet%3C/a%3E" class="external-link uri">https://github.com/ropensci/rtweet"&gt;rtweet&lt;/a&gt;</a>;
+Data schema
 </td>
 <td style="text-align:left;">
-R client for interacting with Twitter's APIs
+The 85 papers are grouped in 9 HTML files (e.g. text-1-10.html)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+License
+</td>
+<td style="text-align:left;">
+Public Domain
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Attribution
+</td>
+<td style="text-align:left;">
+Research Guides: Federalist Papers: Primary Documents in American History: Introduction. (n.d.). Library of Congress Research Guides. Retrieved August 9, 2023, from <a href="https://guides.loc.gov/federalist-papers/introduction" class="external-link uri">https://guides.loc.gov/federalist-papers/introduction</a>
 </td>
 </tr>
 </tbody>
 </table>
+<p>From the file structure and the data origin description, we can surmise that we are working with HTML files which will contain the 85 Federalist Papers. The 85 papers are grouped into 9 files, meaning that for each file there will be multiple papers contained within. We can also see that the HTML files are named according to the range of papers contained within each file. For example, the <em>text-1-10.html</em> file contains the first 10 papers.</p>
+<p>It is also a good idea to inspect the data files themselves. Since these are HTML files, we can open them in a web browser. <span class="citation">(<a href="#ref-fig-cd-federalist-html" role="doc-biblioref"><strong>fig-cd-federalist-html?</strong></a>)</span> shows the <em>text-1-10.html</em> file opened in a web browser.</p>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:fig-cd-federalist-html"></span>
+<img src="assets/images/guide-7/fed-papers-text-1-10.png" alt="The *text-1-10.html* file opened in a web browser." width="100%"><p class="caption">
+Figure 5: The <em>text-1-10.html</em> file opened in a web browser.
+</p>
 </div>
-</div>
-<div class="section level2">
-<h2 id="other-language-resources">Other language resources<a class="anchor" aria-label="anchor" href="#other-language-resources"></a>
-</h2>
-<p>Data for language research is not limited to (primary) text sources. Other sources may include processed data from previous research; word lists, linguistic features, <em>etc</em>.. Alone or in combination with text sources this data can be a rich and viable source of data for a research project.</p>
-<table class="table">
-<caption>
-<span id="tab:pinboard-other">Table 5: </span>Other language resources
-</caption>
+<p>At this point we want to think about what our curated dataset will look like in terms of rows and columns. For the columns, it is helpful to think about what variables we can extract from each of the Federalist Papers. For example, we can extract the paper number, the paper title, the paper's author(s), the venue in which the paper was published, and the paper's text. Of these variables, the paper number, title, and author(s) are metadata about the paper, while the venue is metadata about the publication of the paper, so we will leave venue out of our curated dataset.</p>
+<p>For the rows, we can think about what the unit of analysis is. If we want to conduct a text analysis of the Federalist Papers to predict the author of the paper based on features of the text, then the unit of analysis will be the paper. Now, we can envision a case in which each row is a paper, but to may be the case that the structure of the papers, namely the paragraphs, could be of some use to us. We will keep this in mind as we work through the curation process.</p>
+<p>With this information in mind, an idealized version of our curated dataset is shown in <span class="citation">(<a href="#ref-tbl-cd-fed-data-idealized" role="doc-biblioref"><strong>tbl-cd-fed-data-idealized?</strong></a>)</span>.</p>
+<table class="table table" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
-Resource
+number
 </th>
 <th style="text-align:left;">
-Description
+title
+</th>
+<th style="text-align:left;">
+author
+</th>
+<th style="text-align:left;">
+text
 </th>
 </tr></thead>
 <tbody>
 <tr>
 <td style="text-align:left;">
-&lt;a href="<a href="http://elexicon.wustl.edu/WordStart.asp%22%3EEnglish" class="external-link uri">http://elexicon.wustl.edu/WordStart.asp"&gt;English</a> Lexicon Project&lt;/a&gt;
+1
 </td>
 <td style="text-align:left;">
-Access to a large set of lexical characteristics, along with behavioral data from visual lexical decision and naming studies.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="https://grambank.clld.org/%22%3EGrambank%3C/a%3E" class="external-link uri">https://grambank.clld.org/"&gt;Grambank&lt;/a&gt;</a>;
+...
 </td>
 <td style="text-align:left;">
-Grambank, the result of a collaboration involving 100+ linguists, examines a range of grammatical phenomena, “from word order to verbal tense, nominal plurals, and many other well-studied comparative linguistic variables.” The project’s dataset, available to download and explore online, spans 195 such features across 2,400+ languages and dialects. For instance, here’s the page for feature GB030, which asks, “Is there a gender distinction in independent 3rd person pronouns?” [h/t Robin Sloan]
+...
+</td>
+<td style="text-align:left;">
+...
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-&lt;a href="<a href="https://phoible.org/%22%3EPHOIBLE%3C/a%3E" class="external-link uri">https://phoible.org/"&gt;PHOIBLE&lt;/a&gt;</a>;
+2
 </td>
 <td style="text-align:left;">
-PHOIBLE is a repository of cross-linguistic phonological inventory data, which have been extracted from source documents and tertiary databases and compiled into a single searchable convenience sample. Release 2.0 from 2019 includes 3020 inventories that contain 3183 segment types found in 2186 distinct languages.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="https://sites.miamioh.edu/meyersde/the-collective-noun-catalog/%22%3EThe" class="external-link uri">https://sites.miamioh.edu/meyersde/the-collective-noun-catalog/"&gt;The</a> Collective Noun Catalog&lt;/a&gt;
+...
 </td>
 <td style="text-align:left;">
-Daniel E. Meyers (Miami University) has put together a large list of collective nouns
+...
+</td>
+<td style="text-align:left;">
+...
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-&lt;a href="<a href="https://nyu-mll.github.io/CoLA/%22%3EThe" class="external-link uri">https://nyu-mll.github.io/CoLA/"&gt;The</a> Corpus of Linguistic Acceptability (CoLA)&lt;/a&gt;
+...
 </td>
 <td style="text-align:left;">
-A corpus that consists of 10657 sentences from 23 linguistics publications, expertly annotated for acceptability (grammaticality) by their original authors.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-&lt;a href="<a href="http://icon.shef.ac.uk/Moby/%22%3EThe" class="external-link uri">http://icon.shef.ac.uk/Moby/"&gt;The</a> Moby lexicon project&lt;/a&gt;
+...
 </td>
 <td style="text-align:left;">
-Language wordlists and resources from the Moby project.
+...
+</td>
+<td style="text-align:left;">
+...
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-&lt;a href="<a href="https://github.com/ropensci/lingtypology%22%3Elingtypology%3C/a%3E" class="external-link uri">https://github.com/ropensci/lingtypology"&gt;lingtypology&lt;/a&gt;</a>;
+85
 </td>
 <td style="text-align:left;">
-R package interface to connect with the Glottolog database and provides additional functionality for linguistic mapping.
+...
+</td>
+<td style="text-align:left;">
+...
+</td>
+<td style="text-align:left;">
+...
 </td>
 </tr>
 </tbody>
 </table>
 </div>
+<div class="section level3">
+<h3 id="tidy-the-data">Tidy the data<a class="anchor" aria-label="anchor" href="#tidy-the-data"></a>
+</h3>
+<p>The idealized dataset structure will guide our work. To extract the data and metadata from the files we will need to take a closer look at the structure of the HTML documents. We start with the HTML file we opened in a browser in <span class="citation">(<a href="#ref-fig-cd-federalist-html" role="doc-biblioref"><strong>fig-cd-federalist-html?</strong></a>)</span> and look at the HTML source code with the browser's inspect tool. <span class="citation">(<a href="#ref-fig-cd-federalist-html-inspect" role="doc-biblioref"><strong>fig-cd-federalist-html-inspect?</strong></a>)</span> shows the HTML source code for the first paper in the <em>text-1-10.html</em> file.</p>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:fig-cd-federalist-html-inspect"></span>
+<img src="assets/images/guide-7/fed-papers-text-1-10-inspect-1.png" alt="The HTML source code for the first paper in the *text-1-10.html* file." width="100%"><p class="caption">
+Figure 6: The HTML source code for the first paper in the <em>text-1-10.html</em> file.
+</p>
+</div>
+<p>The structure of the HTML files suggests that the desired content is within a <code>div</code> tag, which forms a kind of box around each paper. There are multiple <code>div</code> tags in the file, so we will need to find a way to identify the <code>div</code> tag that contains the desired content, and only this content. We can see that the <code>div</code> tag we want has two <code>class</code> attributes, <code>s-lib-box s-lib-box-std</code>. This <code>div</code> tag contains a <code>h2</code> tag where the paper number appears. The first <code>p</code> tag contains the title of the paper. The second <code>p</code> tag contains the venue for the paper. The third <code>p</code> tag contains the author of the paper. The remaining <code>p</code> tags contain the text of the paper. A closer view of the <code>div</code> tag is shown in <span class="citation">(<a href="#ref-fig-cd-federalist-html-inspect-2" role="doc-biblioref"><strong>fig-cd-federalist-html-inspect-2?</strong></a>)</span>.</p>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:fig-cd-federalist-html-inspect-2"></span>
+<img src="assets/images/guide-7/fed-papers-text-1-10-inspect-2.png" alt="A closer view of the `div` tag containing the first paper in the *text-1-10.html* file." width="100%"><p class="caption">
+Figure 7: A closer view of the <code>div</code> tag containing the first paper in the <em>text-1-10.html</em> file.
+</p>
+</div>
+<p>Let's read in the <em>text-1-10.html</em> file and use it as a testing ground for extracting the relevant information. Load the <code>rvest</code> package and read in the file with <code>read_html()</code>, as in <span class="citation">(<a href="#ref-exm-cd-federalist-html" role="doc-biblioref"><strong>exm-cd-federalist-html?</strong></a>)</span>.</p>
+<div id="exm-cd-federalist-html">
+<pre><code><span><span class="co">## {html_document}</span></span>
+<span><span class="co">## &lt;html lang="en"&gt;</span></span>
+<span><span class="co">## [1] &lt;head&gt;\n&lt;meta http-equiv="X-UA-Compatible" content="IE=Edge"&gt;\n&lt;meta http ...</span></span>
+<span><span class="co">## [2] &lt;body class="s-lg-guide-body"&gt;\r\n&lt;a id="s-lg-public-skiplink" class="ale ...</span></span></code></pre>
+</div>
+<p>Given what we discovered in the HTML inspection, let's extract the <code>div</code> tags with the <code>s-lib-box s-lib-box-std</code> class attributes. We can use the <code>html_elements()</code> function to extract the <code>div</code> tags and the append <code>.s-lib-box.s-lib-box-std</code> to the <code>html_elements()</code> function to specify the class attributes. <span class="citation">(<a href="#ref-exm-cd-federalist-html-div" role="doc-biblioref"><strong>exm-cd-federalist-html-div?</strong></a>)</span> shows the result assigned to an object called <code>fed_divs</code>.</p>
+<div id="exm-cd-federalist-html-div">
+<pre><code><span><span class="co">##  [1] "s-lib-box s-lib-box-std s-lib-floating-box"</span></span>
+<span><span class="co">##  [2] "s-lib-box s-lib-box-std"                   </span></span>
+<span><span class="co">##  [3] "s-lib-box s-lib-box-std"                   </span></span>
+<span><span class="co">##  [4] "s-lib-box s-lib-box-std"                   </span></span>
+<span><span class="co">##  [5] "s-lib-box s-lib-box-std"                   </span></span>
+<span><span class="co">##  [6] "s-lib-box s-lib-box-std"                   </span></span>
+<span><span class="co">##  [7] "s-lib-box s-lib-box-std"                   </span></span>
+<span><span class="co">##  [8] "s-lib-box s-lib-box-std"                   </span></span>
+<span><span class="co">##  [9] "s-lib-box s-lib-box-std"                   </span></span>
+<span><span class="co">## [10] "s-lib-box s-lib-box-std"                   </span></span>
+<span><span class="co">## [11] "s-lib-box s-lib-box-std"</span></span></code></pre>
+</div>
+<p>Using the <code>html_attr("class")</code> function we can see that the <code>fed_divs</code> object for this file contains 11 <code>div</code> tags, all the <code>div</code> tags we want, and one we don't which also includes the <code>s-lib-floating-box</code> class. We can exclude it by adding <code>:not(.s-lib-floating-box)</code> to the CSS selector. But it is worth checking out one or two other HTML files to see if this is a consistent pattern.</p>
+<p>On inspection of other HTML files in our data, it turns out that only our first HTML file has the <code>.s-lib-floating-box</code> class. So a CSS solution might not be the way to go. An alternative, R-side solution is to use the <code>div.s-lib-box</code>, from above, and then subset the <code>fed_divs</code> vector to exclude the first element, which is where the extract <code>div</code> tag is located. <span class="citation">(<a href="#ref-exm-cd-federalist-html-div-subset" role="doc-biblioref"><strong>exm-cd-federalist-html-div-subset?</strong></a>)</span> shows the result assigned to an object called <code>fed_divs</code>.</p>
+<div id="exm-cd-federalist-html-div-subset">
+
+</div>
+<p>Assuming for the moment that the solution in <span class="citation">(<a href="#ref-exm-cd-federalist-html-div-subset" role="doc-biblioref"><strong>exm-cd-federalist-html-div-subset?</strong></a>)</span> is the way to go, we can move forward to extract the paper number, title, author, and text from each <code>div</code> tag in <code>fed_divs</code>. We can use the <code>html_elements()</code> function to extract the <code>h2</code> tag, which contains the paper number, and later work with the <code>p</code> tags, which contain the title, author, and text.</p>
+<p>We've already isolated the relevant <code>div</code> tags, so using the <code>fed_divs</code> object we can now continue to use the <code>html_elements()</code> function to extract HTML elements within. The paper number is in a <code>h2</code> tag, immediately after the <code>div</code> tag. We can use the <code>html_element()</code> function to extract a single <code>h2</code> tag for each <code>div</code> in <code>fed_divs</code>, as in <span class="citation">(<a href="#ref-exm-cd-federalist-html-h2" role="doc-biblioref"><strong>exm-cd-federalist-html-h2?</strong></a>)</span>.</p>
+<div id="exm-cd-federalist-html-h2">
+<pre><code><span><span class="co">## {xml_nodeset (10)}</span></span>
+<span><span class="co">##  [1] &lt;h2 class="s-lib-box-title"&gt;Federalist No. 1\n                           ...</span></span>
+<span><span class="co">##  [2] &lt;h2 class="s-lib-box-title"&gt;Federalist No. 2\n                           ...</span></span>
+<span><span class="co">##  [3] &lt;h2 class="s-lib-box-title"&gt;Federalist No. 3\n                           ...</span></span>
+<span><span class="co">##  [4] &lt;h2 class="s-lib-box-title"&gt;Federalist No. 4\n                           ...</span></span>
+<span><span class="co">##  [5] &lt;h2 class="s-lib-box-title"&gt;Federalist No. 5\n                           ...</span></span>
+<span><span class="co">##  [6] &lt;h2 class="s-lib-box-title"&gt;Federalist No. 6\n                           ...</span></span>
+<span><span class="co">##  [7] &lt;h2 class="s-lib-box-title"&gt;Federalist No. 7\n                           ...</span></span>
+<span><span class="co">##  [8] &lt;h2 class="s-lib-box-title"&gt;Federalist No. 8\n                           ...</span></span>
+<span><span class="co">##  [9] &lt;h2 class="s-lib-box-title"&gt;Federalist No. 9\n                           ...</span></span>
+<span><span class="co">## [10] &lt;h2 class="s-lib-box-title"&gt;Federalist No. 10\n                          ...</span></span></code></pre>
+</div>
+<p>The result is a vector which contains the <code>h2</code> tag for each <code>div</code> tag in <code>fed_divs</code>, complete with all the HTML tags and attributes. We can use the <code>html_text()</code> function to extract the text from the <code>h2</code> tag, as in <span class="citation">(<a href="#ref-exm-cd-federalist-html-h2-text" role="doc-biblioref"><strong>exm-cd-federalist-html-h2-text?</strong></a>)</span>.</p>
+<div id="exm-cd-federalist-html-h2-text">
+<pre><code><span><span class="co">##  [1] "Federalist No. 1"  "Federalist No. 2"  "Federalist No. 3" </span></span>
+<span><span class="co">##  [4] "Federalist No. 4"  "Federalist No. 5"  "Federalist No. 6" </span></span>
+<span><span class="co">##  [7] "Federalist No. 7"  "Federalist No. 8"  "Federalist No. 9" </span></span>
+<span><span class="co">## [10] "Federalist No. 10"</span></span></code></pre>
+</div>
+<p>I included the <code>str_trim()</code> function from the <code>stringr</code> package to remove any potential whitespace from the text to the code in <span class="citation">(<a href="#ref-exm-cd-federalist-html-h2-text" role="doc-biblioref"><strong>exm-cd-federalist-html-h2-text?</strong></a>)</span>. The result is a vector of the paper numbers, which we can later leverage to create a new column in our dataset.</p>
+<p>Next, we can extract the <code>p</code> tags from the <code>fed_divs</code> object. The <code>p</code> tags contain the title, author, and text. As noted above, the first <code>p</code> tag inside each <code>div</code> tag contains the paper title. Targeting this <code>p</code> tag requires the use of a CSS selector, <code>:nth-child()</code>. This CSS selector allows us to arbitrarily select the <code>p</code> tag we want in the order it appears. In this case, we want the first <code>p</code> tag, so we can use <code>:nth-child(1)</code>. <span class="citation">(<a href="#ref-exm-cd-federalist-html-p-title" role="doc-biblioref"><strong>exm-cd-federalist-html-p-title?</strong></a>)</span> shows the result after extracting the text assigned to an object called <code>titles</code>.</p>
+<div id="exm-cd-federalist-html-p-title">
+<pre><code><span><span class="co">##  [1] "General Introduction"                                                                          </span></span>
+<span><span class="co">##  [2] "Concerning Dangers from Foreign Force and Influence"                                           </span></span>
+<span><span class="co">##  [3] "The Same Subject Continued: Concerning Dangers From Foreign Force and Influence"               </span></span>
+<span><span class="co">##  [4] "The Same Subject Continued: Concerning Dangers From Foreign Force and Influence"               </span></span>
+<span><span class="co">##  [5] "The Same Subject Continued: Concerning Dangers from Foreign Force and Influence"               </span></span>
+<span><span class="co">##  [6] "Concerning Dangers from Dissensions Between the States"                                        </span></span>
+<span><span class="co">##  [7] "The Same Subject Continued: Concerning Dangers from Dissensions Between the States"            </span></span>
+<span><span class="co">##  [8] "PUBLIUS."                                                                                      </span></span>
+<span><span class="co">##  [9] "The Consequences of Hostilities Between the States"                                            </span></span>
+<span><span class="co">## [10] "PUBLIUS."                                                                                      </span></span>
+<span><span class="co">## [11] "The Utility of the Union as a Safeguard Against Domestic Faction and Insurrection"             </span></span>
+<span><span class="co">## [12] "PUBLIUS."                                                                                      </span></span>
+<span><span class="co">## [13] "The Same Subject Continued: The Union as a Safeguard Against Domestic Faction and Insurrection"</span></span></code></pre>
+</div>
+<div class="callout">
+<p><strong>{{&lt; fa medal &gt;}} Dive deeper</strong></p>
+<p>CSS selectors are a powerful tool for extracting data from HTML files. The <code>:nth-child()</code> selector is just one of many. For more information on CSS selectors, see the <a href="https://www.w3schools.com/cssref/css_selectors.asp" class="external-link">W3Schools CSS Selector Reference</a>. The <code>rvest</code> package supports many, but not all CSS selectors. Consult the <code><a href="https://rvest.tidyverse.org/reference/html_element.html" class="external-link">rvest::html_elements()</a></code> documentation for more information.</p>
+</div>
+<p>We get a vector of length 13, not 10. Scanning the output we can see the most likely offender is the 'PUBLIUS.' text. We can exclude it by adding <code>:not(:contains("PUBLIUS."))</code> to the CSS selector, as in <span class="citation">(<a href="#ref-exm-cd-federalist-html-p-title-subset" role="doc-biblioref"><strong>exm-cd-federalist-html-p-title-subset?</strong></a>)</span>.</p>
+<div id="exm-cd-federalist-html-p-title-subset">
+<pre><code><span><span class="co">##  [1] "General Introduction"                                                                          </span></span>
+<span><span class="co">##  [2] "Concerning Dangers from Foreign Force and Influence"                                           </span></span>
+<span><span class="co">##  [3] "The Same Subject Continued: Concerning Dangers From Foreign Force and Influence"               </span></span>
+<span><span class="co">##  [4] "The Same Subject Continued: Concerning Dangers From Foreign Force and Influence"               </span></span>
+<span><span class="co">##  [5] "The Same Subject Continued: Concerning Dangers from Foreign Force and Influence"               </span></span>
+<span><span class="co">##  [6] "Concerning Dangers from Dissensions Between the States"                                        </span></span>
+<span><span class="co">##  [7] "The Same Subject Continued: Concerning Dangers from Dissensions Between the States"            </span></span>
+<span><span class="co">##  [8] "The Consequences of Hostilities Between the States"                                            </span></span>
+<span><span class="co">##  [9] "The Utility of the Union as a Safeguard Against Domestic Faction and Insurrection"             </span></span>
+<span><span class="co">## [10] "The Same Subject Continued: The Union as a Safeguard Against Domestic Faction and Insurrection"</span></span></code></pre>
+</div>
+<p>That works, but this solution is 'brittle', meaning that it potentially overspecific and could easily break. For example, if the text of the title happens to include 'PUBLIUS.' it will be excluded. Furthermore, if the extra <code>p</code> tag contains some other text other than 'PUBLIUS.' it will be included.</p>
+<p>We can make the solution more robust by looking for a more general solution. One possibility is to anchor the <code>p</code> tags to the <code>div</code> tag with the <code>.clearfix</code> class that appears directly above (<code>&gt;</code>) the <code>p</code> tags we want, as in <span class="citation">(<a href="#ref-exm-cd-federalist-html-p-title-subset-2" role="doc-biblioref"><strong>exm-cd-federalist-html-p-title-subset-2?</strong></a>)</span>.</p>
+<div id="exm-cd-federalist-html-p-title-subset-2">
+<pre><code><span><span class="co">##  [1] "General Introduction"                                                                          </span></span>
+<span><span class="co">##  [2] "Concerning Dangers from Foreign Force and Influence"                                           </span></span>
+<span><span class="co">##  [3] "The Same Subject Continued: Concerning Dangers From Foreign Force and Influence"               </span></span>
+<span><span class="co">##  [4] "The Same Subject Continued: Concerning Dangers From Foreign Force and Influence"               </span></span>
+<span><span class="co">##  [5] "The Same Subject Continued: Concerning Dangers from Foreign Force and Influence"               </span></span>
+<span><span class="co">##  [6] "Concerning Dangers from Dissensions Between the States"                                        </span></span>
+<span><span class="co">##  [7] "The Same Subject Continued: Concerning Dangers from Dissensions Between the States"            </span></span>
+<span><span class="co">##  [8] "The Consequences of Hostilities Between the States"                                            </span></span>
+<span><span class="co">##  [9] "The Utility of the Union as a Safeguard Against Domestic Faction and Insurrection"             </span></span>
+<span><span class="co">## [10] "The Same Subject Continued: The Union as a Safeguard Against Domestic Faction and Insurrection"</span></span></code></pre>
+</div>
+<p>Now we have our 10 titles. Moving on to the author, we would assume could use the same approach as above changing the <code>nth-child</code> argument to 3. However, inspecting the HTML reveals that the author is not always the third <code>p</code> tag, sometimes it is the second. What is consistent, however, is that the author is always preceded by the text 'Author:'. We can use the <code>:contains()</code> CSS selector to select the <code>p</code> tag that contains the text 'Author:'.</p>
+<div id="exm-cd-federalist-html-p-author">
+<pre><code><span><span class="co">##  [1] "Author: Alexander Hamilton" "Author: John Jay"          </span></span>
+<span><span class="co">##  [3] "Author: John Jay"           "Author: John Jay"          </span></span>
+<span><span class="co">##  [5] "Author: John Jay"           "Author: Alexander Hamilton"</span></span>
+<span><span class="co">##  [7] "Author: Alexander Hamilton" "Author: Alexander Hamilton"</span></span>
+<span><span class="co">##  [9] "Author: Alexander Hamilton" "Author: James Madison"</span></span></code></pre>
+</div>
+<p>With the result in <span class="citation">(<a href="#ref-exm-cd-federalist-html-p-author" role="doc-biblioref"><strong>exm-cd-federalist-html-p-author?</strong></a>)</span>, we have now been able to extract the paper number, title and author. Our dataset is taking shape, as we can appreciate in <span class="citation">(<a href="#ref-tbl-cd-federalist-html-dataset-preview" role="doc-biblioref"><strong>tbl-cd-federalist-html-dataset-preview?</strong></a>)</span>.</p>
+<table class="table table" style="margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;">
+number
+</th>
+<th style="text-align:left;">
+title
+</th>
+<th style="text-align:left;">
+author
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Federalist No. 1
+</td>
+<td style="text-align:left;">
+General Introduction
+</td>
+<td style="text-align:left;">
+Author: Alexander Hamilton
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Federalist No. 2
+</td>
+<td style="text-align:left;">
+Concerning Dangers from Foreign Force and Influence
+</td>
+<td style="text-align:left;">
+Author: John Jay
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Federalist No. 3
+</td>
+<td style="text-align:left;">
+The Same Subject Continued: Concerning Dangers From Foreign Force and Influence
+</td>
+<td style="text-align:left;">
+Author: John Jay
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Federalist No. 4
+</td>
+<td style="text-align:left;">
+The Same Subject Continued: Concerning Dangers From Foreign Force and Influence
+</td>
+<td style="text-align:left;">
+Author: John Jay
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Federalist No. 5
+</td>
+<td style="text-align:left;">
+The Same Subject Continued: Concerning Dangers from Foreign Force and Influence
+</td>
+<td style="text-align:left;">
+Author: John Jay
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Federalist No. 6
+</td>
+<td style="text-align:left;">
+Concerning Dangers from Dissensions Between the States
+</td>
+<td style="text-align:left;">
+Author: Alexander Hamilton
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Federalist No. 7
+</td>
+<td style="text-align:left;">
+The Same Subject Continued: Concerning Dangers from Dissensions Between the States
+</td>
+<td style="text-align:left;">
+Author: Alexander Hamilton
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Federalist No. 8
+</td>
+<td style="text-align:left;">
+The Consequences of Hostilities Between the States
+</td>
+<td style="text-align:left;">
+Author: Alexander Hamilton
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Federalist No. 9
+</td>
+<td style="text-align:left;">
+The Utility of the Union as a Safeguard Against Domestic Faction and Insurrection
+</td>
+<td style="text-align:left;">
+Author: Alexander Hamilton
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Federalist No. 10
+</td>
+<td style="text-align:left;">
+The Same Subject Continued: The Union as a Safeguard Against Domestic Faction and Insurrection
+</td>
+<td style="text-align:left;">
+Author: James Madison
+</td>
+</tr>
+</tbody>
+</table>
+<p>The last step is to extract the text of the paper. The contents of the papers are contained in the <code>p</code> tags that follow the <code>p</code> tag with the author. It would be nice to be able to target the <code>p</code> tags that follow the author <code>p</code> tag. However, there is no CSS selector that allows us to do this. An alternative is to read all the <code>p</code> tags in each <code>div.clearfix</code> tag and then select the <code>p</code> tags that follow the author <code>p</code> tag.</p>
+<p>This approach requires an additional step. We need to conduct this process for each paper in the HTML file separate</p>
+<p>the <code>str_which()</code> function to identify the index of the <code>p</code> tag that contains the author. We can then use the <code>str_subset()</code> function to select all the <code>p</code> tags that follow the author <code>p</code> tag.</p>
+<div id="exm-cd-federalist-html-p-text">
+
+</div>
+<pre><code><span><span class="co">## [1] "To the People of the State of New York:"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </span></span>
+<span><span class="co">## [2] "AFTER an unequivocal experience of the inefficiency of the subsisting federal government, you are called upon to deliberate on a new Constitution for the United States of America. The subject speaks its own importance; comprehending in its consequences nothing less than the existence of the UNION, the safety and welfare of the parts of which it is composed, the fate of an empire in many respects the most interesting in the world. It has been frequently remarked that it seems to have been reserved to the people of this country, by their conduct and example, to decide the important question, whether societies of men are really capable or not of establishing good government from reflection and choice, or whether they are forever destined to depend for their political constitutions on accident and force. If there be any truth in the remark, the crisis at which we are arrived may with propriety be regarded as the era in which that decision is to be made; and a wrong election of the part we shall act may, in this view, deserve to be considered as the general misfortune of mankind."</span></span></code></pre>
+<p>This gets the text for a single paper within a single <code>div</code> tag. We can wrap this in a function and apply it to each <code>div</code> tag.</p>
+<p>Now we can see what the text looks like for the first paper.</p>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 163 × 4</span></span></span>
+<span><span class="co">##    number           title                author                     text        </span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> Federalist No. 1 General Introduction Author: Alexander Hamilton To the Peop…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> Federalist No. 1 General Introduction Author: Alexander Hamilton AFTER an un…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> Federalist No. 1 General Introduction Author: Alexander Hamilton This idea w…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> Federalist No. 1 General Introduction Author: Alexander Hamilton Among the m…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> Federalist No. 1 General Introduction Author: Alexander Hamilton It is not, …</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> Federalist No. 1 General Introduction Author: Alexander Hamilton And yet, ho…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> Federalist No. 1 General Introduction Author: Alexander Hamilton In the cour…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> Federalist No. 1 General Introduction Author: Alexander Hamilton I propose, …</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> Federalist No. 1 General Introduction Author: Alexander Hamilton THE UTILITY…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> Federalist No. 1 General Introduction Author: Alexander Hamilton In the prog…</span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 153 more rows</span></span></span></code></pre>
+<p>Putting these together for the first HTML file we get the following.</p>
+<p>We can test this on the first HTML file.</p>
+<pre><code><span><span class="co">## Rows: 163</span></span>
+<span><span class="co">## Columns: 4</span></span>
+<span><span class="co">## $ number <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Federalist No. 1", "Federalist No. 1", "Federalist No. 1", "Fe…</span></span>
+<span><span class="co">## $ title  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "General Introduction", "General Introduction", "General Introd…</span></span>
+<span><span class="co">## $ author <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Author: Alexander Hamilton", "Author: Alexander Hamilton", "Au…</span></span>
+<span><span class="co">## $ text   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "To the People of the State of New York:", "AFTER an unequivoca…</span></span></code></pre>
+<p>Let's try the fifth HTML file, just to make sure.</p>
+<pre><code><span><span class="co">## Rows: 56</span></span>
+<span><span class="co">## Columns: 4</span></span>
+<span><span class="co">## $ number <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Federalist No. 51", "Federalist No. 51", "Federalist No. 52", …</span></span>
+<span><span class="co">## $ title  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "The Structure of the Government Must Furnish the Proper Checks…</span></span>
+<span><span class="co">## $ author <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Author: Alexander Hamilton or James Madison", "Author: Alexand…</span></span>
+<span><span class="co">## $ text   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "To the People of the State of New York:", "TO WHAT expedient, …</span></span></code></pre>
+<p>Now we can apply this function to all the HTML files.</p>
+<pre><code><span><span class="co">## Rows: 1,073</span></span>
+<span><span class="co">## Columns: 4</span></span>
+<span><span class="co">## $ number <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Federalist No. 1", "Federalist No. 1", "Federalist No. 1", "Fe…</span></span>
+<span><span class="co">## $ title  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "General Introduction", "General Introduction", "General Introd…</span></span>
+<span><span class="co">## $ author <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Author: Alexander Hamilton", "Author: Alexander Hamilton", "Au…</span></span>
+<span><span class="co">## $ text   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "To the People of the State of New York:", "AFTER an unequivoca…</span></span></code></pre>
+<p>We can do some data checks to make sure we have the right number of rows and columns.</p>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 7 × 2</span></span></span>
+<span><span class="co">##   author                                       author_count</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                               <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> Author: Alexander Hamilton                            659</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> Author: Alexander Hamilton and James Madison           25</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> Author: Alexander Hamilton or James Madison            93</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> Author: James Madison                                 147</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">5</span> Author: John Jay                                       81</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">6</span> Author: Alexander Hamilton                             27</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">7</span> Author: Alexander Hamilton and James Madison           41</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 85 × 2</span></span></span>
+<span><span class="co">##    number            number_count</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> Federalist No. 1            11</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> Federalist No. 10           24</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> Federalist No. 11           15</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> Federalist No. 12           13</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> Federalist No. 13            5</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> Federalist No. 14           13</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> Federalist No. 15           16</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> Federalist No. 16           12</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> Federalist No. 17           15</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> Federalist No. 18           21</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">11</span> Federalist No. 19           20</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">12</span> Federalist No. 2            15</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">13</span> Federalist No. 20           25</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">14</span> Federalist No. 21           14</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">15</span> Federalist No. 22           19</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">16</span> Federalist No. 23           13</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">17</span> Federalist No. 24           14</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">18</span> Federalist No. 25           11</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">19</span> Federalist No. 26           15</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">20</span> Federalist No. 27            7</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">21</span> Federalist No. 28           11</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">22</span> Federalist No. 29           14</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">23</span> Federalist No. 3            19</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">24</span> Federalist No. 30           12</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">25</span> Federalist No. 31           13</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">26</span> Federalist No. 32            6</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">27</span> Federalist No. 33            9</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">28</span> Federalist No. 34           12</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">29</span> Federalist No. 35           12</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">30</span> Federalist No. 36           18</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">31</span> Federalist No. 37           17</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">32</span> Federalist No. 38           12</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">33</span> Federalist No. 39           17</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">34</span> Federalist No. 4            18</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">35</span> Federalist No. 40            3</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">36</span> Federalist No. 41            6</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">37</span> Federalist No. 42            7</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">38</span> Federalist No. 43            7</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">39</span> Federalist No. 44            7</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">40</span> Federalist No. 45            8</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">41</span> Federalist No. 46            9</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">42</span> Federalist No. 47            8</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">43</span> Federalist No. 48            7</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">44</span> Federalist No. 49            5</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">45</span> Federalist No. 5            13</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">46</span> Federalist No. 50            7</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">47</span> Federalist No. 51            2</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">48</span> Federalist No. 52            6</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">49</span> Federalist No. 53            4</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">50</span> Federalist No. 54            5</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">51</span> Federalist No. 55            9</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">52</span> Federalist No. 56            4</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">53</span> Federalist No. 57            9</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">54</span> Federalist No. 58            2</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">55</span> Federalist No. 59            2</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">56</span> Federalist No. 6            20</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">57</span> Federalist No. 60           13</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">58</span> Federalist No. 61            7</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">59</span> Federalist No. 62           20</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">60</span> Federalist No. 63           22</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">61</span> Federalist No. 64           16</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">62</span> Federalist No. 65           12</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">63</span> Federalist No. 66           15</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">64</span> Federalist No. 67           12</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">65</span> Federalist No. 68           11</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">66</span> Federalist No. 69           12</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">67</span> Federalist No. 7            11</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">68</span> Federalist No. 70           25</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">69</span> Federalist No. 71            8</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">70</span> Federalist No. 72           15</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">71</span> Federalist No. 73           16</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">72</span> Federalist No. 74            5</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">73</span> Federalist No. 75            9</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">74</span> Federalist No. 76           11</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">75</span> Federalist No. 77           11</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">76</span> Federalist No. 78           22</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">77</span> Federalist No. 79            6</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">78</span> Federalist No. 8            14</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">79</span> Federalist No. 80           22</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">80</span> Federalist No. 81           20</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">81</span> Federalist No. 82            7</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">82</span> Federalist No. 83           38</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">83</span> Federalist No. 84           22</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">84</span> Federalist No. 85           15</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">85</span> Federalist No. 9            18</span></span></code></pre>
+</div>
+<div class="section level3">
+<h3 id="write-the-data">Write the data<a class="anchor" aria-label="anchor" href="#write-the-data"></a>
+</h3>
+<p>...</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Mosteller1963" class="csl-entry">
+Mosteller, Frederick, and David L Wallace. 1963. <span>“Inference in an Authorship Problem.”</span> <em>Journal of the American Statistical Association</em> 58 (302): 275–309. <a href="https://www.jstor.org/stable/2283270" class="external-link">https://www.jstor.org/stable/2283270</a>.
+</div>
+<div id="ref-R-rvest" class="csl-entry">
+Wickham, Hadley. 2022. <em>Rvest: Easily Harvest (Scrape) Web Pages</em>. <a href="https://rvest.tidyverse.org/" class="external-link">https://rvest.tidyverse.org/</a>.
+</div>
+</div>
+</div>
+</div>
+
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
 </div>

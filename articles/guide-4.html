@@ -6,13 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="qtalrkit">
-<title>Creating reproducible examples • qtalrkit</title>
+<title>Identifying data and data sources • qtalrkit</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<script src="../extra.js"></script><meta property="og:title" content="Creating reproducible examples">
+<script src="../extra.js"></script><meta property="og:title" content="Identifying data and data sources">
 <meta property="og:description" content="qtalrkit">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -70,7 +70,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Creating reproducible examples</h1>
+      <img src="" class="logo" alt=""><h1>Identifying data and data sources</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/qtalr/qtalrkit/blob/HEAD/vignettes/articles/guide-4.Rmd" class="external-link"><code>vignettes/articles/guide-4.Rmd</code></a></small>
@@ -79,118 +79,518 @@
 
     
     
-<hr>
-<ul>
-<li><a href="https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example" class="external-link">How to make a great R reproducible example</a></li>
-</ul>
-<p>In this Guide, we will explore how to create reproducible examples using the <code>reprex</code> package <span class="citation">(<a href="#ref-R-reprex" role="doc-biblioref">Bryan et al. 2022</a>)</span> in R. Reproducible examples are essential for effective communication and collaboration among data scientists and statisticians.</p>
+<!--  
+- [ ] Revise the pinboard tags to reflect these groupings
+- [ ] Check pinboard for dead links
+-->
 <div class="section level2">
-<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+<h2 id="published">Published<a class="anchor" aria-label="anchor" href="#published"></a>
 </h2>
-<p>Reproducible examples are crucial for effectively communicating problems, solutions, and ideas in the world of data science. In this post, we will discuss the importance of reproducible examples and demonstrate how to create them using the <code>reprex</code> package in R.</p>
-</div>
-<div class="section level2">
-<h2 id="what-is-a-reproducible-example">What is a Reproducible Example?<a class="anchor" aria-label="anchor" href="#what-is-a-reproducible-example"></a>
-</h2>
-<p>A reproducible example, often referred to as a "reprex," is a minimal, self-contained piece of code that demonstrates a specific issue or concept. It should include:</p>
-<ul>
-<li>A brief description of the problem or question</li>
-<li>The necessary data to reproduce the issue</li>
-<li>The R code used to generate the output</li>
-<li>The actual output, including any error messages or warnings</li>
-</ul>
-</div>
-<div class="section level2">
-<h2 id="why-use-the-reprex-package">Why Use the reprex Package?<a class="anchor" aria-label="anchor" href="#why-use-the-reprex-package"></a>
-</h2>
-<p>The <code>reprex</code> package in R streamlines the process of creating reproducible examples by:</p>
-<ul>
-<li>Automatically capturing code, input data, and output</li>
-<li>Formatting the example for easy sharing on various platforms (e.g., GitHub, Stack Overflow)</li>
-<li>Encouraging best practices for creating clear and concise examples</li>
-</ul>
-</div>
-<div class="section level2">
-<h2 id="installing-and-loading-the-reprex-package">Installing and Loading the reprex Package<a class="anchor" aria-label="anchor" href="#installing-and-loading-the-reprex-package"></a>
-</h2>
-<p>To get started with the <code>reprex</code> package, first install it from CRAN and load it into your R session:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"reprex"</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://reprex.tidyverse.org" class="external-link">reprex</a></span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="creating-a-reproducible-example-with-reprex">Creating a Reproducible Example with reprex<a class="anchor" aria-label="anchor" href="#creating-a-reproducible-example-with-reprex"></a>
-</h2>
-<p>In this section, we will demonstrate how to create a reproducible example using the <code>reprex</code> package.</p>
 <div class="section level3">
-<h3 id="basic-usage">Basic Usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
+<h3 id="repositories">Repositories<a class="anchor" aria-label="anchor" href="#repositories"></a>
 </h3>
-<p>To create a simple reprex, write your R code and then call the <code><a href="https://reprex.tidyverse.org/reference/reprex.html" class="external-link">reprex()</a></code> function:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://reprex.tidyverse.org" class="external-link">reprex</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">code</span> <span class="op">&lt;-</span> <span class="st">'</span></span>
-<span><span class="st">x &lt;- 1:10</span></span>
-<span><span class="st">mean(x)</span></span>
-<span><span class="st">'</span></span>
-<span></span>
-<span><span class="fu"><a href="https://reprex.tidyverse.org/reference/reprex.html" class="external-link">reprex</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">code</span><span class="op">)</span></span></code></pre></div>
-<p>This will generate a formatted output that includes the code, input data, and results.</p>
+<p>Language-dedicated repositories are a great source of data for language research. Below I've included a listing of some of the more commonly used repositories.</p>
+<table class="table">
+<caption>
+<span id="tab:pinboard-repos">Table 1: </span>Data repositories
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+Resource
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://corpus.byu.edu/%22%3EBYU" class="external-link uri">https://corpus.byu.edu/"&gt;BYU</a> corpora&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+A repository of corpora that includes billions of words of data.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="http://corporafromtheweb.org/%22%3ECOW" class="external-link uri">http://corporafromtheweb.org/"&gt;COW</a> (COrpora from the Web)&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+A collection of linguistically processed gigatoken web corpora
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="http://www.resourcebook.eu/searchll.php%22%3ELRE" class="external-link uri">http://www.resourcebook.eu/searchll.php"&gt;LRE</a> Map&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+Repository of language resources collected during the submission process for the Language Resource and Evaluation Conference (LREC).
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="http://wortschatz.uni-leipzig.de/en/download/%22%3ELeipzig" class="external-link uri">http://wortschatz.uni-leipzig.de/en/download/"&gt;Leipzig</a> Corpora Collection&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+Corpora in different languages using the same format and comparable sources.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://www.ldc.upenn.edu/%22%3ELinguistic" class="external-link uri">https://www.ldc.upenn.edu/"&gt;Linguistic</a> Data Consortium&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+Repository of language corpora
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="http://www.nltk.org/nltk_data/%22%3ENLTK" class="external-link uri">http://www.nltk.org/nltk_data/"&gt;NLTK</a> language data&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+Repository of corpora and language datasets included with the Python package NLTK.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="http://opus.lingfil.uu.se/%22%3EOPUS" class="external-link uri">http://opus.lingfil.uu.se/"&gt;OPUS</a> - an open source parallel corpus&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+Repository of translated texts from the web.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="http://talkbank.org/%22%3ETalkBank%3C/a%3E" class="external-link uri">http://talkbank.org/"&gt;TalkBank&lt;/a&gt;</a>;
+</td>
+<td style="text-align:left;">
+Repository of language collections dealing with conversation, acquisition, multilingualism, and clinical contexts.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://corpus1.mpi.nl/ds/asv/?4%22%3EThe" class="external-link uri">https://corpus1.mpi.nl/ds/asv/?4"&gt;The</a> Language Archive&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+Various corpora and language datasets
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="http://ota.ox.ac.uk/%22%3EThe" class="external-link uri">http://ota.ox.ac.uk/"&gt;The</a> Oxford Text Archive (OTA)&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+A collection of thousands of texts in more than 25 different languages.
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level3">
-<h3 id="customizing-output-format">Customizing Output Format<a class="anchor" aria-label="anchor" href="#customizing-output-format"></a>
+<h3 id="corpora-and-datasets">Corpora and datasets<a class="anchor" aria-label="anchor" href="#corpora-and-datasets"></a>
 </h3>
-<p>You can customize the output format of your reprex by specifying the <code>venue</code> argument. For example, to create a reprex suitable for GitHub, use:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://reprex.tidyverse.org/reference/reprex.html" class="external-link">reprex</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">code</span>, venue <span class="op">=</span> <span class="st">"gh"</span><span class="op">)</span></span></code></pre></div>
+<p>Below I've included a listing of corpora and datasets that are available for language research. This list is not exhaustive, but includes a few of the more common corpora and datasets used in language research.</p>
+<table class="table">
+<caption>
+<span id="tab:pinboard-datasets">Table 2: </span>Corpora and language datasets
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+Resource
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://atariemailarchive.org/%22%3EAtari" class="external-link uri">https://atariemailarchive.org/"&gt;Atari</a> Email Archive&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+A collection of messages sent at Atari from 1983 to 1992.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="http://www.socsci.uci.edu/~lpearl/CoLaLab/CHILDESTreebank/childestreebank.html%22%3ECHILDES" class="external-link uri">http://www.socsci.uci.edu/~lpearl/CoLaLab/CHILDESTreebank/childestreebank.html"&gt;CHILDES</a> Treebank&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+A corpus derived from several corpora from the American English section of CHILDES with the goal to annotate child-directed speech utterance transcriptions with phrase structure tree information.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="http://www.cs.cornell.edu/~cristian/Cornell_Movie-Dialogs_Corpus.html%22%3ECornell" class="external-link uri">http://www.cs.cornell.edu/~cristian/Cornell_Movie-Dialogs_Corpus.html"&gt;Cornell</a> Movie-Dialogs Corpus&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+A corpus containing a large metadata-rich collection of fictional conversations extracted from raw movie scripts.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="http://www.lllf.uam.es/~fmarcos/informes/corpus/coarginl.html%22%3ECorpus" class="external-link uri">http://www.lllf.uam.es/~fmarcos/informes/corpus/coarginl.html"&gt;Corpus</a> Argentino&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+Corpus of Argentine Spanish
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://cesa.arizona.edu/%22%3ECorpus" class="external-link uri">https://cesa.arizona.edu/"&gt;Corpus</a> of Spanish in Southern Arizona&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+Spanish varieties spoken in Arizona.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://www.statmt.org/europarl/%22%3EEuroparl" class="external-link uri">https://www.statmt.org/europarl/"&gt;Europarl</a> Parallel Corpus&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+A parallel corpus extracted from the proceedings of the European Parliament Proceedings between 1996-2011.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="http://storage.googleapis.com/books/ngrams/books/datasetsv2.html%22%3EGoogle" class="external-link uri">http://storage.googleapis.com/books/ngrams/books/datasetsv2.html"&gt;Google</a> Ngram Viewer&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+Google web corpus
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="http://ice-corpora.net/ice/%22%3EInternational" class="external-link uri">http://ice-corpora.net/ice/"&gt;International</a> Corpus of English (ICE)&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+The International Corpus of English (ICE) began in 1990 with the primary aim of collecting material for comparative studies of English worldwide.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="http://opus.lingfil.uu.se/OpenSubtitles_v2.php%22%3EOpenSubtitles2011%3C/a%3E" class="external-link uri">http://opus.lingfil.uu.se/OpenSubtitles_v2.php"&gt;OpenSubtitles2011&lt;/a&gt;</a>;
+</td>
+<td style="text-align:left;">
+A collection of documents from <a href="http://www.opensubtitles.org/" class="external-link uri">http://www.opensubtitles.org/</a>.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="http://www.ruscorpora.ru/en/%22%3ERussian" class="external-link uri">http://www.ruscorpora.ru/en/"&gt;Russian</a> National Corpus&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+A corpus of modern Russian language incorporating over 300 million words.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://quantumstat.com//dataset%22%3EThe" class="external-link uri">https://quantumstat.com//dataset"&gt;The</a> Big Bad NLP Database - Quantum Stat&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+NLP datasets
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://catalog.ldc.upenn.edu/docs/LDC97S62/%22%3EThe" class="external-link uri">https://catalog.ldc.upenn.edu/docs/LDC97S62/"&gt;The</a> Switchboard Dialog Act Corpus&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+A corpus of 1155 5-minute conversations in American English, comprising 205,000 utterances and 1.4 million words, from the Switchboard corpus of telephone conversations.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="http://langsnap.soton.ac.uk/%22%3EWelcome" class="external-link uri">http://langsnap.soton.ac.uk/"&gt;Welcome</a> to LANGSNAP - LANGSNAP&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+The aim of this repository is to promote research on the learning of French and Spanish as L2, by making parallel learner corpora for each language freely available to the research community.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="http://www.psych.ualberta.ca/~westburylab/downloads/usenetcorpus.download.html%22%3EWestbury" class="external-link uri">http://www.psych.ualberta.ca/~westburylab/downloads/usenetcorpus.download.html"&gt;Westbury</a> Lab Web Site: Usenet Corpus Download&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+This corpus is a collection of public USENET postings. This corpus was collected between Oct 2005 and Jan 2011, and covers 47,860 English language, non-binary-file news groups (see list of newsgroups included with the corpus for details)
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level3">
-<h3 id="including-data">Including Data<a class="anchor" aria-label="anchor" href="#including-data"></a>
+<h3 id="data-sharing-platforms">Data sharing platforms<a class="anchor" aria-label="anchor" href="#data-sharing-platforms"></a>
 </h3>
-<p>When your example requires specific data, you can include it using the <code><a href="https://rdrr.io/r/base/dput.html" class="external-link">dput()</a></code> function:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, y <span class="op">=</span> <span class="fl">11</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span></span>
-<span><span class="va">data_dput</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/dput.html" class="external-link">dput</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">code_with_data</span> <span class="op">&lt;-</span> <span class="st">'</span></span>
-<span><span class="st">data &lt;- {{ data_dput }}</span></span>
-<span><span class="st">plot(data$x, data$y)</span></span>
-<span><span class="st">'</span></span>
-<span></span>
-<span><span class="fu"><a href="https://reprex.tidyverse.org/reference/reprex.html" class="external-link">reprex</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">code_with_data</span><span class="op">)</span></span></code></pre></div>
-<p>This will incorporate the data into your reprex, allowing others to reproduce your example easily.</p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="sharing-your-reproducible-example">Sharing Your Reproducible Example<a class="anchor" aria-label="anchor" href="#sharing-your-reproducible-example"></a>
-</h2>
-<p>Once you have created your reprex, you can share it on various platforms such as GitHub, Stack Overflow, or via email. The formatted output generated by the <code>reprex</code> package ensures that your example is easy to read and understand.</p>
-</div>
-<div class="section level2">
-<h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
-</h2>
-<p>In this blog post, we have discussed the importance of reproducible examples and demonstrated how to create them using the <code>reprex</code> package in R. By creating clear and concise reprexes, you can effectively communicate problems, solutions, and ideas with your peers and collaborators. Give the <code>reprex</code> package a try and see how it can improve your workflow!</p>
-</div>
-<div class="section level2">
-<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h2>
-<hr>
+<!--  
+- [ ] Add data sharing platforms to pinboard
+- [ ] Create a listing of data sharing platforms
+- [ ] Include the listing here
+-->
 <ul>
-<li><p>StackOverflow: <a href="https://stackoverflow.com/questions/tagged/r" class="external-link">R</a>, <a href="https://stackoverflow.com/questions/tagged/git" class="external-link">Git</a>, <a href="https://stackoverflow.com/questions/tagged/rstudio" class="external-link">RStudio</a>, <a href="https://stackoverflow.com/questions/tagged/github" class="external-link">GitHub</a></p></li>
-<li><p>Reddit: <a href="https://www.reddit.com/r/rstats/" class="external-link">R</a>, <a href="https://www.reddit.com/r/git/" class="external-link">Git</a>, <a href="https://www.reddit.com/r/RStudio/" class="external-link">RStudio</a>, <a href="https://www.reddit.com/r/github/" class="external-link">Github</a></p></li>
-<li><p><a href="https://community.rstudio.com/" class="external-link">RStudio Community</a></p></li>
-<li><p><a href="https://reprex.tidyverse.org/" class="external-link uri">https://reprex.tidyverse.org/</a></p></li>
-<li><p><a href="https://github.com/MilesMcBain/datapasta" class="external-link uri">https://github.com/MilesMcBain/datapasta</a></p></li>
+<li><a href="https://dataverse.org/" class="external-link uri">https://dataverse.org/</a></li>
+<li><a href="https://osf.io/" class="external-link uri">https://osf.io/</a></li>
+<li><a href="https://www.zenodo.org/" class="external-link uri">https://www.zenodo.org/</a></li>
+<li><a href="https://figshare.com/" class="external-link uri">https://figshare.com/</a></li>
+<li><a href="https://www.researchgate.net/" class="external-link uri">https://www.researchgate.net/</a></li>
+<li><a href="https://www.researchsquare.com/" class="external-link uri">https://www.researchsquare.com/</a></li>
 </ul>
-<!-- 
-- [ ] Work on reprex example with/without RStudio?
-- [ ] Example of a reprex on StackOverflow: https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example
- --><p>Datapasta is a package that allows you to copy and paste data frames from RStudio into a reprex. This is a very useful tool for creating reproducible examples. Here is an example of how to use datapasta to create a reprex.</p>
-<div id="refs" class="references csl-bib-body hanging-indent">
-<div id="ref-R-reprex" class="csl-entry">
-Bryan, Jennifer, Jim Hester, David Robinson, Hadley Wickham, and Christophe Dervieux. 2022. <em>Reprex: Prepare Reproducible Example Code via the Clipboard</em>. <a href="https://reprex.tidyverse.org" class="external-link">https://reprex.tidyverse.org</a>.
+</div>
+<div class="section level3">
+<h3 id="aggregated-listings">Aggregated listings<a class="anchor" aria-label="anchor" href="#aggregated-listings"></a>
+</h3>
+<p>The list of data available for language research is constantly growing. I've document very few of the wide variety of resources. In Table <a href="#tab:pinboard-listings">3</a> I've included attempts by others to provide a summary of the corpus data and language resources available.</p>
+<table class="table">
+<caption>
+<span id="tab:pinboard-listings">Table 3: </span>Aggregated listings of language corpora and datasets
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+Resource
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://www.clarin.eu/resource-families/reference-corpora%22%3ECLARIN" class="external-link uri">https://www.clarin.eu/resource-families/reference-corpora"&gt;CLARIN</a> Reference corpora&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+The CLARIN infrastructure offers access to 30 reference corpora for 21 languages. Most of the corpora are available through easy-to-use concordancers such as KonText and NoSketch Engine; the reference corpora are also well annotated, typically displaying rich morphosyntactic annotation.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://uclouvain.be/en/research-institutes/ilc/cecl/learner-corpora-around-the-world.html%22%3ELearner" class="external-link uri">https://uclouvain.be/en/research-institutes/ilc/cecl/learner-corpora-around-the-world.html"&gt;Learner</a> corpora around the world&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+A listing of learner corpora around the world
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://paperswithcode.com/datasets%22%3EMachine" class="external-link uri">https://paperswithcode.com/datasets"&gt;Machine</a> Learning Datasets | Papers With Code&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+A free and open resource with Machine Learning papers, code, and evaluation tables.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="http://nlp.stanford.edu/links/statnlp.html#Corpora%22%3EStanford" class="external-link uri">http://nlp.stanford.edu/links/statnlp.html#Corpora"&gt;Stanford</a> NLP corpora&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+Listing of corpora and language resources aimed at the NLP community.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://makingnoiseandhearingthings.com/2017/09/20/where-can-you-find-language-data-on-the-web/%22%3EWhere" class="external-link uri">https://makingnoiseandhearingthings.com/2017/09/20/where-can-you-find-language-data-on-the-web/"&gt;Where</a> can you find language data on the web?&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+Listing of various corpora and language datasets.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="http://wordbank.stanford.edu/%22%3EWordbank%3C/a%3E" class="external-link uri">http://wordbank.stanford.edu/"&gt;Wordbank&lt;/a&gt;</a>;
+</td>
+<td style="text-align:left;">
+An open database of children's vocabulary development.
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
+<div class="section level2">
+<h2 id="custom-built">Custom-built<a class="anchor" aria-label="anchor" href="#custom-built"></a>
+</h2>
+<div class="section level3">
+<h3 id="application-programming-interfaces-apis">Application programming interfaces (APIs)<a class="anchor" aria-label="anchor" href="#application-programming-interfaces-apis"></a>
+</h3>
+<p>There are many APIs available for accessing language corpora and datasets. Below I've included a few of the R packages that provide access to these resources.</p>
+<table class="table">
+<caption>
+<span id="tab:pinboard-apis">Table 4: </span>R Package APIs to language corpora and datasets.)
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+Resource
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://langcog.github.io/wordbankr/index.html%22%3EAccessing" class="external-link uri">https://langcog.github.io/wordbankr/index.html"&gt;Accessing</a> the Wordbank Database • wordbankr&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+Connecting to Wordbank, an open repository for developmental vocabulary data.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://ropensci.org/tutorials/arxiv_tutorial.html%22%3EaRxiv%3C/a%3E" class="external-link uri">https://ropensci.org/tutorials/arxiv_tutorial.html"&gt;aRxiv&lt;/a&gt;</a>;
+</td>
+<td style="text-align:left;">
+R package interface to query arXiv, a repository of electronic preprints for computer science, mathematics, physics, quantitative biology, quantitative finance, and statistics.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://github.com/ropensci/crminer%22%3Ecrminer%3C/a%3E" class="external-link uri">https://github.com/ropensci/crminer"&gt;crminer&lt;/a&gt;</a>;
+</td>
+<td style="text-align:left;">
+R package interface focusing on getting the user full text via the Crossref search API.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://github.com/ropensci/dvn%22%3Edvn%3C/a%3E" class="external-link uri">https://github.com/ropensci/dvn"&gt;dvn&lt;/a&gt;</a>;
+</td>
+<td style="text-align:left;">
+R package interface to access to the Dataverse Network APIs.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://ropensci.org/tutorials/fulltext_tutorial.html%22%3Efulltext%3C/a%3E" class="external-link uri">https://ropensci.org/tutorials/fulltext_tutorial.html"&gt;fulltext&lt;/a&gt;</a>;
+</td>
+<td style="text-align:left;">
+R package interface to query open access journals, such as PLOS.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://ropensci.org/tutorials/gutenbergr_tutorial.html%22%3Egutenbergr%3C/a%3E" class="external-link uri">https://ropensci.org/tutorials/gutenbergr_tutorial.html"&gt;gutenbergr&lt;/a&gt;</a>;
+</td>
+<td style="text-align:left;">
+R package interface to download and process public domain works from the Project Gutenberg collection.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://ropensci.org/tutorials/internetarchive_tutorial.html%22%3Einternetarchive%3C/a%3E" class="external-link uri">https://ropensci.org/tutorials/internetarchive_tutorial.html"&gt;internetarchive&lt;/a&gt;</a>;
+</td>
+<td style="text-align:left;">
+R package interface to query the Internet Archive.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://github.com/hrbrmstr/newsflash%22%3Enewsflash%3C/a%3E" class="external-link uri">https://github.com/hrbrmstr/newsflash"&gt;newsflash&lt;/a&gt;</a>;
+</td>
+<td style="text-align:left;">
+R package interface to query the Internet Archive and GDELT Television Explorer
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://github.com/ropensci/oai%22%3Eoai%3C/a%3E" class="external-link uri">https://github.com/ropensci/oai"&gt;oai&lt;/a&gt;</a>;
+</td>
+<td style="text-align:left;">
+R package interface to query any OAI-PMH repository, including Zenodo.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://github.com/ropensci/rfigshare%22%3Erfigshare%3C/a%3E" class="external-link uri">https://github.com/ropensci/rfigshare"&gt;rfigshare&lt;/a&gt;</a>;
+</td>
+<td style="text-align:left;">
+R package interface to query the data sharing platform FigShare.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://github.com/ropensci/rtweet%22%3Ertweet%3C/a%3E" class="external-link uri">https://github.com/ropensci/rtweet"&gt;rtweet&lt;/a&gt;</a>;
+</td>
+<td style="text-align:left;">
+R client for interacting with Twitter's APIs
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section level2">
+<h2 id="other-language-resources">Other language resources<a class="anchor" aria-label="anchor" href="#other-language-resources"></a>
+</h2>
+<p>Data for language research is not limited to (primary) text sources. Other sources may include processed data from previous research; word lists, linguistic features, <em>etc</em>.. Alone or in combination with text sources this data can be a rich and viable source of data for a research project.</p>
+<table class="table">
+<caption>
+<span id="tab:pinboard-other">Table 5: </span>Other language resources
+</caption>
+<thead><tr>
+<th style="text-align:left;">
+Resource
+</th>
+<th style="text-align:left;">
+Description
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="http://elexicon.wustl.edu/WordStart.asp%22%3EEnglish" class="external-link uri">http://elexicon.wustl.edu/WordStart.asp"&gt;English</a> Lexicon Project&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+Access to a large set of lexical characteristics, along with behavioral data from visual lexical decision and naming studies.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://grambank.clld.org/%22%3EGrambank%3C/a%3E" class="external-link uri">https://grambank.clld.org/"&gt;Grambank&lt;/a&gt;</a>;
+</td>
+<td style="text-align:left;">
+Grambank, the result of a collaboration involving 100+ linguists, examines a range of grammatical phenomena, “from word order to verbal tense, nominal plurals, and many other well-studied comparative linguistic variables.” The project’s dataset, available to download and explore online, spans 195 such features across 2,400+ languages and dialects. For instance, here’s the page for feature GB030, which asks, “Is there a gender distinction in independent 3rd person pronouns?” [h/t Robin Sloan]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://phoible.org/%22%3EPHOIBLE%3C/a%3E" class="external-link uri">https://phoible.org/"&gt;PHOIBLE&lt;/a&gt;</a>;
+</td>
+<td style="text-align:left;">
+PHOIBLE is a repository of cross-linguistic phonological inventory data, which have been extracted from source documents and tertiary databases and compiled into a single searchable convenience sample. Release 2.0 from 2019 includes 3020 inventories that contain 3183 segment types found in 2186 distinct languages.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://sites.miamioh.edu/meyersde/the-collective-noun-catalog/%22%3EThe" class="external-link uri">https://sites.miamioh.edu/meyersde/the-collective-noun-catalog/"&gt;The</a> Collective Noun Catalog&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+Daniel E. Meyers (Miami University) has put together a large list of collective nouns
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://nyu-mll.github.io/CoLA/%22%3EThe" class="external-link uri">https://nyu-mll.github.io/CoLA/"&gt;The</a> Corpus of Linguistic Acceptability (CoLA)&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+A corpus that consists of 10657 sentences from 23 linguistics publications, expertly annotated for acceptability (grammaticality) by their original authors.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="http://icon.shef.ac.uk/Moby/%22%3EThe" class="external-link uri">http://icon.shef.ac.uk/Moby/"&gt;The</a> Moby lexicon project&lt;/a&gt;
+</td>
+<td style="text-align:left;">
+Language wordlists and resources from the Moby project.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+&lt;a href="<a href="https://github.com/ropensci/lingtypology%22%3Elingtypology%3C/a%3E" class="external-link uri">https://github.com/ropensci/lingtypology"&gt;lingtypology&lt;/a&gt;</a>;
+</td>
+<td style="text-align:left;">
+R package interface to connect with the Glottolog database and provides additional functionality for linguistic mapping.
+</td>
+</tr>
+</tbody>
+</table>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
