@@ -40,7 +40,8 @@ A data frame with columns:
 \item \code{n}: The frequency of each type across all documents.
 Optionally (based on the \code{frequency} and \code{dispersion} arguments):
 \item \code{rf}: The relative frequency of each type across all documents.
-\item \code{orf}: The observed relative frequency (per 100) of each type across all documents.
+\item \code{orf}: The observed relative frequency (per 100) of each
+type across all documents.
 \item \code{df}: The document frequency of each type.
 \item \code{idf}: The inverse document frequency of each type.
 \item \code{dp}: Gries' Deviation of Proportions of each type.
@@ -67,5 +68,6 @@ calc_type_metrics(
 }
 \references{
 Gries, Stefan Th. (2023). Statistical Methods in Corpus Linguistics.
-In Readings in Corpus Linguistics: A Teaching and Research Guide for Scholars in Nigeria and Beyond, pp. 78-114.
+In Readings in Corpus Linguistics: A Teaching and Research Guide
+for Scholars in Nigeria and Beyond, pp. 78-114.
 }
