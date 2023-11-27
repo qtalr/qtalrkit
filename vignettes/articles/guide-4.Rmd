@@ -1,5 +1,5 @@
 ---
-title: "Creating reproducible examples"
+title: "Identifying data and data sources"
 bibliography: [bibliography.bib, packages.bib]
 biblio-style: apalike
 link-citations: true
@@ -7,179 +7,82 @@ pkgdown:
   as_is: true
 ---
 
+<!--  
+- [ ] Revise the pinboard tags to reflect these groupings
+- [ ] Check pinboard for dead links
+-->
+
 ```{r, child="_common.Rmd"}
 ```
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+opts_chunk$set(echo = FALSE)
 ```
 
----- 
-
-- [How to make a great R reproducible example](https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example)
-
-
-In this Guide, we will explore how to create reproducible examples using the `reprex` package [@R-reprex] in R. Reproducible examples are essential for effective communication and collaboration among data scientists and statisticians.
-
-## Introduction
-
-Reproducible examples are crucial for effectively communicating problems, solutions, and ideas in the world of data science. In this post, we will discuss the importance of reproducible examples and demonstrate how to create them using the `reprex` package in R.
-
-## What is a Reproducible Example?
-
-A reproducible example, often referred to as a "reprex," is a minimal, self-contained piece of code that demonstrates a specific issue or concept. It should include:
-
-* A brief description of the problem or question
-* The necessary data to reproduce the issue
-* The R code used to generate the output
-* The actual output, including any error messages or warnings
-
-## Why Use the reprex Package?
-
-The `reprex` package in R streamlines the process of creating reproducible examples by:
-
-* Automatically capturing code, input data, and output
-* Formatting the example for easy sharing on various platforms (e.g., GitHub, Stack Overflow)
-* Encouraging best practices for creating clear and concise examples
-
-## Installing and Loading the reprex Package
-
-To get started with the `reprex` package, first install it from CRAN and load it into your R session:
-
-```r
-install.packages("reprex")
-library(reprex)
+```{r packages, include=FALSE}
+library(readr) # for data manipulation
 ```
 
-## Creating a Reproducible Example with reprex
+## Published
 
-In this section, we will demonstrate how to create a reproducible example using the `reprex` package.
+### Repositories 
 
-### Basic Usage
+Language-dedicated repositories are a great source of data for language research. Below I've included a listing of some of the more commonly used repositories.
 
-To create a simple reprex, write your R code and then call the `reprex()` function:
-
-```r
-library(reprex)
-
-code <- '
-x <- 1:10
-mean(x)
-'
-
-reprex(input = code)
+```{r pinboard-repos}
+read_rds("assets/listings/data_repositories.rds") |>
+  kable(caption = "Data repositories")
 ```
 
-This will generate a formatted output that includes the code, input data, and results.
+### Corpora and datasets
 
-### Customizing Output Format
+Below I've included a listing of corpora and datasets that are available for language research. This list is not exhaustive, but includes a few of the more common corpora and datasets used in language research.
 
-You can customize the output format of your reprex by specifying the `venue` argument. For example, to create a reprex suitable for GitHub, use:
-
-```r
-reprex(input = code, venue = "gh")
+```{r pinboard-datasets}
+read_rds("assets/listings/data_corpora.rds") |> 
+  kable(caption = "Corpora and language datasets")
 ```
 
-### Including Data
+### Data sharing platforms
 
-When your example requires specific data, you can include it using the `dput()` function:
+<!--  
+- [ ] Add data sharing platforms to pinboard
+- [ ] Create a listing of data sharing platforms
+- [ ] Include the listing here
+-->
 
-```r
-data <- data.frame(x = 1:10, y = 11:20)
-data_dput <- dput(data)
+- https://dataverse.org/
+- https://osf.io/
+- https://www.zenodo.org/
+- https://figshare.com/
+- https://www.researchgate.net/
+- https://www.researchsquare.com/
 
-code_with_data <- '
-data <- {{ data_dput }}
-plot(data$x, data$y)
-'
+### Aggregated listings
 
-reprex(input = code_with_data)
+The list of data available for language research is constantly growing. I've document very few of the wide variety of resources. In Table \@ref(tab:pinboard-listings) I've included attempts by others to provide a summary of the corpus data and language resources available.
+
+```{r pinboard-listings}
+read_rds("assets/listings/data_listings.rds") |> 
+  kable(caption = "Aggregated listings of language corpora and datasets")
 ```
 
-This will incorporate the data into your reprex, allowing others to reproduce your example easily.
+## Custom-built
 
-## Sharing Your Reproducible Example
+### Application programming interfaces (APIs)
 
-Once you have created your reprex, you can share it on various platforms such as GitHub, Stack Overflow, or via email. The formatted output generated by the `reprex` package ensures that your example is easy to read and understand.
+There are many APIs available for accessing language corpora and datasets. Below I've included a few of the R packages that provide access to these resources.
 
-## Conclusion
-
-In this blog post, we have discussed the importance of reproducible examples and demonstrated how to create them using the `reprex` package in R. By creating clear and concise reprexes, you can effectively communicate problems, solutions, and ideas with your peers and collaborators. Give the `reprex` package a try and see how it can improve your workflow!
-
-## References
-
-
-----
-
--   StackOverflow: [R](https://stackoverflow.com/questions/tagged/r), [Git](https://stackoverflow.com/questions/tagged/git), [RStudio](https://stackoverflow.com/questions/tagged/rstudio), [GitHub](https://stackoverflow.com/questions/tagged/github)
--   Reddit: [R](https://www.reddit.com/r/rstats/), [Git](https://www.reddit.com/r/git/), [RStudio](https://www.reddit.com/r/RStudio/), [Github](https://www.reddit.com/r/github/)
--   [RStudio Community](https://community.rstudio.com/)
-
-
--   https://reprex.tidyverse.org/
-
--   https://github.com/MilesMcBain/datapasta
-
-<!-- 
-- [ ] Work on reprex example with/without RStudio?
-- [ ] Example of a reprex on StackOverflow: https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example
- -->
-
-```{r}
-#| label: reprex-example-1
-#| eval: false
-
-install.packages("reprex") # install reprex package
+```{r pinboard-apis}
+read_rds("assets/listings/data_apis.rds") |> 
+  kable(caption = "R Package APIs to language corpora and datasets.)")
 ```
 
-```{r}
-#| label: reprex-example-2
-#| eval: false
-# Create a vector with 100 random values from the normal distribution
-set.seed(123) # set seed for reproducibility
-my_vec <- rnorm(100) # random normal vector
+## Other language resources
 
-summary(my_vec) # 5 number summary
-```
+Data for language research is not limited to (primary) text sources. Other sources may include processed data from previous research; word lists, linguistic features, *etc*.. Alone or in combination with text sources this data can be a rich and viable source of data for a research project.
 
-```{r}
-#| label: reprex-example-3
-#| eval: false
-
-reprex::reprex() # run reprex
-```
-
-Datapasta is a package that allows you to copy and paste data frames from RStudio into a reprex. This is a very useful tool for creating reproducible examples. Here is an example of how to use datapasta to create a reprex. 
-
-```{r}
-#| label: datapasta-example-1
-#| eval: false
-
-# install the datapasta package
-install.packages("datapasta")
-```
-
-```{r}
-#| label: datapasta-example-2
-#| eval: false
-
-# load the datapasta package
-library(datapasta)
-```
-
-```{r}
-#| label: datapasta-example-3
-#| eval: false
-
-# Create a data frame with 100 random values from the normal distribution
-set.seed(123) # set seed for reproducibility
-my_df <- data.frame(x = rnorm(100)) # random normal data frame
-```
-
-```{r}
-#| label: datapasta-example-4
-#| eval: false
-
-# copy the data frame to the clipboard
-dpasta(my_df)
+```{r pinboard-other}
+read_rds("assets/listings/data_experimental.rds") |> 
+  kable(caption = "Other language resources")
 ```

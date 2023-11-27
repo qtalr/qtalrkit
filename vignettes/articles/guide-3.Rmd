@@ -1,5 +1,5 @@
 ---
-title: "Setting up Git and GitHub"
+title: "Creating reproducible examples"
 bibliography: [bibliography.bib, packages.bib]
 biblio-style: apalike
 link-citations: true
@@ -11,129 +11,179 @@ pkgdown:
 ```
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## Introduction
+# Introduction
 
-What is Git? What is GitHub? Why should I use them? How do I use them?
+In this guide, we will explore how to create reproducible examples using the `reprex` package [@R-reprex] in R. Reproducible examples are essential for effective communication and collaboration among data scientists and statisticians.
 
-These are all questions that I had when I first started using Git and GitHub. I hope that this page will help you answer these questions and get you started using Git and GitHub.
+- [How to make a great R reproducible example](https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example)
 
 ::: {.callout}
 **`r fontawesome::fa('list-alt')` Outcomes**
 
-- recognize the purpose of Git and GitHub
-- establish a working Git and GitHub environment
-- recognize the basic Git and GitHub workflow for managing a project
+- ...
 :::
 
-## What is Git?
 
-Git is a version control system. It allows you to track changes to files and folders over time. It also allows you to collaborate with others on projects. Git is a command line tool, but there are also GUIs to interact with Git in both RStudio and VS Code.
+## What is a Reproducible Example?
 
-## What is GitHub?
+Reproducible examples are crucial for effectively communicating problems, solutions, and ideas in the world of data science. In this post, we will discuss the importance of reproducible examples and demonstrate how to create them using the `reprex` package in R.
 
-GitHub is a web-based hosting service for Git repositories. It allows you to store your Git repositories in the cloud. It also allows you to collaborate with others on projects. GitHub is a great place to store and share your code. It is also a great place to find code that others have shared.
+A reproducible example, often referred to as a "reprex," is a minimal, self-contained piece of code that demonstrates a specific issue or concept. It should include:
 
-## Why should I use Git and GitHub?
+* A brief description of the problem or question
+* The necessary data to reproduce the issue
+* The R code used to generate the output
+* The actual output, including any error messages or warnings
 
-The Git software allows for version control. This means that you can track changes to files and folders over time. This is useful for tracking changes to code, but it is also useful for tracking changes to other types of files. For example, you can use Git to track changes to a manuscript or a presentation. Think of it as MS Word's "Track Changes" feature on steroids.
+## Why Use the reprex Package?
 
-Combining Git with GitHub allows you to store your Git repositories in the cloud. This means that you can access your repositories from anywhere. It also means that you can collaborate with others on projects. You can also use GitHub to share your code with others. This is useful for sharing code with collaborators, but it is also useful for sharing code with the world. This is especially useful for making your projects reproducible.
+The `reprex` package in R streamlines the process of creating reproducible examples by:
 
-## How do I set up Git?
+* Automatically capturing code, input data, and output
+* Formatting the example for easy sharing on various platforms (e.g., GitHub, Stack Overflow)
+* Encouraging best practices for creating clear and concise examples
 
-- [Posit Guide on Git with RStudio.](https://support.posit.co/hc/en-us/articles/200532077)
+## Installing and Loading the reprex Package
 
-Initalize a project with Git:
-
-- `git init` - initialize a new Git repository
-
-## How do I set up GitHub?
-
-To set up GitHub, you will need to create an account. You can do this at <github.com>. The service is free and there are extra features available for students and educators. Once you have created an account, you will need to create a repository. You can do this by clicking on the "New" button on the main page. You will need to give your repository a name and a description. You can also choose whether to make your repository public or private. If you make your repository public, anyone can see it. If you make your repository private, only you and people you invite can see it.
-
-In your local, remote, or virtual environment, you will need to connect to GitHub. You can also do this by using the `usethis` package. 
+To get started with the `reprex` package, first install it from CRAN and load it into your R session:
 
 ```r
-library(usethis)
+install.packages("reprex")
+library(reprex)
 ```
 
-- `use_github()` - connect to GitHub
-- `use_git_remote()` - add a remote repository
+## Creating a Reproducible Example with reprex
 
-## How do I manage my project with Git and GitHub?
+In this section, we will demonstrate how to create a reproducible example using the `reprex` package.
 
-Once your Git repository is set up, you can manage it from within your IDE. For most beginners, it is recommedable that you use the Git pane in RStudio to interface with Git and GitHub. Here you can perform various key operations.
+### Basic Usage
 
-Let's introduce operations related to common tasks for this textbook.
+To create a simple reprex, write your R code and then call the `reprex()` function:
 
-Download a lab to complete: 
+```r
+library(reprex)
 
-- Create a new project from a GitHub repository
-  - Login to GitHub
-  - Navigate to the repository on GitHub
-  - Click the 'Fork' button
-  - Copy the URL of the forked repository
-  - Open RStudio
-  - File > New Project > Version Control > Git
-    - Paste the URL of the forked repository
-    - Choose the directory location for the project
-    - Create Project
+code <- '
+x <- 1:10
+mean(x)
+'
 
-- Create a new project and start version control
-  - Create a new project in RStudio
-    - File > New Project > New Directory > New Project
-    - Choose the directory location for the project
-    - Create Project
-  - Add the project to GitHub
-    - Tools > Version Control > Project Setup
-    - Choose Git
+reprex(input = code)
+```
 
-- Edit and update your GitHub repository
-  - Edit the files in your project
-  - Save the files
-  - Commit the changes
-    - Tools > Version Control > Commit
-  - Add a commit message
-  - Commit
-  - Push the changes to GitHub
-    - Tools > Version Control > Push Branch
+This will generate a formatted output that includes the code, input data, and results.
 
-Key operations to manage your project with Git and GitHub:
+### Customizing Output Format
 
-- `git init` - initialize a new Git repository
-- `git add` - add files to the staging area
-- `git commit` - commit changes to the repository
-- `git push` - push changes to a remote repository
+You can customize the output format of your reprex by specifying the `venue` argument. For example, to create a reprex suitable for GitHub, use:
 
+```r
+reprex(input = code, venue = "gh")
+```
 
-What are some of the basic command concepts that you need to know to use Git?
+### Including Data
 
-- `git init` - initialize a new Git repository
-- `git add` - add files to the staging area
-- `git commit` - commit changes to the repository
-- `git push` - push changes to a remote repository
-- `git pull` - pull changes from a remote repository
-- `git clone` - clone a remote repository
+When your example requires specific data, you can include it using the `dput()` function:
 
-When working with R, you can use the `usethis` package to set up Git in your environment. Here are the `usethis` functions that you will use:
+```r
+data <- data.frame(x = 1:10, y = 11:20)
+data_dput <- dput(data)
 
-- `use_git()` - initialize a new Git repository
-- `use_git_config()` - configure Git
-- `use_git_ignore()` - create a `.gitignore` file
+code_with_data <- '
+data <- {{ data_dput }}
+plot(data$x, data$y)
+'
 
-::: {.callout}
-**`r fontawesome::fa('hand-point-up')` Tip**
+reprex(input = code_with_data)
+```
 
-@Bryan2020 is an excellent reference resource for all things Git and GitHub for R users.
+This will incorporate the data into your reprex, allowing others to reproduce your example easily.
 
-:::
+## Sharing Your Reproducible Example
 
+Once you have created your reprex, you can share it on various platforms such as GitHub, Stack Overflow, or via email. The formatted output generated by the `reprex` package ensures that your example is easy to read and understand.
 
+## Conclusion
+
+In this blog post, we have discussed the importance of reproducible examples and demonstrated how to create them using the `reprex` package in R. By creating clear and concise reprexes, you can effectively communicate problems, solutions, and ideas with your peers and collaborators. Give the `reprex` package a try and see how it can improve your workflow!
+
+## References
 
 
 ----
 
-To verify your installation (or for installation instructions) and to set up your `git` configuration, consult the very useful [Happy Git and GitHub for the useR](https://happygitwithr.com/) chapter [Install Git](https://happygitwithr.com/install-git.html).
+-   StackOverflow: [R](https://stackoverflow.com/questions/tagged/r), [Git](https://stackoverflow.com/questions/tagged/git), [RStudio](https://stackoverflow.com/questions/tagged/rstudio), [GitHub](https://stackoverflow.com/questions/tagged/github)
+-   Reddit: [R](https://www.reddit.com/r/rstats/), [Git](https://www.reddit.com/r/git/), [RStudio](https://www.reddit.com/r/RStudio/), [Github](https://www.reddit.com/r/github/)
+-   [RStudio Community](https://community.rstudio.com/)
+
+
+-   https://reprex.tidyverse.org/
+
+-   https://github.com/MilesMcBain/datapasta
+
+<!-- 
+- [ ] Work on reprex example with/without RStudio?
+- [ ] Example of a reprex on StackOverflow: https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example
+ -->
+
+```{r}
+#| label: reprex-example-1
+#| eval: false
+
+install.packages("reprex") # install reprex package
+```
+
+```{r}
+#| label: reprex-example-2
+#| eval: false
+# Create a vector with 100 random values from the normal distribution
+set.seed(123) # set seed for reproducibility
+my_vec <- rnorm(100) # random normal vector
+
+summary(my_vec) # 5 number summary
+```
+
+```{r}
+#| label: reprex-example-3
+#| eval: false
+
+reprex::reprex() # run reprex
+```
+
+Datapasta is a package that allows you to copy and paste data frames from RStudio into a reprex. This is a very useful tool for creating reproducible examples. Here is an example of how to use datapasta to create a reprex. 
+
+```{r}
+#| label: datapasta-example-1
+#| eval: false
+
+# install the datapasta package
+install.packages("datapasta")
+```
+
+```{r}
+#| label: datapasta-example-2
+#| eval: false
+
+# load the datapasta package
+library(datapasta)
+```
+
+```{r}
+#| label: datapasta-example-3
+#| eval: false
+
+# Create a data frame with 100 random values from the normal distribution
+set.seed(123) # set seed for reproducibility
+my_df <- data.frame(x = rnorm(100)) # random normal data frame
+```
+
+```{r}
+#| label: datapasta-example-4
+#| eval: false
+
+# copy the data frame to the clipboard
+dpasta(my_df)
+```

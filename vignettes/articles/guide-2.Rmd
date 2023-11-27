@@ -1,5 +1,5 @@
 ---
-title: "Working with R in remote and virtual environments"
+title: "Setting up Git and GitHub"
 bibliography: [bibliography.bib, packages.bib]
 biblio-style: apalike
 link-citations: true
@@ -7,102 +7,133 @@ pkgdown:
   as_is: true
 ---
 
+<!-- 
+  
+  - [ ] need to complete guide 
+  - [x] Is git necessary to clone a repo? Yes.
+    - [ ] Update this guide to 
+      - [ ] replace recipe-0 instructions (install git, clone repo)
+      - [ ] instructions for recipe-4 (git config, use github)
+      - [ ] 
+
+-->
+
 ```{r, child="_common.Rmd"}
 ```
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 ```
-
----- 
-
-In this Guide, we will explore two powerful strategies for working with R in remote and virtual environments: RStudio Cloud and Docker with Rocker. These tools enable you to easily collaborate on projects, manage dependencies, and ensure reproducibility of your work.
 
 ## Introduction
 
-Working with R in remote and virtual environments can greatly enhance your productivity and collaboration capabilities. In this post, we will discuss two popular options for achieving this: RStudio Cloud and Docker with Rocker.
+In this guide, we will cover the basics of setting up Git and GitHub. We will also cover the basics of using Git and GitHub to manage a project. This guide is intended for beginners who are new to Git and GitHub. It is also intended for those who are new to using Git and GitHub with R.
 
-## RStudio Cloud
+::: {.callout}
+**`r fontawesome::fa('list-alt')` Outcomes**
 
-RStudio Cloud is a cloud-based platform that allows you to run RStudio in your web browser without the need for any local installation.
+- Recognize the purpose of Git and GitHub
+- Establish a working Git and GitHub environment
+- Recognize the basic Git and GitHub workflow for managing a project
+:::
 
-### What is RStudio Cloud?
+## What is Git, Github? And why should I use it?
 
-RStudio Cloud provides an environment where you can create, edit, and run R projects from anywhere with internet access. It offers several advantages:
+Git is a version control system. It allows you to track changes to files and folders over time. It also allows you to collaborate with others on projects. Think of it as MS Word's "Track Changes" feature on steroids. 
 
-* No need to install R or RStudio locally
-* Access your projects from any device
-* Collaborate with others in real-time
-* Easily share your work
+Git is a command line tool, but there are also graphical user interfaces (GUIs) to interact with Git in a more user-friendly way. Git is a great tool for managing projects. It is especially useful for managing projects that involve multiple people.
 
-### Setting up RStudio Cloud
+GitHub is a web-based hosting service for Git repositories. It allows you to store your Git repositories in the cloud. It also allows you to collaborate with others on projects by sharing projects. GitHub is a great place to store and share your code. It is also a great place to find code that others have shared.
 
-To get started with RStudio Cloud, follow these steps:
+Combining Git with GitHub allows you to store your Git managed project repositories in the cloud. This means that you can access your repositories from anywhere. It also means that you can collaborate with others on projects. You can also use GitHub to share your code with others. This is especially useful for making your projects reproducible.
 
-1. Go to [RStudio Cloud](https://rstudio.cloud/)
-2. Sign up for a free account or log in with your existing RStudio account
-3. Create a new project by clicking on the "New Project" button
-4. Start coding in the RStudio IDE within your browser
+## How do I set up Git?
 
-### Collaboration and Sharing
+### Install and setup Git
 
-RStudio Cloud makes it easy to collaborate with others and share your work. You can invite collaborators to your project, allowing them to view and edit your code in real-time. To share your project, simply click on the "Share" button in the top right corner of the RStudio Cloud interface and choose the desired sharing options.
+The process for installation and setup will differ based on what operating system you are using. If you are using a Windows machine, you will likely need to install Git. If you are using a Mac or Linux machine, you will likely already have Git installed.
 
-## Docker with Rocker
+Windows users will need to install Git. You can do this by downloading the installer from <https://git-scm.com/downloads>. Once you have downloaded the installer, you will need to run it. You will need to follow the instructions in the installer to complete the installation.
 
-Docker is a platform that allows you to create, deploy, and run applications in containers. Rocker is a collection of Docker images specifically designed for running R.
+Mac and Linux users can verify that Git is installed by opening a terminal window and typing `git --version`. If Git is installed, you will see a version number. If Git is not installed, you will see an error message.
 
-### What is Docker and Rocker?
-
-Docker enables you to package an application along with its dependencies into a container, ensuring that it will run consistently across different environments. Rocker extends this concept to R, providing pre-built Docker images with various R configurations.
-
-Using Docker with Rocker offers several benefits:
-
-* Reproducible environments
-* Simplified dependency management
-* Easy deployment and scaling
-
-### Setting up Docker and Rocker
-
-To start using Docker with Rocker, follow these steps:
-
-1. Install [Docker](https://www.docker.com/get-started) on your local machine
-2. Pull the desired Rocker image from [Docker Hub](https://hub.docker.com/u/rocker/)
-   ```
-   docker pull rocker/rstudio
-   ```
-3. Run a container using the pulled image
-   ```
-   docker run -d -p 8787:8787 -e PASSWORD=your_password --name rstudio_container rocker/rstudio
-   ```
-4. Access RStudio in your browser at `http://localhost:8787` and log in with username `rstudio` and the password you set
-
-### Creating a Custom Docker Image
-
-You can create a custom Docker image to include specific R packages or configurations. To do this, create a `Dockerfile` with the following content:
-
-```docker
-FROM rocker/rstudio
-
-# Install additional R packages
-RUN install2.r package1 package2 package3
-```
-
-Build the custom image by running:
+Once you have Git installed, you will need to set up your Git configuration. Most of the defaults will be fine, but you will need to set your name and email address, the same address you used to create your GitHub account. You can do this by opening a terminal window and typing the following commands:
 
 ```
-docker build -t my_custom_r_image .
+git config --global user.name "Your Name"
+git config --global user.email "your.email@email.edu"
 ```
 
-Now you can run a container using your custom image:
+Alternatively, you can use the `usethis` package in R to set up Git in your environment. Open RStudio and run the following code in the console:
 
+```r
+if (!require("usethis")) {
+  install.packages("usethis")
+}
+library(usethis)
+
+use_git_config(user.name = "Your Name", user.email = "your.email@school.edu")
 ```
-docker run -d -p 8787:8787 -e PASSWORD=your_password --name custom_rstudio_container my_custom_r_image
-```
 
-## Conclusion
+<!-- - [Posit Guide on Git with RStudio.](https://support.posit.co/hc/en-us/articles/200532077) -->
 
-In this blog post, we have discussed two powerful strategies for working with R in remote and virtual environments: RStudio Cloud and Docker with Rocker. Both options offer unique advantages and can greatly enhance your productivity and collaboration capabilities. Give them a try and see which one works best for your needs!
 
+## How do I set up GitHub?
+
+To set up GitHub, you will need to create an account. You can do this at <github.com>. The service is free and there are extra features available for students and educators. Once you have created an account, you will be able to create repositories. You can also create organizations and teams. You can use these to collaborate with others on projects.
+
+## How do I manage my project with Git and GitHub?
+
+Once your Git installation and Github account are set up, you can manage local and remote repositories. You can do this from the command line, but it is recommedable that you use the Git pane in RStudio to interface with Git and GitHub. Here you can perform various key operations.
+
+Let's introduce operations related to common tasks for this textbook.
+
+A. Copy a remote lab repository to your local machine:
+
+- Navigate to the repository on GitHub
+- Click on the 'Code' button and copy the clone URL (https)
+- In RStudio, create a new project from version control
+  - File > New Project > Version Control > Git
+  - Paste the URL of the repository
+  - Choose the directory location for the project
+  - Create Project
+
+B. Fork and clone a remote template repository to your local machine:
+
+- Navigate to the repository on GitHub
+- Click the 'Fork' button
+- Select the account to fork the repository to
+- In the forked repository, click on the 'Code' button and copy the clone URL (https)
+- In RStudio, create a new project from version control
+  - File > New Project > Version Control > Git
+  - Paste the URL of the forked repository
+  - Choose the directory location for the project
+  - Create Project
+  
+C. Create/ Join a remote repository and clone it to your local machine:
+
+- Create a new repository on GitHub
+  - Click the 'New' button in the top right corner of the repositories listing page
+  - Name the repository
+  - Select 'Public' or 'Private'
+  - Select 'Initialize this repository with a README'
+  - Click 'Create Repository'
+- In the new repository, click on the 'Code' button and copy the clone URL (https)
+- In RStudio, create a new project from version control
+  - File > New Project > Version Control > Git
+  - Paste the URL of the repository
+  - Choose the directory location for the project
+  - Create Project
+
+
+
+::: {.callout}
+**`r fontawesome::fa('hand-point-up')` Tip**
+
+@Bryan2020 is an excellent reference resource for all things Git and GitHub for R users.
+
+:::
+
+## Summary
 
 ## References
