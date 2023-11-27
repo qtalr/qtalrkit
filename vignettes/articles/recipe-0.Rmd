@@ -215,6 +215,28 @@ and that you are prepared to do the following:
 - Create, edit, and render Quarto documents
 - Use some basic Markdown syntax to format text
 
+<!-- [ ] possible options for accessing? Github clone and/ or Posit cloud, Dockerfile -->
+
+::: {.callout}
+
+As this is the first lab, I will provide guidance on how to access the lab materials. The lab materials are hosted on GitHub. GitHub is a platform for hosting code and other files. To access the lab materials, you will not need to create a GitHub account, but you may sign up for a free account if you wish[^1]. You will, however, need to verify that Git is installed on your computer, and if not, install it.
+
+[^1]:  Note, if you use an education email (`.edu`) you will be able to advantage of the [Student Education Benefits](https://education.github.com/benefits).
+
+Let's start with Git. 
+
+If you are on a Windows machine, you will most likely need to install Git. [Download and install Git](https://gitforwindows.org/). Go to the "Assests" section of the page and click on the link for the latest `.exe` version. This will download an executable file. Run the executable file and follow the instructions to install Git.
+
+If you are on a Mac, you will first verify that Git is installed. Open the Terminal application (you can search for it using Spotlight). In the Terminal window, type `git --version` and press enter. If Git is installed, you will see a message that says something like `git version 2.43.0`. If you do not see this message, you will need to install Git.
+
+Once you have Git installed, you will need to clone the lab repository. Cloning a repository means that you will download the files from the repository to your computer. To clone the lab repository, follow these steps:
+
+1. You will navigate to [the lab repository on GitHub](https://github.com/qtalr/lab-0) and identify the blue button that says "Code". Make sure that in this dropdown menu you have selected "Clone" and "HTTPS". Copy the URL that appears in the box.
+2. Open RStudio and select "New Project..." from the "File" menu. Select "Version Control" and then "Git". Paste the URL you copied from GitHub into the "Repository URL" box. Select a location on your computer where you would like to save the lab materials. Click "Create Project".
+
+This process will create a folder on your computer with the lab materials. You will be able to open and edit the lab materials in RStudio.
+:::
+
 With this in mind, you are ready to move on to Lab 0.
 
 ## References 
