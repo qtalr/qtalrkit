@@ -42,9 +42,9 @@ Context: This is the first recipe in the "Preparation" part of the textbook. The
 -->
 
 
-At this point, we now have a strong undertanding of the foundations of programming in R and the data science workflow. Previous lessons, recipes, and labs focused on developing these skills while the chapters aimed to provide a conceptual framework for understanding the steps in the data science workflow. 
+At this point, we now have a strong undertanding of the foundations of programming in R and the data science workflow. Previous lessons, recipes, and labs focused on developing these skills while the chapters aimed to provide a conceptual framework for understanding the steps in the data science workflow. We now turn to applying our conceptual knowledge and our technical skills to accomplish the tasks of the data science workflow. 
 
-We now turn to applying our conceptual knowledge and our technical skills to accomplish the tasks of the data science workflow. In this recipe, we will focus on acquiring data for a text analysis project. 
+In this recipe, we will focus on acquiring data for a text analysis project. 
 
 We will cover the following topics: 
 
@@ -59,18 +59,6 @@ In Lab 4, we will apply what we have learned so far to acquire data for a text a
 ## Concepts and strategies
 
 ### Finding data sources
-
-<!-- 
-
-- Best to look for data sources with a research question in mind
-  - But finding data first can also be a good way to generate research questions
-- Point to the Guide
-- Point out that identifying data sources can be time consuming and lead to dead ends
-- Point out that the data source should be documented in the data origin file
-- Consider permissions and licensing early, to avoid surprises later
-- Consider the data format and how it will be used in the analysis
-
--->
 
 To find data sources, it is best to have a research question in mind. This will help to narrow the search for data sources. However, finding data sources can also be a good way to generate research questions. In either case, it takes some sleuthing to find data sources that will work for your research question. In addition, to the data source itself, you will also need to consider the permissions and licensing of the data source. It is best to consider these early in the process to avoid surprises later. Finally, you will also need to consider the data format and how it will be used in the analysis. It can be the case that a data source seems ideal, but the data format is not conducive to the analysis you would like to do.
 
@@ -127,7 +115,15 @@ Project Gutenberg
 - 
 -->
 
-Let's now turn to the data collection strategy. We will load the `tidyverse` and `gutenbergr` packages to prepare for the data collection process.
+Let's now turn to the data collection strategy. There are a number of data collection strategies that can be used to acquire data for a text analysis project. In the chapter, we covered manual and programmatic downloads and APIs. Here we will use an R package which will provide an API for accessing the data source.
+
+::: {.callout}
+**`r fontawesome::fa('medal')` Dive deeper**
+
+If you are interested in learning about another data collection strategy, web scraping, I suggest you look at the [Web scraping with R](guide-5.html) guide.
+:::
+
+We will load the `tidyverse` and `gutenbergr` packages to prepare for the data collection process.
 
 ```{r setup-libraries, message=FALSE, warning=FALSE}
 library(tidyverse) # data manipulation packages
