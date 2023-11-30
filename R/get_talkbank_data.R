@@ -51,7 +51,7 @@ get_talkbank_data <- function(corpus_name, corpus_path, target_dir, force = FALS
   token_types_file <- fs::path(target_dir, "token_types.csv")
   # Check if the file doesn't exist
   # if not, acquire and write it to disk
-  if (!fs::file_exists(utterances_file) | force) {
+  if (!fs::file_exists(utterances_file) || force) {
     TBDBr::getUtterances(corpusName = corpus_name, corpora = corpus_path) |>
       tidyr::unnest(cols = dplyr::everything()) |>
       readr::write_csv(utterances_file)
@@ -59,7 +59,7 @@ get_talkbank_data <- function(corpus_name, corpus_path, target_dir, force = FALS
   } else {
     message("Already acquired: ", utterances_file)
   }
-  if (!fs::file_exists(transcripts_file) | force) {
+  if (!fs::file_exists(transcripts_file) || force) {
     TBDBr::getTranscripts(corpusName = corpus_name, corpora = corpus_path) |>
       tidyr::unnest(cols = dplyr::everything()) |>
       readr::write_csv(transcripts_file)
@@ -67,7 +67,7 @@ get_talkbank_data <- function(corpus_name, corpus_path, target_dir, force = FALS
   } else {
     message("Already acquired: ", transcripts_file)
   }
-  if (!fs::file_exists(participants_file) | force) {
+  if (!fs::file_exists(participants_file) || force) {
     TBDBr::getParticipants(corpusName = corpus_name, corpora = corpus_path) |>
       tidyr::unnest(cols = dplyr::everything()) |>
       readr::write_csv(participants_file)
@@ -75,7 +75,7 @@ get_talkbank_data <- function(corpus_name, corpus_path, target_dir, force = FALS
   } else {
     message("Already acquired: ", participants_file)
   }
-  if (!fs::file_exists(tokens_file) | force) {
+  if (!fs::file_exists(tokens_file) || force) {
     TBDBr::getTokens(corpusName = corpus_name, corpora = corpus_path) |>
       tidyr::unnest(cols = dplyr::everything()) |>
       readr::write_csv(tokens_file)
@@ -83,7 +83,7 @@ get_talkbank_data <- function(corpus_name, corpus_path, target_dir, force = FALS
   } else {
     message("Already acquired: ", tokens_file)
   }
-  if (!fs::file_exists(token_types_file) | force) {
+  if (!fs::file_exists(token_types_file) || force) {
     TBDBr::getTokenTypes(corpusName = corpus_name, corpora = corpus_path) |>
       tidyr::unnest(cols = dplyr::everything()) |>
       readr::write_csv(token_types_file)
