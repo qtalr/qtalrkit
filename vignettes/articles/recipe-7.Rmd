@@ -26,6 +26,19 @@ The goal will be to do one, more advanced example
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+<!--  
+
+ANC: 
+
+- Subcorpus selection (two genres?)
+- Use samples
+- Layout the goal: (?)
+- Show the idealized dataset after transformation
+
+
+-->
+
+
 ## Overview
 
 

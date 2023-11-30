@@ -17,6 +17,15 @@ The goal will be to do one, more advanced example
 
 -->
 
+<!--  
+
+SWDA: 
+
+- Layout the research goal
+- Show the idealized curated dataset structure
+
+-->
+
 ```{r, child="_common.Rmd"}
 ```
 
