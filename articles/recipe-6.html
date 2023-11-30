@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">qtalrkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3.400</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.4.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,6 +86,14 @@ The goal will be to do one, more advanced example
   - CSV file `compiled` with nested `tokens` column
   - Data checks
   - Data dictionary
+
+-->
+<!--  
+
+SWDA: 
+
+- Layout the research goal
+- Show the idealized curated dataset structure
 
 -->
 <div class="section level2">
@@ -312,7 +320,7 @@ B
 <li>
 <input type="checkbox" disabled>Add idealized structure for the SWDA dataset</li>
 </ul>
-<p>Let's begin by reading one of the conversation files into R as a character vector using the <code>read_lines()</code> function from the readr package.</p>
+<p>Let's begin by reading one of the conversation files into R as a character vector using the <code><a href="https://readr.tidyverse.org/reference/read_lines.html" class="external-link">read_lines()</a></code> function from the readr package.</p>
 <p>To isolate the vector element that contains the document and speaker ids, we use <code>str_detect()</code> from the stringr package. This function takes two arguments, a string and a pattern, and returns a logical value, <code>TRUE</code> if the pattern is matched or <code>FALSE</code> if not. We can use the output of this function, then, to subset the <code>doc</code> character vector and only return the vector element (line) that contains <code>digits_digits_digits</code> with a regular expression. The expression combines the digit matching operator <code>\\d</code> with the <code>+</code> operator to match 1 or more contiguous digits. We then separate three groups of <code>\\d+</code> with underscores <code>_</code>. The result is <code>\\d+_\\d+_\\d+</code>.</p>
 <div class="callout">
 <p><strong>{{&lt; fa regular hand-point-up &gt;}} Tip</strong></p>

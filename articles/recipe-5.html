@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">qtalrkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3.400</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.4.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,246 +91,758 @@ The goal will be to do one, more advanced example
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>In this recipe, we will take a closer look at the data collection and documentation process. Just as in Acquire data chapter, we will group the data collection process into three types of collection strategies: <strong>downloading</strong>, <strong>APIs</strong>, and <strong>web scraping</strong>. We will also discuss the importance of documenting the data collection process including the creation and completion of a data origin file.</p>
-<p>In the process we will employ the following R skills:</p>
+<!--  
+
+Purpose: To review and expand on the data collection process which includes finding, downloading, and documenting data.
+
+Description: This recipe will build on learners' experience with R for reading, subsetting, and writing data. We will introduce programming strategies introduced in the lesson for controlling program flow with control statements and also making code more reusable (and more legible) with custom functions. All of the skills will by applied in the service of programmatically acquiring data and documenting that data collection process as one of the key steps in the data science workflow.
+
+Approach: We will work to acquire data from Project Gutenberg. The data source are selected to provide experience with an API (other than TalkBank), in this case the `gutenbergr` package. The actual data will be two English (Dickens, Eliot) and two American (Hawthorne, Melville) authors that are contemporaries. We will work with the process of acquiring one work (A Tale of Two Cities) and then turn to create a function that can be used to acquire the other most well-known works from each author (The Scarlet Letter, Moby Dick, Middlemarch). We will also work to document the data collection process by creating a data origin file.
+
+Prerequisites: This recipe assumes that learners have experience with R for reading, subsetting, and writing data. It also assumes that learners have experience with the data science workflow and the importance of documenting the data collection process.
+
+Context: This is the first recipe in the "Preparation" part of the textbook. The recipe and accompanying lab are designed to be paired. Labs from now on will include forking the lab repo and finally pushing edits/ commits to the forked repo on GitHub. The recipe will introduce the concepts and skills needed to complete the lab. The lab will provide the opportunity to apply the concepts and skills introduced in the recipe. The lab is designed to be completed in a 50 minute class period.
+
+-->
+<p>At this point, we now have a strong undertanding of the foundations of programming in R and the data science workflow. Previous lessons, recipes, and labs focused on developing these skills while the chapters aimed to provide a conceptual framework for understanding the steps in the data science workflow. We now turn to applying our conceptual knowledge and our technical skills to accomplish the tasks of the data science workflow.</p>
+<p>In this recipe, we will focus on acquiring data for a text analysis project.</p>
+<p>We will cover the following topics:</p>
 <ul>
-<li>control statements
-<ul>
-<li>
-<code>if</code> statements</li>
-<li>
-<code>message</code> function</li>
-<li>
-<code>stop</code> function (<code>.call = FALSE</code>)</li>
+<li>Finding data sources</li>
+<li>Data collection strategies</li>
+<li>Data documentation</li>
 </ul>
-</li>
-<li>custom functions
-<ul>
-<li>required and optional arguments (setting default values)</li>
-<li>argument checks (with <code>if</code> statements)</li>
-<li>
-<code>return</code> function</li>
-</ul>
-</li>
-<li>Vectorized Operations
-<ul>
-<li>Iteration functions in R
-<ul>
-<li><code>purr::map()</code></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>We will also use the following R packages:</p>
-<ul>
-<li>
-<code>here</code> (?)</li>
-<li><code>readr</code></li>
-<li><code>fs</code></li>
-<li><code>dplyr</code></li>
-<li><code>qtalrkit</code></li>
-<li><code>gutenbergr</code></li>
-<li><code>rvest</code></li>
-<li><code>xml2</code></li>
-</ul>
+<p>Along the way we will put into practice our foundational R skills and also continue to work the newly introduced skills of control statements and custom functions.</p>
+<p>In Lab 4, we will apply what we have learned so far to acquire data for a text analysis project.</p>
 </div>
 <div class="section level2">
-<h2 id="cases">Cases<a class="anchor" aria-label="anchor" href="#cases"></a>
+<h2 id="concepts-and-strategies">Concepts and strategies<a class="anchor" aria-label="anchor" href="#concepts-and-strategies"></a>
 </h2>
-<!-- Programmatic downloads -->
-<ul class="task-list">
-<li>
-<input type="checkbox" disabled>Integrate the <strong>Santa Barbara Corpus of Spoken American English</strong> (SBCSAE) into the discussion on downloading compressed files from the internet.<ul class="task-list">
-<li>
-<input type="checkbox" disabled>This will provide the opportunity to discuss the <code><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip()</a></code> function.</li>
-<li>
-<input type="checkbox" disabled>Also an opportunity to discuss a custom function to download various types of compressed data, e.g. <code>.zip</code>, <code>.tar.gz</code>, <code>.tar.bz2</code>, etc.<ul class="task-list">
-<li>
-<input type="checkbox" disabled><code><a href="../reference/get_compressed_data.html">qtalrkit::get_compressed_data()</a></code><ul class="task-list">
-<li>
-<input type="checkbox" disabled>Includes a <code>junkpaths</code> argument to discard the containing directory of the compressed file.</li>
-<li>
-<input type="checkbox" disabled>Include <code>force = TRUE</code> argument to overwrite existing data.</li>
-<li>
-<input type="checkbox" disabled>Includes <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code> and <code><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop()</a></code>/ <code><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible()</a></code> functions to provide status messages and stop the function if the arguments are not specified correctly.</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<!-- APIs  --><ul>
-<li>Literary genres data collection (API: <code>gutenbergr</code> package)
-<ul class="task-list">
-<li>
-<input type="checkbox" disabled><strong>Project Gutenberg</strong> (work on fixing or changing the data that is accessed)<ul class="task-list">
-<li>
-<input type="checkbox" disabled>Write custom function to download data and metadata from Project Gutenberg</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>To get started let's install and/ or load the <code>gutenbergr</code> package. If a package is not part of the R base library, we cannot assume that the user will have the package in their library. The standard approach for installing and then loading a package is by using the <code><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages()</a></code> function and then calling <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code>.</p>
-<!-- Web scraping -->
-<ul>
-<li>
-<a href="https://www.gutenberg.org/ebooks/5050" class="external-link">SOTU data collection (1790-2006)</a>
-<ul>
-<li>Note that the Project Gutenberg site explicitly requests that <a href="https://www.gutenberg.org/policy/terms_of_use.html" class="external-link">only human users access the site</a>. There is a metadata catalog file here: <a href="https://www.gutenberg.org/cache/epub/feeds/" class="external-link uri">https://www.gutenberg.org/cache/epub/feeds/</a>
-</li>
-<li>Scraping one page may not be a problem, but scraping multiple pages (~100) may be a problem.
-<ul>
-<li><blockquote>
-<p>Blocks to Internet addresses (IP addresses) are applied automatically based on the volume of traffic and related factors. Such blocks automatically expire after a few days.</p>
-</blockquote></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<hr>
 <div class="section level3">
-<h3 id="downloads">Downloads<a class="anchor" aria-label="anchor" href="#downloads"></a>
+<h3 id="finding-data-sources">Finding data sources<a class="anchor" aria-label="anchor" href="#finding-data-sources"></a>
 </h3>
-<p>Boilerplate information for the SBCSAE (Santa Barbara Corpus of Spoken American English):</p>
-<p>OK. You should have recognized the general steps in this function: the argument <code>url</code> and <code>target_dir</code> specify where to get the data and where to write the decompressed files, the <code>if()</code> statement evaluates whether the data already exists, if not (<code>!dir.exists(target_dir)</code>) then the data is downloaded and decompressed, if it does exist (<code>else</code>) then it is not downloaded.</p>
-<div class="callout">
-<p><strong>{{&lt; fa regular hand-point-up &gt;}} Tip</strong></p>
-<p>The prefixed <code>!</code> in the logical expression <code>dir.exists(target_dir)</code> returns the opposite logical value. This is needed in this case so when the target directory exists, the expression will return <code>FALSE</code>, not <code>TRUE</code>, and therefore not proceed in downloading the resource.</p>
-</div>
-<p>There are a couple key tweaks I've added that provide some additional functionality. For one I've included the function <code><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create()</a></code> to create the target directory where the data will be written. I've also added an additional argument to the <code><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip()</a></code> function, <code>junkpaths = TRUE</code>. Together these additions allow the user to create an arbitrary directory path where the files, and only the files, will be extracted to on our disk. This will discard the containing directory of the <code>.zip</code> file which can be helpful when we want to add multiple <code>.zip</code> files to the same target directory.</p>
-<p>A practical scenario where this applies is when we want to download data from a corpus that is contained in multiple <code>.zip</code> files but still maintain these files in a single primary data directory. Take for example the <a href="http://www.linguistics.ucsb.edu/research/santa-barbara-corpus" class="external-link">Santa Barbara Corpus</a>. This corpus resource includes a series of interviews in which there is one <code>.zip</code> file, <code>SBCorpus.zip</code> which contains the <a href="http://www.linguistics.ucsb.edu/sites/secure.lsit.ucsb.edu.ling.d7/files/sitefiles/research/SBC/SBCorpus.zip" class="external-link">transcribed interviews</a> and another <code>.zip</code> file, <code>metadata.zip</code> which organizes the <a href="http://www.linguistics.ucsb.edu/sites/secure.lsit.ucsb.edu.ling.d7/files/sitefiles/research/SBC/metadata.zip" class="external-link">meta-data</a> associated with each speaker. Applying our initial strategy to download and decompress the data will lead to the following directory structure:</p>
-<pre><code>data
-├── derived
-└── original
-    ├── SBCorpus
-    │   ├── TRN
-    │   └── __MACOSX
-    │       └── TRN
-    └── metadata
-        └── __MACOSX</code></pre>
-<p>By applying our new custom function <code>get_zip_data()</code> to the transcriptions and then the meta-data we can better organize the data.</p>
-<pre><code>data
-├── derived
-└── original
-    └── sbc
-        ├── meta-data
-        └── transcriptions</code></pre>
-<p>If we add data from other sources we can keep them logical separate and allow our data collection to scale without creating unnecessary complexity. Let's add the Switchboard Corpus sample using our <code>get_zip_data()</code> function to see this in action.</p>
-<pre><code>data
-├── derived
-└── original
-    ├── sbc
-    │   ├── meta-data
-    │   └── transcriptions
-    └── scs
-        ├── README
-        ├── discourse
-        ├── disfluency
-        ├── tagged
-        ├── timed-transcript
-        └── transcript</code></pre>
-</div>
-<div class="section level3">
-<h3 id="apis">APIs<a class="anchor" aria-label="anchor" href="#apis"></a>
-</h3>
-<p>Now that we have <code>pacman</code> installed and loaded into our R session, let's use the <code>p_load()</code> function to make sure to install/ load the two packages we will need for the upcoming tasks. If you are following along with the <code>project_template</code>, add this code within the SETUP section of the <code>1_acquire_data.Rmd</code> file.</p>
+<p>To find data sources, it is best to have a research question in mind. This will help to narrow the search for data sources. However, finding data sources can also be a good way to generate research questions. In either case, it takes some sleuthing to find data sources that will work for your research question. In addition, to the data source itself, you will also need to consider the permissions and licensing of the data source. It is best to consider these early in the process to avoid surprises later. Finally, you will also need to consider the data format and how it will be used in the analysis. It can be the case that a data source seems ideal, but the data format is not conducive to the analysis you would like to do.</p>
 <div class="callout">
 <p><strong><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M64 64V241.6c5.2-1 10.5-1.6 16-1.6H96V208 64c0-8.8-7.2-16-16-16s-16 7.2-16 16zM80 288c-17.7 0-32 14.3-32 32c0 0 0 0 0 0v24c0 66.3 53.7 120 120 120h48c52.5 0 97.1-33.7 113.4-80.7c-3.1 .5-6.2 .7-9.4 .7c-20 0-37.9-9.2-49.7-23.6c-9 4.9-19.4 7.6-30.3 7.6c-15.1 0-29-5.3-40-14c-11 8.8-24.9 14-40 14H120c-13.3 0-24-10.7-24-24s10.7-24 24-24h40c8.8 0 16-7.2 16-16s-7.2-16-16-16H120 80zM0 320s0 0 0 0c0-18 6-34.6 16-48V64C16 28.7 44.7 0 80 0s64 28.7 64 64v82c5.1-1.3 10.5-2 16-2c25.3 0 47.2 14.7 57.6 36c7-2.6 14.5-4 22.4-4c20 0 37.9 9.2 49.7 23.6c9-4.9 19.4-7.6 30.3-7.6c35.3 0 64 28.7 64 64v64 24c0 92.8-75.2 168-168 168H168C75.2 512 0 436.8 0 344V320zm336-64c0-8.8-7.2-16-16-16s-16 7.2-16 16v48 16c0 8.8 7.2 16 16 16s16-7.2 16-16V256zM160 240c5.5 0 10.9 .7 16 2v-2V208c0-8.8-7.2-16-16-16s-16 7.2-16 16v32h16zm64 24v40c0 8.8 7.2 16 16 16s16-7.2 16-16V256 240c0-8.8-7.2-16-16-16s-16 7.2-16 16v24z"></path></svg> Tip</strong></p>
-<p>Note that the arguments <code>dplyr</code> and <code>gutenbergr</code> are comma-separated but not quoted when using <code>p_load()</code>. When using <code><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages()</a></code> to install, package names need to be quoted (character strings). <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code> can take quotes or no quotes, but only one package at a time.</p>
+<p>Consult the <a href="guide-4.html">Identifying data and data sources</a> guide for some ideas on where to find data sources.</p>
 </div>
-<p>Project Gutenberg provides access to thousands of texts in the public domain. The <code>gutenbergr</code> package contains a set of tables, or <strong>data frames</strong> in R speak, that index the meta-data for these texts broken down by text (<code>gutenberg_metadata</code>), author (<code>gutenberg_authors</code>), and subject (<code>gutenberg_subjects</code>). I'll use the <code><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse()</a></code> function loaded in the <a href="https://CRAN.R-project.org/package=tidyverse" class="external-link">tidyverse</a> package <a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;&lt;code&gt;tidyverse&lt;/code&gt; is not a typical package. It is a set of packages: &lt;code&gt;ggplot2&lt;/code&gt;, &lt;code&gt;dplyr&lt;/code&gt;, &lt;code&gt;tidyr&lt;/code&gt;, &lt;code&gt;readr&lt;/code&gt;, &lt;code&gt;purrr&lt;/code&gt;, and &lt;code&gt;tibble&lt;/code&gt;. These packages are all installed/ loaded with &lt;code&gt;tidyverse&lt;/code&gt; and form the backbone for the type of work you will typically do in most analyses.&lt;/p&gt;"><sup>1</sup></a> to summarize the structure of these data frames.</p>
-<div class="callout-warning">
-<p><strong>Tip</strong></p>
-<p>The <code>gutenberg_metadata</code>, <code>gutenberg_authors</code>, and <code>gutenberg_subjects</code> are periodically updated. To check to see when each data frame was last updated run:</p>
-<p><code>attr(gutenberg_metadata, "date_updated")</code></p>
+<p>In this recipe, we will consider some hypothetical reseach aimed at exploring potential similarities and differences in the lexical, syntactic, and/ or stylistic features between American and English literature during the mid 19th century.</p>
+<div class="callout">
+<p><strong><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M4.1 38.2C1.4 34.2 0 29.4 0 24.6C0 11 11 0 24.6 0H133.9c11.2 0 21.7 5.9 27.4 15.5l68.5 114.1c-48.2 6.1-91.3 28.6-123.4 61.9L4.1 38.2zm503.7 0L405.6 191.5c-32.1-33.3-75.2-55.8-123.4-61.9L350.7 15.5C356.5 5.9 366.9 0 378.1 0H487.4C501 0 512 11 512 24.6c0 4.8-1.4 9.6-4.1 13.6zM80 336a176 176 0 1 1 352 0A176 176 0 1 1 80 336zm184.4-94.9c-3.4-7-13.3-7-16.8 0l-22.4 45.4c-1.4 2.8-4 4.7-7 5.1L168 298.9c-7.7 1.1-10.7 10.5-5.2 16l36.3 35.4c2.2 2.2 3.2 5.2 2.7 8.3l-8.6 49.9c-1.3 7.6 6.7 13.5 13.6 9.9l44.8-23.6c2.7-1.4 6-1.4 8.7 0l44.8 23.6c6.9 3.6 14.9-2.2 13.6-9.9l-8.6-49.9c-.5-3 .5-6.1 2.7-8.3l36.3-35.4c5.6-5.4 2.5-14.8-5.2-16l-50.1-7.3c-3-.4-5.7-2.4-7-5.1l-22.4-45.4z"></path></svg> Dive deeper</strong></p>
+<p>If you are interested in understanding a literary analysis perspective to text analysis, I highly recommend <a href="https://link.springer.com/book/10.1007/978-3-319-03164-4" class="external-link">Matthew Jockers' book <em>Text Analysis with R for Students of Literature</em></a> <span class="citation">(<a href="#ref-Jockers2014" role="doc-biblioref">Jockers 2014</a>)</span>. This book is a great resource for understanding how to apply text analysis to literary analysis.</p>
 </div>
-<p>To download the text itself we use the <code>gutenberg_download()</code> function which takes one required argument, <code>gutenberg_id</code>. The <code>gutenberg_download()</code> function is what is known as 'vectorized', that is, it can take a single value or multiple values for the argument <code>gutenberg_id</code>. Vectorization refers to the process of applying a function to each of the elements stored in a <strong>vector</strong> --a primary object type in R. A vector is a grouping of values of one of various types including character (<code>chr</code>), integer (<code>int</code>), double (<code>dbl</code>), and logical (<code>lgl</code>) and a data frame is a grouping of vectors. The <code>gutenberg_download()</code> function takes an integer vector which can be manually added or selected from the <code>gutenberg_metadata</code> or <code>gutenberg_subjects</code> data frames using the <code>$</code> operator (e.g. <code>gutenberg_metadata$gutenberg_id</code>).</p>
-<p>Let's first add them manually here as a toy example by generating a vector of integers from 1 to 5 assigned to the variable name <code>ids</code>.</p>
-<p>To download the works from Project Gutenberg corresponding to the <code>gutenberg_id</code>s 1 to 5, we pass the <code>ids</code> object to the <code>gutenberg_download()</code> function.</p>
-<p>Two attributes are returned: <code>gutenberg_id</code> and <code>text</code>. The <code>text</code> column contains values for each line of text (delimited by a carriage return) for each of the 5 works we downloaded. There are many more attributes available from the Project Gutenberg API that can be accessed by passing a character vector of the attribute names to the argument <code>meta_fields</code>. The column names of the <code>gutenberg_metadata</code> data frame contains the available attributes.</p>
-<p>Let's augment our previous download with the title and author of each of the works. To create a character vector we use the <code><a href="https://rdrr.io/r/base/c.html" class="external-link">c()</a></code> function, then, quote and delimit the individual elements of the vector with a comma.</p>
-<p>Now, in a more practical scenario we would like to select the values of <code>gutenberg_id</code> by some principled query such as works from a specific author, language, or subject. To do this we first query either the <code>gutenberg_metadata</code> data frame or the <code>gutenberg_subjects</code> data frame. Let's say we want to download a random sample of 10 works from English Literature (Library of Congress Classification, "PR"). Using the <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter()</a></code> function (<code>dplyr</code> is part of the <code>tidyverse</code> package set) we first extract all the Gutenberg ids from <code>gutenberg_subjects</code> where <code>subject_type == "lcc"</code> and <code>subject == "PR"</code> assigning the result to <code>ids</code>.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;See &lt;a href="https://www.loc.gov/catdir/cpso/lcco/" class="external-link"&gt;Library of Congress Classification&lt;/a&gt; documentation for a complete list of subject codes.&lt;/p&gt;'><sup>2</sup></a></p>
-<div class="callout-warning">
-<p><strong>Tip</strong></p>
-<p>The operators <code>=</code> and <code>==</code> are not equivalents. <code>==</code> is used for logical evaluation and <code>=</code> is an alternate notation for variable assignment (<code>&lt;-</code>).</p>
-</div>
-<p>The <code>gutenberg_subjects</code> data frame does not contain information as to whether a <code>gutenberg_id</code> is associated with a plain-text version. To limit our query to only those English Literature works with text, we filter the <code>gutenberg_metadata</code> data frame by the ids we have selected in <code>ids</code> and the attribute <code>has_text</code> in the <code>gutenberg_metadata</code> data frame.</p>
-<div class="callout-warning">
-<p><strong>Tip</strong></p>
-<p>A couple R programming notes on the code phrase <code>gutenberg_id %in% ids$gutenberg_id</code>. First, the <code>$</code> symbol in <code>ids$gutenberg_id</code> is the programmatic way to target a particular column in an R data frame. In this example we select the <code>ids</code> data frame and the column <code>gutenberg_id</code>, which is a integer vector. The <code>gutenberg_id</code> variable that precedes the <code>%in%</code> operator does not need an explicit reference to a data frame because the primary argument of the <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter()</a></code> function is this data frame (<code>gutenberg_metadata</code>). Second, the <code>%in%</code> operator logically evaluates whether the vector elements in <code>gutenberg_metadata$gutenberg_ids</code> are also found in the vector <code>ids$gutenberg_id</code> returning <code>TRUE</code> and <code>FALSE</code> accordingly. This effectively filters those ids which are not in both vectors.</p>
-</div>
-<p>As we can see the number of works with text is fewer than the number of works listed, <code>nrow(ids)</code> versus <code>nrow(ids_has_text)</code>. Now we can safely do our random selection of 10 works, with the function <code><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_sample()</a></code> and be confident that the ids we select will contain text when we take the next step by downloading the data.</p>
-<p>To avoid downloading dataset that already resides on disk, let's implement a similar strategy to the one used for direct downloads (<code>get_zip_data()</code>). I've incorporated the code for sampling and downloading data for a particular subject from Project Gutenberg with a control statement to check if the dataset file already exists into a function I named <code>get_gutenberg_subject()</code>. Take a look at this function below.</p>
-<p>Adding this function to our function script <code>functions/acquire_functions.R</code>, we can now source this function in our <code>analysis/1_acquire_data.Rmd</code> script to download multiple subjects and store them in on disk in their own file.</p>
-<p>Let's download American Literature now (LCC code "PQ").</p>
-<p>Applying this function to both the English and American Literature datasets, our data directory structure now looks like this:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">data</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> derived</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">└──</span> original</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">├──</span> gutenberg</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│</span>   ├── works_pq.csv</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│</span>   └── works_pr.csv</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">├──</span> sbc</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│</span>   ├── meta-data</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│</span>   └── transcriptions</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">└──</span> scs</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> README</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> discourse</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> disfluency</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> documentation</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> tagged</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        <span class="ex">├──</span> timed-transcript</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        <span class="ex">└──</span> transcript</span></code></pre></div>
+<p>Project Gutenberg is a great source of data for this research question. Project Gutenberg is a volunteer effort to digitize and archive cultural works. The great majority of the works in the Project Gutenberg database are in the public domain in the United States. This means that the works can be freely used and shared.</p>
+<p>Furthermore, the <code>gutenbergr</code> package provides an API for accessing the Project Gutenberg database. This means that we can use R to access the Project Gutenberg database and download the text and metadata for the works we are interested in. The <code>gutenbergr</code> package also provides a number of data frames that can help us to identify the works we are interested in.</p>
 </div>
 <div class="section level3">
-<h3 id="web-scraping">Web Scraping<a class="anchor" aria-label="anchor" href="#web-scraping"></a>
+<h3 id="data-collection-strategy">Data collection strategy<a class="anchor" aria-label="anchor" href="#data-collection-strategy"></a>
 </h3>
+<!--  
+
+Types of data collection strategies:
+
+- Direct download
+- Programmatic download
+- APIs (Application Programming Interface)
+
+Other avenues for data collection:
+
+- Web scraping
+- Experimental data collection
+  - Survey data collection
+  - Interviews and focus groups
+  - Behavioral data collection
+
+Key concepts for R programming: 
+
+- Vectors, data frames, and lists
+- Variables and functions
+- Control statements
+- Custom functions
+
+Project Gutenberg
+
+- `gutenbergr` package
+- `gutenberg_metadata`, `gutenberg_authors`, `gutenberg_subjects`
+- ...
+
+- Write custom function to download data and metadata from Project Gutenberg
+- 
+-->
+<p>Let's now turn to the data collection strategy. There are a number of data collection strategies that can be used to acquire data for a text analysis project. In the chapter, we covered manual and programmatic downloads and APIs. Here we will use an R package which will provide an API for accessing the data source.</p>
+<div class="callout">
+<p><strong><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M4.1 38.2C1.4 34.2 0 29.4 0 24.6C0 11 11 0 24.6 0H133.9c11.2 0 21.7 5.9 27.4 15.5l68.5 114.1c-48.2 6.1-91.3 28.6-123.4 61.9L4.1 38.2zm503.7 0L405.6 191.5c-32.1-33.3-75.2-55.8-123.4-61.9L350.7 15.5C356.5 5.9 366.9 0 378.1 0H487.4C501 0 512 11 512 24.6c0 4.8-1.4 9.6-4.1 13.6zM80 336a176 176 0 1 1 352 0A176 176 0 1 1 80 336zm184.4-94.9c-3.4-7-13.3-7-16.8 0l-22.4 45.4c-1.4 2.8-4 4.7-7 5.1L168 298.9c-7.7 1.1-10.7 10.5-5.2 16l36.3 35.4c2.2 2.2 3.2 5.2 2.7 8.3l-8.6 49.9c-1.3 7.6 6.7 13.5 13.6 9.9l44.8-23.6c2.7-1.4 6-1.4 8.7 0l44.8 23.6c6.9 3.6 14.9-2.2 13.6-9.9l-8.6-49.9c-.5-3 .5-6.1 2.7-8.3l36.3-35.4c5.6-5.4 2.5-14.8-5.2-16l-50.1-7.3c-3-.4-5.7-2.4-7-5.1l-22.4-45.4z"></path></svg> Dive deeper</strong></p>
+<p>If you are interested in learning about another data collection strategy, web scraping, I suggest you look at the <a href="guide-5.html">Web scraping with R</a> guide.</p>
+</div>
+<p>We will load the <code>dplyr</code>, <code>readr</code> and <code>gutenbergr</code> packages to prepare for the data collection process.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>      <span class="co"># data manipulation</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span>      <span class="co"># data import/ export</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/gutenbergr/" class="external-link">gutenbergr</a></span><span class="op">)</span> <span class="co"># Project Gutenberg API</span></span></code></pre></div>
+<p>The main workhorse of the <code>gutenbergr</code> package is the <code><a href="https://docs.ropensci.org/gutenbergr/reference/gutenberg_download.html" class="external-link">gutenberg_download()</a></code>. It's only required argument is the id(s) used by Project Gutenberg to index all of the works in their database. This function will then download the text of the work(s) and return a data frame with the gutenberg id and the text of the work(s).</p>
+<p>So how do we find the gutenberg ids? The manual method is to go to the Project Gutenberg website and search for the work you are interested in. For example, let's say we are interested in the work "A Tale of Two Cities" by Charles Dickens. We can search for this work on the Project Gutenberg website and then click on the link to the work. The url for this work is: <a href="https://www.gutenberg.org/ebooks/98" class="external-link uri">https://www.gutenberg.org/ebooks/98</a>. The gutenberg id is the number at the end of the url, in this case 98.</p>
+<p>This will work for individual works, but why wouldn't we just download the text from the Project Gutenberg website? For the works on Project Gutenberg this would be perfectly fine. We can share the text with others as the license for the works on Project Gutenberg are in the public domain.</p>
+<p>However, what if are interested in downloading multiple works? As the number of works increases, the time it takes to manually download each work increases. Furthermore, the <code>gutenbergr</code> package provides a number of additional attributes that can be downloaded and organized along side the text. Finally, the results of the <code><a href="https://docs.ropensci.org/gutenbergr/reference/gutenberg_download.html" class="external-link">gutenberg_download()</a></code> function are returned as a data frame which can be easily manipulated and analyzed in R.</p>
+<p>In our data acquisition plan, we want to collect works from a number of authors. So it will be best to leverge the <code>gutenbergr</code> package to download the works we are interested in. To do this we need to know the gutenberg ids for the works we are interested in.</p>
+<p>Convienently, the <code>gutenbergr</code> package also includes a number of data frames that contain meta data for the works in the Project Gutenberg database. These data frames include meta data for works in the Project Gutenberg database (<code>gutenberg_metadata</code>), authors (<code>gutenberg_authors</code>), and subjects (<code>gutenberg_subjects</code>).</p>
+<p>Let's take a look at the structure of these data frames.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">gutenberg_metadata</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Rows: 72,569</span></span>
+<span><span class="co">## Columns: 8</span></span>
+<span><span class="co">## $ gutenberg_id        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,…</span></span>
+<span><span class="co">## $ title               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "The Declaration of Independence of the United Sta…</span></span>
+<span><span class="co">## $ author              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Jefferson, Thomas", "United States", "Kennedy, Jo…</span></span>
+<span><span class="co">## $ gutenberg_author_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1638, 1, 1666, 3, 1, 4, NA, 3, 3, NA, 7, 7, 7, 8, …</span></span>
+<span><span class="co">## $ language            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "en", "en", "en", "en", "en", "en", "en", "en", "e…</span></span>
+<span><span class="co">## $ gutenberg_bookshelf <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Politics/American Revolutionary War/United States…</span></span>
+<span><span class="co">## $ rights              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Public domain in the USA.", "Public domain in the…</span></span>
+<span><span class="co">## $ has_text            <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TR…</span></span></code></pre>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">gutenberg_authors</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Rows: 23,980</span></span>
+<span><span class="co">## Columns: 7</span></span>
+<span><span class="co">## $ gutenberg_author_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1…</span></span>
+<span><span class="co">## $ author              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "United States", "Lincoln, Abraham", "Henry, Patri…</span></span>
+<span><span class="co">## $ alias               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "U.S.A.", NA, NA, NA, "Dodgson, Charles Lutwidge",…</span></span>
+<span><span class="co">## $ birthdate           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> NA, 1809, 1736, 1849, 1832, NA, 1819, 1860, NA, 18…</span></span>
+<span><span class="co">## $ deathdate           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> NA, 1865, 1799, 1931, 1898, NA, 1891, 1937, NA, 18…</span></span>
+<span><span class="co">## $ wikipedia           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "https://en.wikipedia.org/wiki/United_States", "ht…</span></span>
+<span><span class="co">## $ aliases             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "U.S.A.", "United States President (1861-1865)/Lin…</span></span></code></pre>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">gutenberg_subjects</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Rows: 231,741</span></span>
+<span><span class="co">## Columns: 3</span></span>
+<span><span class="co">## $ gutenberg_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, …</span></span>
+<span><span class="co">## $ subject_type <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "lcsh", "lcsh", "lcc", "lcc", "lcsh", "lcsh", "lcc", "lcc…</span></span>
+<span><span class="co">## $ subject      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "United States -- History -- Revolution, 1775-1783 -- Sou…</span></span></code></pre>
+<p>From this overvew, we can see that there are 72,569 works in the Project Gutenberg database. We can also see that there are 23,980 authors and 231,741 subjects.</p>
+<p>As we dicussed, each work in the Project Gutenberg database has a gutenberg id. The <code>gutenberg_id</code> appears in the <code>gutenberg_metadata</code> and also in the <code>gutenberg_subjects</code> data frame. This common attribute means that a work with a particular gutenberg id can be linked to the subject(s) associated with that work. Another important attribute is is the <code>gutenberg_author_id</code> which links the work to the author(s) of that work. Yes, the author name is in the <code>gutenberg_metadata</code> data frame, but the <code>gutenberg_author_id</code> can be used to link the work to the <code>gutenberg_authors</code> data frame which contains additional information about authors.</p>
+<div class="callout">
+<p><strong><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M64 64V241.6c5.2-1 10.5-1.6 16-1.6H96V208 64c0-8.8-7.2-16-16-16s-16 7.2-16 16zM80 288c-17.7 0-32 14.3-32 32c0 0 0 0 0 0v24c0 66.3 53.7 120 120 120h48c52.5 0 97.1-33.7 113.4-80.7c-3.1 .5-6.2 .7-9.4 .7c-20 0-37.9-9.2-49.7-23.6c-9 4.9-19.4 7.6-30.3 7.6c-15.1 0-29-5.3-40-14c-11 8.8-24.9 14-40 14H120c-13.3 0-24-10.7-24-24s10.7-24 24-24h40c8.8 0 16-7.2 16-16s-7.2-16-16-16H120 80zM0 320s0 0 0 0c0-18 6-34.6 16-48V64C16 28.7 44.7 0 80 0s64 28.7 64 64v82c5.1-1.3 10.5-2 16-2c25.3 0 47.2 14.7 57.6 36c7-2.6 14.5-4 22.4-4c20 0 37.9 9.2 49.7 23.6c9-4.9 19.4-7.6 30.3-7.6c35.3 0 64 28.7 64 64v64 24c0 92.8-75.2 168-168 168H168C75.2 512 0 436.8 0 344V320zm336-64c0-8.8-7.2-16-16-16s-16 7.2-16 16v48 16c0 8.8 7.2 16 16 16s16-7.2 16-16V256zM160 240c5.5 0 10.9 .7 16 2v-2V208c0-8.8-7.2-16-16-16s-16 7.2-16 16v32h16zm64 24v40c0 8.8 7.2 16 16 16s16-7.2 16-16V256 240c0-8.8-7.2-16-16-16s-16 7.2-16 16v24z"></path></svg> Tip</strong></p>
+<p>The <code>gutenbergr</code> package is periodically updated. To check to see when each data frame was last updated run:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">gutenberg_metadata</span>, <span class="st">"date_updated"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<p>Let's now describe a few more attributes that will be useful for our data acquisition plan. In the <code>gutenberg_subjects</code> data frame, we have <code>subject_type</code> and <code>subject</code>. The <code>subject_type</code> is the type of subject classification system used to classify the work. If you tabulate this column, you will see that there are two types of subject classification systems used: Library of Congress Classification (<code>lcc</code>) and Library of Congress Subject Headings (<code>lcsh</code>). The <code>subject</code> column contains the subject code for the work. For <code>lsch</code> the subject code is a descriptive character string and for <code>lcc</code> the subject code is an id as a character string that is a combination of letters (and numbers) that the <a href="https://www.loc.gov/catdir/cpso/lcco/" class="external-link">Library of Congress uses to classify works</a>.</p>
+<p>For our data acquistion plan, we will use the <code>lcc</code> subject classification system to select works from the Library of Congress Classification for English Literature (PR) and American Literature (PS).</p>
+<p>In the <code>gutenberg_authors</code> data frame, we have the <code>birthdate</code> and <code>deathdate</code> attributes. These attributes will be useful for filtering the authors that lived during the mid 19th century.</p>
+<p>With this overview of the <code>gutenbergr</code> package and the data frames that it contains, we can now begin to develop our data acquisition plan.</p>
+<ol style="list-style-type: decimal">
+<li>Select the authors that lived during the mid 19th century from the <code>gutenberg_authors</code> data frame.</li>
+<li>Select the works from the Library of Congress Classification for English Literature (PR) and American Literature (PS) from the <code>gutenberg_subjects</code> data frame.</li>
+<li>Select works from <code>gutenberg_metadata</code> that are associated with the authors and subjects selected in steps 1 and 2.</li>
+<li>Download the text and metadata for the works selected in step 3 using the <code><a href="https://docs.ropensci.org/gutenbergr/reference/gutenberg_download.html" class="external-link">gutenberg_download()</a></code> function.</li>
+<li>Write the data to disk in an appropriate format.</li>
+</ol>
+</div>
+<div class="section level3">
+<h3 id="data-collection">Data collection<a class="anchor" aria-label="anchor" href="#data-collection"></a>
+</h3>
+<p>Let's take each of these steps in turn. First, we need to select the authors that lived during the mid 19th century from the <code>gutenberg_authors</code> data frame. To do this we will use the <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter()</a></code> function. We will pass the <code>gutenberg_authors</code> data frame to the <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter()</a></code> function and then use the <code>birthdate</code> column to select the authors that were born after 1800 and died before 1880 --this year is chosen as the mid 19th century is generally considered to be the period from 1830 to 1870. We will then assign the result to the variable name <code>authors</code>.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">authors</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">gutenberg_authors</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>    <span class="va">birthdate</span> <span class="op">&gt;</span> <span class="fl">1800</span>,</span>
+<span>    <span class="va">deathdate</span> <span class="op">&lt;</span> <span class="fl">1880</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p>That's it! We now have a data frame with the authors that lived during the mid 19th century, some 787 authors in total. This will span all subjects and languages, so this isn't the final number of authors we will be working with.</p>
+<p>The next step is to select the works from the Library of Congress Classification for English Literature (PR) and American Literature (PS) from the <code>gutenberg_subjects</code> data frame. To do this we will use the <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter()</a></code> function again. We will pass the <code>gutenberg_subjects</code> data frame to the <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter()</a></code> function and then use the <code>subject_type</code> and <code>subject</code> columns to select the works that are associated with the Library of Congress Classification for English Literature (PR) and American Literature (PS). We will then assign the result to the variable name <code>subjects</code>.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">subjects</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">gutenberg_subjects</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>    <span class="va">subject_type</span> <span class="op">==</span> <span class="st">"lcc"</span>,</span>
+<span>    <span class="va">subject</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PR"</span>, <span class="st">"PS"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p>Now we have a data frame with the subjects that we are interested in. Let's inspect this data frame to see how many works we have for each subject.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">subjects</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">subject</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 2</span></span></span>
+<span><span class="co">##   subject     n</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> PR       <span style="text-decoration: underline;">9</span>926</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> PS      <span style="text-decoration: underline;">10</span>953</span></span></code></pre>
+<p>The next step is to subset the <code>gutenberg_metadata</code> data frame to select works from the authors and subjects selected in the previous steps. Again, we will use <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter()</a></code> to do this. We will pass the <code>gutenberg_metadata</code> data frame to the <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter()</a></code> function and then use the <code>gutenberg_author_id</code> and <code>gutenberg_id</code> columns to select the works that are associated with the authors and subjects selected in the previous steps. We will then assign the result to the variable name <code>works</code>.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">works</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">gutenberg_metadata</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>    <span class="va">gutenberg_author_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">authors</span><span class="op">$</span><span class="va">gutenberg_author_id</span>,</span>
+<span>    <span class="va">gutenberg_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">subjects</span><span class="op">$</span><span class="va">gutenberg_id</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">works</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 1,014 × 8</span></span></span>
+<span><span class="co">##    gutenberg_id title    author gutenberg_author_id language gutenberg_bookshelf</span></span>
+<span><span class="co">##           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span>           33 The Sca… Hawth…                  28 en       <span style="color: #949494;">"</span>Harvard Classics/…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span>           46 A Chris… Dicke…                  37 en       <span style="color: #949494;">"</span>Children's Litera…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span>           71 On the … Thore…                  54 en       <span style="color: #949494;">""</span>                 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span>           77 The Hou… Hawth…                  28 en       <span style="color: #949494;">"</span>Best Books Ever L…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span>           98 A Tale … Dicke…                  37 en       <span style="color: #949494;">"</span>Historical Fictio…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span>          205 Walden,… Thore…                  54 en       <span style="color: #949494;">""</span>                 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span>          258 Poems b… Gordo…                 145 en       <span style="color: #949494;">""</span>                 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span>          271 Black B… Sewel…                 154 en       <span style="color: #949494;">"</span>Best Books Ever L…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span>          292 Beauty … Taylo…                 167 en       <span style="color: #949494;">""</span>                 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span>          394 Cranford Gaske…                 220 en       <span style="color: #949494;">""</span>                 </span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 1,004 more rows</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 2 more variables: rights &lt;chr&gt;, has_text &lt;lgl&gt;</span></span></span></code></pre>
+<p>Filtering the <code>gutenberg_metadata</code> data frame by the authors and subjects selected in the previous steps, we now have a data frame with 1,014 works. This is the final number of works we will be working with so we can now download the text and metadata for these works using the <code><a href="https://docs.ropensci.org/gutenbergr/reference/gutenberg_download.html" class="external-link">gutenberg_download()</a></code> function.</p>
+<p>A few things to note about the <code><a href="https://docs.ropensci.org/gutenbergr/reference/gutenberg_download.html" class="external-link">gutenberg_download()</a></code> function. First, it is vectorized, that is, it can take a single value or multiple values for the argument <code>gutenberg_id</code>. This is good as we will be passing a vector of gutenberg ids to the function. A small fraction of the works on Project Gutenberg are not in the public domain and therefore cannot be downloaded, this is documented in the <code>rights</code> column. Furthermore, not all of the works have text available, as seen in the <code>has_text</code> column. Finally, the <code><a href="https://docs.ropensci.org/gutenbergr/reference/gutenberg_download.html" class="external-link">gutenberg_download()</a></code> function returns a data frame with the gutenberg id and the text of the work(s) --but we can also select additional attributes to be returned by passing a character vector of the attribute names to the argument <code>meta_fields</code>. The column names of the <code>gutenberg_metadata</code> data frame contains the available attributes.</p>
+<p>With this in mind, let's do a quick test before we download all of the works. Let's select the first 5 works from the <code>works</code> data frame that fit our criteria and then download the text and metadata for these works using the <code><a href="https://docs.ropensci.org/gutenbergr/reference/gutenberg_download.html" class="external-link">gutenberg_download()</a></code> function. We will then assign the result to the variable name <code>works_sample</code>.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">works_sample</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">works</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>    <span class="va">rights</span> <span class="op">==</span> <span class="st">"Public domain in the USA."</span>,</span>
+<span>    <span class="va">has_text</span> <span class="op">==</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://docs.ropensci.org/gutenbergr/reference/gutenberg_download.html" class="external-link">gutenberg_download</a></span><span class="op">(</span></span>
+<span>    meta_fields <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"title"</span>, <span class="st">"author"</span>, <span class="st">"gutenberg_author_id"</span>, <span class="st">"gutenberg_bookshelf"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">works_sample</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 38,227 × 6</span></span></span>
+<span><span class="co">##    gutenberg_id text        title author gutenberg_author_id gutenberg_bookshelf</span></span>
+<span><span class="co">##           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span>           33 <span style="color: #949494;">"</span>The Scarl… The … Hawth…                  28 Harvard Classics/M…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span>           33 <span style="color: #949494;">""</span>          The … Hawth…                  28 Harvard Classics/M…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span>           33 <span style="color: #949494;">"</span>by Nathan… The … Hawth…                  28 Harvard Classics/M…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span>           33 <span style="color: #949494;">""</span>          The … Hawth…                  28 Harvard Classics/M…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span>           33 <span style="color: #949494;">""</span>          The … Hawth…                  28 Harvard Classics/M…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span>           33 <span style="color: #949494;">"</span>Contents<span style="color: #949494;">"</span>  The … Hawth…                  28 Harvard Classics/M…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span>           33 <span style="color: #949494;">""</span>          The … Hawth…                  28 Harvard Classics/M…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span>           33 <span style="color: #949494;">"</span> THE CUST… The … Hawth…                  28 Harvard Classics/M…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span>           33 <span style="color: #949494;">"</span> THE SCAR… The … Hawth…                  28 Harvard Classics/M…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span>           33 <span style="color: #949494;">"</span> I. THE P… The … Hawth…                  28 Harvard Classics/M…</span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 38,217 more rows</span></span></span></code></pre>
+<p>Let's inspect the <code>works_sample</code> data frame. First, from the output we can see that all of our meta data attributes were returned. Second, we can see that the <code>text</code> column contains values for each line of text (delimited by a carriage return) for each of the 5 works we downloaded, even blank lines. To make sure that we have the correct number of works, we can use the <code><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count()</a></code> function to count the number of works by <code>gutenberg_id</code>.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">works_sample</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">gutenberg_id</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 5 × 2</span></span></span>
+<span><span class="co">##   gutenberg_id     n</span></span>
+<span><span class="co">##          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span>           33  <span style="text-decoration: underline;">8</span>212</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span>           46  <span style="text-decoration: underline;">3</span>842</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span>          258 <span style="text-decoration: underline;">11</span>050</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span>          271  <span style="text-decoration: underline;">5</span>997</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">5</span>          292  <span style="text-decoration: underline;">9</span>126</span></span></code></pre>
+<p>Yes, we have 5 works and we can see how many lines are in each of these works.</p>
+<p>We could now run this code on the entire <code>works</code> data frame and then write the data to disk like so:</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">works</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>    <span class="va">rights</span> <span class="op">==</span> <span class="st">"Public domain in the USA."</span>,</span>
+<span>    <span class="va">has_text</span> <span class="op">==</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://docs.ropensci.org/gutenbergr/reference/gutenberg_download.html" class="external-link">gutenberg_download</a></span><span class="op">(</span></span>
+<span>    meta_fields <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"title"</span>, <span class="st">"author"</span>, <span class="st">"gutenberg_author_id"</span>, <span class="st">"gutenberg_bookshelf"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"data/original/gutenberg/works.csv"</span><span class="op">)</span></span></code></pre></div>
+<p>This would accomplish the primary goal of our data acquisition plan.</p>
+<p>However, there is some key functionality that we are missing if we would like to make this code more reproducible-friendly. First, we are not checking to see if the data already exists on disk. If we already have run this code in our script, we likely do not want to run it again. Second, we may want to use this code again with different parameters, for example, we may want to retrieve different subject codes, or different time periods, or other languages.</p>
+<p>All three of these additional features can be accomplished with writing a custom function. Let's take a look at the code we have written so far and see how we can turn this into a custom function.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get authors within years</span></span>
+<span><span class="va">authors</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">gutenberg_authors</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>    <span class="va">birthdate</span> <span class="op">&gt;</span> <span class="fl">1800</span>,</span>
+<span>    <span class="va">deathdate</span> <span class="op">&lt;</span> <span class="fl">1880</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co"># Get LCC subjects</span></span>
+<span><span class="va">subjects</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">gutenberg_subjects</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>    <span class="va">subject_type</span> <span class="op">==</span> <span class="st">"lcc"</span>,</span>
+<span>    <span class="va">subject</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PR"</span>, <span class="st">"PS"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co"># Get works based on authors and subjects</span></span>
+<span><span class="va">works</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">gutenberg_metadata</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>    <span class="va">gutenberg_author_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">authors</span><span class="op">$</span><span class="va">gutenberg_author_id</span>,</span>
+<span>    <span class="va">gutenberg_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">subjects</span><span class="op">$</span><span class="va">gutenberg_id</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co"># Download works</span></span>
+<span><span class="va">works</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>    <span class="va">rights</span> <span class="op">==</span> <span class="st">"Public domain in the USA."</span>,</span>
+<span>    <span class="va">has_text</span> <span class="op">==</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://docs.ropensci.org/gutenbergr/reference/gutenberg_download.html" class="external-link">gutenberg_download</a></span><span class="op">(</span></span>
+<span>    meta_fields <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"title"</span>, <span class="st">"author"</span>, <span class="st">"gutenberg_author_id"</span>, <span class="st">"gutenberg_bookshelf"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"data/original/gutenberg/works.csv"</span><span class="op">)</span></span></code></pre></div>
+<div class="section level4 tabset tabset-pills">
+<h4 id="build-the-custom-function">Build the custom function<a class="anchor" aria-label="anchor" href="#build-the-custom-function"></a>
+</h4>
+
+
+
+
+
+
+
+
+
+
+<ul class="nav nav-pills" id="build-the-custom-function" role="tablist">
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#function-name" id="function-name-tab" type="button" role="tab" aria-controls="function-name" aria-selected="true" class="active nav-link">Function name</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#function-arguments" id="function-arguments-tab" type="button" role="tab" aria-controls="function-arguments" aria-selected="false" class="nav-link">Function arguments</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#function-code-comments" id="function-code-comments-tab" type="button" role="tab" aria-controls="function-code-comments" aria-selected="false" class="nav-link">Function code: comments</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#function-code-packages" id="function-code-packages-tab" type="button" role="tab" aria-controls="function-code-packages" aria-selected="false" class="nav-link">Function code: packages</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#function-code-data-check" id="function-code-data-check-tab" type="button" role="tab" aria-controls="function-code-data-check" aria-selected="false" class="nav-link">Function code: data check</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#function-code-authors" id="function-code-authors-tab" type="button" role="tab" aria-controls="function-code-authors" aria-selected="false" class="nav-link">Function code: authors</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#function-code-subject" id="function-code-subject-tab" type="button" role="tab" aria-controls="function-code-subject" aria-selected="false" class="nav-link">Function code: subject</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#function-code-works" id="function-code-works-tab" type="button" role="tab" aria-controls="function-code-works" aria-selected="false" class="nav-link">Function code: works</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#function-code-download" id="function-code-download-tab" type="button" role="tab" aria-controls="function-code-download" aria-selected="false" class="nav-link">Function code: download</button></li>
+<li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#function-code-write" id="function-code-write-tab" type="button" role="tab" aria-controls="function-code-write" aria-selected="false" class="nav-link">Function code: write</button></li>
+</ul>
+<div class="tab-content">
+<div class="active  tab-pane" id="function-name" role="tabpanel" aria-labelledby="function-name-tab">
+
+<p>Let's start to create our function by creating a name and calling the <code>function()</code> function. We will name our function <code><a href="../reference/get_gutenberg_works.html">get_gutenberg_works()</a></code>.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">get_gutenberg_works</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="tab-pane" id="function-arguments" role="tabpanel" aria-labelledby="function-arguments-tab">
+
+<p>Now we need to think of the arguments that we would like to pass to our function so they can be used to customize the data acquisition process. First, we want to check to see if the data already exists on disk. To do this we will need to pass the path to the data file to our function. We will name this argument <code>target_file</code>.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">get_gutenberg_works</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">target_file</span><span class="op">)</span> <span class="op">{</span></span>
+<span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>Next, we want to pass the subject code that the works should be associated with. We will name this argument <code>lcc_subject</code>.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">get_gutenberg_works</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">target_file</span>, <span class="va">lcc_subject</span><span class="op">)</span> <span class="op">{</span></span>
+<span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>Finally, we want to pass the birth year and death year that the authors should be associated with. We will name these arguments <code>birth_year</code> and <code>death_year</code>.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">get_gutenberg_works</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">target_file</span>, <span class="va">lcc_subject</span>, <span class="va">birth_year</span>, <span class="va">death_year</span><span class="op">)</span> <span class="op">{</span></span>
+<span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="tab-pane" id="function-code-comments" role="tabpanel" aria-labelledby="function-code-comments-tab">
+
+<p>We now turn to the code. I like to start by creating comments to describe the steps inside the function before adding code.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">get_gutenberg_works</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">target_file</span>, <span class="va">lcc_subject</span>, <span class="va">birth_year</span>, <span class="va">death_year</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Load packages</span></span>
+<span></span>
+<span>  <span class="co"># Check to see if the data already exists</span></span>
+<span></span>
+<span>  <span class="co"># Get authors within years</span></span>
+<span></span>
+<span>  <span class="co"># Get LCC subjects</span></span>
+<span></span>
+<span>  <span class="co"># Get works based on authors and subjects</span></span>
+<span></span>
+<span>  <span class="co"># Download works</span></span>
+<span></span>
+<span>  <span class="co"># Write works to disk</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="tab-pane" id="function-code-packages" role="tabpanel" aria-labelledby="function-code-packages-tab">
+
+<p>We have some packages we want to make sure are installed and loaded. We will use the <code>pacman</code> package to do this. We will use the <code>p_load()</code> function to install and load the packages. We will pass the character vector of package names to the <code>p_load()</code> function.</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">get_gutenberg_works</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">target_file</span>, <span class="va">lcc_subject</span>, <span class="va">birth_year</span>, <span class="va">death_year</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Load packages</span></span>
+<span>  <span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html" class="external-link">p_load</a></span><span class="op">(</span><span class="va">dplyr</span>, <span class="va">gutenbergr</span>, <span class="va">readr</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Check to see if the data already exists</span></span>
+<span></span>
+<span>  <span class="co"># Get authors within years</span></span>
+<span></span>
+<span>  <span class="co"># Get LCC subjects</span></span>
+<span></span>
+<span>  <span class="co"># Get works based on authors and subjects</span></span>
+<span></span>
+<span>  <span class="co"># Download works</span></span>
+<span></span>
+<span>  <span class="co"># Write works to disk</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="tab-pane" id="function-code-data-check" role="tabpanel" aria-labelledby="function-code-data-check-tab">
+
+<p>We need to create the code to check if the data exists. We will use an <code>if</code> statement to do this. If the data does exist, we will print a message to the console that the data already exists and stop the function. If the data does not exist, we will create the directory structure and continue with the data acquisition process. I will use the <code>fs</code> package in this code so I will load the library at the top of the function.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">get_gutenberg_works</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">target_file</span>, <span class="va">lcc_subject</span>, <span class="va">birth_year</span>, <span class="va">death_year</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Load packages</span></span>
+<span>  <span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html" class="external-link">p_load</a></span><span class="op">(</span><span class="va">dplyr</span>, <span class="va">gutenbergr</span>, <span class="va">readr</span>, <span class="va">fs</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Check to see if the data already exists</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu">file_exists</span><span class="op">(</span><span class="va">target_file</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Data already exists \n"</span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="va">target_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">target_file</span><span class="op">)</span></span>
+<span>    <span class="fu">dir_create</span><span class="op">(</span>path <span class="op">=</span> <span class="va">target_dir</span>, recurse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="co"># Get authors within years</span></span>
+<span></span>
+<span>  <span class="co"># Get LCC subjects</span></span>
+<span></span>
+<span>  <span class="co"># Get works based on authors and subjects</span></span>
+<span></span>
+<span>  <span class="co"># Download works</span></span>
+<span></span>
+<span>  <span class="co"># Write works to disk</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="tab-pane" id="function-code-authors" role="tabpanel" aria-labelledby="function-code-authors-tab">
+
+<p>Let's now add the code to get the authors within the years. We will now use the <code>birth_year</code> and <code>death_year</code> arguments to filter the <code>gutenberg_authors</code> data frame.</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">get_gutenberg_works</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">target_file</span>, <span class="va">lcc_subject</span>, <span class="va">birth_year</span>, <span class="va">death_year</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Load packages</span></span>
+<span>  <span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html" class="external-link">p_load</a></span><span class="op">(</span><span class="va">dplyr</span>, <span class="va">gutenbergr</span>, <span class="va">readr</span>, <span class="va">fs</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Check to see if the data already exists</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu">file_exists</span><span class="op">(</span><span class="va">target_file</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Data already exists \n"</span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="va">target_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">target_file</span><span class="op">)</span></span>
+<span>    <span class="fu">dir_create</span><span class="op">(</span>path <span class="op">=</span> <span class="va">target_dir</span>, recurse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="co"># Get authors within years</span></span>
+<span>  <span class="va">authors</span> <span class="op">&lt;-</span></span>
+<span>    <span class="va">gutenberg_authors</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>      <span class="va">birthdate</span> <span class="op">&gt;</span> <span class="va">birth_year</span>,</span>
+<span>      <span class="va">deathdate</span> <span class="op">&lt;</span> <span class="va">death_year</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Get LCC subjects</span></span>
+<span></span>
+<span>  <span class="co"># Get works based on authors and subjects</span></span>
+<span></span>
+<span>  <span class="co"># Download works</span></span>
+<span></span>
+<span>  <span class="co"># Write works to disk</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="tab-pane" id="function-code-subject" role="tabpanel" aria-labelledby="function-code-subject-tab">
+
+<p>Using the <code>lcc_subject</code> argument, we will now filter the <code>gutenberg_subjects</code> data frame.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">get_gutenberg_works</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">target_file</span>, <span class="va">lcc_subject</span>, <span class="va">birth_year</span>, <span class="va">death_year</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Load packages</span></span>
+<span>  <span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html" class="external-link">p_load</a></span><span class="op">(</span><span class="va">dplyr</span>, <span class="va">gutenbergr</span>, <span class="va">readr</span>, <span class="va">fs</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Check to see if the data already exists</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu">file_exists</span><span class="op">(</span><span class="va">target_file</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Data already exists \n"</span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="va">target_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">target_file</span><span class="op">)</span></span>
+<span>    <span class="fu">dir_create</span><span class="op">(</span>path <span class="op">=</span> <span class="va">target_dir</span>, recurse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="co"># Get authors within years</span></span>
+<span>  <span class="va">authors</span> <span class="op">&lt;-</span></span>
+<span>    <span class="va">gutenberg_authors</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>      <span class="va">birthdate</span> <span class="op">&gt;</span> <span class="va">birth_year</span>,</span>
+<span>      <span class="va">deathdate</span> <span class="op">&lt;</span> <span class="va">death_year</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Get LCC subjects</span></span>
+<span>  <span class="va">subjects</span> <span class="op">&lt;-</span></span>
+<span>    <span class="va">gutenberg_subjects</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>      <span class="va">subject_type</span> <span class="op">==</span> <span class="st">"lcc"</span>,</span>
+<span>      <span class="va">subject</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">lcc_subject</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Get works based on authors and subjects</span></span>
+<span></span>
+<span>  <span class="co"># Download works</span></span>
+<span></span>
+<span>  <span class="co"># Write works to disk</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="tab-pane" id="function-code-works" role="tabpanel" aria-labelledby="function-code-works-tab">
+
+<p>We will use the <code>authors</code> and <code>subjects</code> data frames to filter the <code>gutenberg_metadata</code> data frame as before.</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">get_gutenberg_works</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">target_file</span>, <span class="va">lcc_subject</span>, <span class="va">birth_year</span>, <span class="va">death_year</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Load packages</span></span>
+<span>  <span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html" class="external-link">p_load</a></span><span class="op">(</span><span class="va">dplyr</span>, <span class="va">gutenbergr</span>, <span class="va">readr</span>, <span class="va">fs</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Check to see if the data already exists</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu">file_exists</span><span class="op">(</span><span class="va">target_file</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Data already exists \n"</span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="va">target_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">target_file</span><span class="op">)</span></span>
+<span>    <span class="fu">dir_create</span><span class="op">(</span>path <span class="op">=</span> <span class="va">target_dir</span>, recurse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="co"># Get authors within years</span></span>
+<span>  <span class="va">authors</span> <span class="op">&lt;-</span></span>
+<span>    <span class="va">gutenberg_authors</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>      <span class="va">birthdate</span> <span class="op">&gt;</span> <span class="va">birth_year</span>,</span>
+<span>      <span class="va">deathdate</span> <span class="op">&lt;</span> <span class="va">death_year</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Get LCC subjects</span></span>
+<span>  <span class="va">subjects</span> <span class="op">&lt;-</span></span>
+<span>    <span class="va">gutenberg_subjects</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>      <span class="va">subject_type</span> <span class="op">==</span> <span class="st">"lcc"</span>,</span>
+<span>      <span class="va">subject</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">lcc_subject</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Get works based on authors and subjects</span></span>
+<span>  <span class="va">works</span> <span class="op">&lt;-</span></span>
+<span>    <span class="va">gutenberg_metadata</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>      <span class="va">gutenberg_author_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">authors</span><span class="op">$</span><span class="va">gutenberg_author_id</span>,</span>
+<span>      <span class="va">gutenberg_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">subjects</span><span class="op">$</span><span class="va">gutenberg_id</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Download works</span></span>
+<span></span>
+<span>  <span class="co"># Write works to disk</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="tab-pane" id="function-code-download" role="tabpanel" aria-labelledby="function-code-download-tab">
+
+<p>We will now use the <code>works</code> data frame to download the text and metadata for the works using the <code><a href="https://docs.ropensci.org/gutenbergr/reference/gutenberg_download.html" class="external-link">gutenberg_download()</a></code> function and assign it to <code>results</code>.</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">get_gutenberg_works</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">target_file</span>, <span class="va">lcc_subject</span>, <span class="va">birth_year</span>, <span class="va">death_year</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Load packages</span></span>
+<span>  <span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html" class="external-link">p_load</a></span><span class="op">(</span><span class="va">dplyr</span>, <span class="va">gutenbergr</span>, <span class="va">readr</span>, <span class="va">fs</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Check to see if the data already exists</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu">file_exists</span><span class="op">(</span><span class="va">target_file</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Data already exists \n"</span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="va">target_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">target_file</span><span class="op">)</span></span>
+<span>    <span class="fu">dir_create</span><span class="op">(</span>path <span class="op">=</span> <span class="va">target_dir</span>, recurse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="co"># Get authors within years</span></span>
+<span>  <span class="va">authors</span> <span class="op">&lt;-</span></span>
+<span>    <span class="va">gutenberg_authors</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>      <span class="va">birthdate</span> <span class="op">&gt;</span> <span class="va">birth_year</span>,</span>
+<span>      <span class="va">deathdate</span> <span class="op">&lt;</span> <span class="va">death_year</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Get LCC subjects</span></span>
+<span>  <span class="va">subjects</span> <span class="op">&lt;-</span></span>
+<span>    <span class="va">gutenberg_subjects</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>      <span class="va">subject_type</span> <span class="op">==</span> <span class="st">"lcc"</span>,</span>
+<span>      <span class="va">subject</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">lcc_subject</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Get works based on authors and subjects</span></span>
+<span>  <span class="va">works</span> <span class="op">&lt;-</span></span>
+<span>    <span class="va">gutenberg_metadata</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>      <span class="va">gutenberg_author_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">authors</span><span class="op">$</span><span class="va">gutenberg_author_id</span>,</span>
+<span>      <span class="va">gutenberg_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">subjects</span><span class="op">$</span><span class="va">gutenberg_id</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Download works</span></span>
+<span>  <span class="va">results</span> <span class="op">&lt;-</span></span>
+<span>    <span class="va">works</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>      <span class="va">rights</span> <span class="op">==</span> <span class="st">"Public domain in the USA."</span>,</span>
+<span>      <span class="va">has_text</span> <span class="op">==</span> <span class="cn">TRUE</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://docs.ropensci.org/gutenbergr/reference/gutenberg_download.html" class="external-link">gutenberg_download</a></span><span class="op">(</span></span>
+<span>      meta_fields <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"title"</span>, <span class="st">"author"</span>, <span class="st">"gutenberg_author_id"</span>, <span class="st">"gutenberg_bookshelf"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Write works to disk</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="tab-pane" id="function-code-write" role="tabpanel" aria-labelledby="function-code-write-tab">
+
+<p>Finally, we will write the <code>results</code> data frame to disk using the <code><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv()</a></code> function and the <code>target_file</code> argument.</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">get_gutenberg_works</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">target_file</span>, <span class="va">lcc_subject</span>, <span class="va">birth_year</span>, <span class="va">death_year</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Load packages</span></span>
+<span>  <span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html" class="external-link">p_load</a></span><span class="op">(</span><span class="va">dplyr</span>, <span class="va">gutenbergr</span>, <span class="va">readr</span>, <span class="va">fs</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Check to see if the data already exists</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu">file_exists</span><span class="op">(</span><span class="va">target_file</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Data already exists \n"</span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="va">target_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">target_file</span><span class="op">)</span></span>
+<span>    <span class="fu">dir_create</span><span class="op">(</span>path <span class="op">=</span> <span class="va">target_dir</span>, recurse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="co"># Get authors within years</span></span>
+<span>  <span class="va">authors</span> <span class="op">&lt;-</span></span>
+<span>    <span class="va">gutenberg_authors</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>      <span class="va">birthdate</span> <span class="op">&gt;</span> <span class="va">birth_year</span>,</span>
+<span>      <span class="va">deathdate</span> <span class="op">&lt;</span> <span class="va">death_year</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Get LCC subjects</span></span>
+<span>  <span class="va">subjects</span> <span class="op">&lt;-</span></span>
+<span>    <span class="va">gutenberg_subjects</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>      <span class="va">subject_type</span> <span class="op">==</span> <span class="st">"lcc"</span>,</span>
+<span>      <span class="va">subject</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">lcc_subject</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Get works based on authors and subjects</span></span>
+<span>  <span class="va">works</span> <span class="op">&lt;-</span></span>
+<span>    <span class="va">gutenberg_metadata</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>      <span class="va">gutenberg_author_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">authors</span><span class="op">$</span><span class="va">gutenberg_author_id</span>,</span>
+<span>      <span class="va">gutenberg_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">subjects</span><span class="op">$</span><span class="va">gutenberg_id</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Download works</span></span>
+<span>  <span class="va">results</span> <span class="op">&lt;-</span></span>
+<span>    <span class="va">works</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>      <span class="va">rights</span> <span class="op">==</span> <span class="st">"Public domain in the USA."</span>,</span>
+<span>      <span class="va">has_text</span> <span class="op">==</span> <span class="cn">TRUE</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://docs.ropensci.org/gutenbergr/reference/gutenberg_download.html" class="external-link">gutenberg_download</a></span><span class="op">(</span></span>
+<span>      meta_fields <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"title"</span>, <span class="st">"author"</span>, <span class="st">"gutenberg_author_id"</span>, <span class="st">"gutenberg_bookshelf"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Write works to disk</span></span>
+<span>  <span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv</a></span><span class="op">(</span><span class="va">results</span>, file <span class="op">=</span> <span class="va">target_file</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div class="section level4">
+<h4 id="using-the-custom-function">Using the custom function<a class="anchor" aria-label="anchor" href="#using-the-custom-function"></a>
+</h4>
+<p>We now have a function, <code><a href="../reference/get_gutenberg_works.html">get_gutenberg_works()</a></code>, that we can use to acquire works from Project Gutenberg for a given LCC code for authors that lived during a given time period. We now have a flexible function that we can use to acquire data.</p>
+<p>We can add this function to the script in which we use it, or we can add it to a separate script and source it into any script in which we want to use it.</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Source function</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"get_gutenberg_works.R"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get works for PR and PS for authors born between 1800 and 1880</span></span>
+<span><span class="fu"><a href="../reference/get_gutenberg_works.html">get_gutenberg_works</a></span><span class="op">(</span></span>
+<span>  target_file <span class="op">=</span> <span class="st">"data/original/gutenberg/works.csv"</span>,</span>
+<span>  lcc_subject <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PR"</span>, <span class="st">"PS"</span><span class="op">)</span>,</span>
+<span>  birth_year <span class="op">=</span> <span class="fl">1800</span>,</span>
+<span>  death_year <span class="op">=</span> <span class="fl">1880</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Another option is to add this function to your own package. This is a great option if you plan to use this function in multiple projects or share it with others. Since I have already created a package for this book, <code>qtalrkit</code>, I've added this function, with some additional functionality, to the package.</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Load package</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/qtalr/qtalrkit" class="external-link">qtalrkit</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get works for fiction for authors born between 1870 and 1920</span></span>
+<span><span class="fu"><a href="../reference/get_gutenberg_works.html">get_gutenberg_works</a></span><span class="op">(</span></span>
+<span>  target_dir <span class="op">=</span> <span class="st">"data/original/gutenberg/"</span>,</span>
+<span>  lcc_subject <span class="op">=</span> <span class="st">"PZ"</span>,</span>
+<span>  birth_year <span class="op">=</span> <span class="fl">1870</span>,</span>
+<span>  death_year <span class="op">=</span> <span class="fl">1920</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>This modified function will create a directory structure for the data file if it does not already exist. It will also create a file name for the data file based on the arguments passed to the function.</p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="data-documentation">Data documentation<a class="anchor" aria-label="anchor" href="#data-documentation"></a>
+</h3>
+<p>Finding data sources and collecting data are important steps in the acquisition process. However, it is also important to document the data collection process. This is important so that you, and others, can reproduce the data collection process.</p>
+<p>In data acquisition, the documentation is includes the code, code comments, and prose in the process file used to acquire the data and also a data origin file. The data origin file is a text file that describes the data source and the data collection process.</p>
+<p>The <code>qtalrkit</code> package includes a function, <code><a href="../reference/create_data_origin.html">create_data_origin()</a></code>, that can be used to scaffold a data origin file. This simply takes a file path and creates a data origin file in CSV format.</p>
+<pre class="csv"><code>attribute,description
+Resource name,The name of the resource.
+Data source,"URL, DOI, etc."
+Data sampling frame,"Language, language variety, modality, genre, etc."
+Data collection date(s),The dates the data was collected.
+Data format,".txt, .csv, .xml, .html, etc."
+Data schema,"Relationships between data elements: files, folders, etc."
+License,"CC BY, CC BY-SA, etc."
+Attribution,Citation information.</code></pre>
+<p>The you edit this file and ensure that it contains all of the information needed to document the data. Make sure that this file is near the data file so that it is easy to find.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="ex">data</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">├──</span> analysis/</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">├──</span> derived/</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">└──</span> original/</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>      <span class="ex">├──</span> works_do.csv</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>      <span class="ex">└──</span> gutenberg/</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>          <span class="ex">├──</span> works_pr.csv</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>          <span class="ex">└──</span> works_ps.csv</span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h2>
+<p>In this recipe, we have covered acquiring data for a text analysis project. We used the <code>gutenbergr</code> package to acquire works from Project Gutenberg. After exploring the resources available, we established an acquisition plan. We then used R to implement our plan. To make our code more reproducible-friendly, we wrote a custom function to acquire the data. Finally, we discussed the importance of documenting the data collection process and introduced the data origin file.</p>
 </div>
 <div class="section level2">
 <h2 id="check-your-understanding">Check your understanding<a class="anchor" aria-label="anchor" href="#check-your-understanding"></a>
 </h2>
-<p>(... examples ...)</p>
 <ol style="list-style-type: decimal">
-<li>
-<select class="webex-select"><option value="blank"></option>
-<option value="answer">TRUE</option>
-<option value="">FALSE</option></select> Literate Programming, first introduced by Donald Knuth in 1984, allows the combination of computer code and text prose in one document.</li>
-<li>The programming paradigm Literate Programming is implemented through <select class="webex-select"><option value="blank"></option>
-<option value="answer">Quarto</option>
-<option value="">R</option>
-<option value="">RStudio</option>
-<option value="">GitHub</option></select>, a platform that facilitates the creation of a variety of output documents based on the same source code.</li>
-<li>Which of the following components does a basic Quarto document <em>not</em> contain? <select class="webex-select"><option value="blank"></option>
-<option value="">Front-matter section</option>
-<option value="">Prose section</option>
-<option value="answer">Back-matter section</option>
-<option value="">Code block</option></select>
+<li>In the chapter and in this recipe, strategies for acquiring data were discussed. Which of the following was not discussed as a strategy for acquiring data? <select class="webex-select"><option value="blank"></option>
+<option value="">Direct download</option>
+<option value="">Programmatic download</option>
+<option value="">APIs</option>
+<option value="answer">Web scraping</option></select>
 </li>
-<li>To generate a PDF document in Quarto, you can edit the format attribute value in the front-matter section to <input class="webex-solveme nospaces ignorecase" size="4" data-answer='["pdf","html","word"]'>.</li>
+<li>In this recipe, we used the <code>gutenbergr</code> package to acquire works from Project Gutenberg. What is the name of the function that we used to acquire the actual text? <select class="webex-select"><option value="blank"></option>
+<option value="">gutenberg_metata</option>
+<option value="">gutenberg_get()</option>
+<option value="">gutenberg_search()</option>
+<option value="answer">gutenberg_download()</option></select>
+</li>
 <li>
 <select class="webex-select"><option value="blank"></option>
-<option value="answer">TRUE</option>
-<option value="">FALSE</option></select> The code block options <code>echo</code> and <code>include</code> can be used to hide the code and output, respectively.</li>
-<li>
-<select class="webex-select"><option value="blank"></option>
-<option value="">TRUE</option>
-<option value="answer">FALSE</option></select> In Quarto, a code block, where the programming language code is entered, is bounded by three underscores (<code>_</code>).</li>
+<option value="">True</option>
+<option value="answer">False</option></select> A custom function is only really necessary if you are writting an R package.</li>
+<li>When writing a custom function, what is the first step? <select class="webex-select"><option value="blank"></option>
+<option value="">Write the code</option>
+<option value="">Write the comments</option>
+<option value="">Load the packages</option>
+<option value="answer">Create the function arguments</option></select>
+</li>
+<li>What does it mean when we say that a function is 'vectorized' in R? <select class="webex-select"><option value="blank"></option>
+<option value="">The function returns a vector</option>
+<option value="">The function can take a vector as an argument</option>
+<option value="answer">The function can take a vector and operates on each element of the vector</option></select>
+</li>
+<li>Which Tidyverse package allows us to apply non-vectorized functions to vectors? <select class="webex-select"><option value="blank"></option>
+<option value="">dplyr</option>
+<option value="">stringr</option>
+<option value="">readr</option>
+<option value="answer">purrr</option></select>
+</li>
 </ol>
 </div>
-<div class="section level2">
+<div class="section level2 unnumbered">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Jockers2014" class="csl-entry">
+Jockers, Matthew Lee ML. 2014. <em>Text Analysis with r for Students of Literature</em>. New York: Springer.
 </div>
-
+</div>
+</div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
 </div>
