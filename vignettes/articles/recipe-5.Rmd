@@ -123,10 +123,11 @@ Let's now turn to the data collection strategy. There are a number of data colle
 If you are interested in learning about another data collection strategy, web scraping, I suggest you look at the [Web scraping with R](guide-5.html) guide.
 :::
 
-We will load the `tidyverse` and `gutenbergr` packages to prepare for the data collection process.
+We will load the `dplyr`, `readr` and `gutenbergr` packages to prepare for the data collection process.
 
 ```{r setup-libraries, message=FALSE, warning=FALSE}
-library(tidyverse) # data manipulation packages
+library(dplyr)      # data manipulation
+library(readr)      # data import/ export
 library(gutenbergr) # Project Gutenberg API
 ```
 
