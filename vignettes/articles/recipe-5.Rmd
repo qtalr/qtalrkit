@@ -126,8 +126,8 @@ If you are interested in learning about another data collection strategy, web sc
 We will load the `dplyr`, `readr` and `gutenbergr` packages to prepare for the data collection process.
 
 ```{r setup-libraries, message=FALSE, warning=FALSE}
-library(dplyr)      # data manipulation
-library(readr)      # data import/ export
+library(dplyr) # data manipulation
+library(readr) # data import/ export
 library(gutenbergr) # Project Gutenberg API
 ```
 
@@ -378,7 +378,9 @@ We have some packages we want to make sure are installed and loaded. We will use
 ```{r get-gutenberg-works-fun-6, eval=FALSE}
 get_gutenberg_works <- function(target_file, lcc_subject, birth_year, death_year) {
   # Load packages
-  pacman::p_load(dplyr, gutenbergr, readr)
+  library(dplyr)
+  library(gutenbergr)
+  library(readr)
 
   # Check to see if the data already exists
 
@@ -401,7 +403,10 @@ We need to create the code to check if the data exists. We will use an `if` stat
 ```{r get-gutenberg-works-fun-7, eval=FALSE}
 get_gutenberg_works <- function(target_file, lcc_subject, birth_year, death_year) {
   # Load packages
-  pacman::p_load(dplyr, gutenbergr, readr, fs)
+  library(dplyr)
+  library(gutenbergr)
+  library(readr)
+  library(fs)
 
   # Check to see if the data already exists
   if (file_exists(target_file)) {
@@ -431,7 +436,10 @@ Let's now add the code to get the authors within the years. We will now use the 
 ```{r get-gutenberg-works-fun-8, eval=FALSE}
 get_gutenberg_works <- function(target_file, lcc_subject, birth_year, death_year) {
   # Load packages
-  pacman::p_load(dplyr, gutenbergr, readr, fs)
+  library(dplyr)
+  library(gutenbergr)
+  library(readr)
+  library(fs)
 
   # Check to see if the data already exists
   if (file_exists(target_file)) {
@@ -467,7 +475,10 @@ Using the `lcc_subject` argument, we will now filter the `gutenberg_subjects` da
 ```{r get-gutenberg-works-fun-9, eval=FALSE}
 get_gutenberg_works <- function(target_file, lcc_subject, birth_year, death_year) {
   # Load packages
-  pacman::p_load(dplyr, gutenbergr, readr, fs)
+  library(dplyr)
+  library(gutenbergr)
+  library(readr)
+  library(fs)
 
   # Check to see if the data already exists
   if (file_exists(target_file)) {
@@ -509,7 +520,10 @@ We will use the `authors` and `subjects` data frames to filter the `gutenberg_me
 ```{r get-gutenberg-works-fun-10, eval=FALSE}
 get_gutenberg_works <- function(target_file, lcc_subject, birth_year, death_year) {
   # Load packages
-  pacman::p_load(dplyr, gutenbergr, readr, fs)
+  library(dplyr)
+  library(gutenbergr)
+  library(readr)
+  library(fs)
 
   # Check to see if the data already exists
   if (file_exists(target_file)) {
@@ -557,7 +571,10 @@ We will now use the `works` data frame to download the text and metadata for the
 ```{r get-gutenberg-works-fun-11, eval=FALSE}
 get_gutenberg_works <- function(target_file, lcc_subject, birth_year, death_year) {
   # Load packages
-  pacman::p_load(dplyr, gutenbergr, readr, fs)
+  library(dplyr)
+  library(gutenbergr)
+  library(readr)
+  library(fs)
 
   # Check to see if the data already exists
   if (file_exists(target_file)) {
@@ -614,7 +631,10 @@ Finally, we will write the `results` data frame to disk using the `write_csv()` 
 ```{r get-gutenberg-works-fun-12, eval=FALSE}
 get_gutenberg_works <- function(target_file, lcc_subject, birth_year, death_year) {
   # Load packages
-  pacman::p_load(dplyr, gutenbergr, readr, fs)
+  library(dplyr)
+  library(gutenbergr)
+  library(readr)
+  library(fs)
 
   # Check to see if the data already exists
   if (file_exists(target_file)) {
@@ -672,7 +692,6 @@ We now have a function, `get_gutenberg_works()`, that we can use to acquire work
 We can add this function to the script in which we use it, or we can add it to a separate script and source it into any script in which we want to use it.
 
 ```{r source-get-gutenberg-works-fun, eval=FALSE}
-
 # Source function
 source("get_gutenberg_works.R")
 
