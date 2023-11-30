@@ -1,3 +1,7 @@
+# qtalrkit 0.0.4.0
+
+* Adds `get_gutenberg_works()` function to import data from Project Gutenberg
+
 # qtalrkit 0.0.3.400
 
 * Fixes warnings on `calc_assoc_metrics()` 

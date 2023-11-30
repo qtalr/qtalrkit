@@ -66,19 +66,23 @@ articles:
       - articles/instructor-guide # Instructor guide
 
 reference:
+  - title: "Inspection functions"
+    desc: "Functions to inspect data"
+    contents:
+      - find_outliers           # outlier detection
   - title: "Statistical functions"
     desc: "Functions to perform statistical analyses"
     contents:
       - calc_assoc_metrics      # association metrics (pmi, dice, G)
       - calc_normalized_entropy # dispersion for categorical data
       - calc_type_metrics       # type metrics (frequency, dispersion)
-      - find_outliers           # outlier detection
   - title: "Data functions"
     desc: "Functions to manage data"
     contents:
       - create_data_dictionary  # data dictionary file structure/ contents
       - create_data_origin      # data origin file structure
       - get_compressed_data     # download and decompress data
+      - get_gutenberg_works     # interface to Project Gutenberg API
       - get_talkbank_data       # interface to TalkBank API
   - title: "Publishing functions"
     desc: "Functions to publish data"
