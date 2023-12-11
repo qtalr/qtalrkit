@@ -26,7 +26,7 @@ pacman::p_load(
 write_bib(c(
   "tidyverse", "readr", "rmarkdown", "dplyr", "usethis", "gitcreds",
   "quanteda", "textdata", "tidycensus", "sf", "rtweet", "skimr", "janitor",
-  "ggplot2", "gridExtra", "reprex", "rvest", "fs", "purrr", "fontawesome", "webexercises", "corpora", "knitr", "kableExtra" # nolint: line_length_linter.
+  "ggplot2", "gridExtra", "reprex", "rvest", "fs", "purrr", "fontawesome", "webexercises", "corpora", "knitr", "kableExtra", "stringr", "tidyr", "regexplain", "gutenbergr" # nolint: line_length_linter.
 ), "packages.bib")
 
 

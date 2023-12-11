@@ -9,5 +9,6 @@
 *.Rproj
 docs
 vignettes/articles/_site/
+vignettes/articles/data/original/swda/
 inst/doc
 _R_ideas.md

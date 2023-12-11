@@ -18,11 +18,15 @@ h4 {
   font-size: 1rem;
 }
 
-.table {
+pre {
   font-size: 0.9rem;
 }
 
 /* CLASSES */
+
+.table {
+  font-size: 0.9rem;
+}
 
 .callout {
   margin-top: 1.25rem;
@@ -38,6 +42,7 @@ h4 {
 
 /* matches the .callout class as an alternative 
 to avoid citation issues inside callout environments */
+
 blockquote {
   margin-top: 1.25rem;
   margin-bottom: 1.25rem;
