@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Overview
 
-<!--  
+<!--
 
 Purpose: To review and expand on the data collection process which includes finding, downloading, and documenting data.
 
@@ -33,11 +33,11 @@ Context: This is the first recipe in the "Preparation" part of the textbook. The
 -->
 
 
-At this point, we now have a strong undertanding of the foundations of programming in R and the data science workflow. Previous lessons, recipes, and labs focused on developing these skills while the chapters aimed to provide a conceptual framework for understanding the steps in the data science workflow. We now turn to applying our conceptual knowledge and our technical skills to accomplish the tasks of the data science workflow. 
+At this point, we now have a strong undertanding of the foundations of programming in R and the data science workflow. Previous lessons, recipes, and labs focused on developing these skills while the chapters aimed to provide a conceptual framework for understanding the steps in the data science workflow. We now turn to applying our conceptual knowledge and our technical skills to accomplish the tasks of the data science workflow.
 
-In this recipe, we will focus on acquiring data for a text analysis project. 
+In this recipe, we will focus on acquiring data for a text analysis project.
 
-We will cover the following topics: 
+We will cover the following topics:
 
 - Finding data sources
 - Data collection strategies
@@ -73,7 +73,7 @@ Furthermore, the `gutenbergr` package provides an API for accessing the Project 
 
 ### Data collection strategy
 
-<!--  
+<!--
 
 Types of data collection strategies:
 
@@ -89,7 +89,7 @@ Other avenues for data collection:
   - Interviews and focus groups
   - Behavioral data collection
 
-Key concepts for R programming: 
+Key concepts for R programming:
 
 - Vectors, data frames, and lists
 - Variables and functions
@@ -103,7 +103,7 @@ Project Gutenberg
 - ...
 
 - Write custom function to download data and metadata from Project Gutenberg
-- 
+-
 -->
 
 Let's now turn to the data collection strategy. There are a number of data collection strategies that can be used to acquire data for a text analysis project. In the chapter, we covered manual and programmatic downloads and APIs. Here we will use an R package which will provide an API for accessing the data source.
@@ -122,17 +122,17 @@ library(readr) # data import/ export
 library(gutenbergr) # Project Gutenberg API
 ```
 
-The main workhorse of the `gutenbergr` package is the `gutenberg_download()`. It's only required argument is the id(s) used by Project Gutenberg to index all of the works in their database. This function will then download the text of the work(s) and return a data frame with the gutenberg id and the text of the work(s). 
+The main workhorse of the `gutenbergr` package is the `gutenberg_download()`. It's only required argument is the id(s) used by Project Gutenberg to index all of the works in their database. This function will then download the text of the work(s) and return a data frame with the gutenberg id and the text of the work(s).
 
 So how do we find the gutenberg ids? The manual method is to go to the Project Gutenberg website and search for the work you are interested in. For example, let's say we are interested in the work "A Tale of Two Cities" by Charles Dickens. We can search for this work on the Project Gutenberg website and then click on the link to the work. The url for this work is: https://www.gutenberg.org/ebooks/98. The gutenberg id is the number at the end of the url, in this case 98.
 
-This will work for individual works, but why wouldn't we just download the text from the Project Gutenberg website? For the works on Project Gutenberg this would be perfectly fine. We can share the text with others as the license for the works on Project Gutenberg are in the public domain. 
+This will work for individual works, but why wouldn't we just download the text from the Project Gutenberg website? For the works on Project Gutenberg this would be perfectly fine. We can share the text with others as the license for the works on Project Gutenberg are in the public domain.
 
 However, what if are interested in downloading multiple works? As the number of works increases, the time it takes to manually download each work increases. Furthermore, the `gutenbergr` package provides a number of additional attributes that can be downloaded and organized along side the text. Finally, the results of the `gutenberg_download()` function are returned as a data frame which can be easily manipulated and analyzed in R.
 
-In our data acquisition plan, we want to collect works from a number of authors. So it will be best to leverge the `gutenbergr` package to download the works we are interested in. To do this we need to know the gutenberg ids for the works we are interested in. 
+In our data acquisition plan, we want to collect works from a number of authors. So it will be best to leverge the `gutenbergr` package to download the works we are interested in. To do this we need to know the gutenberg ids for the works we are interested in.
 
-Convienently, the `gutenbergr` package also includes a number of data frames that contain meta data for the works in the Project Gutenberg database. These data frames include meta data for works in the Project Gutenberg database (`gutenberg_metadata`), authors (`gutenberg_authors`), and subjects (`gutenberg_subjects`). 
+Convienently, the `gutenbergr` package also includes a number of data frames that contain meta data for the works in the Project Gutenberg database. These data frames include meta data for works in the Project Gutenberg database (`gutenberg_metadata`), authors (`gutenberg_authors`), and subjects (`gutenberg_subjects`).
 
 Let's take a look at the structure of these data frames.
 
@@ -144,7 +144,7 @@ glimpse(gutenberg_subjects)
 
 From this overvew, we can see that there are `r format(nrow(gutenberg_metadata), big.mark = ",")` works in the Project Gutenberg database. We can also see that there are `r format(nrow(gutenberg_authors), big.mark = ",")` authors and `r format(nrow(gutenberg_subjects), big.mark = ",")` subjects.
 
-As we dicussed, each work in the Project Gutenberg database has a gutenberg id. The `gutenberg_id` appears in the `gutenberg_metadata` and also in the `gutenberg_subjects` data frame. This common attribute means that a work with a particular gutenberg id can be linked to the subject(s) associated with that work. Another important attribute is is the `gutenberg_author_id` which links the work to the author(s) of that work. Yes, the author name is in the `gutenberg_metadata` data frame, but the `gutenberg_author_id` can be used to link the work to the `gutenberg_authors` data frame which contains additional information about authors.   
+As we dicussed, each work in the Project Gutenberg database has a gutenberg id. The `gutenberg_id` appears in the `gutenberg_metadata` and also in the `gutenberg_subjects` data frame. This common attribute means that a work with a particular gutenberg id can be linked to the subject(s) associated with that work. Another important attribute is is the `gutenberg_author_id` which links the work to the author(s) of that work. Yes, the author name is in the `gutenberg_metadata` data frame, but the `gutenberg_author_id` can be used to link the work to the `gutenberg_authors` data frame which contains additional information about authors.
 
 
 ::: {.callout}
@@ -174,7 +174,7 @@ With this overview of the `gutenbergr` package and the data frames that it conta
 
 ### Data collection
 
-Let's take each of these steps in turn. First, we need to select the authors that lived during the mid 19th century from the `gutenberg_authors` data frame. To do this we will use the `filter()` function. We will pass the `gutenberg_authors` data frame to the `filter()` function and then use the `birthdate` column to select the authors that were born after 1800 and died before 1880 --this year is chosen as the mid 19th century is generally considered to be the period from 1830 to 1870. We will then assign the result to the variable name `authors`. 
+Let's take each of these steps in turn. First, we need to select the authors that lived during the mid 19th century from the `gutenberg_authors` data frame. To do this we will use the `filter()` function. We will pass the `gutenberg_authors` data frame to the `filter()` function and then use the `birthdate` column to select the authors that were born after 1800 and died before 1880 --this year is chosen as the mid 19th century is generally considered to be the period from 1830 to 1870. We will then assign the result to the variable name `authors`.
 
 ```{r select-authors}
 authors <-
@@ -187,7 +187,7 @@ authors <-
 
 That's it! We now have a data frame with the authors that lived during the mid 19th century, some `r format(nrow(authors), big.mark = ",")` authors in total. This will span all subjects and languages, so this isn't the final number of authors we will be working with.
 
-The next step is to select the works from the Library of Congress Classification for English Literature (PR) and American Literature (PS) from the `gutenberg_subjects` data frame. To do this we will use the `filter()` function again. We will pass the `gutenberg_subjects` data frame to the `filter()` function and then use the `subject_type` and `subject` columns to select the works that are associated with the Library of Congress Classification for English Literature (PR) and American Literature (PS). We will then assign the result to the variable name `subjects`. 
+The next step is to select the works from the Library of Congress Classification for English Literature (PR) and American Literature (PS) from the `gutenberg_subjects` data frame. To do this we will use the `filter()` function again. We will pass the `gutenberg_subjects` data frame to the `filter()` function and then use the `subject_type` and `subject` columns to select the works that are associated with the Library of Congress Classification for English Literature (PR) and American Literature (PS). We will then assign the result to the variable name `subjects`.
 
 ```{r select-subjects}
 subjects <-
@@ -205,7 +205,7 @@ subjects |>
   count(subject)
 ```
 
-The next step is to subset the `gutenberg_metadata` data frame to select works from the authors and subjects selected in the previous steps. Again, we will use `filter()` to do this. We will pass the `gutenberg_metadata` data frame to the `filter()` function and then use the `gutenberg_author_id` and `gutenberg_id` columns to select the works that are associated with the authors and subjects selected in the previous steps. We will then assign the result to the variable name `works`. 
+The next step is to subset the `gutenberg_metadata` data frame to select works from the authors and subjects selected in the previous steps. Again, we will use `filter()` to do this. We will pass the `gutenberg_metadata` data frame to the `filter()` function and then use the `gutenberg_author_id` and `gutenberg_id` columns to select the works that are associated with the authors and subjects selected in the previous steps. We will then assign the result to the variable name `works`.
 
 ```{r select-works}
 works <-
@@ -222,7 +222,7 @@ Filtering the `gutenberg_metadata` data frame by the authors and subjects select
 
 A few things to note about the `gutenberg_download()` function. First, it is vectorized, that is, it can take a single value or multiple values for the argument `gutenberg_id`. This is good as we will be passing a vector of gutenberg ids to the function. A small fraction of the works on Project Gutenberg are not in the public domain and therefore cannot be downloaded, this is documented in the `rights` column. Furthermore, not all of the works have text available, as seen in the `has_text` column. Finally, the `gutenberg_download()` function returns a data frame with the gutenberg id and the text of the work(s) --but we can also select additional attributes to be returned by passing a character vector of the attribute names to the argument `meta_fields`. The column names of the `gutenberg_metadata` data frame contains the available attributes.
 
-With this in mind, let's do a quick test before we download all of the works. Let's select the first 5 works from the `works` data frame that fit our criteria and then download the text and metadata for these works using the `gutenberg_download()` function. We will then assign the result to the variable name `works_sample`. 
+With this in mind, let's do a quick test before we download all of the works. Let's select the first 5 works from the `works` data frame that fit our criteria and then download the text and metadata for these works using the `gutenberg_download()` function. We will then assign the result to the variable name `works_sample`.
 
 ```{r download-works-sample}
 works_sample <-
@@ -248,7 +248,7 @@ works_sample |>
 
 Yes, we have 5 works and we can see how many lines are in each of these works.
 
-We could now run this code on the entire `works` data frame and then write the data to disk like so: 
+We could now run this code on the entire `works` data frame and then write the data to disk like so:
 
 ```{r download-write-works, eval=FALSE}
 works |>
@@ -262,9 +262,9 @@ works |>
   write_csv(file = "data/original/gutenberg/works.csv")
 ```
 
-This would accomplish the primary goal of our data acquisition plan. 
+This would accomplish the primary goal of our data acquisition plan.
 
-However, there is some key functionality that we are missing if we would like to make this code more reproducible-friendly. First, we are not checking to see if the data already exists on disk. If we already have run this code in our script, we likely do not want to run it again. Second, we may want to use this code again with different parameters, for example, we may want to retrieve different subject codes, or different time periods, or other languages. 
+However, there is some key functionality that we are missing if we would like to make this code more reproducible-friendly. First, we are not checking to see if the data already exists on disk. If we already have run this code in our script, we likely do not want to run it again. Second, we may want to use this code again with different parameters, for example, we may want to retrieve different subject codes, or different time periods, or other languages.
 
 All three of these additional features can be accomplished with writing a custom function. Let's take a look at the code we have written so far and see how we can turn this into a custom function.
 
@@ -306,7 +306,7 @@ works |>
 
 ##### Function name
 
-Let's start to create our function by creating a name and calling the `function()` function. We will name our function `get_gutenberg_works()`. 
+Let's start to create our function by creating a name and calling the `function()` function. We will name our function `get_gutenberg_works()`.
 
 ```{r get-gutenberg-works-fun-1, eval=FALSE}
 get_gutenberg_works <- function() {
@@ -316,7 +316,7 @@ get_gutenberg_works <- function() {
 
 ##### Function arguments
 
-Now we need to think of the arguments that we would like to pass to our function so they can be used to customize the data acquisition process. First, we want to check to see if the data already exists on disk. To do this we will need to pass the path to the data file to our function. We will name this argument `target_file`. 
+Now we need to think of the arguments that we would like to pass to our function so they can be used to customize the data acquisition process. First, we want to check to see if the data already exists on disk. To do this we will need to pass the path to the data file to our function. We will name this argument `target_file`.
 
 ```{r get-gutenberg-works-fun-2, eval=FALSE}
 get_gutenberg_works <- function(target_file) {
@@ -324,7 +324,7 @@ get_gutenberg_works <- function(target_file) {
 }
 ```
 
-Next, we want to pass the subject code that the works should be associated with. We will name this argument `lcc_subject`. 
+Next, we want to pass the subject code that the works should be associated with. We will name this argument `lcc_subject`.
 
 ```{r get-gutenberg-works-fun-3, eval=FALSE}
 get_gutenberg_works <- function(target_file, lcc_subject) {
@@ -332,7 +332,7 @@ get_gutenberg_works <- function(target_file, lcc_subject) {
 }
 ```
 
-Finally, we want to pass the birth year and death year that the authors should be associated with. We will name these arguments `birth_year` and `death_year`. 
+Finally, we want to pass the birth year and death year that the authors should be associated with. We will name these arguments `birth_year` and `death_year`.
 
 ```{r get-gutenberg-works-fun-4, eval=FALSE}
 get_gutenberg_works <- function(target_file, lcc_subject, birth_year, death_year) {
@@ -342,7 +342,7 @@ get_gutenberg_works <- function(target_file, lcc_subject, birth_year, death_year
 
 ##### Function code: comments
 
-We now turn to the code. I like to start by creating comments to describe the steps inside the function before adding code. 
+We now turn to the code. I like to start by creating comments to describe the steps inside the function before adding code.
 
 ```{r get-gutenberg-works-fun-5, eval=FALSE}
 get_gutenberg_works <- function(target_file, lcc_subject, birth_year, death_year) {
@@ -364,7 +364,7 @@ get_gutenberg_works <- function(target_file, lcc_subject, birth_year, death_year
 
 ##### Function code: packages
 
-We have some packages we want to make sure are installed and loaded. We will use the `pacman` package to do this. We will use the `p_load()` function to install and load the packages. We will pass the character vector of package names to the `p_load()` function. 
+We have some packages we want to make sure are installed and loaded. We will use the `pacman` package to do this. We will use the `p_load()` function to install and load the packages. We will pass the character vector of package names to the `p_load()` function.
 
 ```{r get-gutenberg-works-fun-6, eval=FALSE}
 get_gutenberg_works <- function(target_file, lcc_subject, birth_year, death_year) {
@@ -389,7 +389,7 @@ get_gutenberg_works <- function(target_file, lcc_subject, birth_year, death_year
 
 ##### Function code: data check
 
-We need to create the code to check if the data exists. We will use an `if` statement to do this. If the data does exist, we will print a message to the console that the data already exists and stop the function. If the data does not exist, we will create the directory structure and continue with the data acquisition process. I will use the `fs` package [@R-fs] in this code so I will load the library at the top of the function. 
+We need to create the code to check if the data exists. We will use an `if` statement to do this. If the data does exist, we will print a message to the console that the data already exists and stop the function. If the data does not exist, we will create the directory structure and continue with the data acquisition process. I will use the `fs` package [@R-fs] in this code so I will load the library at the top of the function.
 
 ```{r get-gutenberg-works-fun-7, eval=FALSE}
 get_gutenberg_works <- function(target_file, lcc_subject, birth_year, death_year) {
@@ -557,7 +557,7 @@ get_gutenberg_works <- function(target_file, lcc_subject, birth_year, death_year
 
 ##### Function code: download
 
-We will now use the `works` data frame to download the text and metadata for the works using the `gutenberg_download()` function and assign it to `results`. 
+We will now use the `works` data frame to download the text and metadata for the works using the `gutenberg_download()` function and assign it to `results`.
 
 ```{r get-gutenberg-works-fun-11, eval=FALSE}
 get_gutenberg_works <- function(target_file, lcc_subject, birth_year, death_year) {
@@ -617,7 +617,7 @@ get_gutenberg_works <- function(target_file, lcc_subject, birth_year, death_year
 
 ##### Function code: write
 
-Finally, we will write the `results` data frame to disk using the `write_csv()` function and the `target_file` argument.  
+Finally, we will write the `results` data frame to disk using the `write_csv()` function and the `target_file` argument.
 
 ```{r get-gutenberg-works-fun-12, eval=FALSE}
 get_gutenberg_works <- function(target_file, lcc_subject, birth_year, death_year) {
@@ -678,7 +678,7 @@ get_gutenberg_works <- function(target_file, lcc_subject, birth_year, death_year
 
 #### Using the custom function
 
-We now have a function, `get_gutenberg_works()`, that we can use to acquire works from Project Gutenberg for a given LCC code for authors that lived during a given time period. We now have a flexible function that we can use to acquire data. 
+We now have a function, `get_gutenberg_works()`, that we can use to acquire works from Project Gutenberg for a given LCC code for authors that lived during a given time period. We now have a flexible function that we can use to acquire data.
 
 We can add this function to the script in which we use it, or we can add it to a separate script and source it into any script in which we want to use it.
 
@@ -695,7 +695,7 @@ get_gutenberg_works(
 )
 ```
 
-Another option is to add this function to your own package. This is a great option if you plan to use this function in multiple projects or share it with others. Since I have already created a package for this book, `qtalrkit`, I've added this function, with some additional functionality, to the package. 
+Another option is to add this function to your own package. This is a great option if you plan to use this function in multiple projects or share it with others. Since I have already created a package for this book, `qtalrkit`, I've added this function, with some additional functionality, to the package.
 
 ```{r add-get-gutenberg-works-fun-to-package, eval=FALSE}
 # Load package
@@ -710,15 +710,15 @@ get_gutenberg_works(
 )
 ```
 
-This modified function will create a directory structure for the data file if it does not already exist. It will also create a file name for the data file based on the arguments passed to the function. 
+This modified function will create a directory structure for the data file if it does not already exist. It will also create a file name for the data file based on the arguments passed to the function.
 
 ### Data documentation
 
-Finding data sources and collecting data are important steps in the acquisition process. However, it is also important to document the data collection process. This is important so that you, and others, can reproduce the data collection process. 
+Finding data sources and collecting data are important steps in the acquisition process. However, it is also important to document the data collection process. This is important so that you, and others, can reproduce the data collection process.
 
 In data acquisition, the documentation is includes the code, code comments, and prose in the process file used to acquire the data and also a data origin file. The data origin file is a text file that describes the data source and the data collection process.
 
-The `qtalrkit` package includes a function, `create_data_origin()`, that can be used to scaffold a data origin file. This simply takes a file path and creates a data origin file in CSV format. 
+The `qtalrkit` package includes a function, `create_data_origin()`, that can be used to scaffold a data origin file. This simply takes a file path and creates a data origin file in CSV format.
 
 ```csv
 attribute,description
@@ -758,14 +758,14 @@ In this recipe, we have covered acquiring data for a text analysis project. We u
 5. What does it mean when we say that a function is 'vectorized' in R? `r mcq(c("The function returns a vector", "The function can take a vector as an argument", answer = "The function can take a vector and operates on each element of the vector"))`
 6. Which Tidyverse package allows us to apply non-vectorized functions to vectors? `r mcq(c("dplyr", "stringr", "readr", answer = "purrr"))`
 
-## Lab preparation 
+## Lab preparation
 
 <!-- Provide a checklist of knowledge and skills that learners should be comfortable with before beginning the lab -->
 
 Before beginning Lab 5, make sure you are comfortable with the following:
 
 - Reading and subsetting data in R
-- Writing data in R 
+- Writing data in R
 - The project structure of reproducible projects
 
 The additional skills covered in this lab are:

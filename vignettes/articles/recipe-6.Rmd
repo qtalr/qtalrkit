@@ -16,13 +16,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Overview
 
-<!--  
+<!--
 
 Purpose: To review and expand on the concepts of data organization and documentation. This will also show practical examples of how to use `dplyr` and `stringr` to manipulate and parse semi-structured data.
 
 Description: This recipe will showcase using regular expressions to parse semi-structured data and organize it into a tidy dataset. We will use the `readr, `dplyr`, `tidyr` and `stringr` packages. Along the way we will also use more advanced subsetting techniques, work with lists, and create custom functions to automate the process of parsing the semi-structured data.
 
-Approach: We will use the Switchboard Dialog Act Corpus (swda) as an example. We will begin by exploring the data, develop code that parses a single file, then create a custom function to parse the semi-structured data into a tidy dataset  We will then apply this function to all of the conversation files in the corpus and combine the results into a single tidy dataset using the purrr package. We will not perform reshaping of rows or columns (leaving this for the next recipe). 
+Approach: We will use the Switchboard Dialog Act Corpus (swda) as an example. We will begin by exploring the data, develop code that parses a single file, then create a custom function to parse the semi-structured data into a tidy dataset  We will then apply this function to all of the conversation files in the corpus and combine the results into a single tidy dataset using the purrr package. We will not perform reshaping of rows or columns (leaving this for the next recipe).
 
 Prerequisites: This recipe assumes that you have a basic understanding of the `readr` (read_*), `dplyr` (mutate), and `purrr` (unnest, map) packages and a basic understanding of Regular Expressions. Furthermore, it is assumed that you understand the role of data documentation in the research process.
 
@@ -30,9 +30,9 @@ Context: This is the second recipe in the "Preparation" part of the textbook. It
 
 -->
 
-After acquiring data, the next step in process is to organize data that is not tabular into a curated dataset. A curated dataset is a tidy dataset that reflects the data without major modifications. This dataset serves as a more general starting point for further data transformation. 
+After acquiring data, the next step in process is to organize data that is not tabular into a curated dataset. A curated dataset is a tidy dataset that reflects the data without major modifications. This dataset serves as a more general starting point for further data transformation.
 
-Just as other aspects of the research process, it is important to document the process and the resulting dataset. 
+Just as other aspects of the research process, it is important to document the process and the resulting dataset.
 
 In this recipe, we will focus on curating data from a semi-structured format. In the process, we will cover the following topics:
 
@@ -53,7 +53,7 @@ library(fs)
 library(qtalrkit)
 ```
 
-In Lab 6, we will apply what we learn in this recipe to curate and document acquired data. 
+In Lab 6, we will apply what we learn in this recipe to curate and document acquired data.
 
 ## Concepts and strategies
 
@@ -61,7 +61,7 @@ In Lab 6, we will apply what we learn in this recipe to curate and document acqu
 
 Acquired data can be in a variety of formats. This will range from unstructured data such as running text to structured data such as tabular data. Semi-structured data is somewhere in between. It has some structure, but it is not as well defined as structured data and requires some work to organize it into a tidy dataset.
 
-As a semi-structured example we will work with the The Switchboard Dialog Act Corpus (SWDA) [@SWDA2008] which extends the [Switchboard Corpus](https://catalog.ldc.upenn.edu/LDC97S62) with speech act annotation. 
+As a semi-structured example we will work with the The Switchboard Dialog Act Corpus (SWDA) [@SWDA2008] which extends the [Switchboard Corpus](https://catalog.ldc.upenn.edu/LDC97S62) with speech act annotation.
 
 ::: {.callout}
 **`r fontawesome::fa('hand-point-up')` Tip**
@@ -102,9 +102,9 @@ data/
         └── sw13utt/
 ```
 
-The first step is to inspect the data directory and file structure (and of course any documentation files). 
+The first step is to inspect the data directory and file structure (and of course any documentation files).
 
-The `README` file contains basic information about the resource, the `doc/` directory contains more detailed information about the dialog annotations, and each of the following directories prefixed with `sw...` contain individual conversation files. 
+The `README` file contains basic information about the resource, the `doc/` directory contains more detailed information about the dialog annotations, and each of the following directories prefixed with `sw...` contain individual conversation files.
 
 Taking a closer look at the first conversation file directory, `sw00utt/` we can see that it contains files with the `.utt` extension.
 
@@ -128,9 +128,9 @@ read_lines(
   cat(sep = "\n")
 ```
 
-There are few things to take note of here. First we see that the conversation files have a meta-data header offset from the conversation text by a line of `=` characters. Second the header contains meta-information of various types. Third, the conversation text is interleaved with an annotation scheme. 
+There are few things to take note of here. First we see that the conversation files have a meta-data header offset from the conversation text by a line of `=` characters. Second the header contains meta-information of various types. Third, the conversation text is interleaved with an annotation scheme.
 
-Some of the information may be readily understandable, such as the various pieces of meta-data in the header, but to get a better understanding of what information is encoded here let's take a look at the `README` file. 
+Some of the information may be readily understandable, such as the various pieces of meta-data in the header, but to get a better understanding of what information is encoded here let's take a look at the `README` file.
 
 In this file we get a birds eye view of what is going on. In short, the data includes 1155 telephone conversations between two people annotated with 42 'DAMSL' dialog act labels. The `README` file refers us to the `doc/manual.august1.html` file for more information on this scheme.
 
@@ -145,7 +145,7 @@ qy^d = "Declarative Yes-No-Question"
 
 Each utterance is also labeled for speaker ('A' or 'B'), speaker turn ('1', '2', '3', etc.), and each utterance within that turn ('utt1', 'utt2', etc.). There is other annotation provided withing each utterance, but this should be enough to get us started on the conversations.
 
-Now let's turn to the meta-data in the header. We see here that there is information about the creation of the file: 'FILENAME', 'TOPIC', 'DATE', etc. The `doc/manual.august1.html` file doesn't have much to say about this information so I returned to the [LDC Documentation](https://catalog.ldc.upenn.edu/docs/LDC97S62/) and found more information in the [Online Documentation](https://catalog.ldc.upenn.edu/docs/LDC97S62/) section. After some poking around in this documentation I discovered that that meta-data for each speaker in the corpus is found in the `caller_tab.csv` file. This tabular file does not contain column names, but the `caller_doc.txt` does. After inspecting these files manually and comparing them with the information in the conversation file I noticed that the 'FILENAME' information contained three pieces of useful information delimited by underscores `_`. 
+Now let's turn to the meta-data in the header. We see here that there is information about the creation of the file: 'FILENAME', 'TOPIC', 'DATE', etc. The `doc/manual.august1.html` file doesn't have much to say about this information so I returned to the [LDC Documentation](https://catalog.ldc.upenn.edu/docs/LDC97S62/) and found more information in the [Online Documentation](https://catalog.ldc.upenn.edu/docs/LDC97S62/) section. After some poking around in this documentation I discovered that that meta-data for each speaker in the corpus is found in the `caller_tab.csv` file. This tabular file does not contain column names, but the `caller_doc.txt` does. After inspecting these files manually and comparing them with the information in the conversation file I noticed that the 'FILENAME' information contained three pieces of useful information delimited by underscores `_`.
 
 ```plain
 *x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*
@@ -188,7 +188,7 @@ structure(list(doc_id = c("4325", "4325", "4325"), damsl_tag = c(
 
 ### Tidy the data
 
-There are many ways to approach the task of tidying the data in general, and this semi-structured data in particular. In this recipe, we will take a step-by-step approach to parsing the semi-structured data in one file and then apply this process to all of the files in the corpus using a custom function. 
+There are many ways to approach the task of tidying the data in general, and this semi-structured data in particular. In this recipe, we will take a step-by-step approach to parsing the semi-structured data in one file and then apply this process to all of the files in the corpus using a custom function.
 
 Let's begin by reading one of the conversation files into R as a character vector using the `read_lines()` function from the readr package.
 
@@ -204,7 +204,7 @@ doc_chr <-
   read_lines(file = "data/original/swda/sw00utt/sw_0001_4325.utt")
 ```
 
-To isolate the vector element that contains the document and speaker ids, we use `str_subset()` from the `stringr` package. This function takes two arguments, a string and a pattern, and returns any vector element that matches the pattern. 
+To isolate the vector element that contains the document and speaker ids, we use `str_subset()` from the `stringr` package. This function takes two arguments, a string and a pattern, and returns any vector element that matches the pattern.
 
 In this case we are looking for a pattern that matches three groups of digits separated by underscores. To test out a pattern, we can use the `str_view()` function. We will use the regular expression character class `\\d` for digits and the `+` operator to match 1 or more contiguous digits. We then separate three groups of `\\d+` with underscores `_`. The result is `\\d+_\\d+_\\d+`.
 
@@ -226,10 +226,10 @@ str_subset(doc_chr, "\\d+_\\d+_\\d+")
 
 Regular Expressions are a powerful pattern matching syntax. They are used extensively in text manipulation and we will see them again and again.
 
-To develop regular expressions, it is helpful to have a tool that allows you to interactively test your pattern matching. The stringr package has a handy function `str_view()` which allows for interactive pattern matching. A good website to practice Regular Expressions is [RegEx101](https://regex101.com/). You can also install the `regexplain` package [@R-regexplain] in R to get access to a useful [RStudio Addin](https://rstudio.github.io/rstudioaddins/). 
+To develop regular expressions, it is helpful to have a tool that allows you to interactively test your pattern matching. The stringr package has a handy function `str_view()` which allows for interactive pattern matching. A good website to practice Regular Expressions is [RegEx101](https://regex101.com/). You can also install the `regexplain` package [@R-regexplain] in R to get access to a useful [RStudio Addin](https://rstudio.github.io/rstudioaddins/).
 :::
 
-The next step is to extract the three digit sequences that correspond to the `doc_id`, `speaker_a_id`, and `speaker_b_id`. First we extract the pattern that we have identified with `str_extract()` and then we can break up the single character vector into multiple parts based on the underscore `_`. The `str_split()` function takes a string and then a pattern to use to split a character vector. It will return a list of character vectors. 
+The next step is to extract the three digit sequences that correspond to the `doc_id`, `speaker_a_id`, and `speaker_b_id`. First we extract the pattern that we have identified with `str_extract()` and then we can break up the single character vector into multiple parts based on the underscore `_`. The `str_split()` function takes a string and then a pattern to use to split a character vector. It will return a list of character vectors.
 
 ```{r swda-doc-info-2}
 str_subset(doc_chr, "\\d+_\\d+_\\d+") |> # isolate vector element
@@ -237,9 +237,9 @@ str_subset(doc_chr, "\\d+_\\d+_\\d+") |> # isolate vector element
   str_split("_") # split the character vector by underscore
 ```
 
-A list is a special object type in R. It is an unordered collection of objects whose lengths can differ (contrast this with a data frame which is a collection of objects whose lengths are the same --hence the tabular format). 
+A list is a special object type in R. It is an unordered collection of objects whose lengths can differ (contrast this with a data frame which is a collection of objects whose lengths are the same --hence the tabular format).
 
-In this case we have a list of length 1, whose sole element is a character vector of length 3 --one element per segment returned from our split. This is a desired result in most cases as if we were to pass multiple character vectors to our `str_split()` function we don't want the results to be conflated as a single character vector blurring the distinction between the individual character vectors. 
+In this case we have a list of length 1, whose sole element is a character vector of length 3 --one element per segment returned from our split. This is a desired result in most cases as if we were to pass multiple character vectors to our `str_split()` function we don't want the results to be conflated as a single character vector blurring the distinction between the individual character vectors.
 
 In this case, however, we want to extract the three elements of the character vector and assign them to meaningful variable names. To do this we will use the `unlist()` function which will convert the list into a single character vector. We will assign this result to `speaker_info_chr`.
 
@@ -264,7 +264,7 @@ speaker_b_id <- speaker_info_chr[3] # extract by index
 
 The next step is to isolate the text section extracting it from rest of the document. As noted previously, a sequence of `=` separates the header section from the text section. What we need to do is to index the point in our character vector `doc_chr` where that line occurs and then subset the `doc_chr` from that point until the end of the character vector.
 
-Let's first find the point where the `=` sequence occurs. We will again use the `str_view()` to test out a pattern that matches a contiguous sequence of `=`. 
+Let's first find the point where the `=` sequence occurs. We will again use the `str_view()` to test out a pattern that matches a contiguous sequence of `=`.
 
 ```{r swda-text-test-pattern}
 str_view(doc_chr, "=+")
@@ -272,9 +272,9 @@ str_view(doc_chr, "=+")
 
 So for this file we see there is one element that matches and that element's index is `31`.
 
-Now it is important to keep in mind that we are working with a single file from the `swda/` data. Since our plan is to use this code to apply to other files, we need to be cautious to not create a pattern that may be matched multiple times in another document in the corpus. As the `=+` pattern will match `=`, or `==`, or `===`, etc. it is not implausible to believe that there might be a `=` character on some other line in one of the other files. 
+Now it is important to keep in mind that we are working with a single file from the `swda/` data. Since our plan is to use this code to apply to other files, we need to be cautious to not create a pattern that may be matched multiple times in another document in the corpus. As the `=+` pattern will match `=`, or `==`, or `===`, etc. it is not implausible to believe that there might be a `=` character on some other line in one of the other files.
 
-Let's update our regular expression to avoid this potential scenario by only matching sequences of three or more `=`. In this case we will make use of the curly bracket operators `{}`. 
+Let's update our regular expression to avoid this potential scenario by only matching sequences of three or more `=`. In this case we will make use of the curly bracket operators `{}`.
 
 ```{r swda-text-test-pattern-2}
 str_view(doc_chr, "={3,}")
@@ -326,7 +326,7 @@ text <- str_subset(text, ".+")
 head(text)
 ```
 
-Our first step towards a tidy dataset is to now combine the `doc_id` and each element of `text` in a data frame, leaving aside our speaker ids. We will use the `tibble()` function and pass the variables as named arguments. 
+Our first step towards a tidy dataset is to now combine the `doc_id` and each element of `text` in a data frame, leaving aside our speaker ids. We will use the `tibble()` function and pass the variables as named arguments.
 
 ```{r swda-info-text-combine}
 # Combine info and text into a data frame
@@ -336,13 +336,13 @@ swda_df <- tibble(doc_id, text)
 slice_head(swda_df, n = 5)
 ```
 
-With our data now in a data frame, it's time to parse the `text` column and extract the damsl tags, speaker, speaker turn, utterance number, and the utterance text itself into separate columns. 
+With our data now in a data frame, it's time to parse the `text` column and extract the damsl tags, speaker, speaker turn, utterance number, and the utterance text itself into separate columns.
 
-To do this we will make extensive use of regular expressions. Our aim is to find a consistent pattern that distinguishes each piece of information from other other text in a given row. 
+To do this we will make extensive use of regular expressions. Our aim is to find a consistent pattern that distinguishes each piece of information from other other text in a given row.
 
 The best way to learn regular expressions is to use them. To this end I've included a link to the interactive regular expression practice website [regex101](https://regex101.com).
 
-Open this site and copy the text below into the 'TEST STRING' field.  
+Open this site and copy the text below into the 'TEST STRING' field.
 
 ```plain
 o          A.1 utt1: Okay.  /
@@ -370,14 +370,14 @@ utt\d+
 :.+$
 ```
 
-As you can now see, we have regular expressions that will match the damsl tags, speaker and speaker turn, utterance number, and the utterance text. 
+As you can now see, we have regular expressions that will match the damsl tags, speaker and speaker turn, utterance number, and the utterance text.
 
 To apply these expressions to our data and extract this information into separate columns we will make use of the `mutate()` and `str_extract()` functions. `mutate()` will take our data frame and create new columns with values we match and extract from each row in the data frame with `str_extract()`.
 
 ::: {.callout}
 **`r fontawesome::fa('hand-point-up')` Tip**
 
-Notice that `str_extract()` is different than `str_extract_all()`. When we work with `mutate()` each row will be evaluated in turn, therefore we only need to make one match per row. 
+Notice that `str_extract()` is different than `str_extract_all()`. When we work with `mutate()` each row will be evaluated in turn, therefore we only need to make one match per row.
 :::
 
 I've chained each of these steps in the code below, dropping the original `text` column with `select(-text)`, and overwriting `swda_df` with the results.
@@ -402,7 +402,7 @@ glimpse(swda_df)
 One twist you will notice is that regular expressions in R require double backslashes (`\\\\`) where other programming environments use a single backslash (`\\`).
 :::
 
-There are a couple things left to do to the columns we extracted from the text before we move on to finishing up our tidy dataset. First, we need to separate the `speaker_turn` column into `speaker` and `turn_num` columns and second we need to remove unwanted characters from the `damsl_tag`, `utterance_num`, and `utterance_text` columns. 
+There are a couple things left to do to the columns we extracted from the text before we move on to finishing up our tidy dataset. First, we need to separate the `speaker_turn` column into `speaker` and `turn_num` columns and second we need to remove unwanted characters from the `damsl_tag`, `utterance_num`, and `utterance_text` columns.
 
 To separate the values of a column into two columns we use the `separate()` function. It takes a column to separate and character vector of the names of the new columns to create. By default the values of the input column will be separated by non-alphanumeric characters. In our case this means the `.` will be our separator.
 
@@ -451,11 +451,11 @@ swda_df <-
 glimpse(swda_df)
 ```
 
-We now have the tidy dataset we set out to create. But this dataset only includes one conversation file! We want to apply this code to all 1,155 conversation files in the `swda/` corpus. 
+We now have the tidy dataset we set out to create. But this dataset only includes one conversation file! We want to apply this code to all 1,155 conversation files in the `swda/` corpus.
 
-The approach will be to create a custom function which groups the code we've done for this single file and then iteratively send each file from the corpus through this function and combine the results into one data frame. 
+The approach will be to create a custom function which groups the code we've done for this single file and then iteratively send each file from the corpus through this function and combine the results into one data frame.
 
-Here's the custom function with some extra code to print a progress message for each file when it runs. 
+Here's the custom function with some extra code to print a progress message for each file when it runs.
 
 ```{r swda-function-metadata}
 # [ ] add to `qtalrkit` package, note the convention of `extract_` prefix for curation functions. In combination with `get_compressed_data()` this corpus can be curated with few steps.
@@ -584,7 +584,7 @@ swda_files_chr <-
 ../data/original/swda/sw00utt/sw_0006_4108.utt
 ```
 
-To pass each conversation file in the vector of paths to our conversation files iteratively to the `extract_swda_data()` function we use `map_dfr()`. This will apply the function to each conversation file and return a data frame for each and then combine the results into a single data frame. 
+To pass each conversation file in the vector of paths to our conversation files iteratively to the `extract_swda_data()` function we use `map_dfr()`. This will apply the function to each conversation file and return a data frame for each and then combine the results into a single data frame.
 
 ```{r swda-process-files-3, message=FALSE}
 # Process all conversation files
@@ -600,9 +600,9 @@ We now see that we have `r format(nrow(swda_df), big.mark = ", ")` observations 
 
 It also is a good idea to inspect the data frame to ensure that the data is as expected. One is to check for missing values. We can use the `skim()` function from the `skimr` package to get a quick summary of the data frame. Another is to spot check the data frame to see if the values are as expected. As we are working with a fairly large dataset, we can use the `slice_sample()` function from the `dplyr` package to randomly sample a subset of rows from the data frame.
 
-### Documentation 
+### Documentation
 
-We now have a tidy dataset, but we need to document the data curation process and the resulting dataset. The script used to curate the data should be cleaned up and well documented in prose and code comments. 
+We now have a tidy dataset, but we need to document the data curation process and the resulting dataset. The script used to curate the data should be cleaned up and well documented in prose and code comments.
 
 We then need to write the dataset to disk and create a data dictionary. We will make sure to add the curated dataset to the `derived/` directory and the data dictionary close to the dataset.
 
@@ -612,10 +612,10 @@ dir_create(path = "../data/derived/swda/") # create swda subdirectory
 
 write_csv(swda_df,
   file = "../data/derived/swda/swda_curated.csv"
-) 
+)
 ```
 
-The directory structure now looks like this: 
+The directory structure now looks like this:
 
 ```bash
 data/
@@ -643,7 +643,7 @@ data/
         └── sw13utt/
 ```
 
-The data dictionary file will contain information about the dataset variables and their values. This file can be created manually and edited with a text editor or spreadsheet software. Or alternatively, the scaffolding for a CSV file can be generated with the `create_data_dictionary()` function from the `qtalrkit` package. 
+The data dictionary file will contain information about the dataset variables and their values. This file can be created manually and edited with a text editor or spreadsheet software. Or alternatively, the scaffolding for a CSV file can be generated with the `create_data_dictionary()` function from the `qtalrkit` package.
 
 ```{r swda-data-dictionary, eval=FALSE}
 # Create data dictionary
@@ -669,9 +669,9 @@ The skills we used in this recipe include regular expressions, the `readr`, `dpl
 6. A data dictionary is a document that describes the `r mcq(c("data curation process", "data analysis process", answer = "dataset variables and their values", "data visualization process"))`.
 
 
-### Lab preparation 
+## Lab preparation
 
-Before beginning Lab 6, review and ensure that you are familiar with the following: 
+Before beginning Lab 6, review and ensure that you are familiar with the following:
 
 - Vector, data frame, and list data structures
 - Subsetting and indexing vectors, data frames, and lists
@@ -679,6 +679,6 @@ Before beginning Lab 6, review and ensure that you are familiar with the followi
 - Reading, writing, and manipulating files
 - Creating and employing custom functions
 
-In this lab, we will practice these skills and expand our use of the `readr`, `dplyr`, `stringr`, and `purrr` packages to curate and document a dataset. 
+In this lab, we will practice these skills and expand our use of the `readr`, `dplyr`, `stringr`, and `purrr` packages to curate and document a dataset.
 
 ## References
