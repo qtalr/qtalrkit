@@ -7,15 +7,7 @@ biblio-style: apalike
 link-citations: true
 ---
 
-<!--  
-The goal will be to do one, more advanced example
 
-- `gutenbergr` example
-  - Literature: American and English Literature
-  - Metadata: `gutenberg_metadata`, `gutenberg_authors`, `gutenberg_subjects`
-  - Directory structure
-  - Data origin file
--->
 
 ```{r, child="_common.Rmd"}
 ```
@@ -25,7 +17,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Overview
-
 
 <!--  
 
@@ -54,7 +45,7 @@ We will cover the following topics:
 
 Along the way we will put into practice our foundational R skills and also continue to work the newly introduced skills of control statements and custom functions.
 
-In Lab 4, we will apply what we have learned so far to acquire data for a text analysis project.
+In Lab 5, we will apply what we have learned so far to acquire data for a text analysis project.
 
 ## Concepts and strategies
 
@@ -398,7 +389,7 @@ get_gutenberg_works <- function(target_file, lcc_subject, birth_year, death_year
 
 ##### Function code: data check
 
-We need to create the code to check if the data exists. We will use an `if` statement to do this. If the data does exist, we will print a message to the console that the data already exists and stop the function. If the data does not exist, we will create the directory structure and continue with the data acquisition process. I will use the `fs` package in this code so I will load the library at the top of the function. 
+We need to create the code to check if the data exists. We will use an `if` statement to do this. If the data does exist, we will print a message to the console that the data already exists and stop the function. If the data does not exist, we will create the directory structure and continue with the data acquisition process. I will use the `fs` package [@R-fs] in this code so I will load the library at the top of the function. 
 
 ```{r get-gutenberg-works-fun-7, eval=FALSE}
 get_gutenberg_works <- function(target_file, lcc_subject, birth_year, death_year) {
@@ -756,7 +747,7 @@ data
 
 ## Summary
 
-In this recipe, we have covered acquiring data for a text analysis project. We used the `gutenbergr` package to acquire works from Project Gutenberg. After exploring the resources available, we established an acquisition plan. We then used R to implement our plan. To make our code more reproducible-friendly, we wrote a custom function to acquire the data. Finally, we discussed the importance of documenting the data collection process and introduced the data origin file.
+In this recipe, we have covered acquiring data for a text analysis project. We used the `gutenbergr [@R-gutenbergr] to acquire works from Project Gutenberg. After exploring the resources available, we established an acquisition plan. We then used R to implement our plan. To make our code more reproducible-friendly, we wrote a custom function to acquire the data. Finally, we discussed the importance of documenting the data collection process and introduced the data origin file.
 
 ## Check your understanding
 
@@ -766,5 +757,28 @@ In this recipe, we have covered acquiring data for a text analysis project. We u
 4. When writing a custom function, what is the first step? `r mcq(c("Write the code", "Write the comments", "Load the packages", answer = "Create the function arguments"))`
 5. What does it mean when we say that a function is 'vectorized' in R? `r mcq(c("The function returns a vector", "The function can take a vector as an argument", answer = "The function can take a vector and operates on each element of the vector"))`
 6. Which Tidyverse package allows us to apply non-vectorized functions to vectors? `r mcq(c("dplyr", "stringr", "readr", answer = "purrr"))`
+
+## Lab preparation 
+
+<!-- Provide a checklist of knowledge and skills that learners should be comfortable with before beginning the lab -->
+
+Before beginning Lab 5, make sure you are comfortable with the following:
+
+- Reading and subsetting data in R
+- Writing data in R 
+- The project structure of reproducible projects
+
+The additional skills covered in this lab are:
+
+- Identifying data sources
+- Acquiring data through manual and programmatic downloads and APIs
+- Creating a data acquisition plan
+- Documenting the data collection process
+- Writing a custom function
+- Documenting the data source with a data origin file
+
+You will have a choice of data source to acquire data from. Before you start the lab, you should consider which data source you would like to use, what strategy you will use to acquire the data, and what data you will acquire. You should also consider the information you need to document the data collection process.
+
+Consult the [Identifying data and data sources](guide-4.html) guide for some ideas on where to find data sources.
 
 ## References
