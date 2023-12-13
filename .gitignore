@@ -7,9 +7,9 @@
 .DS_Store
 *.code-workspace
 *.Rproj
-docs
 vignettes/articles/_site/
-vignettes/articles/data/original/swda/
+vignettes/articles/data/
 inst/doc
 _R_ideas.md
 .lintr
+.github/workflows/pkgdown.yaml

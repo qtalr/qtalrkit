@@ -1,7 +1,7 @@
 url: https://qtalr.github.io/qtalrkit/
 title: "qtalrkit"
 template:
-  bootstrap: 5  
+  bootstrap: 5
   bslib:
     primary: "#18bc9c"
 
@@ -11,7 +11,7 @@ navbar:
       - intro
       - articles
       - reference
-    right: 
+    right:
       - search
       - news
       - github
@@ -22,7 +22,7 @@ navbar:
     reference:
       text: Reference
       href: reference/index.html
-    github: 
+    github:
       icon: fab fa-github fa-lg
       href: https://github.com/qtalr/qtalrkit/
       aria-label: github
@@ -30,7 +30,7 @@ navbar:
       text: News
       href: news/index.html
 
-articles: 
+articles:
   - title: Recipes
     desc: "A collection of programming demonstrations"
     contents:

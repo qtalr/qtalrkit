@@ -55,28 +55,500 @@ In Lab 7, we will apply what we have learned in this recipe to a new dataset.
 
 ### Orientation
 
-- ANC corpus the MASC corpus.
--
+<!-- about curated data and goal of transformation -->
 
 
+<!-- about the MASC dataset -->
+
+::: {.callout}
+**`r fontawesome::fa('hand-point-up')` Tip** Acquire and tidy the data
+
+The MASC dataset is a curated version of the original data. This data is relatively project-neutral.
+
+If you would like to acquire the original data and curate it for use in this recipe, you can do so by running the following code:
+
+```r
+# Acquire the original data
+qtalrkit::get_compressed_data(
+  url = "..",
+  target_dir = "data/original/masc/"
+)
+
+# Curate the data
+
+# ... write a function and add it to the package
+```
+
+:::
+
+As a starting point, I will assume that the curated dataset is available in the `data/derived/masc/` directory, as seen below.
+
+```bash
+data/
+├── analysis/
+├── derived/
+│   ├── masc_curated_dd.csv
+│   ├── masc/
+│   │   ├── masc_curated.csv
+├── original/
+│   ├── masc_do.csv
+│   ├── masc/
+│   │   ├── ...
+```
+
+The first step is to inspect the data dictionary file. This file contains information about the variables in the dataset. It is also a good idea to review the data origin file, which contains information about the original data source.
+
+Looking at the data dictionary, in Table \@ref(tab:masc-data-dictionary).
+
+```{r masc-data-dictionary, echo=FALSE, message=FALSE}
+# Read and print the data dictionary
+read_csv("data/derived/masc_curated_dd.csv") |>
+  kable(caption = "Data dictionary for the MASC dataset") |>
+  kable_styling()
+```
+
+Let's read in the data and take a glimpse at it.
+
+```{r masc-read-curated-data, message=FALSE}
+# Read the data
+masc_curated <- read_csv("data/derived/masc/masc_curated.csv")
+
+# Preview
+glimpse(masc_curated)
+```
+
+We may also want to do a summary overview of the dataset with the `skimr` package. This will give us a sense of the data types and the number of missing values.
+
+```plain
+── Data Summary ───────────────────────
+                           Values
+Name                       masc_curated
+Number of rows             591097
+Number of columns          10
+_______________________
+Column type frequency:
+  character                9
+  numeric                  1
+________________________
+Group variables            None
+
+── Variable type: character ───────────
+  skim_variable n_missing complete_rate min max empty n_unique whitespace
+1 file                  0         1       3  40     0      392          0
+2 base                  4         1.00    1  99     0    28010          0
+3 msd                   0         1       1   8     0       60          0
+4 string               25         1.00    1  99     0    39474          0
+5 title                 0         1       3 203     0      373          0
+6 source             5732         0.990   3 139     0      348          0
+7 date              94002         0.841   4  17     0       62          0
+8 class                 0         1       5   5     0       18          0
+9 domain            18165         0.969   4  35     0       21          0
+
+── Variable type: numeric ─────────────
+  skim_variable n_missing complete_rate  mean    sd p0 p25  p50  p75  p100 hist
+1 ref                   0             1 3854. 4633.  0 549 2033 5455 24519 ▇▂▁▁▁
+```
+
+In summary, the dataset contains `r format(nrow(masc_curated), big.mark = ",")` observations and `r ncol(masc_curated)` variables. The unit of observation is the word. The variable names are somewhat opaque, but the data dictionary provides some context that will help us understand the data.
+
+Now we want to consider how we plan to use this data in our analysis. Let's assume that we want to use this data to explore lexical variation in the MASC dataset across modalities and genres. We will want to transform the data to reflect this goal.
+
+In Table \@ref(tab:masc-transformed-idealized), we see an idealized version of the data we would like to have.
+
+
+| doc_id | modality | genre | term_num | term | lemma | pos |
+|--------|----------|-------|----------|------|-------|-----|
+|        |          |       |          |      |       |     |
+
+: (tab:masc-transformed-idealized) Idealized version of the MASC dataset
 
 ### Transforming data
 
+To get from the curated dataset to the idealized dataset, we will need to perform a number of transformations. Some of these transformations will be relatively straightforward, while others will require more work. Let's start with the easy ones.
+
+1. Let's drop the variables that we will not use and at the same time rename the variables to make them more intuitive.
+
+We will use the `select()` function to drop and rename variables.
+
+```{r masc-transformed-drop-rename}
+# Drop and rename variables
+masc_df <-
+  masc_curated |>
+  select(
+    doc_id = file,
+    term_num = ref,
+    term = string,
+    lemma = base,
+    pos = msd,
+    mod_gen = class
+  )
+
+masc_df
+```
+
+That's a good start on the structure.
+
+1. Next, we will split the `mod_gen` variable into two variables: `modality` and `genre`.
+
+We have a variable `mod_gen` that contains two pieces of information: modality and genre (e.g., `WR LT`). The information appears to separated by a space. We can make sure this is the case by tabulating the values. The `count()` function will count the number of occurrences of each value in a variable, and as a side effect it will summarize the values of the variable so we can see if there are any unexpected values.
+
+
+```{r masc-transformed-split-mod-gen-tabulate}
+# Tabulate mod_gen
+masc_df |>
+  count(mod_gen) |>
+  arrange(-n) |>
+  print(n = Inf)
+```
+
+Looks good, our values are separated by a space. We can use the `separate_wider_delim()` function from the `tidyr` package to split the variable into two variables. We will use the `delim` argument to specify the delimiter and the `names` argument to specify the names of the new variables.
+
+```{r masc-transformed-split-mod-gen-run}
+# Split mod_gen into modality and genre
+masc_df <-
+  masc_df |>
+  separate_wider_delim(
+    cols = mod_gen,
+    delim = " ",
+    names = c("modality", "genre")
+  )
+
+masc_df
+```
+
+2. Create a document id variable.
+
+Now that we have the variables we want, we can turn our attention to the values of the variables. Let's start with the `doc_id` variable. This may a good variable to use as the document id. If we take a look at the values, however, we can see that the values are not very informative.
+
+Let's use the `distinct()` function to only show the unique values of the variable. We will also chain a `slice_sample()` function to randomly select a sample of the values. This will give us a sense of the values in the variable.
+
+```{r masc-transformed-doc-id-distinct-show, eval=FALSE}
+# Preview doc_id
+masc_df |>
+  distinct(doc_id) |>
+  slice_sample(n = 10)
+```
+
+```{r masc-transformed-doc-id-distinct-run, echo=FALSE}
+# Set seed
+set.seed(123)
+
+# Preview doc_id
+masc_df |>
+  distinct(doc_id) |>
+  slice_sample(n = 10)
+```
+
+You can run this code various times to get a different sample of values.
+
+Since the `doc_id` variable is not informative, let's replace the variable's values with numeric values. In the end, we want a digit for each unique document and we want the words in each document to be grouped together.
+
+To do this we will need to group the data by `doc_id` and then generate a new number for each group. We can achieve this by passing the data grouped by `doc_id` (`group_by()`) to the `mutate()` function and then using the `cur_group_id()` function to generate a number for each group.
+
+```{r masc-transformed-doc-id-recode}
+# Recode doc_id
+masc_df <-
+  masc_df |>
+  group_by(doc_id) |>
+  mutate(doc_id = cur_group_id()) |>
+  ungroup()
+
+masc_df
+```
+
+To check, we can again apply the `count()` function.
+
+```{r masc-transformed-doc-id-recode-check}
+# Check
+masc_df |>
+  count(doc_id) |>
+  arrange(-n) |>
+  print(n = Inf)
+```
+
+We have 392 unique documents in the dataset. We also can see that the word lengths vary quite a bit. That's something we will need to keep in mind as we move forward into the analysis.
+
+3. Check the values of the `pos` variable.
+
+The `pos` variable contains the part-of-speech tags for each word. The PENN Treebank tagset is used. Let's take a look at the values to get familiar with them, and also to see if there are any unexpected values.
+
+Let's use the `slice_sample()` function to randomly select a sample of the values. This will give us a sense of the values in the variable.
+
+```{r masc-transformed-pos-distinct-show, eval=FALSE}
+# Preview pos
+masc_df |>
+  slice_sample(n = 10)
+```
+
+```{r masc-transformed-pos-distinct-run, echo=FALSE}
+# Set seed
+set.seed(6345)
+
+# Preview pos
+masc_df |>
+  slice_sample(n = 10)
+```
+
+After running this code a few times, we can see that the many of the values are as expected. There are, however, some unexpected values. In particular, some punctuation and symbols are tagged as nouns.
+
+We can get a better appreciation for the unexpected values by filtering the data to only show non alpha-numeric values (`^\\W+$`) in the `term` column and then tabulating the values by `term` and `pos`.
+
+```{r masc-transformed-pos-distinct-punct}
+# Filter and tabulate
+masc_df |>
+  filter(str_detect(term, "^\\W+$")) |>
+  count(term, pos) |>
+  arrange(-n) |>
+  print(n = 20)
+```
+
+As we can see from the sample above and from the PENN tagset documentation, most punctuation is tagged as the punctuation itself. For example, the period is tagged as `.` and the comma is tagged as `,`. Let's edit the data to reflect this.
+
+Let's look at the code, and then we will discuss it.
+
+```{r masc-pos-recode-punct}
+# Recode
+masc_df <-
+  masc_df |>
+  mutate(pos = case_when(
+    str_detect(term, "^\\W+$") ~ str_sub(term, start = 1, end = 1),
+    TRUE ~ pos
+  ))
+
+# Check
+masc_df |>
+  filter(str_detect(term, "^\\W+$")) |> # preview
+  count(term, pos) |>
+  arrange(-n) |>
+  print(n = 20)
+```
+
+The `case_when()` function allows us to specify a series of conditions and values. The first condition is that the `term` variable contains only non alpha-numeric characters. If it does, then we want to replace the value of the `pos` variable with the first character of the `term` variable, `str_sub(term, start = 1, end = 1)`. If the condition is not met, then we want to keep the original value of the `pos` variable, `TRUE ~ pos`.
+
+We can see that our code worked by filtering the data to only show non alpha-numeric values (`^\\W+$`) in the `term` column and then tabulating the values by `term` and `pos`.
+
+For completeness, I will also recode the `lemma` values for these values as well as the lemma can some times be multiple punctuation marks (*e.g.* `!!!!!`, `---`, *etc.*) for these terms.
+
+```{r masc-lemma-recode-punct}
+# Recode
+masc_df <-
+  masc_df |>
+  mutate(lemma = case_when(
+    str_detect(term, "^\\W+$") ~ str_sub(term, start = 1, end = 1),
+    TRUE ~ lemma
+  ))
+
+# Check
+masc_df |>
+  filter(str_detect(term, "^\\W+$")) |> # preview
+  count(term, lemma) |>
+  arrange(-n) |>
+  print(n = 20)
+```
+
+4. Check the values of the `modality` variable.
+
+The `modality` variable contains the modality tags for each document. Let's take a look at the values.
+
+Let's tabulate the values with `count()`.
+
+```{r masc-transformed-modality-count}
+# Tabulate modality
+masc_df |>
+  count(modality)
+```
+
+We see that the values are `SP` and `WR`, which stand for spoken and written, respectively. To make this a bit more transparent, we can recode these values to `Spoken` and `Written`. We will use the `case_when()` function to do this.
+
+```{r masc-transformed-modality-recode}
+# Recode modality
+masc_df <-
+  masc_df |>
+  mutate(
+    modality = case_when(
+      modality == "SP" ~ "Spoken",
+      modality == "WR" ~ "Written"
+    )
+  )
+
+masc_df
+```
+
+5. Check the values of the `genre` variable.
+
+Let's look at the values of the `genre` variable.
+
+```{r masc-transformed-genre-count}
+# Tabulate genre
+masc_df |>
+  count(genre) |>
+  print(n = Inf)
+```
+
+These genre labels are definitely cryptic. The data dictionary does not list these labels and their more verbose descriptions. However, looking at the original data's README, we can find the file (`resource-headers.xml`) that lists these genre labels.
+
+```text
+1. 'BL' for blog
+2. 'NP' is newspaper
+3. 'EM' is email
+4. 'ES' is essay
+5. 'FT' is fictlets
+6. 'FC' is fiction
+7. 'GV' is government
+8. 'JK' is jokes
+9. 'JO' is journal
+10. 'LT' is letters
+11. 'MS' is movie script
+12. 'NF' is non-fiction
+13. 'FF' is face-to-face
+14. 'TC' is technical
+15. 'TG' is travel guide
+16. 'TP' is telephone
+17. 'TR' is transcript
+18. 'TW' is twitter
+```
+
+Now we can again use the `case_when()` function. This time we will see if `genre` is equal to one of the genre labels and if it is, then we will replace the value with the more verbose description.
+
+```{r masc-transformed-genre-recode}
+# Recode genre
+masc_df <-
+  masc_df |>
+  mutate(
+    genre = case_when(
+      genre == "BL" ~ "Blog",
+      genre == "NP" ~ "Newspaper",
+      genre == "EM" ~ "Email",
+      genre == "ES" ~ "Essay",
+      genre == "FT" ~ "Fictlets",
+      genre == "FC" ~ "Fiction",
+      genre == "GV" ~ "Government",
+      genre == "JK" ~ "Jokes",
+      genre == "JO" ~ "Journal",
+      genre == "LT" ~ "Letters",
+      genre == "MS" ~ "Movie script",
+      genre == "NF" ~ "Non-fiction",
+      genre == "FF" ~ "Face-to-face",
+      genre == "TC" ~ "Technical",
+      genre == "TG" ~ "Travel guide",
+      genre == "TP" ~ "Telephone",
+      genre == "TR" ~ "Transcript",
+      genre == "TW" ~ "Twitter"
+    )
+  )
+
+masc_df
+```
+
+During the process of transformation and afterwards, it is a good idea to tabulate and/ or visualize the dataset. This provides us an opportunity to get to know the dataset better and also may help us identify inconsistencies that we would like to address in the transformation, or at least be aware of as we move towards analysis.
+
+```{r masc-transformed-evaluation}
+
+# How many documents are in each modality?
+masc_df |>
+  distinct(doc_id, modality) |>
+  count(modality) |>
+  arrange(-n)
+
+# How many documents are in each genre?
+masc_df |>
+  distinct(doc_id, genre) |>
+  count(genre) |>
+  arrange(-n)
+
+# What is the averge length of documents (in words)?
+masc_df |>
+  group_by(doc_id) |>
+  summarize(n = n()) |>
+  summarize(
+    mean = mean(n),
+    median = median(n),
+    min = min(n),
+    max = max(n)
+  )
+
+masc_df |>
+  group_by(doc_id) |>
+  summarize(n = n()) |>
+  ggplot(aes(x = n)) +
+  geom_density()
+
+# What is the distribution of the length of documents by modality?
+masc_df |>
+  group_by(doc_id, modality) |>
+  summarize(n = n()) |>
+  ggplot(aes(x = n, fill = modality)) +
+  geom_density(alpha = 0.5)
+
+# What is the distribution of the length of documents by genre?
+masc_df |>
+  group_by(doc_id, modality, genre) |>
+  summarize(n = n()) |>
+  ggplot(aes(x = genre, y = n)) +
+  geom_boxplot() +
+  facet_wrap(~ modality, scales = "free_x") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+Once we are satisfied with the structure and values of the dataset, we can save it to a file. We will use the `write_csv()` function from the `readr` package to do this.
+
+```{r masc-transformed-save, eval=FALSE}
+# Save the data
+write_csv(masc_df, "data/derived/masc/masc_transformed.csv")
+```
+
+The structure of the `data/` directory in our project should now look like this:
+
+```bash
+data/
+├── analysis/
+├── derived/
+│   ├── masc_curated_dd.csv
+│   ├── masc/
+│   │   ├── masc_curated.csv
+│   │   ├── masc_transformed.csv
+├── original/
+```
+
 ### Documenting data
+
+The last step is to document the process and the resulting dataset(s). In this particular case we only derived one transformed dataset. In some cases, however, you may want to generate various datasets with different units of observations. It all depends on your research question and the research aim that you are adopting.
+
+The documentation steps are the same as in the curation step. We will organize and document the process file (often a `.qmd` file) and then create a data dictionary for each of the transformed datasets. The `create_data_dictionary()` function can come in handy for scaffolding the data dictionary file.
+
+```{r masc-transformed-documentation, eval=FALSE}
+# Create a data dictionary
+create_data_dictionary(
+  data = masc_df,
+  file_path = "data/derived/masc/masc_transformed_dd.csv"
+)
+```
 
 ## Summary
 
+In this recipe, we have looked at an example of transforming a curated dataset. This recipe included operations such as:
+
+- Text normalization
+- Variable recoding
+- Splitting variables
+
+In other projects, the transformation steps will inevitably differ, but these strategies are commonly necessary in almost any project.
+
+Just as with other steps in the data preparation process, it is important to document the transformation steps. This will help you and others understand the process and the resulting dataset(s).
+
 ## Check your understanding
 
-(... examples ...)
-
-1. `r torf(TRUE)` Literate Programming, first introduced by Donald Knuth in 1984, allows the combination of computer code and text prose in one document.
-2. The programming paradigm Literate Programming is implemented through `r mcq(c(answer = "Quarto", "R", "RStudio", "GitHub"))`, a platform that facilitates the creation of a variety of output documents based on the same source code.
-3. Which of the following components does a basic Quarto document *not* contain? `r mcq(c("Front-matter section", "Prose section", answer = "Back-matter section", "Code block"))`
-4. To generate a PDF document in Quarto, you can edit the format attribute value in the front-matter section to `r fitb(c(answer = "pdf", "html", "word"), ignore_case = TRUE)`.
-5. `r torf(TRUE)` The code block options `echo` and `include` can be used to hide the code and output, respectively.
-6. `r torf(FALSE)` In Quarto, a code block, where the programming language code is entered, is bounded by three underscores (`_`).
+1. Which function would you use to remove duplicate rows in a dataset? `r mcq(c("group_by()", "mutate()", answer = "distinct()", "filter()"))`
+2. `r torf(FALSE)` The `str_c()` function from the `stringr` package is used to separate strings rather than combine them.
+3. `r torf(TRUE)` The `separate_wider_delim()` function can be used to split one column into multiple columns based on a delimiter.
+4. If you want to recode the age of learners into categories such as "child", "teen", and "adult" based on their age, which function should you use? `r mcq(c("mutate()", answer = "case_when()", "unite()", "separate_wider_delim()"))`
+5. To normalize text by removing leading and trailing whitespace, you use the `r fitb("str_trim")``()` function from the `stringr` package.
+6. To normalize text by converting all characters to lowercase, you use the `r fitb("str_to_lower")``()` function from the `stringr` package.
 
 ## Lab prepation
+
+<!-- Lab 07 description and checklist -->
+
+...
 
 ## References

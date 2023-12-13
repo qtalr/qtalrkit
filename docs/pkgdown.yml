@@ -1,0 +1,30 @@
+pandoc: 3.1.9
+pkgdown: 2.0.7
+pkgdown_sha: ~
+articles:
+  errata: errata.html
+  guide-1: guide-1.html
+  guide-2: guide-2.html
+  guide-3: guide-3.html
+  guide-4: guide-4.html
+  guide-5: guide-5.html
+  instructor-guide: instructor-guide.html
+  recipe-0: recipe-0.html
+  recipe-1: recipe-1.html
+  recipe-10: recipe-10.html
+  recipe-11: recipe-11.html
+  recipe-12: recipe-12.html
+  recipe-2: recipe-2.html
+  recipe-3: recipe-3.html
+  recipe-4: recipe-4.html
+  recipe-5: recipe-5.html
+  recipe-6: recipe-6.html
+  recipe-7: recipe-7.html
+  recipe-8: recipe-8.html
+  recipe-9: recipe-9.html
+  qtalrkit: qtalrkit.html
+last_built: 2023-12-13T14:23Z
+urls:
+  reference: https://qtalr.github.io/qtalrkit/reference
+  article: https://qtalr.github.io/qtalrkit/articles
+
