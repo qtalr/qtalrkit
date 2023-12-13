@@ -1,5 +1,0 @@
-variable,name,variable_type,description
-number,Federal Number,categorical,The Federalist Paper number
-title,Title,categorical,The title of the Federalist Paper
-author,Author,categorical,The author(s) of the Federalist Paper
-text,Text,categorical,The text content of the Federalist Paper by paragraph
