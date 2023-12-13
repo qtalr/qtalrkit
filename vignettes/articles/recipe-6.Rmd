@@ -668,7 +668,6 @@ The skills we used in this recipe include regular expressions, the `readr`, `dpl
 5. The `map_dfr()` function from the `purrr` package will apply a function to each element of a vector and return a `r mcq(c("list", "nested data frame", answer = "data frame with rows combined", "data frame with columns combined"))`.
 6. A data dictionary is a document that describes the `r mcq(c("data curation process", "data analysis process", answer = "dataset variables and their values", "data visualization process"))`.
 
-
 ## Lab preparation
 
 Before beginning Lab 6, review and ensure that you are familiar with the following:
@@ -680,5 +679,7 @@ Before beginning Lab 6, review and ensure that you are familiar with the followi
 - Creating and employing custom functions
 
 In this lab, we will practice these skills and expand our use of the `readr`, `dplyr`, `stringr`, and `purrr` packages to curate and document a dataset.
+
+You will have a choice of data to curate. Before you start the lab, you should consider which data source you would like to use, what the idealized structure the curated dataset will take, and what strategies you will likely employ to curate the dataset. You should also consider the information you need to document the data curation process.
 
 ## References
