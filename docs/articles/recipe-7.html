@@ -119,7 +119,9 @@ Context: This is the third of three tutorials on data preparation. The first tut
 <h3 id="orientation">Orientation<a class="anchor" aria-label="anchor" href="#orientation"></a>
 </h3>
 <!-- about curated data and goal of transformation -->
+<p>Curated datasets are often project-neutral. That is, they are not necessarily designed to answer a specific research question. Rather, they are designed to be flexible enough to be used in a variety of projects. This is a good thing, but it also means that we will likely need to transform the data to bring it more in line with our research goals. This can include normalizing text, modifying the unit of observation and/ or adding additional attributes to the data.</p>
 <!-- about the MASC dataset -->
+<p>In this recipe, we will explore a practical example of transforming data. We will start with a curated dataset and transform it to reflect a specific research goal. The dataset we will use is the MASC dataset <span class="citation">(<a href="#ref-Ide2008">Ide et al. 2008</a>)</span>. This dataset contains a collection of words from a variety of genres and modalities of American English.</p>
 <div class="callout">
 <p><strong><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M64 64V241.6c5.2-1 10.5-1.6 16-1.6H96V208 64c0-8.8-7.2-16-16-16s-16 7.2-16 16zM80 288c-17.7 0-32 14.3-32 32c0 0 0 0 0 0v24c0 66.3 53.7 120 120 120h48c52.5 0 97.1-33.7 113.4-80.7c-3.1 .5-6.2 .7-9.4 .7c-20 0-37.9-9.2-49.7-23.6c-9 4.9-19.4 7.6-30.3 7.6c-15.1 0-29-5.3-40-14c-11 8.8-24.9 14-40 14H120c-13.3 0-24-10.7-24-24s10.7-24 24-24h40c8.8 0 16-7.2 16-16s-7.2-16-16-16H120 80zM0 320s0 0 0 0c0-18 6-34.6 16-48V64C16 28.7 44.7 0 80 0s64 28.7 64 64v82c5.1-1.3 10.5-2 16-2c25.3 0 47.2 14.7 57.6 36c7-2.6 14.5-4 22.4-4c20 0 37.9 9.2 49.7 23.6c9-4.9 19.4-7.6 30.3-7.6c35.3 0 64 28.7 64 64v64 24c0 92.8-75.2 168-168 168H168C75.2 512 0 436.8 0 344V320zm336-64c0-8.8-7.2-16-16-16s-16 7.2-16 16v48 16c0 8.8 7.2 16 16 16s16-7.2 16-16V256zM160 240c5.5 0 10.9 .7 16 2v-2V208c0-8.8-7.2-16-16-16s-16 7.2-16 16v32h16zm64 24v40c0 8.8 7.2 16 16 16s16-7.2 16-16V256 240c0-8.8-7.2-16-16-16s-16 7.2-16 16v24z"></path></svg> Tip</strong> Acquire and tidy the data</p>
 <p>The MASC dataset is a curated version of the original data. This data is relatively project-neutral.</p>
@@ -358,7 +360,7 @@ Group variables            None
 1 ref                   0             1 3854. 4633.  0 549 2033 5455 24519 ▇▂▁▁▁</code></pre>
 <p>In summary, the dataset contains 591,097 observations and 10 variables. The unit of observation is the word. The variable names are somewhat opaque, but the data dictionary provides some context that will help us understand the data.</p>
 <p>Now we want to consider how we plan to use this data in our analysis. Let's assume that we want to use this data to explore lexical variation in the MASC dataset across modalities and genres. We will want to transform the data to reflect this goal.</p>
-<p>In Table <a href="#tab:masc-transformed-idealized"><strong>??</strong></a>, we see an idealized version of the data we would like to have.</p>
+<p>In Table <a href="#tab:masc-transformed-idealized"><strong>??</strong></a>, we see an idealized version of the dataset we would like to have.</p>
 <table class="table">
 <caption>(tab:masc-transformed-idealized) Idealized version of the MASC dataset</caption>
 <thead><tr class="header">
@@ -380,6 +382,7 @@ Group variables            None
 <td></td>
 </tr></tbody>
 </table>
+<p>Of note, in this recipe we will derive a single transformed dataset. In other projects, you may want to generate various datasets with different units of observations. It all depends on your research question and the research aim that you are adopting.</p>
 </div>
 <div class="section level3">
 <h3 id="transforming-data">Transforming data<a class="anchor" aria-label="anchor" href="#transforming-data"></a>
@@ -388,12 +391,12 @@ Group variables            None
 <ol style="list-style-type: decimal">
 <li>Let's drop the variables that we will not use and at the same time rename the variables to make them more intuitive.</li>
 </ol>
-<p>We will use the <code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select()</a></code> function to drop and rename variables.</p>
+<p>We will use the <code><a href="https://rdrr.io/pkg/dplyr/man/select.html" class="external-link">select()</a></code> function to drop or rename variables.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Drop and rename variables</span></span>
 <span><span class="va">masc_df</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">masc_curated</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/select.html" class="external-link">select</a></span><span class="op">(</span></span>
 <span>    doc_id <span class="op">=</span> <span class="va">file</span>,</span>
 <span>    term_num <span class="op">=</span> <span class="va">ref</span>,</span>
 <span>    term <span class="op">=</span> <span class="va">string</span>,</span>
@@ -421,12 +424,12 @@ Group variables            None
 <ol style="list-style-type: decimal">
 <li>Next, we will split the <code>mod_gen</code> variable into two variables: <code>modality</code> and <code>genre</code>.</li>
 </ol>
-<p>We have a variable <code>mod_gen</code> that contains two pieces of information: modality and genre (e.g., <code>WR LT</code>). The information appears to separated by a space. We can make sure this is the case by tabulating the values. The <code><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count()</a></code> function will count the number of occurrences of each value in a variable, and as a side effect it will summarize the values of the variable so we can see if there are any unexpected values.</p>
+<p>We have a variable <code>mod_gen</code> that contains two pieces of information: modality and genre (e.g., <code>WR LT</code>). The information appears to separated by a space. We can make sure this is the case by tabulating the values. The <code><a href="https://rdrr.io/pkg/dplyr/man/count.html" class="external-link">count()</a></code> function will count the number of occurrences of each value in a variable, and as a side effect it will summarize the values of the variable so we can see if there are any unexpected values.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Tabulate mod_gen</span></span>
 <span><span class="va">masc_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">mod_gen</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">n</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">mod_gen</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">n</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span>n <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 18 × 2</span></span></span>
 <span><span class="co">##    mod_gen     n</span></span>
@@ -449,12 +452,12 @@ Group variables            None
 <span><span class="co">## <span style="color: #BCBCBC;">16</span> SP FF   <span style="text-decoration: underline;">23</span>871</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">17</span> WR TC   <span style="text-decoration: underline;">19</span>419</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">18</span> SP TP    <span style="text-decoration: underline;">6</span>779</span></span></code></pre>
-<p>Looks good, our values are separated by a space. We can use the <code><a href="https://tidyr.tidyverse.org/reference/separate_wider_delim.html" class="external-link">separate_wider_delim()</a></code> function from the <code>tidyr</code> package to split the variable into two variables. We will use the <code>delim</code> argument to specify the delimiter and the <code>names</code> argument to specify the names of the new variables.</p>
+<p>Looks good, our values are separated by a space. We can use the <code><a href="https://rdrr.io/pkg/tidyr/man/separate_wider_delim.html" class="external-link">separate_wider_delim()</a></code> function from the <code>tidyr</code> package to split the variable into two variables. We will use the <code>delim</code> argument to specify the delimiter and the <code>names</code> argument to specify the names of the new variables.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Split mod_gen into modality and genre</span></span>
 <span><span class="va">masc_df</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">masc_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate_wider_delim.html" class="external-link">separate_wider_delim</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/tidyr/man/separate_wider_delim.html" class="external-link">separate_wider_delim</a></span><span class="op">(</span></span>
 <span>    cols <span class="op">=</span> <span class="va">mod_gen</span>,</span>
 <span>    delim <span class="op">=</span> <span class="st">" "</span>,</span>
 <span>    names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"modality"</span>, <span class="st">"genre"</span><span class="op">)</span></span>
@@ -479,12 +482,12 @@ Group variables            None
 <li>Create a document id variable.</li>
 </ol>
 <p>Now that we have the variables we want, we can turn our attention to the values of the variables. Let's start with the <code>doc_id</code> variable. This may a good variable to use as the document id. If we take a look at the values, however, we can see that the values are not very informative.</p>
-<p>Let's use the <code><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct()</a></code> function to only show the unique values of the variable. We will also chain a <code><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_sample()</a></code> function to randomly select a sample of the values. This will give us a sense of the values in the variable.</p>
+<p>Let's use the <code><a href="https://rdrr.io/pkg/dplyr/man/distinct.html" class="external-link">distinct()</a></code> function to only show the unique values of the variable. We will also chain a <code><a href="https://rdrr.io/pkg/dplyr/man/slice.html" class="external-link">slice_sample()</a></code> function to randomly select a sample of the values. This will give us a sense of the values in the variable.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Preview doc_id</span></span>
 <span><span class="va">masc_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">doc_id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_sample</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">doc_id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/slice.html" class="external-link">slice_sample</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 10 × 1</span></span></span>
 <span><span class="co">##    doc_id             </span></span>
 <span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              </span></span>
@@ -500,14 +503,14 @@ Group variables            None
 <span><span class="co">## <span style="color: #BCBCBC;">10</span> wsj_0158</span></span></code></pre>
 <p>You can run this code various times to get a different sample of values.</p>
 <p>Since the <code>doc_id</code> variable is not informative, let's replace the variable's values with numeric values. In the end, we want a digit for each unique document and we want the words in each document to be grouped together.</p>
-<p>To do this we will need to group the data by <code>doc_id</code> and then generate a new number for each group. We can achieve this by passing the data grouped by <code>doc_id</code> (<code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by()</a></code>) to the <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> function and then using the <code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">cur_group_id()</a></code> function to generate a number for each group.</p>
+<p>To do this we will need to group the data by <code>doc_id</code> and then generate a new number for each group. We can achieve this by passing the data grouped by <code>doc_id</code> (<code><a href="https://rdrr.io/pkg/dplyr/man/group_by.html" class="external-link">group_by()</a></code>) to the <code><a href="https://rdrr.io/pkg/dplyr/man/mutate.html" class="external-link">mutate()</a></code> function and then using the <code><a href="https://rdrr.io/pkg/dplyr/man/context.html" class="external-link">cur_group_id()</a></code> function to generate a number for each group.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Recode doc_id</span></span>
 <span><span class="va">masc_df</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">masc_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">doc_id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>doc_id <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">cur_group_id</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">doc_id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>doc_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/context.html" class="external-link">cur_group_id</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">masc_df</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 591,097 × 7</span></span></span>
@@ -524,12 +527,12 @@ Group variables            None
 <span><span class="co">## <span style="color: #BCBCBC;"> 9</span>      1        8 more         more         JJR   WR       LT   </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">10</span>      1        9 than         than         IN    WR       LT   </span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 591,087 more rows</span></span></span></code></pre>
-<p>To check, we can again apply the <code><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count()</a></code> function.</p>
+<p>To check, we can again apply the <code><a href="https://rdrr.io/pkg/dplyr/man/count.html" class="external-link">count()</a></code> function.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Check</span></span>
 <span><span class="va">masc_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">doc_id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">n</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">doc_id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">n</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span>n <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 392 × 2</span></span></span>
 <span><span class="co">##     doc_id     n</span></span>
@@ -931,11 +934,11 @@ Group variables            None
 <li>Check the values of the <code>pos</code> variable.</li>
 </ol>
 <p>The <code>pos</code> variable contains the part-of-speech tags for each word. The PENN Treebank tagset is used. Let's take a look at the values to get familiar with them, and also to see if there are any unexpected values.</p>
-<p>Let's use the <code><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_sample()</a></code> function to randomly select a sample of the values. This will give us a sense of the values in the variable.</p>
+<p>Let's use the <code><a href="https://rdrr.io/pkg/dplyr/man/slice.html" class="external-link">slice_sample()</a></code> function to randomly select a sample of the values. This will give us a sense of the values in the variable.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Preview pos</span></span>
 <span><span class="va">masc_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_sample</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/slice.html" class="external-link">slice_sample</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 10 × 7</span></span></span>
 <span><span class="co">##    doc_id term_num term          lemma         pos   modality genre</span></span>
 <span><span class="co">##     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
@@ -954,9 +957,9 @@ Group variables            None
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Filter and tabulate</span></span>
 <span><span class="va">masc_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"^\\W+$"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">term</span>, <span class="va">pos</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">n</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/stringr/man/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"^\\W+$"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">term</span>, <span class="va">pos</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">n</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 152 × 3</span></span></span>
 <span><span class="co">##    term  pos       n</span></span>
@@ -988,16 +991,16 @@ Group variables            None
 <code class="sourceCode R"><span><span class="co"># Recode</span></span>
 <span><span class="va">masc_df</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">masc_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pos <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"^\\W+$"</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_sub.html" class="external-link">str_sub</a></span><span class="op">(</span><span class="va">term</span>, start <span class="op">=</span> <span class="fl">1</span>, end <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/stringr/man/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"^\\W+$"</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/stringr/man/str_sub.html" class="external-link">str_sub</a></span><span class="op">(</span><span class="va">term</span>, start <span class="op">=</span> <span class="fl">1</span>, end <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
 <span>    <span class="cn">TRUE</span> <span class="op">~</span> <span class="va">pos</span></span>
 <span>  <span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check</span></span>
 <span><span class="va">masc_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"^\\W+$"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># preview</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">term</span>, <span class="va">pos</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">n</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/stringr/man/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"^\\W+$"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># preview</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">term</span>, <span class="va">pos</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">n</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 127 × 3</span></span></span>
 <span><span class="co">##    term  pos       n</span></span>
@@ -1023,23 +1026,23 @@ Group variables            None
 <span><span class="co">## <span style="color: #BCBCBC;">19</span> <span style="color: #949494;">"</span>...<span style="color: #949494;">"</span> <span style="color: #949494;">"</span>.<span style="color: #949494;">"</span>     747</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">20</span> <span style="color: #949494;">"</span>'<span style="color: #949494;">"</span>   <span style="color: #949494;">"</span>'<span style="color: #949494;">"</span>     741</span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 107 more rows</span></span></span></code></pre>
-<p>The <code><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when()</a></code> function allows us to specify a series of conditions and values. The first condition is that the <code>term</code> variable contains only non alpha-numeric characters. If it does, then we want to replace the value of the <code>pos</code> variable with the first character of the <code>term</code> variable, <code>str_sub(term, start = 1, end = 1)</code>. If the condition is not met, then we want to keep the original value of the <code>pos</code> variable, <code>TRUE ~ pos</code>.</p>
+<p>The <code><a href="https://rdrr.io/pkg/dplyr/man/case_when.html" class="external-link">case_when()</a></code> function allows us to specify a series of conditions and values. The first condition is that the <code>term</code> variable contains only non alpha-numeric characters. If it does, then we want to replace the value of the <code>pos</code> variable with the first character of the <code>term</code> variable, <code>str_sub(term, start = 1, end = 1)</code>. If the condition is not met, then we want to keep the original value of the <code>pos</code> variable, <code>TRUE ~ pos</code>.</p>
 <p>We can see that our code worked by filtering the data to only show non alpha-numeric values (<code>^\\W+$</code>) in the <code>term</code> column and then tabulating the values by <code>term</code> and <code>pos</code>.</p>
 <p>For completeness, I will also recode the <code>lemma</code> values for these values as well as the lemma can some times be multiple punctuation marks (<em>e.g.</em> <code>!!!!!</code>, <code>---</code>, <em>etc.</em>) for these terms.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Recode</span></span>
 <span><span class="va">masc_df</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">masc_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>lemma <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"^\\W+$"</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_sub.html" class="external-link">str_sub</a></span><span class="op">(</span><span class="va">term</span>, start <span class="op">=</span> <span class="fl">1</span>, end <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>lemma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/stringr/man/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"^\\W+$"</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/stringr/man/str_sub.html" class="external-link">str_sub</a></span><span class="op">(</span><span class="va">term</span>, start <span class="op">=</span> <span class="fl">1</span>, end <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
 <span>    <span class="cn">TRUE</span> <span class="op">~</span> <span class="va">lemma</span></span>
 <span>  <span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check</span></span>
 <span><span class="va">masc_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"^\\W+$"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># preview</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">term</span>, <span class="va">lemma</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">n</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/stringr/man/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"^\\W+$"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># preview</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">term</span>, <span class="va">lemma</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">n</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 127 × 3</span></span></span>
 <span><span class="co">##    term  lemma     n</span></span>
@@ -1069,23 +1072,23 @@ Group variables            None
 <li>Check the values of the <code>modality</code> variable.</li>
 </ol>
 <p>The <code>modality</code> variable contains the modality tags for each document. Let's take a look at the values.</p>
-<p>Let's tabulate the values with <code><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count()</a></code>.</p>
+<p>Let's tabulate the values with <code><a href="https://rdrr.io/pkg/dplyr/man/count.html" class="external-link">count()</a></code>.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Tabulate modality</span></span>
 <span><span class="va">masc_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">modality</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">modality</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 2</span></span></span>
 <span><span class="co">##   modality      n</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> SP       <span style="text-decoration: underline;">132</span>159</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">2</span> WR       <span style="text-decoration: underline;">458</span>938</span></span></code></pre>
-<p>We see that the values are <code>SP</code> and <code>WR</code>, which stand for spoken and written, respectively. To make this a bit more transparent, we can recode these values to <code>Spoken</code> and <code>Written</code>. We will use the <code><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when()</a></code> function to do this.</p>
+<p>We see that the values are <code>SP</code> and <code>WR</code>, which stand for spoken and written, respectively. To make this a bit more transparent, we can recode these values to <code>Spoken</code> and <code>Written</code>. We will use the <code><a href="https://rdrr.io/pkg/dplyr/man/case_when.html" class="external-link">case_when()</a></code> function to do this.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Recode modality</span></span>
 <span><span class="va">masc_df</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">masc_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    modality <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    modality <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">modality</span> <span class="op">==</span> <span class="st">"SP"</span> <span class="op">~</span> <span class="st">"Spoken"</span>,</span>
 <span>      <span class="va">modality</span> <span class="op">==</span> <span class="st">"WR"</span> <span class="op">~</span> <span class="st">"Written"</span></span>
 <span>    <span class="op">)</span></span>
@@ -1113,7 +1116,7 @@ Group variables            None
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Tabulate genre</span></span>
 <span><span class="va">masc_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">genre</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">genre</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span>n <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 18 × 2</span></span></span>
 <span><span class="co">##    genre     n</span></span>
@@ -1155,13 +1158,13 @@ Group variables            None
 16. 'TP' is telephone
 17. 'TR' is transcript
 18. 'TW' is twitter</code></pre>
-<p>Now we can again use the <code><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when()</a></code> function. This time we will see if <code>genre</code> is equal to one of the genre labels and if it is, then we will replace the value with the more verbose description.</p>
+<p>Now we can again use the <code><a href="https://rdrr.io/pkg/dplyr/man/case_when.html" class="external-link">case_when()</a></code> function. This time we will see if <code>genre</code> is equal to one of the genre labels and if it is, then we will replace the value with the more verbose description.</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Recode genre</span></span>
 <span><span class="va">masc_df</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">masc_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    genre <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    genre <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">genre</span> <span class="op">==</span> <span class="st">"BL"</span> <span class="op">~</span> <span class="st">"Blog"</span>,</span>
 <span>      <span class="va">genre</span> <span class="op">==</span> <span class="st">"NP"</span> <span class="op">~</span> <span class="st">"Newspaper"</span>,</span>
 <span>      <span class="va">genre</span> <span class="op">==</span> <span class="st">"EM"</span> <span class="op">~</span> <span class="st">"Email"</span>,</span>
@@ -1202,9 +1205,9 @@ Group variables            None
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># How many documents are in each modality?</span></span>
 <span><span class="va">masc_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">doc_id</span>, <span class="va">modality</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">modality</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">n</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">doc_id</span>, <span class="va">modality</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">modality</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">n</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 2</span></span></span>
 <span><span class="co">##   modality     n</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
@@ -1213,9 +1216,9 @@ Group variables            None
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># How many documents are in each genre?</span></span>
 <span><span class="va">masc_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">doc_id</span>, <span class="va">genre</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">genre</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">n</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">doc_id</span>, <span class="va">genre</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">genre</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">n</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 18 × 2</span></span></span>
 <span><span class="co">##    genre            n</span></span>
 <span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
@@ -1233,9 +1236,9 @@ Group variables            None
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># What is the averge length of documents (in words)?</span></span>
 <span><span class="va">masc_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">doc_id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">doc_id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
 <span>    mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>,</span>
 <span>    median <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>,</span>
 <span>    min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>,</span>
@@ -1247,24 +1250,24 @@ Group variables            None
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">1</span>508.   418.    45 <span style="text-decoration: underline;">24</span>520</span></span></code></pre>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">masc_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">doc_id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">doc_id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_density</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="recipe-7_files/figure-html/masc-transformed-evaluation-1.png" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># What is the distribution of the length of documents by modality?</span></span>
 <span><span class="va">masc_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">doc_id</span>, <span class="va">modality</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">doc_id</span>, <span class="va">modality</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">n</span>, fill <span class="op">=</span> <span class="va">modality</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_density</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
 <p><img src="recipe-7_files/figure-html/masc-transformed-evaluation-2.png" width="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># What is the distribution of the length of documents by genre?</span></span>
 <span><span class="va">masc_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">doc_id</span>, <span class="va">modality</span>, <span class="va">genre</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">doc_id</span>, <span class="va">modality</span>, <span class="va">genre</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">genre</span>, y <span class="op">=</span> <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_boxplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span> <span class="va">modality</span>, scales <span class="op">=</span> <span class="st">"free_x"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1287,8 +1290,7 @@ Group variables            None
 <div class="section level3">
 <h3 id="documenting-data">Documenting data<a class="anchor" aria-label="anchor" href="#documenting-data"></a>
 </h3>
-<p>The last step is to document the process and the resulting dataset(s). In this particular case we only derived one transformed dataset. In some cases, however, you may want to generate various datasets with different units of observations. It all depends on your research question and the research aim that you are adopting.</p>
-<p>The documentation steps are the same as in the curation step. We will organize and document the process file (often a <code>.qmd</code> file) and then create a data dictionary for each of the transformed datasets. The <code><a href="../reference/create_data_dictionary.html">create_data_dictionary()</a></code> function can come in handy for scaffolding the data dictionary file.</p>
+<p>The last step is to document the process and the resulting dataset(s). In this particular case we only derived one transformed dataset. The documentation steps are the same as in the curation step. We will organize and document the process file (often a <code>.qmd</code> file) and then create a data dictionary for each of the transformed datasets. The <code><a href="../reference/create_data_dictionary.html">create_data_dictionary()</a></code> function can come in handy for scaffolding the data dictionary file.</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create a data dictionary</span></span>
 <span><span class="fu"><a href="../reference/create_data_dictionary.html">create_data_dictionary</a></span><span class="op">(</span></span>
@@ -1322,11 +1324,11 @@ Group variables            None
 <li>
 <select class="webex-select"><option value="blank"></option>
 <option value="">TRUE</option>
-<option value="answer">FALSE</option></select> The <code><a href="https://stringr.tidyverse.org/reference/str_c.html" class="external-link">str_c()</a></code> function from the <code>stringr</code> package is used to separate strings rather than combine them.</li>
+<option value="answer">FALSE</option></select> The <code><a href="https://rdrr.io/pkg/stringr/man/str_c.html" class="external-link">str_c()</a></code> function from the <code>stringr</code> package is used to separate strings rather than combine them.</li>
 <li>
 <select class="webex-select"><option value="blank"></option>
 <option value="answer">TRUE</option>
-<option value="">FALSE</option></select> The <code><a href="https://tidyr.tidyverse.org/reference/separate_wider_delim.html" class="external-link">separate_wider_delim()</a></code> function can be used to split one column into multiple columns based on a delimiter.</li>
+<option value="">FALSE</option></select> The <code><a href="https://rdrr.io/pkg/tidyr/man/separate_wider_delim.html" class="external-link">separate_wider_delim()</a></code> function can be used to split one column into multiple columns based on a delimiter.</li>
 <li>If you want to recode the age of learners into categories such as "child", "teen", and "adult" based on their age, which function should you use? <select class="webex-select"><option value="blank"></option>
 <option value="">mutate()</option>
 <option value="answer">case_when()</option>
@@ -1341,11 +1343,23 @@ Group variables            None
 <h2 id="lab-prepation">Lab prepation<a class="anchor" aria-label="anchor" href="#lab-prepation"></a>
 </h2>
 <!-- Lab 07 description and checklist -->
-<p>...</p>
+<p>In preparation for Lab 7, review and ensure you are comfortable with the following:</p>
+<ul>
+<li>Vector, data frame, and list data structures</li>
+<li>Subsetting and filtering data structures with and without regular expressions</li>
+<li>Reshaping datasets by rows and columns</li>
+</ul>
+<p>In this lab, we will practice these skills and expand our knowledge of data preparation by transforming and documenting data with Tidyverse packages such as <code>dplyr</code>, <code>tidyr</code>, and <code>stringr</code>.</p>
+<p>You will have a choice of a dataset to transform. Before you start the lab, you should consider which dataset you would like to use, what the idealized structure the transformed dataset will take, and what strategies you will likely employ to transform the dataset. You should also consider the information you need to document the data transformation process.</p>
 </div>
-<div class="section level2">
+<div class="section level2 unnumbered">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-Ide2008" class="csl-entry">
+Ide, Nancy, Collin Baker, Christiane Fellbaum, Charles Fillmore, and Rebecca Passonneau. 2008. <span>“MASC: The Manually Annotated Sub-Corpus of American English.”</span> In <em>6th International Conference on Language Resources and Evaluation, LREC 2008</em>, 2455–60. European Language Resources Association (ELRA).
+</div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

@@ -57,8 +57,12 @@ In Lab 7, we will apply what we have learned in this recipe to a new dataset.
 
 <!-- about curated data and goal of transformation -->
 
+Curated datasets are often project-neutral. That is, they are not necessarily designed to answer a specific research question. Rather, they are designed to be flexible enough to be used in a variety of projects. This is a good thing, but it also means that we will likely need to transform the data to bring it more in line with our research goals. This can include normalizing text, modifying the unit of observation and/ or adding additional attributes to the data.
 
 <!-- about the MASC dataset -->
+
+In this recipe, we will explore a practical example of transforming data. We will start with a curated dataset and transform it to reflect a specific research goal. The dataset we will use is the MASC dataset [@Ide2008]. This dataset contains a collection of words from a variety of genres and modalities of American English.
+
 
 ::: {.callout}
 **`r fontawesome::fa('hand-point-up')` Tip** Acquire and tidy the data
@@ -153,7 +157,7 @@ In summary, the dataset contains `r format(nrow(masc_curated), big.mark = ",")` 
 
 Now we want to consider how we plan to use this data in our analysis. Let's assume that we want to use this data to explore lexical variation in the MASC dataset across modalities and genres. We will want to transform the data to reflect this goal.
 
-In Table \@ref(tab:masc-transformed-idealized), we see an idealized version of the data we would like to have.
+In Table \@ref(tab:masc-transformed-idealized), we see an idealized version of the dataset we would like to have.
 
 
 | doc_id | modality | genre | term_num | term | lemma | pos |
@@ -162,13 +166,15 @@ In Table \@ref(tab:masc-transformed-idealized), we see an idealized version of t
 
 : (tab:masc-transformed-idealized) Idealized version of the MASC dataset
 
+Of note, in this recipe we will derive a single transformed dataset. In other projects, you may want to generate various datasets with different units of observations. It all depends on your research question and the research aim that you are adopting.
+
 ### Transforming data
 
 To get from the curated dataset to the idealized dataset, we will need to perform a number of transformations. Some of these transformations will be relatively straightforward, while others will require more work. Let's start with the easy ones.
 
 1. Let's drop the variables that we will not use and at the same time rename the variables to make them more intuitive.
 
-We will use the `select()` function to drop and rename variables.
+We will use the `select()` function to drop or rename variables.
 
 ```{r masc-transformed-drop-rename}
 # Drop and rename variables
@@ -512,9 +518,7 @@ data/
 
 ### Documenting data
 
-The last step is to document the process and the resulting dataset(s). In this particular case we only derived one transformed dataset. In some cases, however, you may want to generate various datasets with different units of observations. It all depends on your research question and the research aim that you are adopting.
-
-The documentation steps are the same as in the curation step. We will organize and document the process file (often a `.qmd` file) and then create a data dictionary for each of the transformed datasets. The `create_data_dictionary()` function can come in handy for scaffolding the data dictionary file.
+The last step is to document the process and the resulting dataset(s). In this particular case we only derived one transformed dataset. The documentation steps are the same as in the curation step. We will organize and document the process file (often a `.qmd` file) and then create a data dictionary for each of the transformed datasets. The `create_data_dictionary()` function can come in handy for scaffolding the data dictionary file.
 
 ```{r masc-transformed-documentation, eval=FALSE}
 # Create a data dictionary
@@ -549,6 +553,14 @@ Just as with other steps in the data preparation process, it is important to doc
 
 <!-- Lab 07 description and checklist -->
 
-...
+In preparation for Lab 7, review and ensure you are comfortable with the following:
+
+- Vector, data frame, and list data structures
+- Subsetting and filtering data structures with and without regular expressions
+- Reshaping datasets by rows and columns
+
+In this lab, we will practice these skills and expand our knowledge of data preparation by transforming and documenting data with Tidyverse packages such as `dplyr`, `tidyr`, and `stringr`.
+
+You will have a choice of a dataset to transform. Before you start the lab, you should consider which dataset you would like to use, what the idealized structure the transformed dataset will take, and what strategies you will likely employ to transform the dataset. You should also consider the information you need to document the data transformation process.
 
 ## References
