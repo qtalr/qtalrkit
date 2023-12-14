@@ -43,11 +43,10 @@ articles:
       - articles/recipe-5 # Chapter 5/ Collecting and documenting data
       - articles/recipe-6 # Chapter 6/ Organizing and documenting data
       - articles/recipe-7 # Chapter 7/ Transforming and documenting data
-      - articles/recipe-8 # Chapter 8/ Exploratory data analysis
+      - articles/recipe-8 # Chapter 8/ Exploratory analysis methods
       - articles/recipe-9 # Chapter 9/ Predictive modeling
       - articles/recipe-10 # Chapter 10/ Inferential statistics
-      - articles/recipe-11 # Chapter 11/ Research write-ups
-      - articles/recipe-12 # Chapter 12/ Research sharing and collaboration
+      - articles/recipe-11 # Chapter 11/ Sharing research
   - title: Guides
     desc: "A collection of guides for using R and related tools"
     contents:
