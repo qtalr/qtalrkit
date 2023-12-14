@@ -544,7 +544,7 @@ Just as with other steps in the data preparation process, it is important to doc
 
 1. Which function would you use to remove duplicate rows in a dataset? `r mcq(c("group_by()", "mutate()", answer = "distinct()", "filter()"))`
 2. `r torf(FALSE)` The `str_c()` function from the `stringr` package is used to separate strings rather than combine them.
-3. `r torf(TRUE)` The `separate_wider_delim()` function can be used to split one column into multiple columns based on a delimiter.
+3. `r torf(TRUE)` The `count()` function from the `dplyr` package is used to tabulate the values of a variable.
 4. If you want to recode the age of learners into categories such as "child", "teen", and "adult" based on their age, which function should you use? `r mcq(c("mutate()", answer = "case_when()", "unite()", "separate_wider_delim()"))`
 5. To normalize text by removing leading and trailing whitespace, you use the `r fitb("str_trim")``()` function from the `stringr` package.
 6. To normalize text by converting all characters to lowercase, you use the `r fitb("str_to_lower")``()` function from the `stringr` package.
