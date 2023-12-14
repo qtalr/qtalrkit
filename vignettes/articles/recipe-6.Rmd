@@ -399,21 +399,21 @@ glimpse(swda_df)
 ::: {.callout}
 **`r fontawesome::fa('exclamation-triangle')` Warning**
 
-One twist you will notice is that regular expressions in R require double backslashes (`\\\\`) where other programming environments use a single backslash (`\\`).
+One twist you will notice is that regular expressions in R require double backslashes (`\\`) where other programming environments use a single backslash (`\`).
 :::
 
 There are a couple things left to do to the columns we extracted from the text before we move on to finishing up our tidy dataset. First, we need to separate the `speaker_turn` column into `speaker` and `turn_num` columns and second we need to remove unwanted characters from the `damsl_tag`, `utterance_num`, and `utterance_text` columns.
 
-To separate the values of a column into two columns we use the `separate()` function. It takes a column to separate and character vector of the names of the new columns to create. By default the values of the input column will be separated by non-alphanumeric characters. In our case this means the `.` will be our separator.
+To separate the values of a column into two columns we use the `separate_wider_delim()` function. It takes a column to separate, a delimiter to use to separate the values, and a character vector of the names of the new columns to create.
 
 ```{r swda-text-organize-2}
 # Separate speaker_turn into distinct columns
 swda_df <-
-  swda_df |> # current dataset
-  separate(
-    col = speaker_turn, # source column
-    into = c("speaker", "turn_num"),
-    sep = "\\." # separator
+  swda_df |>
+  separate_wider_delim(
+    cols = speaker_turn,
+    delim = ".",
+    names = c("speaker", "turn_num")
   )
 
 # Preview
@@ -502,10 +502,10 @@ extract_swda_data <- function(file) {
   # Separate speaker_turn into distinct columns
   swda_df <-
     swda_df |> # current dataset
-    separate(
-      col = speaker_turn, # source column
-      into = c("speaker", "turn_num"),
-      sep = "\\." # separator
+    separate_wider_delim(
+      cols = speaker_turn,
+      delim = ".",
+      names = c("speaker", "turn_num")
     )
 
   # Clean up column information
@@ -663,7 +663,7 @@ The skills we used in this recipe include regular expressions, the `readr`, `dpl
 
 1. The first thing that should be done in the data curation process is to `r mcq(c("know what packages you are going to use", answer = "explore the data documentation and understand the resource", "read the data into R", "parse the data into a tidy dataset"))`.
 2. The `read_lines()` function from the `readr` package will read a file into R as a `r mcq(c(answer = "character vector", "data frame", "list", "matrix"))`.
-3. `r torf(TRUE)` The `separate()` function from the `tidyr` package will separate a column into two or more columns based on a separator pattern.
+3. `r torf(TRUE)` The `separate_wider_delim()` function from the `tidyr` package will separate a column into two or more columns based on a delimiter (*e.g.* `-`, `.`, *etc.*).
 4. Which of the following functions from the `stringr` package will return vector elements which contain a match for a pattern? `r mcq(c(answer = "str_subset()", "str_extract()", "str_replace()", "str_trim()"))`
 5. The `map_dfr()` function from the `purrr` package will apply a function to each element of a vector and return a `r mcq(c("list", "nested data frame", answer = "data frame with rows combined", "data frame with columns combined"))`.
 6. A data dictionary is a document that describes the `r mcq(c("data curation process", "data analysis process", answer = "dataset variables and their values", "data visualization process"))`.
