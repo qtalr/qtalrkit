@@ -1,4 +1,4 @@
-pandoc: 3.1.9
+pandoc: 3.1.10
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
@@ -13,7 +13,6 @@ articles:
   recipe-1: recipe-1.html
   recipe-10: recipe-10.html
   recipe-11: recipe-11.html
-  recipe-12: recipe-12.html
   recipe-2: recipe-2.html
   recipe-3: recipe-3.html
   recipe-4: recipe-4.html
@@ -23,7 +22,7 @@ articles:
   recipe-8: recipe-8.html
   recipe-9: recipe-9.html
   qtalrkit: qtalrkit.html
-last_built: 2023-12-13T14:23Z
+last_built: 2023-12-14T15:27Z
 urls:
   reference: https://qtalr.github.io/qtalrkit/reference
   article: https://qtalr.github.io/qtalrkit/articles
