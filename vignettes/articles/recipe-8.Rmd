@@ -1,18 +1,11 @@
 ---
-title: "8. Exploratory Data Analysis"
+title: "8. Exploratory analysis methods"
 pkgdown:
   as_is: true
 bibliography: [bibliography.bib, packages.bib]
 biblio-style: apalike
 link-citations: true
 ---
-
-<!--  
-The goal will be to do one, more advanced example
-
-
-
--->
 
 ```{r, child="_common.Rmd"}
 ```
@@ -23,19 +16,10 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Overview
 
-
+This is the overview section of the recipe.
 
 ## Summary
 
 ## Check your understanding
-
-(... examples ...)
-
-1. `r torf(TRUE)` Literate Programming, first introduced by Donald Knuth in 1984, allows the combination of computer code and text prose in one document. 
-2. The programming paradigm Literate Programming is implemented through `r mcq(c(answer = "Quarto", "R", "RStudio", "GitHub"))`, a platform that facilitates the creation of a variety of output documents based on the same source code.
-3. Which of the following components does a basic Quarto document *not* contain? `r mcq(c("Front-matter section", "Prose section", answer = "Back-matter section", "Code block"))`
-4. To generate a PDF document in Quarto, you can edit the format attribute value in the front-matter section to `r fitb(c(answer = "pdf", "html", "word"), ignore_case = TRUE)`.
-5. `r torf(TRUE)` The code block options `echo` and `include` can be used to hide the code and output, respectively.
-6. `r torf(FALSE)` In Quarto, a code block, where the programming language code is entered, is bounded by three underscores (`_`).
 
 ## References

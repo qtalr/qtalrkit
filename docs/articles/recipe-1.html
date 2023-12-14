@@ -115,7 +115,7 @@ This is the prose section.
 <p>To number sections in Quarto, we use the <code>number_sections</code> key with the value <code>yes</code>. This is set in the front-matter section, nested under the value for the document type to be rendered. For example, to number sections in a PDF document, we would set the <code>number-sections</code> key to <code>true</code> in the front-matter section as follows:</p>
 <pre><code>---
 title: "My document title"
-format: 
+format:
   pdf:
     number-sections: true
 ---</code></pre>
@@ -134,7 +134,7 @@ format:
 <p>We can also control the depth of the numbering by setting the <code>number-depth</code> key in the front-matter section. For example, to number sections and subsections, but not subsubsections, we would set the <code>number-depth</code> key to <code>2</code> as follows:</p>
 <pre><code>---
 title: "My document title"
-format: 
+format:
   pdf:
     number-sections: true
     number-depth: 2
@@ -154,7 +154,7 @@ format:
 <p>For longer documents including a table of contents can be a useful way to help readers navigate the document. To include a table of contents in Quarto, we use the <code>toc</code> key with the value <code>true</code>. Again, in the front-matter section, nested under the format value, as seen below:</p>
 <pre><code>---
 title: "My document title"
-format: 
+format:
   pdf:
     toc: true
 ---</code></pre>
@@ -165,7 +165,7 @@ format:
 <p>If if our headers are numbered, they will appeared numbered in the table of contents. If we unnnumbered a header, it will not appear with a section number. As with section numbering, we can also control the depth of the table of contents by setting the <code>toc-depth</code> key in the front-matter section. For example, to include sections and subsections, but not subsubsections, we would set the <code>toc-depth</code> key to <code>2</code> as follows:</p>
 <pre><code>---
 title: "My document title"
-format: 
+format:
   pdf:
     toc: true
     toc-depth: 2
@@ -286,7 +286,7 @@ bibliography: bibliography.bib
 <p><strong>A</strong></p>
 <pre><code>---
 title: "My document title"
-format: 
+format:
   pdf:
     number-sections: true
     number-depth: 3
@@ -297,7 +297,7 @@ format:
 <p><strong>B</strong></p>
 <pre><code>---
 title: "My document title"
-format: 
+format:
   pdf:
     number-sections: true
     toc: true
@@ -338,7 +338,7 @@ format:
 <h2 id="lab-preparation">Lab preparation<a class="anchor" aria-label="anchor" href="#lab-preparation"></a>
 </h2>
 <p>This rounds out our introduction to academic writing in Quarto. In Lab 1 you will have an opportunity to practice these concepts by doing an article summary which includes some of these features using Quarto.</p>
-<p>In preparation for Lab 1, ensure that you are prepared to do the following:</p>
+<p>In preparation for <a href="https://github.com/qtalr/lab-01" class="external-link">Lab 1</a>, ensure that you are prepared to do the following:</p>
 <ul>
 <li>Edit the front-matter section of a Quarto document to render:
 <ul>

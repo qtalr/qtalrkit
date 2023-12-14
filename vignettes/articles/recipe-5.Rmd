@@ -762,7 +762,7 @@ In this recipe, we have covered acquiring data for a text analysis project. We u
 
 <!-- Provide a checklist of knowledge and skills that learners should be comfortable with before beginning the lab -->
 
-Before beginning Lab 5, make sure you are comfortable with the following:
+Before beginning [Lab 5](https://github.com/qtalr/lab-05), make sure you are comfortable with the following:
 
 - Reading and subsetting data in R
 - Writing data in R

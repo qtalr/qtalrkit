@@ -553,7 +553,7 @@ Just as with other steps in the data preparation process, it is important to doc
 
 <!-- Lab 07 description and checklist -->
 
-In preparation for Lab 7, review and ensure you are comfortable with the following:
+In preparation for [Lab 7](https://github.com/qtalr/lab-07), review and ensure you are comfortable with the following:
 
 - Vector, data frame, and list data structures
 - Subsetting and filtering data structures with and without regular expressions

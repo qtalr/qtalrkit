@@ -29,7 +29,7 @@ In Lab 1 you will have an opportunity to practice these concepts by doing an art
 
 ## Concepts and strategies
 
-For many of the style components that we use in Quarto, there is a part that is addressed in the front-matter section and a part that is addressed in the prose section and/ or code block sections. 
+For many of the style components that we use in Quarto, there is a part that is addressed in the front-matter section and a part that is addressed in the prose section and/ or code block sections.
 
 To refresh our memory, the front-matter is fenced by three dashes (`---`) and is where we set the document attributes. The prose section is where we write the text of the document. The code block section is where we write the code that will be executed and is fenced by three backticks (`` ``` ``) and the name of the code interpreter `{r}` (R for us).
 
@@ -56,7 +56,7 @@ To number sections in Quarto, we use the `number_sections` key with the value `y
 ```
 ---
 title: "My document title"
-format: 
+format:
   pdf:
     number-sections: true
 ---
@@ -87,7 +87,7 @@ We can also control the depth of the numbering by setting the `number-depth` key
 ```
 ---
 title: "My document title"
-format: 
+format:
   pdf:
     number-sections: true
     number-depth: 2
@@ -107,17 +107,17 @@ This is particularly useful in academic writing when we want to add a reference,
 ::: {.callout}
 **`r fontawesome::fa('exclamation-triangle')` Warning**
 
-Note that if you have a header that is unnumbered, the next header will be numbered as if the unnumbered header did not exist. This can have unexpected results if you have children of an unnumbered header. 
+Note that if you have a header that is unnumbered, the next header will be numbered as if the unnumbered header did not exist. This can have unexpected results if you have children of an unnumbered header.
 :::
 
 ### Table of contents
 
-For longer documents including a table of contents can be a useful way to help readers navigate the document. To include a table of contents in Quarto, we use the `toc` key with the value `true`. Again, in the front-matter section, nested under the format value, as seen below: 
+For longer documents including a table of contents can be a useful way to help readers navigate the document. To include a table of contents in Quarto, we use the `toc` key with the value `true`. Again, in the front-matter section, nested under the format value, as seen below:
 
 ```
 ---
 title: "My document title"
-format: 
+format:
   pdf:
     toc: true
 ---
@@ -126,7 +126,7 @@ format:
 ::: {.callout}
 **`r fontawesome::fa('hand-point-up')` Tip**
 
-For PDF and Word document outputs, the table of contents will be automatically generated and placed at the beginning of the document. For HTML documents, the table of contents will be placed in the sidebar by default. 
+For PDF and Word document outputs, the table of contents will be automatically generated and placed at the beginning of the document. For HTML documents, the table of contents will be placed in the sidebar by default.
 :::
 
 If if our headers are numbered, they will appeared numbered in the table of contents. If we unnnumbered a header, it will not appear with a section number. As with section numbering, we can also control the depth of the table of contents by setting the `toc-depth` key in the front-matter section. For example, to include sections and subsections, but not subsubsections, we would set the `toc-depth` key to `2` as follows:
@@ -134,7 +134,7 @@ If if our headers are numbered, they will appeared numbered in the table of cont
 ```
 ---
 title: "My document title"
-format: 
+format:
   pdf:
     toc: true
     toc-depth: 2
@@ -145,9 +145,9 @@ And as with section numbering we can avoid listing a header in the table of cont
 
 ### Cross-referencing tables and figures
 
-Another key element in academic writing are using cross-references to tables and figures. This allows us to refer to a table or figure by number without having to manually update the number if we add or remove a table or figure. 
+Another key element in academic writing are using cross-references to tables and figures. This allows us to refer to a table or figure by number without having to manually update the number if we add or remove a table or figure.
 
-In this case, we will not need to add anything to the front-matter section. Instead, we will modify keys in the code block section of a code-generated table or figure. 
+In this case, we will not need to add anything to the front-matter section. Instead, we will modify keys in the code block section of a code-generated table or figure.
 
 To cross-reference a table or figure, we need to add a prefix to the `label` key's value. The prefix, either `tbl-` or `fig-`, indicates whether the label is for a table or figure. Additionally, table or figure captions can be added with the `tbl-cap` or `fig-cap` keys, respectively.
 
@@ -173,7 +173,7 @@ plot(1:10, 1:10)
 In Figure \@ref(fig:scatterplot) we see a scatterplot. ....
 :::
 
-For tables generated by R, the process is very similar to that of figures. The only difference is that we use the `tbl-`  prefix on the label value and the `tbl-cap` key instead of the `fig-cap` key for the caption. 
+For tables generated by R, the process is very similar to that of figures. The only difference is that we use the `tbl-`  prefix on the label value and the `tbl-cap` key instead of the `fig-cap` key for the caption.
 
 We can also create tables using markdown syntax. In this case, the format is a little different. Consider Table \@ref(tab:table-1), for example.
 
@@ -206,7 +206,7 @@ The last element we will cover here is adding citations and a references list to
 
 The bibliography file is a plain text file that contains the citations that we want to use in our document. The file requires the extension `.bib` and is formatted using the BibTeX format. BibTeX is a reference syntax that is commonly used in academia.
 
-Let's take a look at a sample file, `bibliography.bib`, that contains a single reference. 
+Let's take a look at a sample file, `bibliography.bib`, that contains a single reference.
 
 ```bib
 @Article{tidyverse2019,
@@ -258,7 +258,7 @@ The citation will appear as below in the rendered document.
 This is a citation to @tidyverse2019.
 :::
 
-And automatically, on rendering the document, a references list will be added to the end of the document. For this reason if you have citations in your document, it is a good idea to include a header section `# References` at the end of your document. 
+And automatically, on rendering the document, a references list will be added to the end of the document. For this reason if you have citations in your document, it is a good idea to include a header section `# References` at the end of your document.
 
 ::: {.callout}
 **`r fontawesome::fa('hand-point-up')` Tip**
@@ -270,14 +270,14 @@ There are a number of ways of having your inline citations appear. For example, 
 
 <!-- here are some questions to check the reader's understanding of this recipe -->
 
-Consider the following front-matter sections, A and B. 
+Consider the following front-matter sections, A and B.
 
 ::: {.callout}
 **A**
 ```
 ---
 title: "My document title"
-format: 
+format:
   pdf:
     number-sections: true
     number-depth: 3
@@ -291,7 +291,7 @@ format:
 ```
 ---
 title: "My document title"
-format: 
+format:
   pdf:
     number-sections: true
     toc: true
@@ -316,7 +316,7 @@ Now respond to the following questions.
 
 This rounds out our introduction to academic writing in Quarto. In Lab 1 you will have an opportunity to practice these concepts by doing an article summary which includes some of these features using Quarto.
 
-In preparation for Lab 1, ensure that you are prepared to do the following:
+In preparation for [Lab 1](https://github.com/qtalr/lab-01), ensure that you are prepared to do the following:
 
 - Edit the front-matter section of a Quarto document to render:
   - a PDF document or a Word document
@@ -327,7 +327,7 @@ In preparation for Lab 1, ensure that you are prepared to do the following:
 
 Also, since you will do an article summary, you should be prepared with:
 
-- an article of interest related to text analysis that you have read or at least skimmed for the following: 
+- an article of interest related to text analysis that you have read or at least skimmed for the following:
   - the research question
   - the data used
   - the methods used

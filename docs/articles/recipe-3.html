@@ -83,7 +83,7 @@
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<!--  
+<!--
 Purpose: To explore appropriate methods for summarizing variables in datasets given the number and informational values of the variable(s).
 
 Description: This will build on our understanding of how to summarize data using statistics, tables, and plots. We will dive deeper into the use of the `skimr` package to summarize data and the `ggplot2` package to create plots. We also introduce producing Quarto tables and figures with appropriate code block options. We will reinforce our understanding of the `readr` package to read in data and the `dplyr` package to manipulate data.
@@ -154,19 +154,19 @@ Prerequisites: It will be assumed that learners have a basic understanding of th
 <div class="section level3">
 <h3 id="statistical-overviews">Statistical overviews<a class="anchor" aria-label="anchor" href="#statistical-overviews"></a>
 </h3>
-<!--  
+<!--
 
 - We can use the `skim()` function to create a statistical overview of the data
 - We can use the `yank()` function to extract the statistical overview of the data
 - We can use the `group_by()` function to create a statistical overview of the data by groups
 -->
-<!--  
+<!--
 - Point out the importance of understanding the data before diving into analysis (recipe and lab 2)
 -->
 <p>Understanding our data is of utmost importance before, during, and after analysis. After we get to know our data by inspecting the data origin, dictionary, and structure, we then move to summarizing the data.</p>
-<!--  
+<!--
 - The next step to understanding the data is to summarize the data
-- A statistical overview of the data is a good place to start as it gives us a sense of all of the variables and variable types in the dataset 
+- A statistical overview of the data is a good place to start as it gives us a sense of all of the variables and variable types in the dataset
 - We can use the `skimr` package to create a statistical overview of the data
 -->
 <p>A statistical overview of the data is a good place to start as it gives us a sense of all of the variables and variable types in the dataset. We can use the <code>skimr</code> package to create a statistical overview of the data, using the very convienent <code><a href="https://docs.ropensci.org/skimr/reference/skim.html" class="external-link">skim()</a></code> function.</p>
@@ -179,32 +179,32 @@ Prerequisites: It will be assumed that learners have a basic understanding of th
 <span><span class="co"># Create a statistical overview of the `brown_fam_df` dataset</span></span>
 <span><span class="fu"><a href="https://docs.ropensci.org/skimr/reference/skim.html" class="external-link">skim</a></span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span></span></code></pre></div>
 <pre class="plain"><code>── Data Summary ────────────────────────
-                           Values      
+                           Values
 Name                       brown_fam_df
-Number of rows             2499        
-Number of columns          11          
-_______________________                
-Column type frequency:                 
-  character                1           
-  factor                   5           
-  numeric                  5           
-________________________               
-Group variables            None        
+Number of rows             2499
+Number of columns          11
+_______________________
+Column type frequency:
+  character                1
+  factor                   5
+  numeric                  5
+________________________
+Group variables            None
 
 ── Variable type: character ───────────────────────────────────────────────────────────────────────
   skim_variable n_missing complete_rate min max empty n_unique whitespace
 1 id                    0             1   7   9     0     2499          0
 
 ── Variable type: factor ──────────────────────────────────────────────────────────────────────────
-  skim_variable n_missing complete_rate ordered n_unique top_counts                            
+  skim_variable n_missing complete_rate ordered n_unique top_counts
 1 corpus                0             1 FALSE          5 BLO: 500, Bro: 500, LOB: 500, FLO: 500
-2 section               0             1 FALSE         15 J: 400, G: 381, F: 228, A: 220        
+2 section               0             1 FALSE         15 J: 400, G: 381, F: 228, A: 220
 3 genre                 0             1 FALSE         15 lea: 400, bel: 381, pop: 228, pre: 220
-4 period                0             1 FALSE          3 196: 1000, 199: 999, 193: 500         
-5 lang_variety          0             1 FALSE          2 BrE: 1500, AmE: 999                   
+4 period                0             1 FALSE          3 196: 1000, 199: 999, 193: 500
+5 lang_variety          0             1 FALSE          2 BrE: 1500, AmE: 999
 
 ── Variable type: numeric ─────────────────────────────────────────────────────────────────────────
-  skim_variable   n_missing complete_rate   mean    sd       p0     p25    p50    p75   p100 hist 
+  skim_variable   n_missing complete_rate   mean    sd       p0     p25    p50    p75   p100 hist
 1 num_words               0             1 2165.  97.8  1406     2127    2163   2200   4397   ▁▇▁▁▁
 2 active_verbs            0             1  179.  56.6    39      139     170    214    551   ▃▇▂▁▁
 3 passive_verbs           0             1   25.7 12.9     2       16      23     32     86   ▆▇▂▁▁
@@ -222,7 +222,7 @@ Group variables            None
 <span>  <span class="fu"><a href="https://docs.ropensci.org/skimr/reference/skim.html" class="external-link">skim</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://docs.ropensci.org/skimr/reference/partition.html" class="external-link">yank</a></span><span class="op">(</span><span class="st">"numeric"</span><span class="op">)</span></span></code></pre></div>
 <pre class="plain"><code>── Variable type: numeric ─────────────────────────────────────────────────────────────────────────
-  skim_variable   n_missing complete_rate   mean    sd       p0     p25    p50    p75   p100 hist 
+  skim_variable   n_missing complete_rate   mean    sd       p0     p25    p50    p75   p100 hist
 1 num_words               0             1 2165.  97.8  1406     2127    2163   2200   4397   ▁▇▁▁▁
 2 active_verbs            0             1  179.  56.6    39      139     170    214    551   ▃▇▂▁▁
 3 passive_verbs           0             1   25.7 12.9     2       16      23     32     86   ▆▇▂▁▁
@@ -233,12 +233,12 @@ Group variables            None
 <div class="section level3">
 <h3 id="summary-statistics-of-particular-variables">Summary statistics of particular variables<a class="anchor" aria-label="anchor" href="#summary-statistics-of-particular-variables"></a>
 </h3>
-<!--  
+<!--
 - For a more targeted summary of the data we can use `dplyr` to calculate summary statistics
 - We can use the `group_by()` function to group the data by a particular variable or variables
   - We can use the `ungroup()` function to remove the grouping
 - We can use the `summarize()` function to calculate summary statistics for the grouped data
-  - Summary functions: 
+  - Summary functions:
     - Numeric: `mean()`, `median()`, `sd()`, `var()`, `min()`, `max()`, `IQR()`, `mad()`, `quantile()`
     - Character: `n()`, `n_distinct()`, ...
 - For cross-tabulations we can use the `table() function or `count()` function from `dplyr` or `tabyl()` function from `janitor`
@@ -527,7 +527,7 @@ Group variables            None
 <div class="section level3">
 <h3 id="creating-quarto-tables">Creating Quarto tables<a class="anchor" aria-label="anchor" href="#creating-quarto-tables"></a>
 </h3>
-<!--  
+<!--
 - Summarizing data is not only for understanding the data but also for communicating the data in reports, manuscripts, and presentations
 - We can use the `knitr` package to create tables in Quarto
 - We can use the `kable()` function to create tables in Quarto
@@ -941,7 +941,7 @@ humour
 <div class="section level3">
 <h3 id="creating-quarto-plots">Creating Quarto plots<a class="anchor" aria-label="anchor" href="#creating-quarto-plots"></a>
 </h3>
-<!--  
+<!--
 - Communicating data and relationships in data is often best done with plots
 - We can use the `ggplot2` package to create plots in Quarto
 - To cross-reference and add a caption to a plot in Quarto we use the code block options `label` and `fig-cap`
@@ -1187,7 +1187,7 @@ Figure 1: Histogram of <code>percent_passive</code>
 <h2 id="lab-preparation">Lab preparation<a class="anchor" aria-label="anchor" href="#lab-preparation"></a>
 </h2>
 <!-- Provide a checklist of knowledge and skills that learners should be comfortable with before beginning the lab -->
-<p>Before beginning Lab 3, learners should be comfortable with the skills and knowledge developed in the previous recipes and labs. In this lab, you will have a chance to use these skills and those introduced in this Recipe to provide a descriptive assessment of a dataset that includes statistics, tables, and plots using Quarto and R.</p>
+<p>Before beginning <a href="https://github.com/qtalr/lab-03" class="external-link">Lab 3</a>, learners should be comfortable with the skills and knowledge developed in the previous recipes and labs. In this lab, you will have a chance to use these skills and those introduced in this Recipe to provide a descriptive assessment of a dataset that includes statistics, tables, and plots using Quarto and R.</p>
 <p>The additional skills and knowledge you will need to complete Lab 3 include:</p>
 <ul>
 <li>Summarizing data with <code>skimr</code>

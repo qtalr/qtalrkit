@@ -15,21 +15,21 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 
-<!--  
+<!--
 - [ ] Add unit of observation description to dataset? Lab-2?
 -->
 
 ## Overview
 
-<!--  
+<!--
 
 Purpose: Using Quarto, learners will practice reading, inspecting, and writing data using R functions and Quarto code blocks. Intermingled with the code blocks will be prose to explain the code and the output as well as citation and documentation for the data and functions used.
 
-Description: This recipe will start by very briefly reviewing the purpose of Quarto documents and the basic structure of a Quarto document. Then, learners will be given a common scenario in data analysis: to read, to inspect, and to write data. The recipe will discuss the necessary packages and functions to accomplish these tasks including `readr` and `dplyr`. The recipe will also refresh and expand on the elements of code blocks such as the `label`, `echo`, `message`, and `include` options. 
+Description: This recipe will start by very briefly reviewing the purpose of Quarto documents and the basic structure of a Quarto document. Then, learners will be given a common scenario in data analysis: to read, to inspect, and to write data. The recipe will discuss the necessary packages and functions to accomplish these tasks including `readr` and `dplyr`. The recipe will also refresh and expand on the elements of code blocks such as the `label`, `echo`, `message`, and `include` options.
 
 Approach: The approach will be to use a Quarto document to demonstrate the use of R functions and Quarto code blocks to read, inspect, and write data. A sample dataset will be used to demonstrate the use of the `readr` package to read data into R with `read_*()`. The `dplyr` package will be used to inspect and transform (subset) the data, including the `select()`, `slice()`, `filter()`, and `arrange()` functions. Finally, the `readr` package will be used to write the data to a file `write_csv()`. The recipe will also demonstrate the use of the native R pipe operator `|>` to chain functions together in to more readable code.
 
-Prerequisites: It will be assumed that learners can create a Quarto document in RStudio, have a basic understanding of R and using R in RStudio editor and console, and have a basic understanding of vectors and data frames and assigning objects to variables. 
+Prerequisites: It will be assumed that learners can create a Quarto document in RStudio, have a basic understanding of R and using R in RStudio editor and console, and have a basic understanding of vectors and data frames and assigning objects to variables.
 -->
 
 This Recipes guides you through the process of reading, inspecting, and writing data using R packages and functions in a Quarto environment. You'll learn how to effectively combine code and narrative to create a reproducible document that can be shared with others.
@@ -78,9 +78,9 @@ Code blocks have various options that can be added by using key-value pairs that
 
 ### Setting up the environment
 
-Before we can read, inspect, and write data, we need to load the packages that contain the functions we will use. We will use the `readr` package to read data into R and write data to disk and the `dplyr` package to inspect and transform (subset) the data. 
+Before we can read, inspect, and write data, we need to load the packages that contain the functions we will use. We will use the `readr` package to read data into R and write data to disk and the `dplyr` package to inspect and transform (subset) the data.
 
-There are a few ways to load packages into an R session. The most common way is to use the `library()` function. The `library()` function loads a package into the R session and stops the script if the package is not available on the current computing environment. 
+There are a few ways to load packages into an R session. The most common way is to use the `library()` function. The `library()` function loads a package into the R session and stops the script if the package is not available on the current computing environment.
 
 For example, the following code block loads the `readr` and `dplyr` packages into the R session:
 
@@ -94,13 +94,13 @@ library(dplyr) # for inspecting and transforming data
 ```
 ````
 
-This code block assumes that the `readr` and `dplyr` packages are installed on the current computing environment. If the packages are not installed, the code block will stop and display an error message, such as: 
-  
+This code block assumes that the `readr` and `dplyr` packages are installed on the current computing environment. If the packages are not installed, the code block will stop and display an error message, such as:
+
 ```plain
 Error in library(readr) : there is no package called ‘readr’
 ```
 
-This error can be addressed by installing the missing package with `install.packages("readr")` and then re-running the code block. This is not ideal for reproducibility, however, because the code block will stop if the package is not installed. We will consider a more reproducible approach later in the course. 
+This error can be addressed by installing the missing package with `install.packages("readr")` and then re-running the code block. This is not ideal for reproducibility, however, because the code block will stop if the package is not installed. We will consider a more reproducible approach later in the course.
 
 ::: {.callout}
 **`r fontawesome::fa('medal')` Dive deeper**
@@ -112,7 +112,7 @@ If you interested in learning about safeguarding package loading in a reproducib
 
 Now that we have our environment set up, we can read the data into R. But before we do, we should make sure that we understand the data by looking at the data documentation.
 
-The dataset that we will read into our R session based on the Brown Corpus [@Francis1961]. I've created a data origin file that contains the data documentation for the Brown Corpus, as we can see in Table \@ref(tab:brow-passives-do). 
+The dataset that we will read into our R session based on the Brown Corpus [@Francis1961]. I've created a data origin file that contains the data documentation for the Brown Corpus, as we can see in Table \@ref(tab:brow-passives-do).
 
 ```{r brow-passives-do, echo=FALSE, message=FALSE}
 # Read and display the data origin file
@@ -121,7 +121,7 @@ read_csv(file = "data/original/brown_passives_do.csv") |>
   kable_styling()
 ```
 
-This data origin file provides an overview of the original data source. In this case, the dataset we will read into R is a subset of the Brown Corpus which is an aggregate of the use of passive voice. This data was developed by the authors of the `corpora` package [@R-corpora]. I've exported the data to a CSV file, which we will read into R. 
+This data origin file provides an overview of the original data source. In this case, the dataset we will read into R is a subset of the Brown Corpus which is an aggregate of the use of passive voice. This data was developed by the authors of the `corpora` package [@R-corpora]. I've exported the data to a CSV file, which we will read into R.
 
 The data dictionary which describes the dataset we will read appears in Table \@ref(tab:brow-passives-dd).
 
@@ -136,8 +136,8 @@ With this information, we are now in a position to read and inspect the dataset.
 
 ### Reading data into R with `readr`
 
-<!-- 
-- Use the `corpora::BrownLOBpassives` dataset 
+<!--
+- Use the `corpora::BrownLOBpassives` dataset
 - Write the data to different file formats
   - `write_csv()`
   - `write_tsv()`
@@ -163,7 +163,7 @@ The `readr` package provides functions to read rectangular data into R. The `rea
 
 Let's use the `read_csv()` function to read the `brown_passives_curated.csv` file into R. To do this we will use the `file = ` argument to specify the path to the file. Now, the file "path" is the location of the file on the computer. We can specify this path in two ways:
 
-- Relative path: The relative path is the path to the file relative to the current working directory. The current working directory is the directory in which the R session is running. 
+- Relative path: The relative path is the path to the file relative to the current working directory. The current working directory is the directory in which the R session is running.
 - Absolute path: The absolute path is the path to the file from the root directory of the computer.
 
 For most purpose, the relative path is the better option because it is more portable. For example, if you share your code with someone else, they may have a different absolute path to the file. However, they will likely have the same relative path to the file.
@@ -203,8 +203,8 @@ brown_passives_df <-
   read_csv(file = "data/derived/brown/brown_passives_curated.csv")
 ```
 
-This information can be helpful in an interactive session, as `read_csv()` tells us the dimensions of the data and the data types of each column. 
-But this output is not necessary, and is unnecessarily verbose in a reproducible document. 
+This information can be helpful in an interactive session, as `read_csv()` tells us the dimensions of the data and the data types of each column.
+But this output is not necessary, and is unnecessarily verbose in a reproducible document.
 
 We can hide any messages produced by a function by using the `message = false` key-value pair in the code block. For example, the following code block will read the data into R and assign it to the `brown_passives_df` variable without displaying any messages:
 
@@ -219,7 +219,7 @@ brown_passives_df <-
 ```
 ````
 
-No messages are displayed in the document output. 
+No messages are displayed in the document output.
 
 ### Inspecting data with `dplyr`
 
@@ -227,7 +227,7 @@ The objective of this section is to demonstrate how to inspect and transform (su
 
 Reading a CSV file into R will create a data frame object. Thus, I assigned the result to `brown_passives_df`. The `df` suffix is a common naming convention for rectangular data frames. It is good practice to use a consistent naming convention for objects in your code. This makes it easier to understand the code and to avoid errors.
 
-Let's do get an overview of the data by using the `glimpse()` function from the `dplyr` package. The `glimpse()` function displays the dimensions of the data frame and the data types of each column. 
+Let's do get an overview of the data by using the `glimpse()` function from the `dplyr` package. The `glimpse()` function displays the dimensions of the data frame and the data types of each column.
 
 ```{r glimpse-brown-passives-curated, echo=TRUE}
 # Preview
@@ -241,9 +241,9 @@ If we want a more, tabular-like view of the data, we can simply print the data f
 brown_passives_df
 ```
 
-By default, printing tibbles will return the first 10 rows and all columns, unless the columns are too numerous to display width-wise. 
+By default, printing tibbles will return the first 10 rows and all columns, unless the columns are too numerous to display width-wise.
 
-`dplyr` also provides a set of `slice_*()` functions which allow us to display the data in a tabular fashion, with some additional options. There are three `slice_*()` functions we will cover here: 
+`dplyr` also provides a set of `slice_*()` functions which allow us to display the data in a tabular fashion, with some additional options. There are three `slice_*()` functions we will cover here:
 
 - `slice_head()`: Select the first `n` rows of the data frame.
 - `slice_tail()`: Select the last `n` rows of the data frame.
@@ -270,7 +270,7 @@ Finally, we can select a random sample of 5 rows from the data frame with the `s
 slice_sample(brown_passives_df, n = 5)
 ```
 
-These functions can be helpful to get a sense of the data in different ways. In combination with `arrange()` function, we can also sort the data frame by a column or columns and then select the first or last rows. 
+These functions can be helpful to get a sense of the data in different ways. In combination with `arrange()` function, we can also sort the data frame by a column or columns and then select the first or last rows.
 
 For example, the following code block will sort the data frame by the `passive` column in ascending order and then select the first 5 rows:
 
@@ -290,12 +290,12 @@ brown_passives_df |>
   slice_head(n = 5)
 ```
 
-The result is the same but the code makes more sense. We can read the code from left to right, top to bottom, which is the order in which the functions are executed. 
+The result is the same but the code makes more sense. We can read the code from left to right, top to bottom, which is the order in which the functions are executed.
 
 ::: {.callout}
 **`r fontawesome::fa('medal')` Dive deeper**
 
-The native R pipe `|>` was introduced in R 4.1.0. If you are using an earlier version of R, you can use the `magrittr` package to load the pipe operator `%>%`. 
+The native R pipe `|>` was introduced in R 4.1.0. If you are using an earlier version of R, you can use the `magrittr` package to load the pipe operator `%>%`.
 
 There are certain advantages to using the `magrittr` pipe operator, including the ability to use the pipe operator to pass arguments to functions with placeholders. For more information, see the [magrittr documentation](https://magrittr.tidyverse.org/).
 :::
@@ -313,7 +313,7 @@ This is a good practice to follow when writing code. It makes the code more read
 
 ### Subsetting data with `dplyr`
 
-Now that we have a sense of the data, we can subset the data to create a variations of our original data frame. We can subset the data frame by selecting columns and/ or rows. 
+Now that we have a sense of the data, we can subset the data to create a variations of our original data frame. We can subset the data frame by selecting columns and/ or rows.
 
 In the [R lesson](https://github.com/qtalr/lessons) "Packages and Functions", we saw that base R provides the bracket (`[]`) operator to subset data frames. The `dplyr` package provides functions to subset data frames which can be more readable and easier to use.
 
@@ -335,7 +335,7 @@ brown_passives_df |>
 ::: {.callout}
 **`r fontawesome::fa('medal')` Dive deeper**
 
-`select()` also provides a number of helper functions to select columns. For example, we can use the `starts_with()` function inside the `select()` call to select columns that start with a certain string. Or we can select columns by their vector type by using `where(is.character)`. 
+`select()` also provides a number of helper functions to select columns. For example, we can use the `starts_with()` function inside the `select()` call to select columns that start with a certain string. Or we can select columns by their vector type by using `where(is.character)`.
 
 For more information, see the [select() documentation](https://dplyr.tidyverse.org/reference/select.html) or use the `?select` command in the R console.
 :::
@@ -406,7 +406,7 @@ write_csv(
 )
 ```
 
-Given the example directory structure we saw earlier, our new file appears in the `data/derived/` directory. 
+Given the example directory structure we saw earlier, our new file appears in the `data/derived/` directory.
 
 ```bash
 project/
@@ -438,9 +438,9 @@ There is much more to learn about reading, inspecting, and writing data in R. We
 
 <!-- Provide a checklist of knowledge and skills that will be necessary to complete Lab 2 -->
 
-In Lab 2 you will have the opportunity to apply the skills you learned in this Recipe to create a Quarto document that reads, inspects, and writes data. 
+In Lab 2 you will have the opportunity to apply the skills you learned in this Recipe to create a Quarto document that reads, inspects, and writes data.
 
-In addition to the knowledge and skills you have developed in Labs 0 and 1, to complete Lab 2, you will need to be able to:
+In addition to the knowledge and skills you have developed in Labs 0 and 1, to complete [Lab 2](https://github.com/qtalr/lab-02), you will need to be able to:
 
 - Create code blocks in a Quarto document
 - Understand the purpose of the `label`, `echo`, `message`, and `include` options in a code block

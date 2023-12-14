@@ -670,7 +670,7 @@ The skills we used in this recipe include regular expressions, the `readr`, `dpl
 
 ## Lab preparation
 
-Before beginning Lab 6, review and ensure that you are familiar with the following:
+Before beginning [Lab 6](https://github.com/qtalr/lab-06), review and ensure that you are familiar with the following:
 
 - Vector, data frame, and list data structures
 - Subsetting and indexing vectors, data frames, and lists

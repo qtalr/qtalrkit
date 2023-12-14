@@ -29,7 +29,6 @@ write_bib(c(
   "ggplot2", "gridExtra", "reprex", "rvest", "fs", "purrr", "fontawesome", "webexercises", "corpora", "knitr", "kableExtra", "stringr", "tidyr", "regexplain", "gutenbergr" # nolint: line_length_linter.
 ), "packages.bib")
 
-
 # Plots ------------------------------------------------------------------
 
 # Plot theme
@@ -101,7 +100,6 @@ scale_linetype_discrete <- function(...) {
 
 update_geom_defaults("smooth", list(colour = "#525252"))
 update_geom_defaults("point", list(colour = "#929292"))
-
 
 # Options ----------------------------------------------------------------
 
