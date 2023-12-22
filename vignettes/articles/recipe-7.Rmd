@@ -17,12 +17,11 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Overview
 
 <!--
-
 Purpose: To introduce the concept of transforming data to prepare it for analysis. This includes text normalization and tokenization as well as the creation of new variables by splitting, merging, and recoding existing variables.
 
 Description: Building on our understanding of tidy data, we now look at ways to transform data to bring it more in line with our research goals. This includes modifying the unit of observation and/ or adding additional attributes to the data. We will cover some of the basic operations and make reference to the fact that these operations can be performed in a variety of ways and each project will have its own unique requirements.
 
-Approach:
+Approach: We will use a practical example to demonstrate the process of transforming data. We will start with a curated dataset (MASC) and transform it to reflect a specific research goal (lexical variation across modalities and genres). We will use a variety of tools and techniques to accomplish this task.
 
 Prerequisites: This recipe assumes a basic understanding of the concepts of and methods for data acquisition and tidying data. This includes experience with the readr, stringr, dplyr, and tidyr packages. It also assumes basic familiarity with regular expressions.
 
@@ -162,9 +161,9 @@ In Table \@ref(tab:masc-transformed-idealized), we see an idealized version of t
 
 | doc_id | modality | genre | term_num | term | lemma | pos |
 |--------|----------|-------|----------|------|-------|-----|
-|        |          |       |          |      |       |     |
+| ...    | ...      | ...   | ...      | ...  | ...   | ... |
 
-: (tab:masc-transformed-idealized) Idealized version of the MASC dataset
+Table: (\#tab:masc-transformed-idealized) Idealized version of the MASC dataset
 
 Of note, in this recipe we will derive a single transformed dataset. In other projects, you may want to generate various datasets with different units of observations. It all depends on your research question and the research aim that you are adopting.
 
