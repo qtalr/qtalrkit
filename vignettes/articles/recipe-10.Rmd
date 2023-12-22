@@ -22,7 +22,12 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Overview
 
+## Concepts and stragegies
 
+- Identify and map the hypothesis to variables
+- Inspect the data distributions
+- Interrogate the data
+- Interpret the results
 
 ## Summary
 

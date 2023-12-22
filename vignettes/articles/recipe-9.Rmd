@@ -16,6 +16,14 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Overview
 
+## Concepts and strategies
+
+- Identify the variables that you want to predict (the outcome) and the variables that you will use to predict it (the predictors).
+  - Split the data into a training set and a test set.
+  - Integrate variable selection into the model building process.
+- Inspect the data to identify potential problems.
+- Interrogate the data with model development and validation.
+- Interpret the results of the model on validation set.
 
 ## Summary
 
