@@ -39,7 +39,9 @@ Suggests:
     webexercises,
     corpora,
     janitor,
-    skimr
+    skimr,
+    word2vec,
+    wordVectors
 Remotes:
     TalkBank/TBDBr
 Encoding: UTF-8
