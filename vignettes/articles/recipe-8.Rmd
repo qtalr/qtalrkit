@@ -11,14 +11,718 @@ link-citations: true
 ```
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Overview
 
-This is the overview section of the recipe.
+<!--
+Purpose: To showcase the different methods used in exploratory analysis of textual data. This will include how to identify the variables of interest, inspect the data, interrogate the data, and interpret the results.
+
+Description: Exploratory analysis is a wide-ranging term that encompasses many different methods. In this recipe, we will focus on the methods that are most commonly used in the analysis of textual data. These include frequency and distributional analysis, clustering, and word embedding models. We will model how to explore iteratively using the output of one method to inform the next and ultimately to address the research question.
+
+Approach: We will use the SOTU corpus to demonstrate the different methods. We will select a subset of the corpus (post-1945) and explore the questions: How has the language of the SOTU changed over time? How has the language of the SOTU changed across presidents? How has the language of the SOTU changed across political parties? How has the language of the SOTU changed across topics? This will include methods such as frequency and distributional analysis, clustering, and word embedding models.
+
+Prerequisites: This recipe assumes that you have a solid understanding of how to read, manipulate, and tidy data in R. Experience with the `dplyr`, `tidyr`, `tidytext`, `tidylo`, and `ggplot2` packages is also helpful.
+
+Context: This is the first of three tutorials on text analysis. The next two tutorials will be on predictive and inferential modeling methods. The accompanying lab for this recipe will continue with the options for forking/ cloning a project from GitHub, working with an existing project, and creating a new project. The lab is designed to be completed in a 50 minute class period.
+-->
+
+Exploratory analysis is a wide-ranging term that encompasses many different methods. In this recipe, we will focus on the methods that are most commonly used in the analysis of textual data. These include frequency and distributional analysis, clustering, and word embedding models.
+
+The approach to exploratory analysis is highly iterative. The process is not linear, but rather a cycle of the steps in Table \@ref(tab:eda-workflow). This cycle is repeated until the research question(s) have been addressed.
+
+| Step | Name | Description |
+| --- | --- | --- |
+| 1 | Identify | Consider the research question and identify variables of potential interest to provide insight into our question. |
+| 2 | Inspect | Check for missing data, outliers, *etc*. and check data distributions and transform if necessary. |
+| 3 | Interrogate | Submit the selected variables to descriptive or unsupervised learning methods to provide quantitative measures to evaluate. |
+| 4 | Interpret | Evaluate the results and determine if they are valid and meaningful to respond to the research question. |
+
+Table: (\#tab:eda-workflow) The exploratory analysis workflow
+
+We will model how to explore iteratively using the output of one method to inform the next and ultimately to address the research question. For this reason, the subsequent sections of this recipe are grouped by research question rather than by approach step or method.
+
+Let's get started by loading some of the packages we will likely use.
+
+```{r load-packages, message=FALSE, warning=FALSE}
+library(dplyr)        # for data manipulation
+library(stringr)      # for string manipulation
+library(tidyr)        # for data tidying
+library(tidytext)     # for text analysis
+library(ggplot2)      # for data visualization
+```
+
+In Lab 8, we will try our hand at exploratory analysis using another dataset.
+
+## Concepts and strategies
+
+### Orientation
+
+We will use the SOTU corpus to demonstrate the different methods. We will select a subset of the corpus (post-1945) and explore the question:
+
+- How has the language of the SOTU changed over time?
+
+<!-- [ ] return and update for the methods actually used -->
+
+This will include methods such as frequency and distributional analysis, dimensionality reduction, and word embedding models.
+
+```{r sotu-corpus, message=FALSE, warning=FALSE, echo=FALSE}
+sotu_df <-
+  quanteda.corpora::data_corpus_sotu |> # load the SOTU corpus
+  quanteda::corpus_subset(Date > "1946-01-01") |> # subset the corpus to post-1945
+  tidy() |> # tidy the corpus
+  filter(delivery == "spoken") |> # filter to spoken addresses
+  select(president = President, year = Date, party, address = text) |>
+  mutate(address = str_squish(address)) |>
+  mutate(year = lubridate::year(year)) |>
+  mutate(party = as.character(party))
+```
+
+Let's look at the first few rows of the data to get a sense of what we have.
+
+```{r sotu-corpus-head, comment = "#"}
+sotu_df
+```
+
+We can see that the dataset contains the president, year, party, and address for each SOTU address.
+
+Now let's view a statistical overview summary of the data by using the `skim()` function.
+
+```{r sotu-corpus-summary-show, eval=FALSE}
+skimr::skim(sotu_df)
+```
+
+```{r sotu-corpus-summary-run, comment = "#", echo=FALSE}
+# This is a hack to get the skimr output to display as code output
+skimr::skim(sotu_df) |>
+  capture.output() |>
+  cat(sep = "\n")
+```
+
+We can see that the dataset contains `r nrow(sotu_df)` rows --corresponding to the number of SOTU addresses. Looking at missing values, we can see that there are no missing values for any of the variables. Taking a closer look at each variable, the `president` variable is a character vector with `r n_distinct(sotu_df$president)` unique presidents. There are two unique parties and `r n_distinct(sotu_df$address)` unique addresses. The `year` variable is numeric with a minimum value of `r min(sotu_df$year)` and a maximum value of `r max(sotu_df$year)`, therefore the addresses include `r length(sotu_df$year)` years.
+
+### Identify
+
+With a general sense of the data, we can now move on to the first step in the exploratory analysis workflow: identifying variables of interest.
+
+- What linguistic variables might be of interest to address this question?
+
+Words might be the most obvious variable, but we might also be interested in other linguistic variables such as parts of speech, syntactic structures, or some combination of these.
+
+Let's start with words. If we look at words, we might be interested in the frequency of words, the distribution of words, or the meaning of words. We might also be interested in the relationship between words. For example, we might be interested in the co-occurrence of words or the similarity of words. These, and more, are all possible approaches that we might consider.
+
+Another consideration is if we want to do comparisons across time, across presidents, across parties, *etc.*. In our research question, we have already identified that we want to compare across time so that will be our focus. However, what we mean by "time" is not clear. Do we mean across years, across decades, across presidencies, *etc.*? We will need to make a decision about how we want to define time, but we can fold this into our exploratory analysis, as we will see below.
+
+Let's posit the following sub-questions:
+
+1. What are the most frequent words across time periods?
+2. How does the distribution of words change across time periods?
+3. How does the meaning of words change across time periods?
+
+We will use these sub-questions to guide our exploratory analysis.
+
+### Inspect
+
+The next step is to inspect the data. We will transform the data as necessary to prepare it for analysis and then do some diagnostic checks to make sure that the data is ready for analysis.
+
+Since we will be working with words, let's tokenize the `addresses` variable to extract the words and maintain a tidy dataset. We will use the `unnest_tokens()` function from the `tidytext` package to do this. Let's apply the function and assign the result to a new variable called `sotu_words_df`.
+
+```{r sotu-tokenize-words-strip-numeric}
+# Tokenize the words by year (with numbers removed)
+sotu_words_df <-
+  sotu_df |>
+  unnest_tokens(word, address, strip_numeric = TRUE)
+```
+
+Let's continue by looking at whether there is a relationship between the number of words and years. We can do this by using the `count()` function on the `year` variable. This will group and count the number of observations (words) per year as `n`.
+
+We can then visualize this with a line plot where the x-axis is the year and the y-axis is the number of words `n`. I'll add the plot to a variable called `p` so that we can add layers to it.
+
+```{r sotu-words-over-time, fig.cap="Number of words per year"}
+# Get the number of words per year --------------------------------
+p <-
+  sotu_words_df |>
+  count(year) |>
+  ggplot(aes(x = year, y = n)) +
+  geom_line()
+
+# View
+p
+```
+
+::: {.callout}
+**`r fontawesome::fa('hand-point-up')` Tip**
+
+The `count()` function is a wrapper for the `summarize()` function. It is a convenient way to count the number of observations in a dataset.
+
+```r
+
+# the output of
+df |>
+  count(var1)
+
+# is equivalent to
+df |>
+  group_by(var1) |>
+  summarize(n = n()) |>
+  ungroup()
+```
+
+The difference is that `count()` grouping is added and removed automatically. In other cases, we can mimic this behavior for other operations inside a `summarize()` or `mutate()` function by using the `.by` argument. For example:
+
+```r
+df |>
+  summarize(n = n(), .by = var1)
+```
+
+:::
+
+We can see from Figure \@ref(fig:sotu-words-over-time) that the number of words per year varies, sometimes quite a bit. To get a sense of the relationship between the number of words and the year, we can add a linear trend line to the plot. We can do this by adding the `geom_smooth()` function to the plot. We will set the `method` argument to `"lm"` to use a linear model.
+
+```{r sotu-words-over-time-trend-lm}
+p + geom_smooth(method = "lm")
+```
+
+This plot shows that there is a positive relationship between the number of words and the year --that is the number of words increases over time. But the line is not a great fit and furthermore the angle of the line is more horizontal than vertical. This suggests that the relationship is not a strong one. We can confirm this by calculating the correlation between the number of words and the year. We can do this by using the `cor.test()` function on the `year` and `n` variables inside a `summarize()` function.
+
+```{r sotu-words-over-time-trend-lm-cor}
+# Get the correlation between the number of words and the year ----
+sotu_words_df |>
+  count(year) |>
+  summarize(cor = cor.test(year, n)$estimate)
+```
+
+So, even though we are working to inspect our data, we already have a finding. The number of words increases over time, despite the fact that the relationship is not a strong one.
+
+Now, let's turn our attention to the frequency of individual words. Let's start by looking at the most frequent words for the entire corpus. We can do this by grouping by the `word` variable and then summarizing the number of times each word occurs. We will then arrange the data in descending order by the number of times each word occurs.
+
+```{r sotu-freq-words}
+# Get the most frequent words ------------------------------------
+
+sotu_words_df |>
+  count(word, sort = TRUE) |>
+  slice_head(n = 10)
+```
+
+The usual suspects are at the top of the list. This is not surprising, and will likely be the case for most corpora, and sizeable subcorpora --in our case the time periods. Let's address this.
+
+We could use a stopwords list to just eliminate many of these common words, but that might be a bit too agressive and we will likely lose some words that we want to keep. Considering a more nuanced approach, we will use the $tf$-$idf$ transformation to attenuate the effect of words that are common across all time periods, and on the flip side, to promote the effect of words that are more distinctive to each time period.
+
+In order to do this, we will need to calculate the $tf$-$idf$ for each word in each time period. To keep things simple, we will calculate the $tf$-$idf$ for each word in each decade. We will do this by creating a new variable called `decade` that is the year rounded down to the nearest decade. Then we can group by this `decade` variable and then count the number of times each word occurs. We will then calculate the $tf$-$idf$ for each word in each decade using the `bind_tf_idf()` function from the `tidytext` package. We will then arrange the data in descending order by the $tf$-$idf$ value.
+
+```{r sotu-freq-words-tfidf}
+# Get the tf-idf of words by decade ------------------------------
+
+sotu_words_tfidf_df <-
+  sotu_words_df |>
+  mutate(decade = floor(year / 10) * 10) |>
+  count(decade, word) |>
+  bind_tf_idf(word, decade, n) |>
+  arrange(decade, desc(tf_idf))
+
+# Preview
+sotu_words_tfidf_df
+```
+
+OK. Even the preview shows that we are getting a more interesting list of words.
+
+Let's look at the top 10 words for each decade. We group by `decade` and then slice the top 10 words by $tf$-$idf$ value with `slice_max()`. Then we will use the `reorder_within()` function from the `tidytext` package to reorder the words within each facet by the $tf$-$idf$ value.
+
+We will visualize this with a bar chart where word is on the x-axis and the height of the bar is the $tf$-$idf$ value. We will also facet the plot by decade. I've flipped the coordinates so that the words are on the y-axis and the bars are horizontal. This is a personal preference, but I find it easier to read the words this way.
+
+```{r sotu-freq-words-tfidf-top-10}
+# Visualize the top 10 words by decade ---------------------------------
+
+sotu_words_tfidf_df |>
+  group_by(decade) |>
+  slice_max(n = 10, tf_idf) |>
+  ungroup() |>
+  mutate(decade = as.character(decade)) |>
+  mutate(word = reorder_within(word, desc(tf_idf), decade)) |>
+  ggplot(aes(word, tf_idf, fill = decade)) +
+  geom_col() +
+  scale_x_reordered() +
+  facet_wrap(~decade, scales = "free") +
+  theme(legend.position = "none") +
+  coord_flip()
+```
+
+Scanning the top words for the decades we can see some words that signal contemporary issues. This is a hint that we are picking up on some of the changes in the language of the SOTU over time.
+
+::: {.callout}
+**`r fontawesome::fa('medal')` Dive deeper**
+
+The plot above makes use of the `reorder_within()` and `scale_x_reordered()` functions from the `tidytext` package. These functions allow us to reorder the words within each facet by the $tf$-$idf$ value. This is a nice way to visualize the most distinctive words for each decade. These are more advanced functions. If you are interested in learning more about them, you can read more about them in the help documentation `?tidytext::reorder_within`
+:::
+
+To my eye, however, the 1940s and the 2020s don't seem to jump out at me in the same way. Let's take a closer look at the 1940s and the 2020s in our original dataset.
+
+```{r sotu-freq-words-tfidf-top-10-1940s}
+sotu_df |>
+  filter(year < 1950 | year >= 2020)
+```
+
+Well, that explains it. There are only 3 addresses in the 1940s and 1 address in the 2020s. This is not enough data to get a good sense of the language of the SOTU for these decades. Let's remove these decades from our original dataset as not being representative of the language of the SOTU.
+
+Another consideration that catches my eye in looking at the top words by decade is that our words like "communist" and "communists" are being counted separately. That is fine, but what if we want to count these as the same word? We can do this by lemmatizing the words --that is reducing the words to their root form. We can do this using the `lemmatize_words()` function from the `textstem` package.
+
+So consider this example:
+
+```{r sotu-lemmatize-words}
+# Lemmatize the words --------------------------------------------
+words_chr <- c("freedom", "free", "frees", "freeing", "freed")
+textstem::lemmatize_words(words_chr)
+```
+
+::: {.callout}
+**`r fontawesome::fa('medal')` Dive deeper**
+
+By default, the `lemmatize_words()` function uses a lookup table for English to lemmatize words. This is a simple approach that works well for many cases. However, it is not perfect. For example, it will not lemmatize words that are not in the lookup table.
+
+If you want to lemmatize words that are not in the lookup table, or you want to lemmatize words in another language, you can create or add to a lookup table. You can read more about this in the help documentation `?textstem::lemmatize_words()`.
+
+A resource for lemma lookup tables can be found here <https://github.com/michmech/lemmatization-lists>.
+:::
+
+With these considerations in mind, let's update our `sotu_df` dataset to remove the 1940s and 2020s, tokenize and lemmatize the words, and add a decade variable.
+
+```{r sotu-update-dataset}
+# Update the dataset ----------------------------------------------
+sotu_terms_df <-
+  sotu_df |>
+  filter(year >= 1950 & year < 2020) |> # Remove the 1940s and 2020s
+  unnest_tokens(word, address, strip_numeric = TRUE) |> # Tokenize the words
+  mutate(lemma = textstem::lemmatize_words(word)) |> # Lemmatize the words
+  mutate(decade = floor(year / 10) * 10) |> # Add a decade variable
+  select(president, decade, year, party, word, lemma) #
+
+# Preview
+sotu_terms_df
+```
+
+This inspection process could go on for a while. We could continue to inspect the data and make changes to the dataset but it is often the case that in the process of analysis we will often run into issues that require us to go back and make changes to the dataset. So we will move on to the next step in the exploratory analysis workflow.
+
+### Interrogate
+
+Now that we have our data in a tidy format, we can move on to the next step in the exploratory analysis workflow: interrogating the data. We will submit the selected variables to descriptive or unsupervised learning methods to provide quantitative measures to evaluate.
+
+#### Frequency
+
+1. What are the most frequent words across time periods?
+
+We have already made some progress on this question in the inspection phase, but now we can do it again with the updated dataset.
+
+```{r sotu-freq-lemmas-tfidf-top-10-2}
+# Get the most frequent lemmas by decade --------------------------
+
+sotu_lemmas_tfidf_df <-
+  sotu_terms_df |>
+  count(decade, lemma) |> # Count the lemmas by decade
+  bind_tf_idf(lemma, decade, n) |> # Calculate the tf-idf
+  arrange(decade, desc(tf_idf))
+
+# Preview
+sotu_lemmas_tfidf_df
+```
+
+Now we can visualize the top 10 lemmas for each decade, as we did above, but for the lemmas instead of the words and for seven full decades.
+
+```{r sotu-freq-lemmas-tfidf-top-10}
+# Visualize the top 10 lemmas by decade ---------------------------
+sotu_lemmas_tfidf_df |>
+  group_by(decade) |>
+  slice_max(n = 10, tf_idf) |>
+  ungroup() |>
+  mutate(decade = as.character(decade)) |>
+  mutate(lemma = reorder_within(lemma, desc(tf_idf), decade)) |>
+  ggplot(aes(lemma, tf_idf, fill = decade)) +
+  geom_col() +
+  scale_x_reordered() +
+  facet_wrap(~decade, scales = "free") +
+  theme(legend.position = "none") +
+  coord_flip()
+```
+
+#### Distribution
+
+2. How does the distribution of words change across time periods?
+
+OK. Now let's focus on word frequency distributions over time. We will return to the `sotu_terms_df`.
+
+```{r sotu-terms-df-preview}
+sotu_terms_df
+```
+
+We want to get a sense of how the word distributions change over time. We need to calculate the frequency of words for each year, first off. So we need to go back to the `sotu_terms_df` dataset and group by `year` and `word` and then count the number of times each word occurs.
+
+Since we will lose the `lemma` variable in this process, we will add it back after the $tf$-$idf$ transformation by using the `mutate()` function and the `textstem::lemmatize_words()` function.
+
+```{r sotu-terms-tfidf-df}
+sotu_terms_tfidf_df <-
+  sotu_terms_df |>
+  count(year, word) |> # Count the words by year
+  bind_tf_idf(word, year, n) |> # Calculate the tf-idf
+  mutate(lemma = textstem::lemmatize_words(word)) |> # Lemmatize the words
+  arrange(year, desc(tf_idf))
+
+# Preview
+sotu_terms_tfidf_df
+```
+
+With this format, we can visualize the distinctiveness of words over time. All we need to do is to filter the data to the lemmas we are interested first.
+
+Let's just start with some random poltical-oriented words.
+
+```{r sotu-terms-tfidf-df-political, fig.cap="Distinctiveness of political words over time"}
+plot_terms <- c("crime", "law", "free", "terror", "family", "government")
+
+sotu_terms_tfidf_df |>
+  filter(lemma %in% plot_terms) |>
+  ggplot(aes(year, tf_idf)) +
+  geom_smooth(se = FALSE, span = 0.25) +
+  facet_wrap(~lemma, scales = "free_y")
+```
+
+We can see in Figure \@ref(fig:sotu-terms-tfidf-df-political) that the distinctiveness of these lemmas varies over time. Now, in this plot I've used a small span value for the `geom_smooth()` function to get a sense of the more fine-grained changes over time. However, this is may be too fine-grained. We can adjust this by increasing the `span` value. Let's try a `span` value of 0.5.
+
+```{r sotu-terms-tfidf-df-political-smooth-0.5, fig.cap="Distinctiveness of political words over time"}
+sotu_terms_tfidf_df |>
+  filter(lemma %in% plot_terms) |>
+  ggplot(aes(year, tf_idf)) +
+  geom_smooth(se = FALSE, span = 0.5) +
+  facet_wrap(~lemma, scales = "free_y")
+```
+
+Figure \@ref(fig:sotu-terms-tfidf-df-political-smooth-0.5) seems to be picking up on some of the more general word usage trends over time.
+
+Another thing to note about the way we plotted the data is that we used the `facet_wrap()` function to create a separate plot for each word but we used the `scales = "free_y"` allowing the y-axis to vary for each plot. This means we are not comparing the y-axis values across plots and thus can not say anything about the differing magnitudes from a visual inspection.
+
+To address this, we can remove the `scales = "free_y"` argument and use the default which will fix the x- and y-axis scales across plots.
+
+```{r sotu-terms-tfidf-df-political-smooth-0.5-fixed, fig.cap="Distinctiveness of political words over time"}
+sotu_terms_tfidf_df |>
+  filter(lemma %in% plot_terms) |>
+  ggplot(aes(year, tf_idf)) +
+  geom_smooth(se = FALSE, span = 0.5) +
+  facet_wrap(~lemma)
+```
+
+In Figure \@ref(fig:sotu-terms-tfidf-df-political-smooth-0.5-fixed), we can clearly see that the magnitude of the words "crime" and "terror" are much higher than the other words we happend to select. Furthermore, these words have interesting patterns. In particular, "terror" has two peaks on around 1980 and another around the turn of the century. "Crime" also has two distinctive peaks on in the 1970s and one in the 1990s.
+
+The terms that I selected before were somewhat arbitrary. How can I identify the words that have changed the most drastically over these years from the data itself? We can do this by creating a term-document matrix with and then calculating the standard deviation of the $tf$-$idf$ values for each word. This will give us a sense of the words that have changed the most over time.
+
+```{r sotu-words-over-time-tfidf-mat}
+# Create TDM with words-year and tf-idf values
+sotu_word_tfidf_mat <-
+  sotu_terms_tfidf_df |>
+  cast_tdm(word, year, tf_idf) |>
+  as.matrix()
+
+# Preview
+dim(sotu_word_tfidf_mat)
+sotu_word_tfidf_mat[1:5, 1:5]
+```
+
+To calculate the standard deviation of the $tf$-$idf$ values for each word, we can use the `apply()` function to iterate over each row of the matrix and calculate the standard deviation of the values in each row. You can think of the `apply()` function as a cousin of the `map()` function. The `apply()` function iterates over the rows or columns of a matrix or data frame and applies a function to each row or column. We choose whether the function is applied to the rows or columns with the `MARGIN` argument. We can set `MARGIN = 1` to apply the function to the rows and `MARGIN = 2` to apply the function to the columns.
+
+```{r sotu-words-over-time-tfidf-sd}
+# Calculate the standard deviation of the tf-idf values for each word
+sotu_words_sd <-
+  apply(sotu_word_tfidf_mat, MARGIN = 1, FUN = sd, na.rm = TRUE)
+
+# Preview seed words
+sotu_words_sd |>
+  sort(decreasing = TRUE) |>
+  head(100)
+```
+
+Now we can choose from the top words that have changed the most over time. Here's another selection of words based on the standard deviation of the $tf$-$idf$ values.
+
+```{r sotu-terms-tfidf-sd-based, fig.cap="Distinctiveness of words over time"}
+plot_terms <- c("equality", "right", "community", "child", "woman", "man")
+
+sotu_terms_tfidf_df |>
+  filter(lemma %in% plot_terms) |>
+  ggplot(aes(year, tf_idf)) +
+  geom_smooth(se = FALSE, span = 0.5) +
+  geom_smooth(method = "lm") +
+  facet_wrap(~lemma)
+```
+
+We can see that the words I selected based on the standard deviation can either increase, decrease, or fluctuate over time.
+
+#### Meaning
+
+3. How does the meaning of words change across time periods?
+
+For this approach we need to turn to word embeddings. Word embeddings have been show to capture distributional semantics --that is the meaning of words based on their distribution in a corpus [@Hamilton2016].
+
+Since our research question is aimed a change over time we are performing a diachronic analysis. This means that we will need to create word embeddings for each time period, identify the common vocabulary across time periods, and then align the word embeddings to a common space before we can compare them.
+
+Let's load some packages that we will need.
+
+```{r sotu-word-embeddings-load-packages, message=FALSE, warning=FALSE}
+library(word2vec)         # for training word embeddings
+library(wordVectors)      # for reading word embeddings
+library(purrr)            # for iterating over lists
+library(PsychWordVec)     # for aligning word embeddings
+```
+
+Let's first start by creating sub-corpora for each decade. We will write these to disk so that we can use them again if necessary. Note that data or datasets that are generated in the process of analysis are often stored in an `analysis/` folder inside of the main data folder to keep them separate from the other data acquired or derived in the project.
+
+We will use the `str_c()` function to summarize the words for each address into a single string by decade. We will then use the `write_lines()` function to write the string to a text file. The `pwalk()` function from the `purrr` package is a convenient way to iterate over multiple arguments (`decade` and `address` in this case) in a function without returning a value to the console. The `p` in `pwalk()` stands for "parallel" and indicates that the function will iterate over the arguments in parallel.
+
+```{r sotu-create-sub-corpora}
+# Create sub-corpora for each decade and write to disk ------------
+sotu_terms_df |>
+  summarize(address = str_c(lemma, collapse = " "), .by = decade) |>
+  select(decade, address) |>
+  pwalk(\(decade, address) {
+    file_name <- str_c("~/Desktop/sotu/", decade, "s.txt")
+    write_lines(address, file_name)
+  })
+```
+
+Now I have written a function to read the text files, train the word embeddings for each, write the word embeddings to disk, and then load them back as VectorSpaceModel objects in a list.
+
+::: {.callout}
+**`r fontawesome::fa('hand-point-up')` Tip**
+
+A note on the training of the word embeddings. There are two main approaches to training word embeddings: Continuous Bag of Words (CBOW) and Skip-gram. CBOW is better for more common words and larger datasets. Skip-gram is better for less common words and smaller datasets. Given the varying sizes of the sub-corpora, Skip-gram might be more suitable as it may capture more nuances in less frequent words. Furthermore, the number of dimensions is a hyperparameter that needs to be tuned. The default is 50, but I have chosen 100 as we are attempting to capture more nuanced changes in the language of the SOTU.
+:::
+
+
+```{r sotu-create-word-embeddings-show, eval=FALSE}
+# Create word embeddings for each decade --------------------------
+read_write_load_word2vec <- function(path) {
+  txt_files <- dir_ls(path, regexp = "\\.txt$")
+  models <- txt_files |> map(\(x) {
+    model <- word2vec(x = x, split = c(" ", ".?!"))
+    bin_file <- str_replace(x, "\\.txt$", ".bin")
+    write.word2vec(model, bin_file)
+    read.vectors(bin_file)
+  })
+  names(models) <-
+    names(models) |>
+    basename() |>
+    str_remove("\\.txt")
+
+  return(models)
+}
+
+sotu_vec_mods <- read_write_load_word2vec("~/Desktop/sotu")
+```
+
+```{r sotu-create-word-embeddings-run, include=FALSE}
+# Create word embeddings for each decade --------------------------
+# - CBOW better for more common words
+# - Skip-gram better for less common words
+#   Given the varying sizes of the sub-corpora, Skip-gram might be more suitable as it may capture more nuances in less frequent words.
+read_write_load_word2vec <- function(path) {
+  txt_files <- dir_ls(path, regexp = "\\.txt$")
+  models <- txt_files |> map(\(x) {
+    model <- word2vec(x = x, type = c("skip-gram"), dim = 100, split = c(" ", ".?!"))
+    bin_file <- str_replace(x, "\\.txt$", ".bin")
+    write.word2vec(model, bin_file)
+    read.vectors(bin_file)
+  })
+  names(models) <-
+    names(models) |>
+    basename() |>
+    str_remove("\\.txt")
+
+  return(models)
+}
+
+# Read and train the word2vec models
+sotu_vec_mods <- read_write_load_word2vec("~/Desktop/sotu")
+```
+
+Each word embedding model is a matrix with the words as the rows and the dimensions as the columns as an element of the `sotu_vec_mods` list. Each of these elements have the name of the decade. We can extract an element from a list using the `pluck()` function from the `purrr` package.
+
+```{r sotu-create-word-embeddings-pluck}
+# Extract an element from a list
+sotu_vec_mods |> pluck("1950s")
+```
+
+::: {.callout}
+**`r fontawesome::fa('hand-point-up')` Tip**
+
+Since we have our models in a list, we will be using `purrr` functions quite a bit. Here's a quick summary of some of the `purrr` functions we will be using.
+
+- `map()` iterates over a list and applies a function to each element of the list. It returns a list.
+- `walk()` iterates over a list and applies a function to each element of the list. It does not return a value.
+
+Each of these has a parallel version, `pmap()` and `pwalk()`, which iterate over multiple lists in parallel, and a version that iterates over named lists, `imap()` and `iwalk()`. The `p` in `pmap()` and `pwalk()` stands for "parallel" and indicates that the function will iterate over the arguments in parallel. The `i` in `imap()` and `iwalk()` stands for "indexed" and indicates that the function will iterate over the arguments in parallel and return the index of the list element.
+:::
+
+These embeddings can be explored in a number of ways. For example, we can get the words closest to a given word in the vector space for each decade. The `wordVectors` package has a function, `closest_to()`, that will do this for us. We can use the `map()` function to iterate over each model in the list and get the closest words to a word. We will then use the `str_c()` function to summarize the words into a single string for each decade.
+
+```{r sotu-closest-words}
+# Get the closest words
+sotu_vec_mods |>
+  map(\(x) {
+    closest_to(x, "freedom", 10) # get the closest words to "freedom"
+  }) |>
+  map(\(x) {
+    str_c(x$word, collapse = ", ") # summarize the words into a single string
+  })
+```
+
+The previous example shows that the closest words to "freedom" in each decade in a synchronic manner. We can inspect these synchronic changes and draw conclusions from them. However, we are interested in diachronic changes. To do this, we will need to align the word embeddings to a common space.
+
+Now we will identify the common words across the decades and subset the word embeddings to the common vocabulary. The `map()` function iterates over each model in the list and returns the rownames with `rownames()` (words) for each model. The `reduce()` function then iterates over the list of words and returns the intersection of the words across the models with `intersect()`.
+
+```{r}
+# Extract the common vocabulary -----------------------------------
+common_vocab <-
+  sotu_vec_mods |>
+  map(rownames) |>
+  reduce(intersect)
+
+length(common_vocab)
+head(common_vocab)
+```
+
+There are `r length(common_vocab)` words in the common vocabulary. Now we can subset the word embeddings to the common vocabulary. We will use the `map()` function to iterate over each model in the list and subset the model to the common vocabulary using the `common_vocab` variable as part of the bracket notation subset.
+
+```{r}
+# Subset the models to the common vocabulary ----------------------
+sotu_vec_common_mods <-
+  sotu_vec_mods |>
+  map(\(x) {
+    x[common_vocab, ] # subset each model to the common vocabulary
+  })
+
+sotu_vec_common_mods |> pluck("1950s")
+sotu_vec_common_mods |> pluck("2010s")
+```
+
+So now each of the models in the list has the same vocabulary and the same number of dimensions, `r ncol(sotu_vec_common_mods[[1]])`.
+
+Now we can align the models to a common space. The reason that the models need to be aligned is that the word embeddings are trained on different corpora. This means that the words will be represented in different spaces. We will use the Orthogonal Procrustes solution to align the models to a common coordinate space. The `PsychWordVec` package [@R-PsychWordVec] has a function, `orth_procrustes()`, that will do this for us. In the process of aligning the models, the models are converted to plain matrices so we will need to convert them back to `VectorSpaceModel` objects.
+
+```{r}
+# Align the models to a common space
+sotu_aligned_mods <-
+  sotu_vec_common_mods |>
+  map(\(x) {
+    orth_procrustes(sotu_vec_common_mods[[1]], x) # align to the first model
+  }) |>
+  map(\(x) {
+    x <- as.VectorSpaceModel(x) # convert to a VectorSpaceModel object
+    x
+  })
+```
+
+Having a model for each decade which is aligned in vocabulary and space, we can now use these models to compare words across time. There are a number of ways we can compare words across time.
+
+In our first approach, let's consider the semantic displacement of words over time in the vector space. We will do this by calculating the cosine difference between the word embeddings for a word in each decade. Once we have the cosine difference, we can visualize the change over time.
+
+```{r}
+# Calculate the cosine difference between the models --------------
+word <- "freedom"
+
+word_vectors <- map(sotu_aligned_mods, \(x) {
+  x[word, ]
+})
+
+differences <- map(word_vectors, \(x) {
+  cosineDist(x, word_vectors[[1]])
+})
+```
+
+We now have a list with the cosine difference for each decade compared to the first decade ("1950s"). We can visualize this with a line plot where the x-axis is the decade and the y-axis is the cosine difference. We will add a linear trend line to the plot to get a sense of the overall trend.
+
+```{r}
+# Visualize the change in cosine similarity over time -------------
+data.frame(decade = basename(names(differences)), difference = unlist(differences)) |>
+  arrange(decade) |>
+  ggplot(aes(decade, difference, group = 1)) +
+  geom_smooth(se = FALSE, span = 1) +
+  labs(title = word)
+```
+
+Let's create a function which performs this for us and can plot multiple words at the same time.
+
+```{r, eval=FALSE}
+# Function to get the cosine difference over time -----------------
+get_cosine_diff <- function(word, models) {
+  word_vectors <- map(models, \(x) {
+    x[word, ]
+  })
+
+  differences <- map(word_vectors, \(x) {
+    cosineDist(x, word_vectors[[1]])
+  })
+
+  data.frame(decade = basename(names(differences)), difference = unlist(differences))
+}
+
+# Get the cosine difference for multiple words --------------------
+
+get_cosine_diff(word = c("freedom", "equality", "community"), models = sotu_aligned_mods) |>
+  ggplot(aes(decade, difference, group = word)) +
+  geom_smooth(se = FALSE, span = 1) +
+  labs(title = "Cosine difference over time")
+```
+
+
+```{r}
+# Function to get the closest words to a word ---------------------
+word <- "individual"
+
+sotu_vec_common_mods |>
+  map(\(x) {
+    closest_to(x, word, 10)
+  }) |>
+  map(\(x) {
+    str_c(x$word, collapse = ", ")
+  }) |>
+  enframe(name = "decade", value = "words") |>
+  unnest(words)
+```
+
+
+Another approach is to visualize the vector space that words occupy over time. To do this we will collapse the word embeddings for each decade into a single matrix. We will append the decade to each word as not to lose the decade information. The we will extract the first two principal components of the matrix, so that we can visualize the data in two dimensions. We will then plot the data with a scatter plot where the x-axis is the first principal component and the y-axis is the second principal component. We will label the points with the words.
+
+```{r}
+# Visualize the vector space of words over time -------------------
+sotu_joined_mods <-
+  sotu_aligned_mods |>
+  imap(\(x, y) {
+    rownames(x) <- str_c(rownames(x), "_", y)
+    x
+  }) |>
+  reduce(rbind) |>
+  as.VectorSpaceModel()
+```
+
+PCA on the word embeddings, yes! With the aligned models the results are much more sensible and interesting. The individual words are grouped closer together across time, in general, but there are exceptions.
+
+```{r}
+sotu_joined_pca <-
+  sotu_joined_mods |>
+  scale() |>
+  prcomp()
+
+sotu_pca_df <-
+  as_tibble(sotu_joined_pca$x[, 1:2]) |>
+  mutate(word = names(sotu_joined_pca$x[, 1]))
+
+sotu_pca_df |>
+  filter(str_detect(word, "^(freedom|free|community|individual|force|military)_")) |>
+  ggplot(aes(x = PC1, y = PC2, label = word)) +
+  geom_point() +
+  ggrepel::geom_text_repel()
+```
+
 
 ## Summary
+
+
+
 
 ## Check your understanding
 
