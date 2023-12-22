@@ -119,7 +119,7 @@ Taking a closer look at the first conversation file directory, `sw00utt/` we can
 
 Let's take a look inside a conversation file (`sw_0001_4325.utt`) to see how it is structured internally. You can do this by opening the file in a text editor or by using the `read_lines()` function from the `readr` package.
 
-```{r swda-file-preview, comment = ">", echo = FALSE}
+```{r swda-file-preview, comment = "#", echo = FALSE}
 # Preview the first few lines of the first conversation file
 read_lines(
   file = "data/original/swda/sw00utt/sw_0001_4325.utt"
