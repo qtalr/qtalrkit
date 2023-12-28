@@ -46,11 +46,11 @@ We will model how to explore iteratively using the output of one method to infor
 Let's get started by loading some of the packages we will likely use.
 
 ```{r load-packages, message=FALSE, warning=FALSE}
-library(dplyr)        # for data manipulation
-library(stringr)      # for string manipulation
-library(tidyr)        # for data tidying
-library(tidytext)     # for text analysis
-library(ggplot2)      # for data visualization
+library(dplyr) # for data manipulation
+library(stringr) # for string manipulation
+library(tidyr) # for data tidying
+library(tidytext) # for text analysis
+library(ggplot2) # for data visualization
 ```
 
 In Lab 8, we will try our hand at exploratory analysis using another dataset.
@@ -463,24 +463,34 @@ Since our research question is aimed a change over time we are performing a diac
 Let's load some packages that we will need.
 
 ```{r sotu-word-embeddings-load-packages, message=FALSE, warning=FALSE}
-library(fs)               # for file system functions
-library(word2vec)         # for training word embeddings
-library(wordVectors)      # for reading word embeddings
-library(purrr)            # for iterating over lists
-library(PsychWordVec)     # for aligning word embeddings
+library(fs) # for file system functions
+library(PsychWordVec) # for working with word embeddings
+library(purrr) # for iterating over lists
 ```
 
 Let's first start by creating sub-corpora for each decade. We will write these to disk so that we can use them again if necessary. Note that data or datasets that are generated in the process of analysis are often stored in an `analysis/` folder inside of the main data folder to keep them separate from the other data acquired or derived in the project.
 
 We will use the `str_c()` function to summarize the words for each address into a single string by decade. We will then use the `write_lines()` function to write the string to a text file. The `pwalk()` function from the `purrr` package is a convenient way to iterate over multiple arguments (`decade` and `address` in this case) in a function without returning a value to the console. The `p` in `pwalk()` stands for "parallel" and indicates that the function will iterate over the arguments in parallel.
 
-```{r sotu-create-sub-corpora}
+```{r sotu-create-sub-corpora-show, eval=FALSE}
 # Create sub-corpora for each decade and write to disk ------------
 sotu_terms_df |>
   summarize(address = str_c(lemma, collapse = " "), .by = decade) |>
   select(decade, address) |>
   pwalk(\(decade, address) {
-    file_name <- str_c("~/Desktop/sotu/", decade, "s.txt")
+    file_name <- str_c("../data/analysis/sotu/", decade, "s.txt")
+    write_lines(address, file_name)
+  })
+```
+
+
+```{r sotu-create-sub-corpora-run, echo=FALSE}
+# Create sub-corpora for each decade and write to disk ------------
+sotu_terms_df |>
+  summarize(address = str_c(lemma, collapse = " "), .by = decade) |>
+  select(decade, address) |>
+  pwalk(\(decade, address) {
+    file_name <- str_c("data/analysis/sotu/", decade, "s.txt")
     write_lines(address, file_name)
   })
 ```
@@ -493,51 +503,41 @@ Now I have written a function to read the text files, train the word embeddings 
 A note on the training of the word embeddings. There are two main approaches to training word embeddings: Continuous Bag of Words (CBOW) and Skip-gram. CBOW is better for more common words and larger datasets. Skip-gram is better for less common words and smaller datasets. Given the varying sizes of the sub-corpora, Skip-gram might be more suitable as it may capture more nuances in less frequent words. Furthermore, the number of dimensions is a hyperparameter that needs to be tuned. The default is 50, but I have chosen 100 as we are attempting to capture more nuanced changes in the language of the SOTU.
 :::
 
-
-```{r sotu-create-word-embeddings-show, eval=FALSE}
-# Create word embeddings for each decade --------------------------
-read_write_load_word2vec <- function(path) {
-  txt_files <- dir_ls(path, regexp = "\\.txt$")
-  models <- txt_files |> map(\(x) {
-    model <- word2vec(x = x, split = c(" ", ".?!"))
-    bin_file <- str_replace(x, "\\.txt$", ".bin")
-    write.word2vec(model, bin_file)
-    read.vectors(bin_file)
-  })
+```{r sotu-create-word-embeddings-function}
+create_embeddings <- function(dir_path, dims = 100) {
+  # Get the text file paths
+  txt_files <- dir_ls(dir_path, regexp = "\\.txt$")
+  # Train the word embeddings
+  models <-
+    txt_files |>
+    map(\(file) {
+      train_wordvec(
+        text = file,
+        dims = 100,
+        normalize = TRUE
+      )
+    })
+  # Modify the list names
   names(models) <-
     names(models) |>
     basename() |>
     str_remove("\\.txt")
 
+  # Convert to embed matrices
+  models <- map(models, as_embed)
+
   return(models)
 }
+```
 
-sotu_vec_mods <- read_write_load_word2vec("~/Desktop/sotu")
+We can now apply the `create_embeddings()` custom function to the decade sub-corpora text files in `../analysis/sotu/`.
+
+```{r sotu-create-word-embeddings-show, eval=FALSE}
+sotu_vec_mods <- create_embeddings("../analysis/sotu/")
 ```
 
 ```{r sotu-create-word-embeddings-run, include=FALSE}
-# Create word embeddings for each decade --------------------------
-# - CBOW better for more common words
-# - Skip-gram better for less common words
-#   Given the varying sizes of the sub-corpora, Skip-gram might be more suitable as it may capture more nuances in less frequent words.
-read_write_load_word2vec <- function(path) {
-  txt_files <- dir_ls(path, regexp = "\\.txt$")
-  models <- txt_files |> map(\(x) {
-    model <- word2vec(x = x, type = c("skip-gram"), dim = 100, split = c(" ", ".?!"))
-    bin_file <- str_replace(x, "\\.txt$", ".bin")
-    write.word2vec(model, bin_file)
-    read.vectors(bin_file)
-  })
-  names(models) <-
-    names(models) |>
-    basename() |>
-    str_remove("\\.txt")
-
-  return(models)
-}
-
-# Read and train the word2vec models
-sotu_vec_mods <- read_write_load_word2vec("~/Desktop/sotu")
+sotu_vec_mods <- create_embeddings("data/analysis/sotu/")
 ```
 
 Each word embedding model is a matrix with the words as the rows and the dimensions as the columns as an element of the `sotu_vec_mods` list. Each of these elements have the name of the decade. We can extract an element from a list using the `pluck()` function from the `purrr` package.
@@ -558,16 +558,16 @@ Since we have our models in a list, we will be using `purrr` functions quite a b
 Each of these has a parallel version, `pmap()` and `pwalk()`, which iterate over multiple lists in parallel, and a version that iterates over named lists, `imap()` and `iwalk()`. The `p` in `pmap()` and `pwalk()` stands for "parallel" and indicates that the function will iterate over the arguments in parallel. The `i` in `imap()` and `iwalk()` stands for "indexed" and indicates that the function will iterate over the arguments in parallel and return the index of the list element.
 :::
 
-These embeddings can be explored in a number of ways. For example, we can get the words closest to a given word in the vector space for each decade. The `wordVectors` package has a function, `closest_to()`, that will do this for us. We can use the `map()` function to iterate over each model in the list and get the closest words to a word. We will then use the `str_c()` function to summarize the words into a single string for each decade.
+These embeddings can be explored in a number of ways. For example, we can get the words closest to a given word in the vector space for each decade. The `PsychWordVec` package has a function, `most_similar()`, that will do this for us. We can use the `map()` function to iterate over each model in the list and get the words with the most similar vectors. We will then use the `str_c()` function to summarize the words into a single string for each decade.
 
 ```{r sotu-closest-words}
 # Get the closest words
 sotu_vec_mods |>
-  map(\(x) {
-    closest_to(x, "freedom", 10) # get the closest words to "freedom"
+  map(\(mod) {
+    most_similar(mod, "freedom", verbose = FALSE) # get words similar to "freedom"
   }) |>
-  map(\(x) {
-    str_c(x$word, collapse = ", ") # summarize the words into a single string
+  map(\(res) {
+    str_c(res$word, collapse = ", ") # summarize the words into a single string
   })
 ```
 
@@ -592,8 +592,8 @@ There are `r length(common_vocab)` words in the common vocabulary. Now we can su
 # Subset the models to the common vocabulary ----------------------
 sotu_vec_common_mods <-
   sotu_vec_mods |>
-  map(\(x) {
-    x[common_vocab, ] # subset each model to the common vocabulary
+  map(\(mod) {
+    mod[common_vocab, ] # subset each model to the common vocabulary
   })
 
 sotu_vec_common_mods |> pluck("1950s")
@@ -602,18 +602,18 @@ sotu_vec_common_mods |> pluck("2010s")
 
 So now each of the models in the list has the same vocabulary and the same number of dimensions, `r ncol(sotu_vec_common_mods[[1]])`.
 
-Now we can align the models to a common space. The reason that the models need to be aligned is that the word embeddings are trained on different corpora. This means that the words will be represented in different spaces. We will use the Orthogonal Procrustes solution to align the models to a common coordinate space. The `PsychWordVec` package [@R-PsychWordVec] has a function, `orth_procrustes()`, that will do this for us. In the process of aligning the models, the models are converted to plain matrices so we will need to convert them back to `VectorSpaceModel` objects.
+Now we can align the models to a common space. The reason that the models need to be aligned is that the word embeddings are trained on different corpora. This means that the words will be represented in different spaces. We will use the Orthogonal Procrustes solution to align the models to a common coordinate space. The `PsychWordVec` package [@R-PsychWordVec] has a function, `orth_procrustes()`, that will do this for us. In the process of aligning the models, the models are converted to plain matrices so we will need to convert them back to `embed` matrix objects.
 
 ```{r}
 # Align the models to a common space
 sotu_aligned_mods <-
   sotu_vec_common_mods |>
-  map(\(x) {
-    orth_procrustes(sotu_vec_common_mods[[1]], x) # align to the first model
+  map(\(mod) {
+    orth_procrustes(sotu_vec_common_mods[[1]], mod) # align to the first model
   }) |>
-  map(\(x) {
-    x <- as.VectorSpaceModel(x) # convert to a VectorSpaceModel object
-    x
+  map(\(mod) {
+    emb <- as_embed(mod) # convert to a embed matrix object
+    emb
   })
 ```
 
@@ -625,13 +625,19 @@ In our first approach, let's consider the semantic displacement of words over ti
 # Calculate the cosine difference between the models --------------
 word <- "freedom"
 
-word_vectors <- map(sotu_aligned_mods, \(x) {
-  x[word, ]
-})
+word_vectors <-
+  sotu_aligned_mods |>
+  map(\(mod) {
+    mod[word, ]
+  })
 
-differences <- map(word_vectors, \(x) {
-  cosineDist(x, word_vectors[[1]])
-})
+differences <-
+  word_vectors |>
+  map(\(vec) {
+    cos_dist(vec, word_vectors[[1]])
+  })
+
+differences
 ```
 
 We now have a list with the cosine difference for each decade compared to the first decade ("1950s"). We can visualize this with a line plot where the x-axis is the decade and the y-axis is the cosine difference. We will add a linear trend line to the plot to get a sense of the overall trend.
@@ -642,34 +648,32 @@ I'll write a function to get the differences for a word and then return a data f
 # Function to get the cosine difference over time
 
 get_cosine_diff <- function(word, models) {
-  word_vectors <- map(models, \(x) {
-    x[word, ]
+  word_vectors <- map(models, \(mod) {
+    mod[word, ]
   })
 
-  differences <- map(word_vectors, \(x) {
-    cosineDist(x, word_vectors[[1]])
+  differences <- map(word_vectors, \(vec) {
+    cos_dist(vec, word_vectors[[1]])
   })
 
   tibble(word, decade = basename(names(differences)), difference = unlist(differences))
 }
 
 get_cosine_diff(word = "freedom", models = sotu_aligned_mods)
-
 ```
 
 Let's create a function which performs this for us and can plot multiple words at the same time.
 
 ```{r}
-
 plot_words <-
-  c("nation", "country", "america")
+  c("freedom", "nation", "country", "america")
 
 plot_words |>
   map(get_cosine_diff, models = sotu_aligned_mods) |>
   bind_rows() |>
   arrange(decade) |>
   ggplot(aes(decade, difference, group = word, color = word)) +
-  geom_smooth(method = "lm") +
+  geom_smooth(se = FALSE, span = 1) +
   labs(title = word)
 ```
 
@@ -678,14 +682,14 @@ We can then focus in on a particular word and the nearest words to that word in 
 
 ```{r}
 # Function to get the closest words to a word ---------------------
-word <- "nation"
+word <- "america"
 
 sotu_vec_common_mods |>
-  map(\(x) {
-    closest_to(x, word, 10)
+  map(\(mod) {
+    most_similar(mod, word, verbose = FALSE)
   }) |>
-  map(\(x) {
-    str_c(x$word, collapse = ", ")
+  map(\(mod) {
+    str_c(mod$word, collapse = ", ")
   }) |>
   enframe(name = "decade", value = "words") |>
   unnest(words)
@@ -697,12 +701,12 @@ Another approach is to visualize the vector space that words occupy over time. T
 # Visualize the vector space of words over time -------------------
 sotu_joined_mods <-
   sotu_aligned_mods |>
-  imap(\(x, y) {
-    rownames(x) <- str_c(rownames(x), "_", y)
-    x
+  imap(\(mod, index) {
+    rownames(mod) <- str_c(rownames(mod), "_", index)
+    mod
   }) |>
   reduce(rbind) |>
-  as.VectorSpaceModel()
+  as_embed()
 ```
 
 PCA on the word embeddings, yes! With the aligned models the results are much more sensible and interesting. The individual words are grouped closer together across time, in general, but there are exceptions.
@@ -725,7 +729,6 @@ sotu_pca_df |>
 ```
 
 These kinds of visualizations can be very useful for exploring the data and drawing conclusions.
-
 
 ## Summary
 
