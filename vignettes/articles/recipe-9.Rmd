@@ -1,5 +1,5 @@
 ---
-title: "9. Predictive Modeling"
+title: "9. Building predictive models"
 pkgdown:
   as_is: true
 bibliography: [bibliography.bib, packages.bib]
