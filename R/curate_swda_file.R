@@ -6,6 +6,8 @@
 #'
 #' @return A data frame containing the extracted SWDA data, including document ID, speaker IDs, damsl tags, speaker turns, utterance numbers, and utterance text.
 #'
+#' @keywords internal
+#'
 #' @examples
 #' \dontrun{
 #' file <- "/path/to/swda_data.txt"

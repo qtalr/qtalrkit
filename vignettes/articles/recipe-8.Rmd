@@ -14,6 +14,13 @@ link-citations: true
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+<!--
+
+- [ ] Review this recipe, still in draft phase
+
+-->
+
+
 ## Overview
 
 <!--
@@ -62,8 +69,6 @@ In Lab 8, we will try our hand at exploratory analysis using another dataset.
 We will use the SOTU corpus to demonstrate the different methods. We will select a subset of the corpus (post-1945) and explore the question:
 
 - How has the language of the SOTU changed over time?
-
-<!-- [ ] return and update for the methods actually used -->
 
 This will include methods such as frequency and distributional analysis, dimensionality reduction, and word embedding models.
 
@@ -737,134 +742,6 @@ In this recipe, we have explored the State of the Union addresses from 1950 to 2
 These strategies, and others, can be used to explore these questions or other questions in more depth. Exploratory analysis is where your creativity and curiosity can shine.
 
 ## Check your understanding
-
-<!-- lesson
-
-### True/False Questions
-
-1. All elements in a matrix must be of the same type (e.g., numeric, character).
-   - [ ] True
-   - [ ] False
-
-2. The `dimnames()` function can only be used to name the rows of a matrix.
-   - [ ] True
-   - [ ] False
-
-3. A DocumentTermMatrix object is a sparse matrix, meaning only non-zero elements are stored.
-   - [ ] True
-   - [ ] False
-
-### Fill-in-the-Blank Questions
-
-4. To create a matrix using the `matrix()` function, you need to provide a vector of elements, the number of __________, and the number of __________.
-
-5. When combining two matrices with different data types using `cbind()`, R will convert the combined matrix elements to the __________ data type.
-
-6. To inspect the dimensions of a matrix, you can use the `__________()` function which returns the number of rows and columns.
-
-### Multiple Choice Questions
-
-7. What is the correct command to see the matrix with each element multiplied by 2?
-   - A) ex_int_mat + 2
-   - B) ex_int_mat / 2
-   - C) ex_int_mat * 2
-   - D) ex_int_mat - 2
-
-8. Which function would you use to access multiple elements of a matrix using row and column names?
-   - A) `ex_int_mat[1, 2]`
-   - B) `ex_int_mat["row1", "col2"]`
-   - C) `ex_int_mat[, c("col2", "col3")]`
-   - D) `ex_int_mat[1:2, 2:3]`
-
-9. If you wanted to calculate the sum of the elements in each column of a matrix, which function would you use?
-   - A) `rowSums()`
-   - B) `colSums()`
-   - C) `sum()`
-   - D) `mean()`
-
--->
-
-
-<!-- chapter
-
-### True/False Questions
-
-1. True or False: Exploratory data analysis (EDA) is used only when researchers have a predefined hypothesis.
-2. True or False: Clustering is a supervised learning technique that groups similar items in the text data into distinct categories.
-3. True or False: In vector space modeling, words that appear in similar contexts tend to have similar meanings, reflecting the distributional hypothesis.
-
-### Fill-in-the-Blank Questions
-
-1. The process of reducing the number of features in a dataset while retaining as much information as possible is known as ____________ reduction.
-2. A ____________ is a sequence of words that co-occur more often than would be expected by chance.
-3. The ____________ model in word2vec predicts the context words based on the target word.
-
-### Multiple Choice Questions
-
-1. Which of the following is NOT one of the steps in the workflow for exploratory data analysis?
-   - A) Inspect
-   - B) Interrogate
-   - C) Invalidate
-   - D) Interpret
-
-2. What does 'PMI' stand for in the context of co-occurrence analysis?
-   - A) Principle Mutual Information
-   - B) Pointwise Mutual Information
-   - C) Primary Mutual Index
-   - D) Probabilistic Measure of Independence
-
-3. What type of distribution is characterized by the fact that the frequency of any word is inversely proportional to its rank in the frequency table?
-   - A) Gaussian distribution
-   - B) Binomial distribution
-   - C) Poisson distribution
-   - D) Zipfian distribution
--->
-
-
-<!-- recipe
-
-### True/False Questions
-
-1. The `skim()` function provides a statistical overview summary that includes missing values for each variable.
-   - [ ] True
-   - [ ] False
-
-2. When creating word embeddings, the CBOW model is better suited for less common words and smaller datasets compared to Skip-gram.
-   - [ ] True
-   - [ ] False
-
-3. After aligning word embedding models to a common space, the individual words are grouped closer together across time.
-   - [ ] True
-   - [ ] False
-
-### Fill-in-the-Blank Questions
-
-4. In text analysis, ________ is used to transform the effect of words that are common across all time periods and promote the effect of words that are more distinctive to each time period.
-
-5. The `count()` function in R is a wrapper for the `summarize()` function and it automatically adds and removes __________.
-
-6. To visualize changes in the language of the SOTU over time, one can calculate the cosine difference between the word embeddings for a word in each decade and visualize it with a __________ plot.
-
-### Multiple Choice Questions
-
-7. What is the correct method to use when adding a linear trend line to a plot in ggplot2?
-   - A) `geom_line()`
-   - B) `geom_smooth(method = "lm")`
-   - C) `geom_bar()`
-   - D) `geom_point()`
-
-8. Which package is used to align word embedding models to a common coordinate space?
-   - A) `tidytext`
-   - B) `word2vec`
-   - C) `PsychWordVec`
-   - D) `ggplot2`
-
-9. How can you identify the words that have changed the most drastically over the years from the data itself?
-   - A) By calculating the mean of the tf-idf values for each word.
-   - B) By counting the number of times each word appears in the corpus.
-   - C) By creating a term-document matrix and then calculating the standard deviation of the tf-idf values for each word.
-   - D) By using the `lemmatize_words()` function on each word.
--->
 
 <!-- Comprehension questions -->
 

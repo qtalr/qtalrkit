@@ -22,3 +22,4 @@ swda_data <- extract_swda_data(file)
 head(swda_data)
 }
 }
+\keyword{internal}

@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">qtalrkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -481,10 +481,10 @@ brown_passives_df &lt;-
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 5 × 5</span></span></span>
 <span><span class="co">##   cat   passive    n_w   n_s name           </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> A         892 <span style="text-decoration: underline;">101</span>196  <span style="text-decoration: underline;">3</span>684 press reportage</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> R         146  <span style="text-decoration: underline;">21</span>757   975 humour         </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> H         837  <span style="text-decoration: underline;">69</span>446  <span style="text-decoration: underline;">2</span>012 miscellaneous  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> J        <span style="text-decoration: underline;">2</span>423 <span style="text-decoration: underline;">181</span>426  <span style="text-decoration: underline;">6</span>311 learned        </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> C         283  <span style="text-decoration: underline;">40</span>749  <span style="text-decoration: underline;">1</span>459 press reviews  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> L         265  <span style="text-decoration: underline;">57</span>624  <span style="text-decoration: underline;">3</span>673 detective      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> J        <span style="text-decoration: underline;">2</span>423 <span style="text-decoration: underline;">181</span>426  <span style="text-decoration: underline;">6</span>311 learned        </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> G        <span style="text-decoration: underline;">1</span>460 <span style="text-decoration: underline;">173</span>017  <span style="text-decoration: underline;">6</span>537 belles lettres </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">5</span> B         543  <span style="text-decoration: underline;">61</span>535  <span style="text-decoration: underline;">2</span>399 press editorial</span></span></code></pre>
 <p>These functions can be helpful to get a sense of the data in different ways. In combination with <code><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange()</a></code> function, we can also sort the data frame by a column or columns and then select the first or last rows.</p>
 <p>For example, the following code block will sort the data frame by the <code>passive</code> column in ascending order and then select the first 5 rows:</p>
