@@ -1,12 +1,17 @@
+# qtalrkit 0.9.0
+
+* Updated version number to reflect that the package is now in beta
+* Added `curate_swda_data()` function to curate data from the Switchboard Dialog Act Corpus
+
 # qtalrkit 0.0.4.0
 
 * Adds `get_gutenberg_works()` function to import data from Project Gutenberg
 
 # qtalrkit 0.0.3.400
 
-* Fixes warnings on `calc_assoc_metrics()` 
+* Fixes warnings on `calc_assoc_metrics()`
 * Updates Date on DESCRIPTION file
-* Adds test-add_pkg_to_bib.R 
+* Adds test-add_pkg_to_bib.R
 
 # qtalrkit 0.0.3.000
 
@@ -15,7 +20,7 @@
 # qtalrkit 0.0.3.210
 
 * Removes `calc_dispersion_metrics()` function and replaces it with `calc_type_metric()` which includes frequency and dispersion metrics.
-  
+
 # qtalrkit 0.0.3.200
 
 * Fixes bug in `get_compressed_data()` that caused the function to create dot file copies of the original files
@@ -45,7 +50,7 @@
 
 # qtalrkit 0.0.1.9200
 
-* Adds project template for RStudio: "Minimal Reproducible Project" 
+* Adds project template for RStudio: "Minimal Reproducible Project"
 
 # qtalrkit 0.0.1.9100
 
