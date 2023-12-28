@@ -548,7 +548,7 @@ Just as with other steps in the data preparation process, it is important to doc
 5. To normalize text by removing leading and trailing whitespace, you use the `r fitb("str_trim")``()` function from the `stringr` package.
 6. To normalize text by converting all characters to lowercase, you use the `r fitb("str_to_lower")``()` function from the `stringr` package.
 
-## Lab prepation
+## Lab preparation
 
 <!-- Lab 07 description and checklist -->
 
