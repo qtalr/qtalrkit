@@ -1,5 +1,5 @@
 ---
-title: "10. Inferential Statistics"
+title: "10. Testing generalizations"
 pkgdown:
   as_is: true
 bibliography: [bibliography.bib, packages.bib]
@@ -9,7 +9,6 @@ link-citations: true
 
 <!--
 The goal will be to do one, more advanced example
-
 -->
 
 
