@@ -463,6 +463,7 @@ Since our research question is aimed a change over time we are performing a diac
 Let's load some packages that we will need.
 
 ```{r sotu-word-embeddings-load-packages, message=FALSE, warning=FALSE}
+library(fs)               # for file system functions
 library(word2vec)         # for training word embeddings
 library(wordVectors)      # for reading word embeddings
 library(purrr)            # for iterating over lists

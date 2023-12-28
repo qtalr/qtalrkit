@@ -498,12 +498,12 @@ utt\d+
 <p>One twist you will notice is that regular expressions in R require double backslashes (<code>\\</code>) where other programming environments use a single backslash (<code>\</code>).</p>
 </div>
 <p>There are a couple things left to do to the columns we extracted from the text before we move on to finishing up our tidy dataset. First, we need to separate the <code>speaker_turn</code> column into <code>speaker</code> and <code>turn_num</code> columns and second we need to remove unwanted characters from the <code>damsl_tag</code>, <code>utterance_num</code>, and <code>utterance_text</code> columns.</p>
-<p>To separate the values of a column into two columns we use the <code><a href="https://tidyr.tidyverse.org/reference/separate_wider_delim.html" class="external-link">separate_wider_delim()</a></code> function. It takes a column to separate, a delimiter to use to separate the values, and a character vector of the names of the new columns to create.</p>
+<p>To separate the values of a column into two columns we use the <code>separate_wider_delim()</code> function. It takes a column to separate, a delimiter to use to separate the values, and a character vector of the names of the new columns to create.</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Separate speaker_turn into distinct columns</span></span>
 <span><span class="va">swda_df</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">swda_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate_wider_delim.html" class="external-link">separate_wider_delim</a></span><span class="op">(</span></span>
+<span>  <span class="fu">separate_wider_delim</span><span class="op">(</span></span>
 <span>    cols <span class="op">=</span> <span class="va">speaker_turn</span>,</span>
 <span>    delim <span class="op">=</span> <span class="st">"."</span>,</span>
 <span>    names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"speaker"</span>, <span class="st">"turn_num"</span><span class="op">)</span></span>
@@ -609,7 +609,7 @@ utt\d+
 <span>  <span class="co"># Separate speaker_turn into distinct columns</span></span>
 <span>  <span class="va">swda_df</span> <span class="op">&lt;-</span></span>
 <span>    <span class="va">swda_df</span> <span class="op">|&gt;</span> <span class="co"># current dataset</span></span>
-<span>    <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate_wider_delim.html" class="external-link">separate_wider_delim</a></span><span class="op">(</span></span>
+<span>    <span class="fu">separate_wider_delim</span><span class="op">(</span></span>
 <span>      cols <span class="op">=</span> <span class="va">speaker_turn</span>,</span>
 <span>      delim <span class="op">=</span> <span class="st">"."</span>,</span>
 <span>      names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"speaker"</span>, <span class="st">"turn_num"</span><span class="op">)</span></span>
@@ -758,7 +758,7 @@ utt\d+
 <li>
 <select class="webex-select"><option value="blank"></option>
 <option value="answer">TRUE</option>
-<option value="">FALSE</option></select> The <code><a href="https://tidyr.tidyverse.org/reference/separate_wider_delim.html" class="external-link">separate_wider_delim()</a></code> function from the <code>tidyr</code> package will separate a column into two or more columns based on a delimiter (<em>e.g.</em> <code>-</code>, <code>.</code>, <em>etc.</em>).</li>
+<option value="">FALSE</option></select> The <code>separate_wider_delim()</code> function from the <code>tidyr</code> package will separate a column into two or more columns based on a delimiter (<em>e.g.</em> <code>-</code>, <code>.</code>, <em>etc.</em>).</li>
 <li>Which of the following functions from the <code>stringr</code> package will return vector elements which contain a match for a pattern? <select class="webex-select"><option value="blank"></option>
 <option value="answer">str_subset()</option>
 <option value="">str_extract()</option>

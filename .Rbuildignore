@@ -10,3 +10,4 @@
 ^vignettes/articles$
 ^\.httr-oauth$
 ^_.*\.md$
+^\.lintr

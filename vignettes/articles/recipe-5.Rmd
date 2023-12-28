@@ -7,8 +7,6 @@ biblio-style: apalike
 link-citations: true
 ---
 
-
-
 ```{r, child="_common.Rmd"}
 ```
 

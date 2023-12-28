@@ -297,7 +297,7 @@ Project Gutenberg
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">works_sample</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 38,227 × 6</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 34,385 × 6</span></span></span>
 <span><span class="co">##    gutenberg_id text        title author gutenberg_author_id gutenberg_bookshelf</span></span>
 <span><span class="co">##           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 1</span>           33 <span style="color: #949494;">"</span>The Scarl… The … Hawth…                  28 Harvard Classics/M…</span></span>
@@ -310,19 +310,18 @@ Project Gutenberg
 <span><span class="co">## <span style="color: #BCBCBC;"> 8</span>           33 <span style="color: #949494;">"</span> THE CUST… The … Hawth…                  28 Harvard Classics/M…</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 9</span>           33 <span style="color: #949494;">"</span> THE SCAR… The … Hawth…                  28 Harvard Classics/M…</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">10</span>           33 <span style="color: #949494;">"</span> I. THE P… The … Hawth…                  28 Harvard Classics/M…</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 38,217 more rows</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;"># ℹ 34,375 more rows</span></span></span></code></pre>
 <p>Let's inspect the <code>works_sample</code> data frame. First, from the output we can see that all of our meta data attributes were returned. Second, we can see that the <code>text</code> column contains values for each line of text (delimited by a carriage return) for each of the 5 works we downloaded, even blank lines. To make sure that we have the correct number of works, we can use the <code><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count()</a></code> function to count the number of works by <code>gutenberg_id</code>.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">works_sample</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">gutenberg_id</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 5 × 2</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 2</span></span></span>
 <span><span class="co">##   gutenberg_id     n</span></span>
 <span><span class="co">##          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span>           33  <span style="text-decoration: underline;">8</span>212</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span>           46  <span style="text-decoration: underline;">3</span>842</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span>          258 <span style="text-decoration: underline;">11</span>050</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span>          271  <span style="text-decoration: underline;">5</span>997</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span>          292  <span style="text-decoration: underline;">9</span>126</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span>          258 <span style="text-decoration: underline;">11</span>050</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span>          271  <span style="text-decoration: underline;">5</span>997</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span>          292  <span style="text-decoration: underline;">9</span>126</span></span></code></pre>
 <p>Yes, we have 5 works and we can see how many lines are in each of these works.</p>
 <p>We could now run this code on the entire <code>works</code> data frame and then write the data to disk like so:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
