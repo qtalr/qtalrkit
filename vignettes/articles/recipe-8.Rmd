@@ -1,5 +1,5 @@
 ---
-title: "8. Exploratory analysis methods"
+title: "8. Employing exploratory methods"
 pkgdown:
   as_is: true
 bibliography: [bibliography.bib, packages.bib]
@@ -386,7 +386,7 @@ sotu_terms_tfidf_df |>
 
 We can see in Figure \@ref(fig:sotu-terms-tfidf-df-political) that the distinctiveness of these lemmas varies over time. Now, in this plot I've used a small span value for the `geom_smooth()` function to get a sense of the more fine-grained changes over time. However, this is may be too fine-grained. We can adjust this by increasing the `span` value. Let's try a `span` value of 0.5.
 
-```{r sotu-terms-tfidf-df-political-smooth-0.5, fig.cap="Distinctiveness of political words over time"}
+```{r sotu-terms-tfidf-df-political-smooth-detail, fig.cap="Distinctiveness of political words over time"}
 sotu_terms_tfidf_df |>
   filter(lemma %in% plot_terms) |>
   ggplot(aes(year, tf_idf)) +
@@ -394,13 +394,13 @@ sotu_terms_tfidf_df |>
   facet_wrap(~lemma, scales = "free_y")
 ```
 
-Figure \@ref(fig:sotu-terms-tfidf-df-political-smooth-0.5) seems to be picking up on some of the more general word usage trends over time.
+Figure \@ref(fig:sotu-terms-tfidf-df-political-smooth-detail) seems to be picking up on some of the more general word usage trends over time.
 
 Another thing to note about the way we plotted the data is that we used the `facet_wrap()` function to create a separate plot for each word but we used the `scales = "free_y"` allowing the y-axis to vary for each plot. This means we are not comparing the y-axis values across plots and thus can not say anything about the differing magnitudes from a visual inspection.
 
 To address this, we can remove the `scales = "free_y"` argument and use the default which will fix the x- and y-axis scales across plots.
 
-```{r sotu-terms-tfidf-df-political-smooth-0.5-fixed, fig.cap="Distinctiveness of political words over time"}
+```{r sotu-terms-tfidf-df-political-smooth-detailed-fixed, fig.cap="Distinctiveness of political words over time"}
 sotu_terms_tfidf_df |>
   filter(lemma %in% plot_terms) |>
   ggplot(aes(year, tf_idf)) +
@@ -408,7 +408,7 @@ sotu_terms_tfidf_df |>
   facet_wrap(~lemma)
 ```
 
-In Figure \@ref(fig:sotu-terms-tfidf-df-political-smooth-0.5-fixed), we can clearly see that the magnitude of the words "crime" and "terror" are much higher than the other words we happend to select. Furthermore, these words have interesting patterns. In particular, "terror" has two peaks on around 1980 and another around the turn of the century. "Crime" also has two distinctive peaks on in the 1970s and one in the 1990s.
+In Figure \@ref(fig:sotu-terms-tfidf-df-political-smooth-detailed-fixed), we can clearly see that the magnitude of the words "crime" and "terror" are much higher than the other words we happend to select. Furthermore, these words have interesting patterns. In particular, "terror" has two peaks on around 1980 and another around the turn of the century. "Crime" also has two distinctive peaks on in the 1970s and one in the 1990s.
 
 The terms that I selected before were somewhat arbitrary. How can I identify the words that have changed the most drastically over these years from the data itself? We can do this by creating a term-document matrix with and then calculating the standard deviation of the $tf$-$idf$ values for each word. This will give us a sense of the words that have changed the most over time.
 
@@ -635,19 +635,11 @@ differences <- map(word_vectors, \(x) {
 
 We now have a list with the cosine difference for each decade compared to the first decade ("1950s"). We can visualize this with a line plot where the x-axis is the decade and the y-axis is the cosine difference. We will add a linear trend line to the plot to get a sense of the overall trend.
 
+I'll write a function to get the differences for a word and then return a data frame with the decade and the difference. This will make it easier to visualize the differences for multiple words.
+
 ```{r}
-# Visualize the change in cosine similarity over time -------------
-data.frame(decade = basename(names(differences)), difference = unlist(differences)) |>
-  arrange(decade) |>
-  ggplot(aes(decade, difference, group = 1)) +
-  geom_smooth(se = FALSE, span = 1) +
-  labs(title = word)
-```
+# Function to get the cosine difference over time
 
-Let's create a function which performs this for us and can plot multiple words at the same time.
-
-```{r, eval=FALSE}
-# Function to get the cosine difference over time -----------------
 get_cosine_diff <- function(word, models) {
   word_vectors <- map(models, \(x) {
     x[word, ]
@@ -657,21 +649,35 @@ get_cosine_diff <- function(word, models) {
     cosineDist(x, word_vectors[[1]])
   })
 
-  data.frame(decade = basename(names(differences)), difference = unlist(differences))
+  tibble(word, decade = basename(names(differences)), difference = unlist(differences))
 }
 
-# Get the cosine difference for multiple words --------------------
+get_cosine_diff(word = "freedom", models = sotu_aligned_mods)
 
-get_cosine_diff(word = c("freedom", "equality", "community"), models = sotu_aligned_mods) |>
-  ggplot(aes(decade, difference, group = word)) +
-  geom_smooth(se = FALSE, span = 1) +
-  labs(title = "Cosine difference over time")
+```
+
+Let's create a function which performs this for us and can plot multiple words at the same time.
+
+```{r}
+
+plot_words <-
+  c("nation", "country", "america")
+
+plot_words |>
+  map(get_cosine_diff, models = sotu_aligned_mods) |>
+  bind_rows() |>
+  arrange(decade) |>
+  ggplot(aes(decade, difference, group = word, color = word)) +
+  geom_smooth(method = "lm") +
+  labs(title = word)
 ```
 
 
+We can then focus in on a particular word and the nearest words to that word in each decade. We will use the `map()` function to iterate over each model in the list and get the closest words to a word. We will then use the `str_c()` function to summarize the words into a single string for each decade.
+
 ```{r}
 # Function to get the closest words to a word ---------------------
-word <- "individual"
+word <- "nation"
 
 sotu_vec_common_mods |>
   map(\(x) {
@@ -683,7 +689,6 @@ sotu_vec_common_mods |>
   enframe(name = "decade", value = "words") |>
   unnest(words)
 ```
-
 
 Another approach is to visualize the vector space that words occupy over time. To do this we will collapse the word embeddings for each decade into a single matrix. We will append the decade to each word as not to lose the decade information. The we will extract the first two principal components of the matrix, so that we can visualize the data in two dimensions. We will then plot the data with a scatter plot where the x-axis is the first principal component and the y-axis is the second principal component. We will label the points with the words.
 
@@ -712,18 +717,172 @@ sotu_pca_df <-
   mutate(word = names(sotu_joined_pca$x[, 1]))
 
 sotu_pca_df |>
-  filter(str_detect(word, "^(freedom|free|community|individual|force|military)_")) |>
+  filter(str_detect(word, "^(nation|country|america)_")) |>
   ggplot(aes(x = PC1, y = PC2, label = word)) +
   geom_point() +
   ggrepel::geom_text_repel()
 ```
 
+These kinds of visualizations can be very useful for exploring the data and drawing conclusions.
+
 
 ## Summary
 
+In this recipe, we have explored the State of the Union addresses from 1950 to 2019. We have used a number of tools and techniques to explore the data and draw conclusions. We have used the `tidytext` package to tokenize and lemmatize the words in the addresses. We have used the `word2vec` package to train word embeddings for each decade. We have used the `PsychWordVec` package to align the word embeddings to a common space. We have used the `wordVectors` package to explore the word embeddings. We have used the `ggplot2` package to visualize the data.
 
-
+These strategies, and others, can be used to explore these questions or other questions in more depth. Exploratory analysis is where your creativity and curiosity can shine.
 
 ## Check your understanding
+
+<!-- lesson
+
+### True/False Questions
+
+1. All elements in a matrix must be of the same type (e.g., numeric, character).
+   - [ ] True
+   - [ ] False
+
+2. The `dimnames()` function can only be used to name the rows of a matrix.
+   - [ ] True
+   - [ ] False
+
+3. A DocumentTermMatrix object is a sparse matrix, meaning only non-zero elements are stored.
+   - [ ] True
+   - [ ] False
+
+### Fill-in-the-Blank Questions
+
+4. To create a matrix using the `matrix()` function, you need to provide a vector of elements, the number of __________, and the number of __________.
+
+5. When combining two matrices with different data types using `cbind()`, R will convert the combined matrix elements to the __________ data type.
+
+6. To inspect the dimensions of a matrix, you can use the `__________()` function which returns the number of rows and columns.
+
+### Multiple Choice Questions
+
+7. What is the correct command to see the matrix with each element multiplied by 2?
+   - A) ex_int_mat + 2
+   - B) ex_int_mat / 2
+   - C) ex_int_mat * 2
+   - D) ex_int_mat - 2
+
+8. Which function would you use to access multiple elements of a matrix using row and column names?
+   - A) `ex_int_mat[1, 2]`
+   - B) `ex_int_mat["row1", "col2"]`
+   - C) `ex_int_mat[, c("col2", "col3")]`
+   - D) `ex_int_mat[1:2, 2:3]`
+
+9. If you wanted to calculate the sum of the elements in each column of a matrix, which function would you use?
+   - A) `rowSums()`
+   - B) `colSums()`
+   - C) `sum()`
+   - D) `mean()`
+
+-->
+
+
+<!-- chapter
+
+### True/False Questions
+
+1. True or False: Exploratory data analysis (EDA) is used only when researchers have a predefined hypothesis.
+2. True or False: Clustering is a supervised learning technique that groups similar items in the text data into distinct categories.
+3. True or False: In vector space modeling, words that appear in similar contexts tend to have similar meanings, reflecting the distributional hypothesis.
+
+### Fill-in-the-Blank Questions
+
+1. The process of reducing the number of features in a dataset while retaining as much information as possible is known as ____________ reduction.
+2. A ____________ is a sequence of words that co-occur more often than would be expected by chance.
+3. The ____________ model in word2vec predicts the context words based on the target word.
+
+### Multiple Choice Questions
+
+1. Which of the following is NOT one of the steps in the workflow for exploratory data analysis?
+   - A) Inspect
+   - B) Interrogate
+   - C) Invalidate
+   - D) Interpret
+
+2. What does 'PMI' stand for in the context of co-occurrence analysis?
+   - A) Principle Mutual Information
+   - B) Pointwise Mutual Information
+   - C) Primary Mutual Index
+   - D) Probabilistic Measure of Independence
+
+3. What type of distribution is characterized by the fact that the frequency of any word is inversely proportional to its rank in the frequency table?
+   - A) Gaussian distribution
+   - B) Binomial distribution
+   - C) Poisson distribution
+   - D) Zipfian distribution
+-->
+
+
+<!-- recipe
+
+### True/False Questions
+
+1. The `skim()` function provides a statistical overview summary that includes missing values for each variable.
+   - [ ] True
+   - [ ] False
+
+2. When creating word embeddings, the CBOW model is better suited for less common words and smaller datasets compared to Skip-gram.
+   - [ ] True
+   - [ ] False
+
+3. After aligning word embedding models to a common space, the individual words are grouped closer together across time.
+   - [ ] True
+   - [ ] False
+
+### Fill-in-the-Blank Questions
+
+4. In text analysis, ________ is used to transform the effect of words that are common across all time periods and promote the effect of words that are more distinctive to each time period.
+
+5. The `count()` function in R is a wrapper for the `summarize()` function and it automatically adds and removes __________.
+
+6. To visualize changes in the language of the SOTU over time, one can calculate the cosine difference between the word embeddings for a word in each decade and visualize it with a __________ plot.
+
+### Multiple Choice Questions
+
+7. What is the correct method to use when adding a linear trend line to a plot in ggplot2?
+   - A) `geom_line()`
+   - B) `geom_smooth(method = "lm")`
+   - C) `geom_bar()`
+   - D) `geom_point()`
+
+8. Which package is used to align word embedding models to a common coordinate space?
+   - A) `tidytext`
+   - B) `word2vec`
+   - C) `PsychWordVec`
+   - D) `ggplot2`
+
+9. How can you identify the words that have changed the most drastically over the years from the data itself?
+   - A) By calculating the mean of the tf-idf values for each word.
+   - B) By counting the number of times each word appears in the corpus.
+   - C) By creating a term-document matrix and then calculating the standard deviation of the tf-idf values for each word.
+   - D) By using the `lemmatize_words()` function on each word.
+-->
+
+<!-- Comprehension questions -->
+
+1. In text analysis, `r fitb(c("tf-idf"))` is used to transform the effect of words that are common across all time periods and promote the effect of words that are more distinctive to each time period.
+2. What is the correct method to use when adding a linear trend line to a plot in ggplot2? `r mcq(c(answer = "geom_smooth(method = 'lm')", "geom_line()", "geom_bar()", "geom_point()"))`
+3. `torf(TRUE)` When working with lists, `walk()` is like `map()` but does not return a value.
+4. `r torf(FALSE)` When creating word embeddings, the CBOW model is better suited for less common words and smaller datasets compared to Skip-gram.
+5. Which package is used to align word embedding models to a common coordinate space? `r mcq(c(answer = "PsychWordVec", "tidytext", "word2vec", "ggplot2"))`
+6. The process of reducing the number of features in a dataset while retaining as much information as possible is known as `r fitb(c("dimensionality", "dimension"))` reduction.
+
+## Lab preparation
+
+<!-- Lab 08 description -->
+
+In preparation for [Lab 8](https://github.com/qtalr/lab-08), review and and ensure that you are familiar with the following concepts:
+
+- Tokenizing text
+- Generating frequency and dispersion measures
+- Creating Term-Document Matrices
+- Using the `purrr` package to iterate over lists
+- Visualizations with `ggplot2`
+
+In this lab, you will have the opportunity to apply the concepts from the materials in this chapter to a new dataset. You should consider the dataset and the questions that you want to ask of the data. You should also consider the tools and techniques that you will use to explore the data and draw conclusions. You will be asked to submit your code and a brief report of your findings.
 
 ## References
