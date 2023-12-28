@@ -171,45 +171,57 @@ Prerequisites: It will be assumed that learners have a basic understanding of th
 -->
 <p>A statistical overview of the data is a good place to start as it gives us a sense of all of the variables and variable types in the dataset. We can use the <code>skimr</code> package to create a statistical overview of the data, using the very convienent <code><a href="https://docs.ropensci.org/skimr/reference/skim.html" class="external-link">skim()</a></code> function.</p>
 <p>Let's create a statistical overview of the <code>brown_fam_df</code> dataset.</p>
-<!-- [ ] skim output in rmd show a Table for part, fix -->
+<p><!-- [ ] skim output in rmd show a Table for part, fix --></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load packages</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/skimr/" class="external-link">skimr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create a statistical overview of the `brown_fam_df` dataset</span></span>
 <span><span class="fu"><a href="https://docs.ropensci.org/skimr/reference/skim.html" class="external-link">skim</a></span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span></span></code></pre></div>
-<pre class="plain"><code>── Data Summary ────────────────────────
-                           Values
-Name                       brown_fam_df
-Number of rows             2499
-Number of columns          11
-_______________________
-Column type frequency:
-  character                1
-  factor                   5
-  numeric                  5
-________________________
-Group variables            None
-
-── Variable type: character ───────────────────────────────────────────────────────────────────────
-  skim_variable n_missing complete_rate min max empty n_unique whitespace
-1 id                    0             1   7   9     0     2499          0
-
-── Variable type: factor ──────────────────────────────────────────────────────────────────────────
-  skim_variable n_missing complete_rate ordered n_unique top_counts
-1 corpus                0             1 FALSE          5 BLO: 500, Bro: 500, LOB: 500, FLO: 500
-2 section               0             1 FALSE         15 J: 400, G: 381, F: 228, A: 220
-3 genre                 0             1 FALSE         15 lea: 400, bel: 381, pop: 228, pre: 220
-4 period                0             1 FALSE          3 196: 1000, 199: 999, 193: 500
-5 lang_variety          0             1 FALSE          2 BrE: 1500, AmE: 999
-
-── Variable type: numeric ─────────────────────────────────────────────────────────────────────────
-  skim_variable   n_missing complete_rate   mean    sd       p0     p25    p50    p75   p100 hist
-1 num_words               0             1 2165.  97.8  1406     2127    2163   2200   4397   ▁▇▁▁▁
-2 active_verbs            0             1  179.  56.6    39      139     170    214    551   ▃▇▂▁▁
-3 passive_verbs           0             1   25.7 12.9     2       16      23     32     86   ▆▇▂▁▁
-4 total_verbs             0             1  204.  49.1    66      170     196    234    571   ▃▇▂▁▁
-5 percent_passive         0             1   14.0  9.13    0.612    7.39   12.1   18.2   67.7 ▇▅▁▁▁</code></pre>
+<pre><code><span><span class="co"># ── Data Summary ────────────────────────</span></span>
+<span><span class="co">#                            Values      </span></span>
+<span><span class="co"># Name                       brown_fam_df</span></span>
+<span><span class="co"># Number of rows             2499        </span></span>
+<span><span class="co"># Number of columns          11          </span></span>
+<span><span class="co"># _______________________                </span></span>
+<span><span class="co"># Column type frequency:                 </span></span>
+<span><span class="co">#   character                1           </span></span>
+<span><span class="co">#   factor                   5           </span></span>
+<span><span class="co">#   numeric                  5           </span></span>
+<span><span class="co"># ________________________               </span></span>
+<span><span class="co"># Group variables            None        </span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># ── Variable type: character ────────────────────────────────────────────────────</span></span>
+<span><span class="co">#   skim_variable n_missing complete_rate min max empty n_unique whitespace</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">1</span> id                    0             1   7   9     0     <span style="text-decoration: underline;">2</span>499          0</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># ── Variable type: factor ───────────────────────────────────────────────────────</span></span>
+<span><span class="co">#   skim_variable n_missing complete_rate ordered n_unique</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">1</span> corpus                0             1 FALSE          5</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">2</span> section               0             1 FALSE         15</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">3</span> genre                 0             1 FALSE         15</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">4</span> period                0             1 FALSE          3</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">5</span> lang_variety          0             1 FALSE          2</span></span>
+<span><span class="co">#   top_counts                            </span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">1</span> BLO: 500, Bro: 500, LOB: 500, FLO: 500</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">2</span> J: 400, G: 381, F: 228, A: 220        </span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">3</span> lea: 400, bel: 381, pop: 228, pre: 220</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">4</span> 196: 1000, 199: 999, 193: 500         </span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">5</span> BrE: 1500, AmE: 999                   </span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># ── Variable type: numeric ──────────────────────────────────────────────────────</span></span>
+<span><span class="co">#   skim_variable   n_missing complete_rate   mean    sd       p0     p25    p50</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">1</span> num_words               0             1 <span style="text-decoration: underline;">2</span>165.  97.8  <span style="text-decoration: underline;">1</span>406     <span style="text-decoration: underline;">2</span>127    <span style="text-decoration: underline;">2</span>163  </span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">2</span> active_verbs            0             1  179.  56.6    39      139     170  </span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">3</span> passive_verbs           0             1   25.7 12.9     2       16      23  </span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">4</span> total_verbs             0             1  204.  49.1    66      170     196  </span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">5</span> percent_passive         0             1   14.0  9.13    0.612    7.39   12.1</span></span>
+<span><span class="co">#      p75   p100 hist </span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">2</span>200   <span style="text-decoration: underline;">4</span>397   ▁▇▁▁▁</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">2</span>  214    551   ▃▇▂▁▁</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">3</span>   32     86   ▆▇▂▁▁</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">4</span>  234    571   ▃▇▂▁▁</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">5</span>   18.2   67.7 ▇▅▁▁▁</span></span></code></pre>
 <p>The output of the <code><a href="https://docs.ropensci.org/skimr/reference/skim.html" class="external-link">skim()</a></code> function contains a lot of information but it essentially has two parts: a summary of the dataset and a summary of each variable in the dataset. The summary of each of the variables, however, is grouped by variable type. Remember, each of our variables in a data frame is a vector and each vector has a type.</p>
 <p>We have already learned about different types of vectors in R, including character, numeric, and logical. In this dataset, we are presented with a new type of vector: a factor. A factor is essentially a character vector that contains a set of discrete values, or levels. Factors can be ordered or unordered and can contain levels that are not present in the data.</p>
 <p>Now, looking at each of the variable types, we can see that we have 1 character variable, 5 factor variables, and 5 numeric variables. Each of these variable types assume a different set of summary statistics. For example, we can calculate the mean of a numeric variable but not of a character variable. Or, we can count the number of unique values in a character variable but not in a numeric variable.</p>

@@ -164,40 +164,40 @@ Context: This is the second recipe in the "Preparation" part of the textbook. It
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="ex">│</span>   ├── sw_0004_4327.utt</span>
 <span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="ex">│</span>   ├── sw_0005_4646.utt</span></code></pre></div>
 <p>Let's take a look inside a conversation file (<code>sw_0001_4325.utt</code>) to see how it is structured internally. You can do this by opening the file in a text editor or by using the <code><a href="https://readr.tidyverse.org/reference/read_lines.html" class="external-link">read_lines()</a></code> function from the <code>readr</code> package.</p>
-<pre><code>&gt; *x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*
-&gt; 
-&gt; 
-&gt; FILENAME: 4325_1632_1519
-&gt; TOPIC#:       323
-&gt; DATE:     920323
-&gt; TRANSCRIBER:  glp
-&gt; UTT_CODER:    tc
-&gt; DIFFICULTY:   1
-&gt; TOPICALITY:   3
-&gt; NATURALNESS:  2
-&gt; ECHO_FROM_B:  1
-&gt; ECHO_FROM_A:  4
-&gt; STATIC_ON_A:  1
-&gt; STATIC_ON_B:  1
-&gt; BACKGROUND_A: 1
-&gt; BACKGROUND_B: 2
-&gt; REMARKS:        None.
-&gt; 
-&gt; =========================================================================
-&gt;   
-&gt; 
-&gt; o          A.1 utt1: Okay.  /
-&gt; qw          A.1 utt2: {D So, }   
-&gt; 
-&gt; qy^d          B.2 utt1: [ [ I guess, +   
-&gt; 
-&gt; +          A.3 utt1: What kind of experience [ do you, + do you ] have, then with child care? /  
-&gt; 
-&gt; +          B.4 utt1: I think, ] + {F uh, } I wonder ] if that worked. /  
-&gt; 
-&gt; qy          A.5 utt1: Does it say something? /  
-&gt; 
-&gt; sd          B.6 utt1: I think it usually does.  /</code></pre>
+<pre><code><span><span class="co"># *x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*x*</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># FILENAME: 4325_1632_1519</span></span>
+<span><span class="co"># TOPIC#:       323</span></span>
+<span><span class="co"># DATE:     920323</span></span>
+<span><span class="co"># TRANSCRIBER:  glp</span></span>
+<span><span class="co"># UTT_CODER:    tc</span></span>
+<span><span class="co"># DIFFICULTY:   1</span></span>
+<span><span class="co"># TOPICALITY:   3</span></span>
+<span><span class="co"># NATURALNESS:  2</span></span>
+<span><span class="co"># ECHO_FROM_B:  1</span></span>
+<span><span class="co"># ECHO_FROM_A:  4</span></span>
+<span><span class="co"># STATIC_ON_A:  1</span></span>
+<span><span class="co"># STATIC_ON_B:  1</span></span>
+<span><span class="co"># BACKGROUND_A: 1</span></span>
+<span><span class="co"># BACKGROUND_B: 2</span></span>
+<span><span class="co"># REMARKS:        None.</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># =========================================================================</span></span>
+<span><span class="co">#   </span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># o          A.1 utt1: Okay.  /</span></span>
+<span><span class="co"># qw          A.1 utt2: {D So, }   </span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># qy^d          B.2 utt1: [ [ I guess, +   </span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># +          A.3 utt1: What kind of experience [ do you, + do you ] have, then with child care? /  </span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># +          B.4 utt1: I think, ] + {F uh, } I wonder ] if that worked. /  </span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># qy          A.5 utt1: Does it say something? /  </span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># sd          B.6 utt1: I think it usually does.  /</span></span></code></pre>
 <p>There are few things to take note of here. First we see that the conversation files have a meta-data header offset from the conversation text by a line of <code>=</code> characters. Second the header contains meta-information of various types. Third, the conversation text is interleaved with an annotation scheme.</p>
 <p>Some of the information may be readily understandable, such as the various pieces of meta-data in the header, but to get a better understanding of what information is encoded here let's take a look at the <code>README</code> file.</p>
 <p>In this file we get a birds eye view of what is going on. In short, the data includes 1155 telephone conversations between two people annotated with 42 'DAMSL' dialog act labels. The <code>README</code> file refers us to the <code>doc/manual.august1.html</code> file for more information on this scheme.</p>
@@ -498,12 +498,12 @@ utt\d+
 <p>One twist you will notice is that regular expressions in R require double backslashes (<code>\\</code>) where other programming environments use a single backslash (<code>\</code>).</p>
 </div>
 <p>There are a couple things left to do to the columns we extracted from the text before we move on to finishing up our tidy dataset. First, we need to separate the <code>speaker_turn</code> column into <code>speaker</code> and <code>turn_num</code> columns and second we need to remove unwanted characters from the <code>damsl_tag</code>, <code>utterance_num</code>, and <code>utterance_text</code> columns.</p>
-<p>To separate the values of a column into two columns we use the <code>separate_wider_delim()</code> function. It takes a column to separate, a delimiter to use to separate the values, and a character vector of the names of the new columns to create.</p>
+<p>To separate the values of a column into two columns we use the <code><a href="https://tidyr.tidyverse.org/reference/separate_wider_delim.html" class="external-link">separate_wider_delim()</a></code> function. It takes a column to separate, a delimiter to use to separate the values, and a character vector of the names of the new columns to create.</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Separate speaker_turn into distinct columns</span></span>
 <span><span class="va">swda_df</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">swda_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">separate_wider_delim</span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate_wider_delim.html" class="external-link">separate_wider_delim</a></span><span class="op">(</span></span>
 <span>    cols <span class="op">=</span> <span class="va">speaker_turn</span>,</span>
 <span>    delim <span class="op">=</span> <span class="st">"."</span>,</span>
 <span>    names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"speaker"</span>, <span class="st">"turn_num"</span><span class="op">)</span></span>
@@ -609,7 +609,7 @@ utt\d+
 <span>  <span class="co"># Separate speaker_turn into distinct columns</span></span>
 <span>  <span class="va">swda_df</span> <span class="op">&lt;-</span></span>
 <span>    <span class="va">swda_df</span> <span class="op">|&gt;</span> <span class="co"># current dataset</span></span>
-<span>    <span class="fu">separate_wider_delim</span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate_wider_delim.html" class="external-link">separate_wider_delim</a></span><span class="op">(</span></span>
 <span>      cols <span class="op">=</span> <span class="va">speaker_turn</span>,</span>
 <span>      delim <span class="op">=</span> <span class="st">"."</span>,</span>
 <span>      names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"speaker"</span>, <span class="st">"turn_num"</span><span class="op">)</span></span>
@@ -758,7 +758,7 @@ utt\d+
 <li>
 <select class="webex-select"><option value="blank"></option>
 <option value="answer">TRUE</option>
-<option value="">FALSE</option></select> The <code>separate_wider_delim()</code> function from the <code>tidyr</code> package will separate a column into two or more columns based on a delimiter (<em>e.g.</em> <code>-</code>, <code>.</code>, <em>etc.</em>).</li>
+<option value="">FALSE</option></select> The <code><a href="https://tidyr.tidyverse.org/reference/separate_wider_delim.html" class="external-link">separate_wider_delim()</a></code> function from the <code>tidyr</code> package will separate a column into two or more columns based on a delimiter (<em>e.g.</em> <code>-</code>, <code>.</code>, <em>etc.</em>).</li>
 <li>Which of the following functions from the <code>stringr</code> package will return vector elements which contain a match for a pattern? <select class="webex-select"><option value="blank"></option>
 <option value="answer">str_subset()</option>
 <option value="">str_extract()</option>

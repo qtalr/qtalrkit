@@ -6,13 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="qtalrkit">
-<title>8. Exploratory analysis methods • qtalrkit</title>
+<title>8. Employing exploratory methods • qtalrkit</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<script src="../extra.js"></script><meta property="og:title" content="8. Exploratory analysis methods">
+<script src="../extra.js"></script><meta property="og:title" content="8. Employing exploratory methods">
 <meta property="og:description" content="qtalrkit">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -70,7 +70,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>8. Exploratory analysis methods</h1>
+      <img src="" class="logo" alt=""><h1>8. Employing exploratory methods</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/qtalr/qtalrkit/blob/HEAD/vignettes/articles/recipe-8.Rmd" class="external-link"><code>vignettes/articles/recipe-8.Rmd</code></a></small>
@@ -82,19 +82,1026 @@
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>This is the overview section of the recipe.</p>
+<!--
+Purpose: To showcase the different methods used in exploratory analysis of textual data. This will include how to identify the variables of interest, inspect the data, interrogate the data, and interpret the results.
+
+Description: Exploratory analysis is a wide-ranging term that encompasses many different methods. In this recipe, we will focus on the methods that are most commonly used in the analysis of textual data. These include frequency and distributional analysis, clustering, and word embedding models. We will model how to explore iteratively using the output of one method to inform the next and ultimately to address the research question.
+
+Approach: We will use the SOTU corpus to demonstrate the different methods. We will select a subset of the corpus (post-1945) and explore the questions: How has the language of the SOTU changed over time? How has the language of the SOTU changed across presidents? How has the language of the SOTU changed across political parties? How has the language of the SOTU changed across topics? This will include methods such as frequency and distributional analysis, clustering, and word embedding models.
+
+Prerequisites: This recipe assumes that you have a solid understanding of how to read, manipulate, and tidy data in R. Experience with the `dplyr`, `tidyr`, `tidytext`, `tidylo`, and `ggplot2` packages is also helpful.
+
+Context: This is the first of three tutorials on text analysis. The next two tutorials will be on predictive and inferential modeling methods. The accompanying lab for this recipe will continue with the options for forking/ cloning a project from GitHub, working with an existing project, and creating a new project. The lab is designed to be completed in a 50 minute class period.
+-->
+<p>Exploratory analysis is a wide-ranging term that encompasses many different methods. In this recipe, we will focus on the methods that are most commonly used in the analysis of textual data. These include frequency and distributional analysis, clustering, and word embedding models.</p>
+<p>The approach to exploratory analysis is highly iterative. The process is not linear, but rather a cycle of the steps in Table <a href="#tab:eda-workflow">1</a>. This cycle is repeated until the research question(s) have been addressed.</p>
+<table class="table">
+<caption>
+<span id="tab:eda-workflow">Table 1: </span> The exploratory analysis workflow</caption>
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr class="header">
+<th>Step</th>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Identify</td>
+<td>Consider the research question and identify variables of potential interest to provide insight into our question.</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Inspect</td>
+<td>Check for missing data, outliers, <em>etc</em>. and check data distributions and transform if necessary.</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Interrogate</td>
+<td>Submit the selected variables to descriptive or unsupervised learning methods to provide quantitative measures to evaluate.</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Interpret</td>
+<td>Evaluate the results and determine if they are valid and meaningful to respond to the research question.</td>
+</tr>
+</tbody>
+</table>
+<p>We will model how to explore iteratively using the output of one method to inform the next and ultimately to address the research question. For this reason, the subsequent sections of this recipe are grouped by research question rather than by approach step or method.</p>
+<p>Let's get started by loading some of the packages we will likely use.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>        <span class="co"># for data manipulation</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://stringr.tidyverse.org" class="external-link">stringr</a></span><span class="op">)</span>      <span class="co"># for string manipulation</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span>        <span class="co"># for data tidying</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/juliasilge/tidytext" class="external-link">tidytext</a></span><span class="op">)</span>     <span class="co"># for text analysis</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>      <span class="co"># for data visualization</span></span></code></pre></div>
+<p>In Lab 8, we will try our hand at exploratory analysis using another dataset.</p>
+</div>
+<div class="section level2">
+<h2 id="concepts-and-strategies">Concepts and strategies<a class="anchor" aria-label="anchor" href="#concepts-and-strategies"></a>
+</h2>
+<div class="section level3">
+<h3 id="orientation">Orientation<a class="anchor" aria-label="anchor" href="#orientation"></a>
+</h3>
+<p>We will use the SOTU corpus to demonstrate the different methods. We will select a subset of the corpus (post-1945) and explore the question:</p>
+<ul>
+<li>How has the language of the SOTU changed over time?</li>
+</ul>
+<!-- [ ] return and update for the methods actually used --><p>This will include methods such as frequency and distributional analysis, dimensionality reduction, and word embedding models.</p>
+<p>Let's look at the first few rows of the data to get a sense of what we have.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sotu_df</span></span></code></pre></div>
+<pre><code><span><span class="co"># <span style="color: #949494;"># A tibble: 73 × 4</span></span></span>
+<span><span class="co">#    president   year party      address                                          </span></span>
+<span><span class="co">#    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                            </span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 1</span> Truman      <span style="text-decoration: underline;">1</span>947 Democratic <span style="color: #949494;">"</span>Mr. President, Mr. Speaker, Members of the Cong…</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 2</span> Truman      <span style="text-decoration: underline;">1</span>948 Democratic <span style="color: #949494;">"</span>Mr. President, Mr. Speaker, and Members of the …</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 3</span> Truman      <span style="text-decoration: underline;">1</span>949 Democratic <span style="color: #949494;">"</span>Mr. President, Mr. Speaker, Members of the Cong…</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 4</span> Truman      <span style="text-decoration: underline;">1</span>950 Democratic <span style="color: #949494;">"</span>Mr. President, Mr. Speaker, Members of the Cong…</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 5</span> Truman      <span style="text-decoration: underline;">1</span>951 Democratic <span style="color: #949494;">"</span>Mr. President, Mr. Speaker, Members of the Cong…</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 6</span> Truman      <span style="text-decoration: underline;">1</span>952 Democratic <span style="color: #949494;">"</span>Mr. President, Mr. Speaker, Members of the Cong…</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 7</span> Eisenhower  <span style="text-decoration: underline;">1</span>953 Republican <span style="color: #949494;">"</span>Mr. President, Mr. Speaker, Members of the Eigh…</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 8</span> Eisenhower  <span style="text-decoration: underline;">1</span>954 Republican <span style="color: #949494;">"</span>Mr. President, Mr. Speaker, Members of the Eigh…</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 9</span> Eisenhower  <span style="text-decoration: underline;">1</span>955 Republican <span style="color: #949494;">"</span>Mr. President, Mr. Speaker, Members of the Cong…</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">10</span> Eisenhower  <span style="text-decoration: underline;">1</span>956 Republican <span style="color: #949494;">"</span>My Fellow Citizens: This morning I sent to the …</span></span>
+<span><span class="co"># <span style="color: #949494;"># ℹ 63 more rows</span></span></span></code></pre>
+<p>We can see that the dataset contains the president, year, party, and address for each SOTU address.</p>
+<p>Now let's view a statistical overview summary of the data by using the <code>skim()</code> function.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">skimr</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/skimr/reference/skim.html" class="external-link">skim</a></span><span class="op">(</span><span class="va">sotu_df</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co"># ── Data Summary ────────────────────────</span></span>
+<span><span class="co">#                            Values </span></span>
+<span><span class="co"># Name                       sotu_df</span></span>
+<span><span class="co"># Number of rows             73     </span></span>
+<span><span class="co"># Number of columns          4      </span></span>
+<span><span class="co"># _______________________           </span></span>
+<span><span class="co"># Column type frequency:            </span></span>
+<span><span class="co">#   character                3      </span></span>
+<span><span class="co">#   numeric                  1      </span></span>
+<span><span class="co"># ________________________          </span></span>
+<span><span class="co"># Group variables            None   </span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># ── Variable type: character ────────────────────────────────────────────────────</span></span>
+<span><span class="co">#   skim_variable n_missing complete_rate  min   max empty n_unique whitespace</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">1</span> president             0             1    4    10     0       12          0</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">2</span> party                 0             1   10    10     0        2          0</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">3</span> address               0             1 <span style="text-decoration: underline;">6</span>160 <span style="text-decoration: underline;">51</span>947     0       73          0</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># ── Variable type: numeric ──────────────────────────────────────────────────────</span></span>
+<span><span class="co">#   skim_variable n_missing complete_rate  mean   sd   p0  p25  p50  p75 p100</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">1</span> year                  0             1 <span style="text-decoration: underline;">1</span>984. 21.6 <span style="text-decoration: underline;">1</span>947 <span style="text-decoration: underline;">1</span>965 <span style="text-decoration: underline;">1</span>984 <span style="text-decoration: underline;">2</span>002 <span style="text-decoration: underline;">2</span>020</span></span>
+<span><span class="co">#   hist </span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">1</span> ▇▇▇▇▇</span></span></code></pre>
+<p>We can see that the dataset contains 73 rows --corresponding to the number of SOTU addresses. Looking at missing values, we can see that there are no missing values for any of the variables. Taking a closer look at each variable, the <code>president</code> variable is a character vector with 12 unique presidents. There are two unique parties and 73 unique addresses. The <code>year</code> variable is numeric with a minimum value of 1947 and a maximum value of 2020, therefore the addresses include 73 years.</p>
+</div>
+<div class="section level3">
+<h3 id="identify">Identify<a class="anchor" aria-label="anchor" href="#identify"></a>
+</h3>
+<p>With a general sense of the data, we can now move on to the first step in the exploratory analysis workflow: identifying variables of interest.</p>
+<ul>
+<li>What linguistic variables might be of interest to address this question?</li>
+</ul>
+<p>Words might be the most obvious variable, but we might also be interested in other linguistic variables such as parts of speech, syntactic structures, or some combination of these.</p>
+<p>Let's start with words. If we look at words, we might be interested in the frequency of words, the distribution of words, or the meaning of words. We might also be interested in the relationship between words. For example, we might be interested in the co-occurrence of words or the similarity of words. These, and more, are all possible approaches that we might consider.</p>
+<p>Another consideration is if we want to do comparisons across time, across presidents, across parties, <em>etc.</em>. In our research question, we have already identified that we want to compare across time so that will be our focus. However, what we mean by "time" is not clear. Do we mean across years, across decades, across presidencies, <em>etc.</em>? We will need to make a decision about how we want to define time, but we can fold this into our exploratory analysis, as we will see below.</p>
+<p>Let's posit the following sub-questions:</p>
+<ol style="list-style-type: decimal">
+<li>What are the most frequent words across time periods?</li>
+<li>How does the distribution of words change across time periods?</li>
+<li>How does the meaning of words change across time periods?</li>
+</ol>
+<p>We will use these sub-questions to guide our exploratory analysis.</p>
+</div>
+<div class="section level3">
+<h3 id="inspect">Inspect<a class="anchor" aria-label="anchor" href="#inspect"></a>
+</h3>
+<p>The next step is to inspect the data. We will transform the data as necessary to prepare it for analysis and then do some diagnostic checks to make sure that the data is ready for analysis.</p>
+<p>Since we will be working with words, let's tokenize the <code>addresses</code> variable to extract the words and maintain a tidy dataset. We will use the <code><a href="https://rdrr.io/pkg/tidytext/man/unnest_tokens.html" class="external-link">unnest_tokens()</a></code> function from the <code>tidytext</code> package to do this. Let's apply the function and assign the result to a new variable called <code>sotu_words_df</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Tokenize the words by year (with numbers removed)</span></span>
+<span><span class="va">sotu_words_df</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">sotu_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/unnest_tokens.html" class="external-link">unnest_tokens</a></span><span class="op">(</span><span class="va">word</span>, <span class="va">address</span>, strip_numeric <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>Let's continue by looking at whether there is a relationship between the number of words and years. We can do this by using the <code><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count()</a></code> function on the <code>year</code> variable. This will group and count the number of observations (words) per year as <code>n</code>.</p>
+<p>We can then visualize this with a line plot where the x-axis is the year and the y-axis is the number of words <code>n</code>. I'll add the plot to a variable called <code>p</code> so that we can add layers to it.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get the number of words per year --------------------------------</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">sotu_words_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">year</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">year</span>, y <span class="op">=</span> <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># View</span></span>
+<span><span class="va">p</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:sotu-words-over-time"></span>
+<img src="recipe-8_files/figure-html/sotu-words-over-time-1.png" alt="Number of words per year" width="100%"><p class="caption">
+Figure 1: Number of words per year
+</p>
+</div>
+<div class="callout">
+<p><strong><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M64 64V241.6c5.2-1 10.5-1.6 16-1.6H96V208 64c0-8.8-7.2-16-16-16s-16 7.2-16 16zM80 288c-17.7 0-32 14.3-32 32c0 0 0 0 0 0v24c0 66.3 53.7 120 120 120h48c52.5 0 97.1-33.7 113.4-80.7c-3.1 .5-6.2 .7-9.4 .7c-20 0-37.9-9.2-49.7-23.6c-9 4.9-19.4 7.6-30.3 7.6c-15.1 0-29-5.3-40-14c-11 8.8-24.9 14-40 14H120c-13.3 0-24-10.7-24-24s10.7-24 24-24h40c8.8 0 16-7.2 16-16s-7.2-16-16-16H120 80zM0 320s0 0 0 0c0-18 6-34.6 16-48V64C16 28.7 44.7 0 80 0s64 28.7 64 64v82c5.1-1.3 10.5-2 16-2c25.3 0 47.2 14.7 57.6 36c7-2.6 14.5-4 22.4-4c20 0 37.9 9.2 49.7 23.6c9-4.9 19.4-7.6 30.3-7.6c35.3 0 64 28.7 64 64v64 24c0 92.8-75.2 168-168 168H168C75.2 512 0 436.8 0 344V320zm336-64c0-8.8-7.2-16-16-16s-16 7.2-16 16v48 16c0 8.8 7.2 16 16 16s16-7.2 16-16V256zM160 240c5.5 0 10.9 .7 16 2v-2V208c0-8.8-7.2-16-16-16s-16 7.2-16 16v32h16zm64 24v40c0 8.8 7.2 16 16 16s16-7.2 16-16V256 240c0-8.8-7.2-16-16-16s-16 7.2-16 16v24z"></path></svg> Tip</strong></p>
+<p>The <code><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count()</a></code> function is a wrapper for the <code><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize()</a></code> function. It is a convenient way to count the number of observations in a dataset.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># the output of</span></span>
+<span><span class="va">df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">var1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># is equivalent to</span></span>
+<span><span class="va">df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">var1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>The difference is that <code><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count()</a></code> grouping is added and removed automatically. In other cases, we can mimic this behavior for other operations inside a <code><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize()</a></code> or <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> function by using the <code>.by</code> argument. For example:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>, .by <span class="op">=</span> <span class="va">var1</span><span class="op">)</span></span></code></pre></div>
+</div>
+<p>We can see from Figure <a href="#fig:sotu-words-over-time">1</a> that the number of words per year varies, sometimes quite a bit. To get a sense of the relationship between the number of words and the year, we can add a linear trend line to the plot. We can do this by adding the <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth()</a></code> function to the plot. We will set the <code>method</code> argument to <code>"lm"</code> to use a linear model.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="recipe-8_files/figure-html/sotu-words-over-time-trend-lm-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p>This plot shows that there is a positive relationship between the number of words and the year --that is the number of words increases over time. But the line is not a great fit and furthermore the angle of the line is more horizontal than vertical. This suggests that the relationship is not a strong one. We can confirm this by calculating the correlation between the number of words and the year. We can do this by using the <code><a href="https://rdrr.io/r/stats/cor.test.html" class="external-link">cor.test()</a></code> function on the <code>year</code> and <code>n</code> variables inside a <code><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize()</a></code> function.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get the correlation between the number of words and the year ----</span></span>
+<span><span class="va">sotu_words_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">year</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>cor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.test.html" class="external-link">cor.test</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">n</span><span class="op">)</span><span class="op">$</span><span class="va">estimate</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 1</span></span></span>
+<span><span class="co">##     cor</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> 0.342</span></span></code></pre>
+<p>So, even though we are working to inspect our data, we already have a finding. The number of words increases over time, despite the fact that the relationship is not a strong one.</p>
+<p>Now, let's turn our attention to the frequency of individual words. Let's start by looking at the most frequent words for the entire corpus. We can do this by grouping by the <code>word</code> variable and then summarizing the number of times each word occurs. We will then arrange the data in descending order by the number of times each word occurs.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get the most frequent words ------------------------------------</span></span>
+<span></span>
+<span><span class="va">sotu_words_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">word</span>, sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 10 × 2</span></span></span>
+<span><span class="co">##    word      n</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> the   <span style="text-decoration: underline;">21</span>565</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> and   <span style="text-decoration: underline;">14</span>433</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> to    <span style="text-decoration: underline;">13</span>679</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> of    <span style="text-decoration: underline;">13</span>087</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> in     <span style="text-decoration: underline;">8</span>116</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> we     <span style="text-decoration: underline;">7</span>327</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> a      <span style="text-decoration: underline;">7</span>137</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> our    <span style="text-decoration: underline;">6</span>822</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> that   <span style="text-decoration: underline;">5</span>391</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> for    <span style="text-decoration: underline;">4</span>513</span></span></code></pre>
+<p>The usual suspects are at the top of the list. This is not surprising, and will likely be the case for most corpora, and sizeable subcorpora --in our case the time periods. Let's address this.</p>
+<p>We could use a stopwords list to just eliminate many of these common words, but that might be a bit too agressive and we will likely lose some words that we want to keep. Considering a more nuanced approach, we will use the <span class="math inline">\(tf\)</span>-<span class="math inline">\(idf\)</span> transformation to attenuate the effect of words that are common across all time periods, and on the flip side, to promote the effect of words that are more distinctive to each time period.</p>
+<p>In order to do this, we will need to calculate the <span class="math inline">\(tf\)</span>-<span class="math inline">\(idf\)</span> for each word in each time period. To keep things simple, we will calculate the <span class="math inline">\(tf\)</span>-<span class="math inline">\(idf\)</span> for each word in each decade. We will do this by creating a new variable called <code>decade</code> that is the year rounded down to the nearest decade. Then we can group by this <code>decade</code> variable and then count the number of times each word occurs. We will then calculate the <span class="math inline">\(tf\)</span>-<span class="math inline">\(idf\)</span> for each word in each decade using the <code><a href="https://rdrr.io/pkg/tidytext/man/bind_tf_idf.html" class="external-link">bind_tf_idf()</a></code> function from the <code>tidytext</code> package. We will then arrange the data in descending order by the <span class="math inline">\(tf\)</span>-<span class="math inline">\(idf\)</span> value.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get the tf-idf of words by decade ------------------------------</span></span>
+<span></span>
+<span><span class="va">sotu_words_tfidf_df</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">sotu_words_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>decade <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">floor</a></span><span class="op">(</span><span class="va">year</span> <span class="op">/</span> <span class="fl">10</span><span class="op">)</span> <span class="op">*</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">decade</span>, <span class="va">word</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/bind_tf_idf.html" class="external-link">bind_tf_idf</a></span><span class="op">(</span><span class="va">word</span>, <span class="va">decade</span>, <span class="va">n</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">decade</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">tf_idf</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Preview</span></span>
+<span><span class="va">sotu_words_tfidf_df</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 40,073 × 6</span></span></span>
+<span><span class="co">##    decade word               n       tf   idf   tf_idf</span></span>
+<span><span class="co">##     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span>   <span style="text-decoration: underline;">1</span>940 boycotts           5 0.000<span style="text-decoration: underline;">344</span> 2.20  0.000<span style="text-decoration: underline;">756</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span>   <span style="text-decoration: underline;">1</span>940 jurisdictional     7 0.000<span style="text-decoration: underline;">482</span> 1.50  0.000<span style="text-decoration: underline;">725</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span>   <span style="text-decoration: underline;">1</span>940 interpretation     4 0.000<span style="text-decoration: underline;">275</span> 2.20  0.000<span style="text-decoration: underline;">605</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span>   <span style="text-decoration: underline;">1</span>940 unjustified        4 0.000<span style="text-decoration: underline;">275</span> 2.20  0.000<span style="text-decoration: underline;">605</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span>   <span style="text-decoration: underline;">1</span>940 insecurity         5 0.000<span style="text-decoration: underline;">344</span> 1.50  0.000<span style="text-decoration: underline;">518</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span>   <span style="text-decoration: underline;">1</span>940 arbitration        3 0.000<span style="text-decoration: underline;">207</span> 2.20  0.000<span style="text-decoration: underline;">454</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span>   <span style="text-decoration: underline;">1</span>940 output             6 0.000<span style="text-decoration: underline;">413</span> 1.10  0.000<span style="text-decoration: underline;">454</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span>   <span style="text-decoration: underline;">1</span>940 unjustifiable      3 0.000<span style="text-decoration: underline;">207</span> 2.20  0.000<span style="text-decoration: underline;">454</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span>   <span style="text-decoration: underline;">1</span>940 management        25 0.001<span style="text-decoration: underline;">72</span>  0.251 0.000<span style="text-decoration: underline;">433</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span>   <span style="text-decoration: underline;">1</span>940 rental             4 0.000<span style="text-decoration: underline;">275</span> 1.50  0.000<span style="text-decoration: underline;">414</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 40,063 more rows</span></span></span></code></pre>
+<p>OK. Even the preview shows that we are getting a more interesting list of words.</p>
+<p>Let's look at the top 10 words for each decade. We group by <code>decade</code> and then slice the top 10 words by <span class="math inline">\(tf\)</span>-<span class="math inline">\(idf\)</span> value with <code><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_max()</a></code>. Then we will use the <code><a href="https://rdrr.io/pkg/tidytext/man/reorder_within.html" class="external-link">reorder_within()</a></code> function from the <code>tidytext</code> package to reorder the words within each facet by the <span class="math inline">\(tf\)</span>-<span class="math inline">\(idf\)</span> value.</p>
+<p>We will visualize this with a bar chart where word is on the x-axis and the height of the bar is the <span class="math inline">\(tf\)</span>-<span class="math inline">\(idf\)</span> value. We will also facet the plot by decade. I've flipped the coordinates so that the words are on the y-axis and the bars are horizontal. This is a personal preference, but I find it easier to read the words this way.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Visualize the top 10 words by decade ---------------------------------</span></span>
+<span></span>
+<span><span class="va">sotu_words_tfidf_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">decade</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_max</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span>, <span class="va">tf_idf</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>decade <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">decade</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>word <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/reorder_within.html" class="external-link">reorder_within</a></span><span class="op">(</span><span class="va">word</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">tf_idf</span><span class="op">)</span>, <span class="va">decade</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">word</span>, <span class="va">tf_idf</span>, fill <span class="op">=</span> <span class="va">decade</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/reorder_within.html" class="external-link">scale_x_reordered</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">decade</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="recipe-8_files/figure-html/sotu-freq-words-tfidf-top-10-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p>Scanning the top words for the decades we can see some words that signal contemporary issues. This is a hint that we are picking up on some of the changes in the language of the SOTU over time.</p>
+<div class="callout">
+<p><strong><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M4.1 38.2C1.4 34.2 0 29.4 0 24.6C0 11 11 0 24.6 0H133.9c11.2 0 21.7 5.9 27.4 15.5l68.5 114.1c-48.2 6.1-91.3 28.6-123.4 61.9L4.1 38.2zm503.7 0L405.6 191.5c-32.1-33.3-75.2-55.8-123.4-61.9L350.7 15.5C356.5 5.9 366.9 0 378.1 0H487.4C501 0 512 11 512 24.6c0 4.8-1.4 9.6-4.1 13.6zM80 336a176 176 0 1 1 352 0A176 176 0 1 1 80 336zm184.4-94.9c-3.4-7-13.3-7-16.8 0l-22.4 45.4c-1.4 2.8-4 4.7-7 5.1L168 298.9c-7.7 1.1-10.7 10.5-5.2 16l36.3 35.4c2.2 2.2 3.2 5.2 2.7 8.3l-8.6 49.9c-1.3 7.6 6.7 13.5 13.6 9.9l44.8-23.6c2.7-1.4 6-1.4 8.7 0l44.8 23.6c6.9 3.6 14.9-2.2 13.6-9.9l-8.6-49.9c-.5-3 .5-6.1 2.7-8.3l36.3-35.4c5.6-5.4 2.5-14.8-5.2-16l-50.1-7.3c-3-.4-5.7-2.4-7-5.1l-22.4-45.4z"></path></svg> Dive deeper</strong></p>
+<p>The plot above makes use of the <code><a href="https://rdrr.io/pkg/tidytext/man/reorder_within.html" class="external-link">reorder_within()</a></code> and <code><a href="https://rdrr.io/pkg/tidytext/man/reorder_within.html" class="external-link">scale_x_reordered()</a></code> functions from the <code>tidytext</code> package. These functions allow us to reorder the words within each facet by the <span class="math inline">\(tf\)</span>-<span class="math inline">\(idf\)</span> value. This is a nice way to visualize the most distinctive words for each decade. These are more advanced functions. If you are interested in learning more about them, you can read more about them in the help documentation <code><a href="https://rdrr.io/pkg/tidytext/man/reorder_within.html" class="external-link">?tidytext::reorder_within</a></code></p>
+</div>
+<p>To my eye, however, the 1940s and the 2020s don't seem to jump out at me in the same way. Let's take a closer look at the 1940s and the 2020s in our original dataset.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sotu_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">year</span> <span class="op">&lt;</span> <span class="fl">1950</span> <span class="op">|</span> <span class="va">year</span> <span class="op">&gt;=</span> <span class="fl">2020</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 4</span></span></span>
+<span><span class="co">##   president  year party      address                                            </span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                              </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> Truman     <span style="text-decoration: underline;">1</span>947 Democratic <span style="color: #949494;">"</span>Mr. President, Mr. Speaker, Members of the Congre…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> Truman     <span style="text-decoration: underline;">1</span>948 Democratic <span style="color: #949494;">"</span>Mr. President, Mr. Speaker, and Members of the 80…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> Truman     <span style="text-decoration: underline;">1</span>949 Democratic <span style="color: #949494;">"</span>Mr. President, Mr. Speaker, Members of the Congre…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> Trump      <span style="text-decoration: underline;">2</span>020 Republican <span style="color: #949494;">"</span>Madam Speaker, Mr. Vice President, Members of Con…</span></span></code></pre>
+<p>Well, that explains it. There are only 3 addresses in the 1940s and 1 address in the 2020s. This is not enough data to get a good sense of the language of the SOTU for these decades. Let's remove these decades from our original dataset as not being representative of the language of the SOTU.</p>
+<p>Another consideration that catches my eye in looking at the top words by decade is that our words like "communist" and "communists" are being counted separately. That is fine, but what if we want to count these as the same word? We can do this by lemmatizing the words --that is reducing the words to their root form. We can do this using the <code>lemmatize_words()</code> function from the <code>textstem</code> package.</p>
+<p>So consider this example:</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Lemmatize the words --------------------------------------------</span></span>
+<span><span class="va">words_chr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"freedom"</span>, <span class="st">"free"</span>, <span class="st">"frees"</span>, <span class="st">"freeing"</span>, <span class="st">"freed"</span><span class="op">)</span></span>
+<span><span class="fu">textstem</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/textstem/man/lemmatize_words.html" class="external-link">lemmatize_words</a></span><span class="op">(</span><span class="va">words_chr</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "freedom" "free"    "free"    "free"    "free"</span></span></code></pre>
+<div class="callout">
+<p><strong><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M4.1 38.2C1.4 34.2 0 29.4 0 24.6C0 11 11 0 24.6 0H133.9c11.2 0 21.7 5.9 27.4 15.5l68.5 114.1c-48.2 6.1-91.3 28.6-123.4 61.9L4.1 38.2zm503.7 0L405.6 191.5c-32.1-33.3-75.2-55.8-123.4-61.9L350.7 15.5C356.5 5.9 366.9 0 378.1 0H487.4C501 0 512 11 512 24.6c0 4.8-1.4 9.6-4.1 13.6zM80 336a176 176 0 1 1 352 0A176 176 0 1 1 80 336zm184.4-94.9c-3.4-7-13.3-7-16.8 0l-22.4 45.4c-1.4 2.8-4 4.7-7 5.1L168 298.9c-7.7 1.1-10.7 10.5-5.2 16l36.3 35.4c2.2 2.2 3.2 5.2 2.7 8.3l-8.6 49.9c-1.3 7.6 6.7 13.5 13.6 9.9l44.8-23.6c2.7-1.4 6-1.4 8.7 0l44.8 23.6c6.9 3.6 14.9-2.2 13.6-9.9l-8.6-49.9c-.5-3 .5-6.1 2.7-8.3l36.3-35.4c5.6-5.4 2.5-14.8-5.2-16l-50.1-7.3c-3-.4-5.7-2.4-7-5.1l-22.4-45.4z"></path></svg> Dive deeper</strong></p>
+<p>By default, the <code>lemmatize_words()</code> function uses a lookup table for English to lemmatize words. This is a simple approach that works well for many cases. However, it is not perfect. For example, it will not lemmatize words that are not in the lookup table.</p>
+<p>If you want to lemmatize words that are not in the lookup table, or you want to lemmatize words in another language, you can create or add to a lookup table. You can read more about this in the help documentation <code>?textstem::lemmatize_words()</code>.</p>
+<p>A resource for lemma lookup tables can be found here <a href="https://github.com/michmech/lemmatization-lists" class="external-link uri">https://github.com/michmech/lemmatization-lists</a>.</p>
+</div>
+<p>With these considerations in mind, let's update our <code>sotu_df</code> dataset to remove the 1940s and 2020s, tokenize and lemmatize the words, and add a decade variable.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Update the dataset ----------------------------------------------</span></span>
+<span><span class="va">sotu_terms_df</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">sotu_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">year</span> <span class="op">&gt;=</span> <span class="fl">1950</span> <span class="op">&amp;</span> <span class="va">year</span> <span class="op">&lt;</span> <span class="fl">2020</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># Remove the 1940s and 2020s</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/unnest_tokens.html" class="external-link">unnest_tokens</a></span><span class="op">(</span><span class="va">word</span>, <span class="va">address</span>, strip_numeric <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># Tokenize the words</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>lemma <span class="op">=</span> <span class="fu">textstem</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/textstem/man/lemmatize_words.html" class="external-link">lemmatize_words</a></span><span class="op">(</span><span class="va">word</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># Lemmatize the words</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>decade <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">floor</a></span><span class="op">(</span><span class="va">year</span> <span class="op">/</span> <span class="fl">10</span><span class="op">)</span> <span class="op">*</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># Add a decade variable</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">president</span>, <span class="va">decade</span>, <span class="va">year</span>, <span class="va">party</span>, <span class="va">word</span>, <span class="va">lemma</span><span class="op">)</span> <span class="co">#</span></span>
+<span></span>
+<span><span class="co"># Preview</span></span>
+<span><span class="va">sotu_terms_df</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 368,586 × 6</span></span></span>
+<span><span class="co">##    president decade  year party      word      lemma    </span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> Truman      <span style="text-decoration: underline;">1</span>950  <span style="text-decoration: underline;">1</span>950 Democratic mr        mr       </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> Truman      <span style="text-decoration: underline;">1</span>950  <span style="text-decoration: underline;">1</span>950 Democratic president president</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> Truman      <span style="text-decoration: underline;">1</span>950  <span style="text-decoration: underline;">1</span>950 Democratic mr        mr       </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> Truman      <span style="text-decoration: underline;">1</span>950  <span style="text-decoration: underline;">1</span>950 Democratic speaker   speaker  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> Truman      <span style="text-decoration: underline;">1</span>950  <span style="text-decoration: underline;">1</span>950 Democratic members   member   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> Truman      <span style="text-decoration: underline;">1</span>950  <span style="text-decoration: underline;">1</span>950 Democratic of        of       </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> Truman      <span style="text-decoration: underline;">1</span>950  <span style="text-decoration: underline;">1</span>950 Democratic the       the      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> Truman      <span style="text-decoration: underline;">1</span>950  <span style="text-decoration: underline;">1</span>950 Democratic congress  congress </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> Truman      <span style="text-decoration: underline;">1</span>950  <span style="text-decoration: underline;">1</span>950 Democratic a         a        </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> Truman      <span style="text-decoration: underline;">1</span>950  <span style="text-decoration: underline;">1</span>950 Democratic year      year     </span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 368,576 more rows</span></span></span></code></pre>
+<p>This inspection process could go on for a while. We could continue to inspect the data and make changes to the dataset but it is often the case that in the process of analysis we will often run into issues that require us to go back and make changes to the dataset. So we will move on to the next step in the exploratory analysis workflow.</p>
+</div>
+<div class="section level3">
+<h3 id="interrogate">Interrogate<a class="anchor" aria-label="anchor" href="#interrogate"></a>
+</h3>
+<p>Now that we have our data in a tidy format, we can move on to the next step in the exploratory analysis workflow: interrogating the data. We will submit the selected variables to descriptive or unsupervised learning methods to provide quantitative measures to evaluate.</p>
+<div class="section level4">
+<h4 id="frequency">Frequency<a class="anchor" aria-label="anchor" href="#frequency"></a>
+</h4>
+<ol style="list-style-type: decimal">
+<li>What are the most frequent words across time periods?</li>
+</ol>
+<p>We have already made some progress on this question in the inspection phase, but now we can do it again with the updated dataset.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get the most frequent lemmas by decade --------------------------</span></span>
+<span></span>
+<span><span class="va">sotu_lemmas_tfidf_df</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">sotu_terms_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">decade</span>, <span class="va">lemma</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># Count the lemmas by decade</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/bind_tf_idf.html" class="external-link">bind_tf_idf</a></span><span class="op">(</span><span class="va">lemma</span>, <span class="va">decade</span>, <span class="va">n</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># Calculate the tf-idf</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">decade</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">tf_idf</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Preview</span></span>
+<span><span class="va">sotu_lemmas_tfidf_df</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 26,435 × 6</span></span></span>
+<span><span class="co">##    decade lemma            n       tf   idf   tf_idf</span></span>
+<span><span class="co">##     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span>   <span style="text-decoration: underline;">1</span>950 armament        16 0.000<span style="text-decoration: underline;">321</span> 1.95  0.000<span style="text-decoration: underline;">625</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span>   <span style="text-decoration: underline;">1</span>950 imperialism      9 0.000<span style="text-decoration: underline;">181</span> 1.95  0.000<span style="text-decoration: underline;">351</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span>   <span style="text-decoration: underline;">1</span>950 shall          107 0.002<span style="text-decoration: underline;">15</span>  0.154 0.000<span style="text-decoration: underline;">331</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span>   <span style="text-decoration: underline;">1</span>950 disarmament     13 0.000<span style="text-decoration: underline;">261</span> 1.25  0.000<span style="text-decoration: underline;">327</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span>   <span style="text-decoration: underline;">1</span>950 mineral          8 0.000<span style="text-decoration: underline;">160</span> 1.95  0.000<span style="text-decoration: underline;">312</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span>   <span style="text-decoration: underline;">1</span>950 mobilization    12 0.000<span style="text-decoration: underline;">241</span> 1.25  0.000<span style="text-decoration: underline;">302</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span>   <span style="text-decoration: underline;">1</span>950 survivor        12 0.000<span style="text-decoration: underline;">241</span> 1.25  0.000<span style="text-decoration: underline;">302</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span>   <span style="text-decoration: underline;">1</span>950 expenditure     42 0.000<span style="text-decoration: underline;">842</span> 0.336 0.000<span style="text-decoration: underline;">283</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span>   <span style="text-decoration: underline;">1</span>950 adequate        25 0.000<span style="text-decoration: underline;">501</span> 0.560 0.000<span style="text-decoration: underline;">281</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span>   <span style="text-decoration: underline;">1</span>950 constantly      11 0.000<span style="text-decoration: underline;">221</span> 1.25  0.000<span style="text-decoration: underline;">276</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 26,425 more rows</span></span></span></code></pre>
+<p>Now we can visualize the top 10 lemmas for each decade, as we did above, but for the lemmas instead of the words and for seven full decades.</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Visualize the top 10 lemmas by decade ---------------------------</span></span>
+<span><span class="va">sotu_lemmas_tfidf_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">decade</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_max</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span>, <span class="va">tf_idf</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>decade <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">decade</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>lemma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/reorder_within.html" class="external-link">reorder_within</a></span><span class="op">(</span><span class="va">lemma</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">tf_idf</span><span class="op">)</span>, <span class="va">decade</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">lemma</span>, <span class="va">tf_idf</span>, fill <span class="op">=</span> <span class="va">decade</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/reorder_within.html" class="external-link">scale_x_reordered</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">decade</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="recipe-8_files/figure-html/sotu-freq-lemmas-tfidf-top-10-1.png" width="100%" style="display: block; margin: auto;"></p>
+</div>
+<div class="section level4">
+<h4 id="distribution">Distribution<a class="anchor" aria-label="anchor" href="#distribution"></a>
+</h4>
+<ol start="2" style="list-style-type: decimal">
+<li>How does the distribution of words change across time periods?</li>
+</ol>
+<p>OK. Now let's focus on word frequency distributions over time. We will return to the <code>sotu_terms_df</code>.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sotu_terms_df</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 368,586 × 6</span></span></span>
+<span><span class="co">##    president decade  year party      word      lemma    </span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> Truman      <span style="text-decoration: underline;">1</span>950  <span style="text-decoration: underline;">1</span>950 Democratic mr        mr       </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> Truman      <span style="text-decoration: underline;">1</span>950  <span style="text-decoration: underline;">1</span>950 Democratic president president</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> Truman      <span style="text-decoration: underline;">1</span>950  <span style="text-decoration: underline;">1</span>950 Democratic mr        mr       </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> Truman      <span style="text-decoration: underline;">1</span>950  <span style="text-decoration: underline;">1</span>950 Democratic speaker   speaker  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> Truman      <span style="text-decoration: underline;">1</span>950  <span style="text-decoration: underline;">1</span>950 Democratic members   member   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> Truman      <span style="text-decoration: underline;">1</span>950  <span style="text-decoration: underline;">1</span>950 Democratic of        of       </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> Truman      <span style="text-decoration: underline;">1</span>950  <span style="text-decoration: underline;">1</span>950 Democratic the       the      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> Truman      <span style="text-decoration: underline;">1</span>950  <span style="text-decoration: underline;">1</span>950 Democratic congress  congress </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> Truman      <span style="text-decoration: underline;">1</span>950  <span style="text-decoration: underline;">1</span>950 Democratic a         a        </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> Truman      <span style="text-decoration: underline;">1</span>950  <span style="text-decoration: underline;">1</span>950 Democratic year      year     </span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 368,576 more rows</span></span></span></code></pre>
+<p>We want to get a sense of how the word distributions change over time. We need to calculate the frequency of words for each year, first off. So we need to go back to the <code>sotu_terms_df</code> dataset and group by <code>year</code> and <code>word</code> and then count the number of times each word occurs.</p>
+<p>Since we will lose the <code>lemma</code> variable in this process, we will add it back after the <span class="math inline">\(tf\)</span>-<span class="math inline">\(idf\)</span> transformation by using the <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> function and the <code><a href="https://rdrr.io/pkg/textstem/man/lemmatize_words.html" class="external-link">textstem::lemmatize_words()</a></code> function.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sotu_terms_tfidf_df</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">sotu_terms_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">word</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># Count the words by year</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/bind_tf_idf.html" class="external-link">bind_tf_idf</a></span><span class="op">(</span><span class="va">word</span>, <span class="va">year</span>, <span class="va">n</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># Calculate the tf-idf</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>lemma <span class="op">=</span> <span class="fu">textstem</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/textstem/man/lemmatize_words.html" class="external-link">lemmatize_words</a></span><span class="op">(</span><span class="va">word</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># Lemmatize the words</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">year</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">tf_idf</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Preview</span></span>
+<span><span class="va">sotu_terms_tfidf_df</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 97,213 × 7</span></span></span>
+<span><span class="co">##     year word               n       tf   idf  tf_idf lemma         </span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span>  <span style="text-decoration: underline;">1</span>950 enjoyment          3 0.000<span style="text-decoration: underline;">585</span> 3.54  0.002<span style="text-decoration: underline;">07</span> enjoyment     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span>  <span style="text-decoration: underline;">1</span>950 rent               3 0.000<span style="text-decoration: underline;">585</span> 2.85  0.001<span style="text-decoration: underline;">67</span> rend          </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span>  <span style="text-decoration: underline;">1</span>950 widespread         3 0.000<span style="text-decoration: underline;">585</span> 2.85  0.001<span style="text-decoration: underline;">67</span> widespread    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span>  <span style="text-decoration: underline;">1</span>950 underdeveloped     2 0.000<span style="text-decoration: underline;">390</span> 4.23  0.001<span style="text-decoration: underline;">65</span> underdeveloped</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span>  <span style="text-decoration: underline;">1</span>950 ideals             7 0.001<span style="text-decoration: underline;">36</span>  1.14  0.001<span style="text-decoration: underline;">56</span> ideal         </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span>  <span style="text-decoration: underline;">1</span>950 transmit           3 0.000<span style="text-decoration: underline;">585</span> 2.62  0.001<span style="text-decoration: underline;">53</span> transmit      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span>  <span style="text-decoration: underline;">1</span>950 peoples            8 0.001<span style="text-decoration: underline;">56</span>  0.976 0.001<span style="text-decoration: underline;">52</span> people        </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span>  <span style="text-decoration: underline;">1</span>950 democratic        12 0.002<span style="text-decoration: underline;">34</span>  0.623 0.001<span style="text-decoration: underline;">46</span> democratic    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span>  <span style="text-decoration: underline;">1</span>950 expenditures       7 0.001<span style="text-decoration: underline;">36</span>  1.06  0.001<span style="text-decoration: underline;">44</span> expenditure   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span>  <span style="text-decoration: underline;">1</span>950 businessmen        3 0.000<span style="text-decoration: underline;">585</span> 2.44  0.001<span style="text-decoration: underline;">43</span> businessman   </span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 97,203 more rows</span></span></span></code></pre>
+<p>With this format, we can visualize the distinctiveness of words over time. All we need to do is to filter the data to the lemmas we are interested first.</p>
+<p>Let's just start with some random poltical-oriented words.</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">plot_terms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"crime"</span>, <span class="st">"law"</span>, <span class="st">"free"</span>, <span class="st">"terror"</span>, <span class="st">"family"</span>, <span class="st">"government"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sotu_terms_tfidf_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">lemma</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">plot_terms</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">tf_idf</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>se <span class="op">=</span> <span class="cn">FALSE</span>, span <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">lemma</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:sotu-terms-tfidf-df-political"></span>
+<img src="recipe-8_files/figure-html/sotu-terms-tfidf-df-political-1.png" alt="Distinctiveness of political words over time" width="100%"><p class="caption">
+Figure 2: Distinctiveness of political words over time
+</p>
+</div>
+<p>We can see in Figure <a href="#fig:sotu-terms-tfidf-df-political">2</a> that the distinctiveness of these lemmas varies over time. Now, in this plot I've used a small span value for the <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth()</a></code> function to get a sense of the more fine-grained changes over time. However, this is may be too fine-grained. We can adjust this by increasing the <code>span</code> value. Let's try a <code>span</code> value of 0.5.</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sotu_terms_tfidf_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">lemma</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">plot_terms</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">tf_idf</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>se <span class="op">=</span> <span class="cn">FALSE</span>, span <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">lemma</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:sotu-terms-tfidf-df-political-smooth-detail"></span>
+<img src="recipe-8_files/figure-html/sotu-terms-tfidf-df-political-smooth-detail-1.png" alt="Distinctiveness of political words over time" width="100%"><p class="caption">
+Figure 3: Distinctiveness of political words over time
+</p>
+</div>
+<p>Figure <a href="#fig:sotu-terms-tfidf-df-political-smooth-detail">3</a> seems to be picking up on some of the more general word usage trends over time.</p>
+<p>Another thing to note about the way we plotted the data is that we used the <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap()</a></code> function to create a separate plot for each word but we used the <code>scales = "free_y"</code> allowing the y-axis to vary for each plot. This means we are not comparing the y-axis values across plots and thus can not say anything about the differing magnitudes from a visual inspection.</p>
+<p>To address this, we can remove the <code>scales = "free_y"</code> argument and use the default which will fix the x- and y-axis scales across plots.</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sotu_terms_tfidf_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">lemma</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">plot_terms</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">tf_idf</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>se <span class="op">=</span> <span class="cn">FALSE</span>, span <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">lemma</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:sotu-terms-tfidf-df-political-smooth-detailed-fixed"></span>
+<img src="recipe-8_files/figure-html/sotu-terms-tfidf-df-political-smooth-detailed-fixed-1.png" alt="Distinctiveness of political words over time" width="100%"><p class="caption">
+Figure 4: Distinctiveness of political words over time
+</p>
+</div>
+<p>In Figure <a href="#fig:sotu-terms-tfidf-df-political-smooth-detailed-fixed">4</a>, we can clearly see that the magnitude of the words "crime" and "terror" are much higher than the other words we happend to select. Furthermore, these words have interesting patterns. In particular, "terror" has two peaks on around 1980 and another around the turn of the century. "Crime" also has two distinctive peaks on in the 1970s and one in the 1990s.</p>
+<p>The terms that I selected before were somewhat arbitrary. How can I identify the words that have changed the most drastically over these years from the data itself? We can do this by creating a term-document matrix with and then calculating the standard deviation of the <span class="math inline">\(tf\)</span>-<span class="math inline">\(idf\)</span> values for each word. This will give us a sense of the words that have changed the most over time.</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create TDM with words-year and tf-idf values</span></span>
+<span><span class="va">sotu_word_tfidf_mat</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">sotu_terms_tfidf_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/document_term_casters.html" class="external-link">cast_tdm</a></span><span class="op">(</span><span class="va">word</span>, <span class="va">year</span>, <span class="va">tf_idf</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Preview</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">sotu_word_tfidf_mat</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 13109    69</span></span></code></pre>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sotu_word_tfidf_mat</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">##                 Docs</span></span>
+<span><span class="co">## Terms               1950    1951     1952 1953 1954</span></span>
+<span><span class="co">##   enjoyment      0.00207 0.00000 0.000661    0    0</span></span>
+<span><span class="co">##   rent           0.00167 0.00000 0.000000    0    0</span></span>
+<span><span class="co">##   widespread     0.00167 0.00000 0.000000    0    0</span></span>
+<span><span class="co">##   underdeveloped 0.00165 0.00000 0.000000    0    0</span></span>
+<span><span class="co">##   ideals         0.00156 0.00171 0.000853    0    0</span></span></code></pre>
+<p>To calculate the standard deviation of the <span class="math inline">\(tf\)</span>-<span class="math inline">\(idf\)</span> values for each word, we can use the <code><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply()</a></code> function to iterate over each row of the matrix and calculate the standard deviation of the values in each row. You can think of the <code><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply()</a></code> function as a cousin of the <code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map()</a></code> function. The <code><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply()</a></code> function iterates over the rows or columns of a matrix or data frame and applies a function to each row or column. We choose whether the function is applied to the rows or columns with the <code>MARGIN</code> argument. We can set <code>MARGIN = 1</code> to apply the function to the rows and <code>MARGIN = 2</code> to apply the function to the columns.</p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Calculate the standard deviation of the tf-idf values for each word</span></span>
+<span><span class="va">sotu_words_sd</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">sotu_word_tfidf_mat</span>, MARGIN <span class="op">=</span> <span class="fl">1</span>, FUN <span class="op">=</span> <span class="va">sd</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Preview seed words</span></span>
+<span><span class="va">sotu_words_sd</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span>decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##      vietnam      hussein       saddam         salt         iraq        shall </span></span>
+<span><span class="co">##     0.001188     0.001138     0.001121     0.001067     0.000976     0.000887 </span></span>
+<span><span class="co">##          oil        iraqi       that's   inspectors        qaida       terror </span></span>
+<span><span class="co">##     0.000798     0.000786     0.000733     0.000715     0.000702     0.000662 </span></span>
+<span><span class="co">##   terrorists         it's        crude       soviet    terrorist     activity </span></span>
+<span><span class="co">##     0.000651     0.000647     0.000635     0.000633     0.000632     0.000630 </span></span>
+<span><span class="co">##     covenant arrangements      session           al  disarmament       steven </span></span>
+<span><span class="co">##     0.000611     0.000609     0.000596     0.000596     0.000589     0.000588 </span></span>
+<span><span class="co">##      wartime      barrels         isil    mentioned        ought        elvin </span></span>
+<span><span class="co">##     0.000573     0.000569     0.000567     0.000559     0.000558     0.000556 </span></span>
+<span><span class="co">##       iraqis         ryan        we're         kids        let's          gun </span></span>
+<span><span class="co">##     0.000551     0.000539     0.000539     0.000535     0.000533     0.000532 </span></span>
+<span><span class="co">##      rebekah           cj        camps      empower         cory        we've </span></span>
+<span><span class="co">##     0.000531     0.000527     0.000524     0.000523     0.000522     0.000518 </span></span>
+<span><span class="co">##          92d  afghanistan    childcare        100th        music         gulf </span></span>
+<span><span class="co">##     0.000516     0.000514     0.000513     0.000507     0.000500     0.000494 </span></span>
+<span><span class="co">##         21st   extremists   foundation      picture     beguiled  contemplate </span></span>
+<span><span class="co">##     0.000491     0.000489     0.000487     0.000486     0.000473     0.000473 </span></span>
+<span><span class="co">##    enumerate    hurriedly   hysterical  ingredients        smile       smiles </span></span>
+<span><span class="co">##     0.000473     0.000473     0.000473     0.000473     0.000473     0.000473 </span></span>
+<span><span class="co">##     wagehour     josefina        shi'a        alice     alliance    seventies </span></span>
+<span><span class="co">##     0.000473     0.000471     0.000468     0.000468     0.000467     0.000464 </span></span>
+<span><span class="co">##       herman       joshua      matthew        julie         11th       border </span></span>
+<span><span class="co">##     0.000463     0.000463     0.000463     0.000462     0.000461     0.000459 </span></span>
+<span><span class="co">##      persian    recommend    communist        mayor    nicaragua       planes </span></span>
+<span><span class="co">##     0.000456     0.000453     0.000447     0.000443     0.000442     0.000442 </span></span>
+<span><span class="co">##       trevor        corey       kenton      preston        seong     property </span></span>
+<span><span class="co">##     0.000440     0.000439     0.000439     0.000439     0.000439     0.000439 </span></span>
+<span><span class="co">##      regimes       disarm      mention    peacetime   localities    objective </span></span>
+<span><span class="co">##     0.000437     0.000436     0.000436     0.000433     0.000429     0.000428 </span></span>
+<span><span class="co">##          i'm       surtax        banks       pounds       foster          she </span></span>
+<span><span class="co">##     0.000424     0.000423     0.000423     0.000422     0.000421     0.000418 </span></span>
+<span><span class="co">##         isis  sandinistas  discharging         gold </span></span>
+<span><span class="co">##     0.000417     0.000416     0.000416     0.000415</span></span></code></pre>
+<p>Now we can choose from the top words that have changed the most over time. Here's another selection of words based on the standard deviation of the <span class="math inline">\(tf\)</span>-<span class="math inline">\(idf\)</span> values.</p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">plot_terms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"equality"</span>, <span class="st">"right"</span>, <span class="st">"community"</span>, <span class="st">"child"</span>, <span class="st">"woman"</span>, <span class="st">"man"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sotu_terms_tfidf_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">lemma</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">plot_terms</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">tf_idf</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>se <span class="op">=</span> <span class="cn">FALSE</span>, span <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">lemma</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:sotu-terms-tfidf-sd-based"></span>
+<img src="recipe-8_files/figure-html/sotu-terms-tfidf-sd-based-1.png" alt="Distinctiveness of words over time" width="100%"><p class="caption">
+Figure 5: Distinctiveness of words over time
+</p>
+</div>
+<p>We can see that the words I selected based on the standard deviation can either increase, decrease, or fluctuate over time.</p>
+</div>
+<div class="section level4">
+<h4 id="meaning">Meaning<a class="anchor" aria-label="anchor" href="#meaning"></a>
+</h4>
+<ol start="3" style="list-style-type: decimal">
+<li>How does the meaning of words change across time periods?</li>
+</ol>
+<p>For this approach we need to turn to word embeddings. Word embeddings have been show to capture distributional semantics --that is the meaning of words based on their distribution in a corpus <span class="citation">(<a href="#ref-Hamilton2016">Hamilton, Leskovec, and Jurafsky 2016</a>)</span>.</p>
+<p>Since our research question is aimed a change over time we are performing a diachronic analysis. This means that we will need to create word embeddings for each time period, identify the common vocabulary across time periods, and then align the word embeddings to a common space before we can compare them.</p>
+<p>Let's load some packages that we will need.</p>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bnosac/word2vec" class="external-link">word2vec</a></span><span class="op">)</span>         <span class="co"># for training word embeddings</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/bmschmidt/wordVectors" class="external-link">wordVectors</a></span><span class="op">)</span>      <span class="co"># for reading word embeddings</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://purrr.tidyverse.org/" class="external-link">purrr</a></span><span class="op">)</span>            <span class="co"># for iterating over lists</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://psychbruce.github.io/PsychWordVec/" class="external-link">PsychWordVec</a></span><span class="op">)</span>     <span class="co"># for aligning word embeddings</span></span></code></pre></div>
+<p>Let's first start by creating sub-corpora for each decade. We will write these to disk so that we can use them again if necessary. Note that data or datasets that are generated in the process of analysis are often stored in an <code>analysis/</code> folder inside of the main data folder to keep them separate from the other data acquired or derived in the project.</p>
+<p>We will use the <code><a href="https://stringr.tidyverse.org/reference/str_c.html" class="external-link">str_c()</a></code> function to summarize the words for each address into a single string by decade. We will then use the <code><a href="https://readr.tidyverse.org/reference/read_lines.html" class="external-link">write_lines()</a></code> function to write the string to a text file. The <code><a href="https://purrr.tidyverse.org/reference/pmap.html" class="external-link">pwalk()</a></code> function from the <code>purrr</code> package is a convenient way to iterate over multiple arguments (<code>decade</code> and <code>address</code> in this case) in a function without returning a value to the console. The <code>p</code> in <code><a href="https://purrr.tidyverse.org/reference/pmap.html" class="external-link">pwalk()</a></code> stands for "parallel" and indicates that the function will iterate over the arguments in parallel.</p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create sub-corpora for each decade and write to disk ------------</span></span>
+<span><span class="va">sotu_terms_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>address <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html" class="external-link">str_c</a></span><span class="op">(</span><span class="va">lemma</span>, collapse <span class="op">=</span> <span class="st">" "</span><span class="op">)</span>, .by <span class="op">=</span> <span class="va">decade</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">decade</span>, <span class="va">address</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/pmap.html" class="external-link">pwalk</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">decade</span>, <span class="va">address</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html" class="external-link">str_c</a></span><span class="op">(</span><span class="st">"~/Desktop/sotu/"</span>, <span class="va">decade</span>, <span class="st">"s.txt"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://readr.tidyverse.org/reference/read_lines.html" class="external-link">write_lines</a></span><span class="op">(</span><span class="va">address</span>, <span class="va">file_name</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<p>Now I have written a function to read the text files, train the word embeddings for each, write the word embeddings to disk, and then load them back as VectorSpaceModel objects in a list.</p>
+<div class="callout">
+<p><strong><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M64 64V241.6c5.2-1 10.5-1.6 16-1.6H96V208 64c0-8.8-7.2-16-16-16s-16 7.2-16 16zM80 288c-17.7 0-32 14.3-32 32c0 0 0 0 0 0v24c0 66.3 53.7 120 120 120h48c52.5 0 97.1-33.7 113.4-80.7c-3.1 .5-6.2 .7-9.4 .7c-20 0-37.9-9.2-49.7-23.6c-9 4.9-19.4 7.6-30.3 7.6c-15.1 0-29-5.3-40-14c-11 8.8-24.9 14-40 14H120c-13.3 0-24-10.7-24-24s10.7-24 24-24h40c8.8 0 16-7.2 16-16s-7.2-16-16-16H120 80zM0 320s0 0 0 0c0-18 6-34.6 16-48V64C16 28.7 44.7 0 80 0s64 28.7 64 64v82c5.1-1.3 10.5-2 16-2c25.3 0 47.2 14.7 57.6 36c7-2.6 14.5-4 22.4-4c20 0 37.9 9.2 49.7 23.6c9-4.9 19.4-7.6 30.3-7.6c35.3 0 64 28.7 64 64v64 24c0 92.8-75.2 168-168 168H168C75.2 512 0 436.8 0 344V320zm336-64c0-8.8-7.2-16-16-16s-16 7.2-16 16v48 16c0 8.8 7.2 16 16 16s16-7.2 16-16V256zM160 240c5.5 0 10.9 .7 16 2v-2V208c0-8.8-7.2-16-16-16s-16 7.2-16 16v32h16zm64 24v40c0 8.8 7.2 16 16 16s16-7.2 16-16V256 240c0-8.8-7.2-16-16-16s-16 7.2-16 16v24z"></path></svg> Tip</strong></p>
+<p>A note on the training of the word embeddings. There are two main approaches to training word embeddings: Continuous Bag of Words (CBOW) and Skip-gram. CBOW is better for more common words and larger datasets. Skip-gram is better for less common words and smaller datasets. Given the varying sizes of the sub-corpora, Skip-gram might be more suitable as it may capture more nuances in less frequent words. Furthermore, the number of dimensions is a hyperparameter that needs to be tuned. The default is 50, but I have chosen 100 as we are attempting to capture more nuanced changes in the language of the SOTU.</p>
+</div>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create word embeddings for each decade --------------------------</span></span>
+<span><span class="va">read_write_load_word2vec</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">path</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">txt_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://fs.r-lib.org/reference/dir_ls.html" class="external-link">dir_ls</a></span><span class="op">(</span><span class="va">path</span>, regexp <span class="op">=</span> <span class="st">"\\.txt$"</span><span class="op">)</span></span>
+<span>  <span class="va">models</span> <span class="op">&lt;-</span> <span class="va">txt_files</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/word2vec/man/word2vec.html" class="external-link">word2vec</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, split <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">" "</span>, <span class="st">".?!"</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">bin_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html" class="external-link">str_replace</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"\\.txt$"</span>, <span class="st">".bin"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/word2vec/man/write.word2vec.html" class="external-link">write.word2vec</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">bin_file</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/wordVectors/man/read.vectors.html" class="external-link">read.vectors</a></span><span class="op">(</span><span class="va">bin_file</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span> <span class="op">&lt;-</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">basename</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html" class="external-link">str_remove</a></span><span class="op">(</span><span class="st">"\\.txt"</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">sotu_vec_mods</span> <span class="op">&lt;-</span> <span class="fu">read_write_load_word2vec</span><span class="op">(</span><span class="st">"~/Desktop/sotu"</span><span class="op">)</span></span></code></pre></div>
+<p>Each word embedding model is a matrix with the words as the rows and the dimensions as the columns as an element of the <code>sotu_vec_mods</code> list. Each of these elements have the name of the decade. We can extract an element from a list using the <code><a href="https://purrr.tidyverse.org/reference/pluck.html" class="external-link">pluck()</a></code> function from the <code>purrr</code> package.</p>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Extract an element from a list</span></span>
+<span><span class="va">sotu_vec_mods</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/pluck.html" class="external-link">pluck</a></span><span class="op">(</span><span class="st">"1950s"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## A VectorSpaceModel object of  1169  words and  100  vectors</span></span>
+<span><span class="co">##                  [,1]    [,2]     [,3]    [,4]   [,5]  [,6]</span></span>
+<span><span class="co">## accept          0.443  0.5696  0.28580  1.6661 -0.392 2.447</span></span>
+<span><span class="co">## accomplishment -0.991  2.1212  0.49073  0.2028  0.289 2.327</span></span>
+<span><span class="co">## accumulate      1.156  0.7786 -0.37270 -0.1064 -0.919 1.798</span></span>
+<span><span class="co">## allegiance     -0.752 -0.0506 -0.25382  0.2373 -0.539 1.020</span></span>
+<span><span class="co">## appear          0.138 -0.4059 -0.00107  1.3467  0.974 2.164</span></span>
+<span><span class="co">## big            -0.751 -0.1413  0.80794  0.0438 -1.653 0.511</span></span>
+<span><span class="co">## character      -0.644  0.3454  0.84363  0.4408 -0.359 2.641</span></span>
+<span><span class="co">## city           -1.418  1.2010 -0.45452  0.8536 -1.085 1.575</span></span>
+<span><span class="co">## compensation    0.718  0.2932 -0.03938  1.3567 -1.192 1.029</span></span>
+<span><span class="co">## competitive    -1.171  0.6094 -0.17582 -1.0641 -1.853 0.750</span></span>
+<span><span class="co">## attr(,".cache")</span></span>
+<span><span class="co">## &lt;environment: 0x7f96d1b06218&gt;</span></span></code></pre>
+<div class="callout">
+<p><strong><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M64 64V241.6c5.2-1 10.5-1.6 16-1.6H96V208 64c0-8.8-7.2-16-16-16s-16 7.2-16 16zM80 288c-17.7 0-32 14.3-32 32c0 0 0 0 0 0v24c0 66.3 53.7 120 120 120h48c52.5 0 97.1-33.7 113.4-80.7c-3.1 .5-6.2 .7-9.4 .7c-20 0-37.9-9.2-49.7-23.6c-9 4.9-19.4 7.6-30.3 7.6c-15.1 0-29-5.3-40-14c-11 8.8-24.9 14-40 14H120c-13.3 0-24-10.7-24-24s10.7-24 24-24h40c8.8 0 16-7.2 16-16s-7.2-16-16-16H120 80zM0 320s0 0 0 0c0-18 6-34.6 16-48V64C16 28.7 44.7 0 80 0s64 28.7 64 64v82c5.1-1.3 10.5-2 16-2c25.3 0 47.2 14.7 57.6 36c7-2.6 14.5-4 22.4-4c20 0 37.9 9.2 49.7 23.6c9-4.9 19.4-7.6 30.3-7.6c35.3 0 64 28.7 64 64v64 24c0 92.8-75.2 168-168 168H168C75.2 512 0 436.8 0 344V320zm336-64c0-8.8-7.2-16-16-16s-16 7.2-16 16v48 16c0 8.8 7.2 16 16 16s16-7.2 16-16V256zM160 240c5.5 0 10.9 .7 16 2v-2V208c0-8.8-7.2-16-16-16s-16 7.2-16 16v32h16zm64 24v40c0 8.8 7.2 16 16 16s16-7.2 16-16V256 240c0-8.8-7.2-16-16-16s-16 7.2-16 16v24z"></path></svg> Tip</strong></p>
+<p>Since we have our models in a list, we will be using <code>purrr</code> functions quite a bit. Here's a quick summary of some of the <code>purrr</code> functions we will be using.</p>
+<ul>
+<li>
+<code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map()</a></code> iterates over a list and applies a function to each element of the list. It returns a list.</li>
+<li>
+<code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">walk()</a></code> iterates over a list and applies a function to each element of the list. It does not return a value.</li>
+</ul>
+<p>Each of these has a parallel version, <code><a href="https://purrr.tidyverse.org/reference/pmap.html" class="external-link">pmap()</a></code> and <code><a href="https://purrr.tidyverse.org/reference/pmap.html" class="external-link">pwalk()</a></code>, which iterate over multiple lists in parallel, and a version that iterates over named lists, <code><a href="https://purrr.tidyverse.org/reference/imap.html" class="external-link">imap()</a></code> and <code><a href="https://purrr.tidyverse.org/reference/imap.html" class="external-link">iwalk()</a></code>. The <code>p</code> in <code><a href="https://purrr.tidyverse.org/reference/pmap.html" class="external-link">pmap()</a></code> and <code><a href="https://purrr.tidyverse.org/reference/pmap.html" class="external-link">pwalk()</a></code> stands for "parallel" and indicates that the function will iterate over the arguments in parallel. The <code>i</code> in <code><a href="https://purrr.tidyverse.org/reference/imap.html" class="external-link">imap()</a></code> and <code><a href="https://purrr.tidyverse.org/reference/imap.html" class="external-link">iwalk()</a></code> stands for "indexed" and indicates that the function will iterate over the arguments in parallel and return the index of the list element.</p>
+</div>
+<p>These embeddings can be explored in a number of ways. For example, we can get the words closest to a given word in the vector space for each decade. The <code>wordVectors</code> package has a function, <code><a href="https://rdrr.io/pkg/wordVectors/man/closest_to.html" class="external-link">closest_to()</a></code>, that will do this for us. We can use the <code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map()</a></code> function to iterate over each model in the list and get the closest words to a word. We will then use the <code><a href="https://stringr.tidyverse.org/reference/str_c.html" class="external-link">str_c()</a></code> function to summarize the words into a single string for each decade.</p>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get the closest words</span></span>
+<span><span class="va">sotu_vec_mods</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/wordVectors/man/closest_to.html" class="external-link">closest_to</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"freedom"</span>, <span class="fl">10</span><span class="op">)</span> <span class="co"># get the closest words to "freedom"</span></span>
+<span>  <span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html" class="external-link">str_c</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">word</span>, collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span> <span class="co"># summarize the words into a single string</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## $`1950s`</span></span>
+<span><span class="co">## [1] "freedom, earnestly, bargain, heritage, collective, flourish, knowledge, deep, human, earn"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`1960s`</span></span>
+<span><span class="co">## [1] "freedom, s, honor, ideal, hand, hear, endure, emerge, generation, walk"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`1970s`</span></span>
+<span><span class="co">## [1] "freedom, determination, militarily, honor, defend, endure, democracy, root, japan, around"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`1980s`</span></span>
+<span><span class="co">## [1] "freedom, fighter, everywhere, rule, democracy, liberty, march, central, cause, communist"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`1990s`</span></span>
+<span><span class="co">## [1] "freedom, peaceful, latin, vision, africa, asia, root, prosperity, relationship, persian"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`2000s`</span></span>
+<span><span class="co">## [1] "freedom, movement, broad, witness, spread, region, oppression, choose, middle, trouble"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`2010s`</span></span>
+<span><span class="co">## [1] "freedom, alice, blood, salute, sergeant, always, pride, soul, celebrate, among"</span></span></code></pre>
+<p>The previous example shows that the closest words to "freedom" in each decade in a synchronic manner. We can inspect these synchronic changes and draw conclusions from them. However, we are interested in diachronic changes. To do this, we will need to align the word embeddings to a common space.</p>
+<p>Now we will identify the common words across the decades and subset the word embeddings to the common vocabulary. The <code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map()</a></code> function iterates over each model in the list and returns the rownames with <code><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames()</a></code> (words) for each model. The <code><a href="https://purrr.tidyverse.org/reference/reduce.html" class="external-link">reduce()</a></code> function then iterates over the list of words and returns the intersection of the words across the models with <code><a href="https://generics.r-lib.org/reference/setops.html" class="external-link">intersect()</a></code>.</p>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Extract the common vocabulary -----------------------------------</span></span>
+<span><span class="va">common_vocab</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">sotu_vec_mods</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">rownames</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/reduce.html" class="external-link">reduce</a></span><span class="op">(</span><span class="va">intersect</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">common_vocab</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 535</span></span></code></pre>
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">common_vocab</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "city"       "debate"     "different"  "everything" "happen"    </span></span>
+<span><span class="co">## [6] "offer"</span></span></code></pre>
+<p>There are 535 words in the common vocabulary. Now we can subset the word embeddings to the common vocabulary. We will use the <code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map()</a></code> function to iterate over each model in the list and subset the model to the common vocabulary using the <code>common_vocab</code> variable as part of the bracket notation subset.</p>
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Subset the models to the common vocabulary ----------------------</span></span>
+<span><span class="va">sotu_vec_common_mods</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">sotu_vec_mods</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">x</span><span class="op">[</span><span class="va">common_vocab</span>, <span class="op">]</span> <span class="co"># subset each model to the common vocabulary</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sotu_vec_common_mods</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/pluck.html" class="external-link">pluck</a></span><span class="op">(</span><span class="st">"1950s"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## A VectorSpaceModel object of  535  words and  100  vectors</span></span>
+<span><span class="co">##              [,1]   [,2]    [,3]   [,4]   [,5]  [,6]</span></span>
+<span><span class="co">## city       -1.418  1.201 -0.4545  0.854 -1.085 1.575</span></span>
+<span><span class="co">## debate     -0.924  0.606 -0.5868  1.233  0.185 1.318</span></span>
+<span><span class="co">## different  -1.178  1.552  0.8213  0.743 -1.382 1.996</span></span>
+<span><span class="co">## everything -1.417  1.074 -0.5285  0.348 -0.259 1.273</span></span>
+<span><span class="co">## happen     -1.214  0.702  0.7354  0.897 -0.784 0.562</span></span>
+<span><span class="co">## offer       0.890 -0.113  0.7550  1.211 -0.235 2.798</span></span>
+<span><span class="co">## technology  0.288  0.699  1.0806  0.166 -1.627 1.956</span></span>
+<span><span class="co">## democracy  -0.756  0.454 -0.0277  0.612 -0.926 0.185</span></span>
+<span><span class="co">## week        1.052  0.341 -0.4860  0.409  0.236 0.877</span></span>
+<span><span class="co">## priority   -0.114  0.674 -0.3987 -0.130 -0.226 0.265</span></span>
+<span><span class="co">## attr(,".cache")</span></span>
+<span><span class="co">## &lt;environment: 0x7f96e0303d28&gt;</span></span></code></pre>
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sotu_vec_common_mods</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/pluck.html" class="external-link">pluck</a></span><span class="op">(</span><span class="st">"2010s"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## A VectorSpaceModel object of  535  words and  100  vectors</span></span>
+<span><span class="co">##              [,1]    [,2]   [,3]   [,4]    [,5]    [,6]</span></span>
+<span><span class="co">## city        1.063 -0.7176  1.297  0.279  0.4386 -0.1899</span></span>
+<span><span class="co">## debate     -1.341 -0.7135  1.458  2.370 -0.0975 -1.3211</span></span>
+<span><span class="co">## different   0.532 -0.6941  0.986  0.135  2.4619 -1.3676</span></span>
+<span><span class="co">## everything  0.704 -0.5673 -0.248  0.357  0.5452 -1.0420</span></span>
+<span><span class="co">## happen     -0.349 -1.8214  1.163 -1.939  0.1140 -2.0276</span></span>
+<span><span class="co">## offer       0.870 -0.0626  0.207  0.977  0.6597 -0.0648</span></span>
+<span><span class="co">## technology -0.830  0.3117  0.450 -0.514 -0.8301 -1.6927</span></span>
+<span><span class="co">## democracy   0.970  0.7930  1.208  1.856  0.0814 -1.3022</span></span>
+<span><span class="co">## week       -0.306 -0.8466  0.367 -1.763  0.2408 -0.0936</span></span>
+<span><span class="co">## priority   -0.710 -1.0858 -0.138 -1.783  0.9228  0.1398</span></span>
+<span><span class="co">## attr(,".cache")</span></span>
+<span><span class="co">## &lt;environment: 0x7f96c505cd30&gt;</span></span></code></pre>
+<p>So now each of the models in the list has the same vocabulary and the same number of dimensions, 100.</p>
+<p>Now we can align the models to a common space. The reason that the models need to be aligned is that the word embeddings are trained on different corpora. This means that the words will be represented in different spaces. We will use the Orthogonal Procrustes solution to align the models to a common coordinate space. The <code>PsychWordVec</code> package <span class="citation">(<a href="#ref-R-PsychWordVec">Bao 2023</a>)</span> has a function, <code><a href="https://psychbruce.github.io/PsychWordVec/reference/orth_procrustes.html" class="external-link">orth_procrustes()</a></code>, that will do this for us. In the process of aligning the models, the models are converted to plain matrices so we will need to convert them back to <code>VectorSpaceModel</code> objects.</p>
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Align the models to a common space</span></span>
+<span><span class="va">sotu_aligned_mods</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">sotu_vec_common_mods</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://psychbruce.github.io/PsychWordVec/reference/orth_procrustes.html" class="external-link">orth_procrustes</a></span><span class="op">(</span><span class="va">sotu_vec_common_mods</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="va">x</span><span class="op">)</span> <span class="co"># align to the first model</span></span>
+<span>  <span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/wordVectors/man/as.VectorSpaceModel.html" class="external-link">as.VectorSpaceModel</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="co"># convert to a VectorSpaceModel object</span></span>
+<span>    <span class="va">x</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<p>Having a model for each decade which is aligned in vocabulary and space, we can now use these models to compare words across time. There are a number of ways we can compare words across time.</p>
+<p>In our first approach, let's consider the semantic displacement of words over time in the vector space. We will do this by calculating the cosine difference between the word embeddings for a word in each decade. Once we have the cosine difference, we can visualize the change over time.</p>
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Calculate the cosine difference between the models --------------</span></span>
+<span><span class="va">word</span> <span class="op">&lt;-</span> <span class="st">"freedom"</span></span>
+<span></span>
+<span><span class="va">word_vectors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">sotu_aligned_mods</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">x</span><span class="op">[</span><span class="va">word</span>, <span class="op">]</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">differences</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">word_vectors</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/wordVectors/man/cosineDist.html" class="external-link">cosineDist</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">word_vectors</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<p>We now have a list with the cosine difference for each decade compared to the first decade ("1950s"). We can visualize this with a line plot where the x-axis is the decade and the y-axis is the cosine difference. We will add a linear trend line to the plot to get a sense of the overall trend.</p>
+<p>I'll write a function to get the differences for a word and then return a data frame with the decade and the difference. This will make it easier to visualize the differences for multiple words.</p>
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Function to get the cosine difference over time</span></span>
+<span></span>
+<span><span class="va">get_cosine_diff</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">word</span>, <span class="va">models</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">word_vectors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">models</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">x</span><span class="op">[</span><span class="va">word</span>, <span class="op">]</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">differences</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">word_vectors</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/wordVectors/man/cosineDist.html" class="external-link">cosineDist</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">word_vectors</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span><span class="va">word</span>, decade <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">basename</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">differences</span><span class="op">)</span><span class="op">)</span>, difference <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">differences</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu">get_cosine_diff</span><span class="op">(</span>word <span class="op">=</span> <span class="st">"freedom"</span>, models <span class="op">=</span> <span class="va">sotu_aligned_mods</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 7 × 3</span></span></span>
+<span><span class="co">##   word    decade difference</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> freedom 1950s   -<span style="color: #BB0000;">2.22</span><span style="color: #949494;">e</span><span style="color: #BB0000;">-16</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> freedom 1960s    3.23<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> freedom 1970s    3.61<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> freedom 1980s    4.60<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">5</span> freedom 1990s    4.05<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">6</span> freedom 2000s    4.28<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">7</span> freedom 2010s    4.67<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span></span></span></code></pre>
+<p>Let's create a function which performs this for us and can plot multiple words at the same time.</p>
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">plot_words</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nation"</span>, <span class="st">"country"</span>, <span class="st">"america"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">plot_words</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">get_cosine_diff</span>, models <span class="op">=</span> <span class="va">sotu_aligned_mods</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">decade</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">decade</span>, <span class="va">difference</span>, group <span class="op">=</span> <span class="va">word</span>, color <span class="op">=</span> <span class="va">word</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="va">word</span><span class="op">)</span></span></code></pre></div>
+<p><img src="recipe-8_files/figure-html/unnamed-chunk-7-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p>We can then focus in on a particular word and the nearest words to that word in each decade. We will use the <code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map()</a></code> function to iterate over each model in the list and get the closest words to a word. We will then use the <code><a href="https://stringr.tidyverse.org/reference/str_c.html" class="external-link">str_c()</a></code> function to summarize the words into a single string for each decade.</p>
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Function to get the closest words to a word ---------------------</span></span>
+<span><span class="va">word</span> <span class="op">&lt;-</span> <span class="st">"nation"</span></span>
+<span></span>
+<span><span class="va">sotu_vec_common_mods</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/wordVectors/man/closest_to.html" class="external-link">closest_to</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">word</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html" class="external-link">str_c</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">word</span>, collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">enframe</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"decade"</span>, value <span class="op">=</span> <span class="st">"words"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">words</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 7 × 2</span></span></span>
+<span><span class="co">##   decade words                                                                  </span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                                  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> 1950s  nation, join, free, difficult, promise, world's, with, people, agreeme…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> 1960s  nation, lead, opportunity, international, trade, strengthen, freedom, …</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> 1970s  nation, democracy, develop, sustain, launch, international, europe, al…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> 1980s  nation, hand, duty, struggle, america, speak, courage, liberty, in, fa…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">5</span> 1990s  nation, serious, role, ally, true, interest, recent, europe, nuclear, …</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">6</span> 2000s  nation, leadership, history, interest, matter, answer, union, of, grea…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">7</span> 2010s  nation, free, powerful, respect, bear, among, country, pledge, and, am…</span></span></code></pre>
+<p>Another approach is to visualize the vector space that words occupy over time. To do this we will collapse the word embeddings for each decade into a single matrix. We will append the decade to each word as not to lose the decade information. The we will extract the first two principal components of the matrix, so that we can visualize the data in two dimensions. We will then plot the data with a scatter plot where the x-axis is the first principal component and the y-axis is the second principal component. We will label the points with the words.</p>
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Visualize the vector space of words over time -------------------</span></span>
+<span><span class="va">sotu_joined_mods</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">sotu_aligned_mods</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/imap.html" class="external-link">imap</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html" class="external-link">str_c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="st">"_"</span>, <span class="va">y</span><span class="op">)</span></span>
+<span>    <span class="va">x</span></span>
+<span>  <span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/reduce.html" class="external-link">reduce</a></span><span class="op">(</span><span class="va">rbind</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/wordVectors/man/as.VectorSpaceModel.html" class="external-link">as.VectorSpaceModel</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>PCA on the word embeddings, yes! With the aligned models the results are much more sensible and interesting. The individual words are grouped closer together across time, in general, but there are exceptions.</p>
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sotu_joined_pca</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">sotu_joined_mods</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html" class="external-link">prcomp</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sotu_pca_df</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="va">sotu_joined_pca</span><span class="op">$</span><span class="va">x</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>word <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">sotu_joined_pca</span><span class="op">$</span><span class="va">x</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sotu_pca_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">word</span>, <span class="st">"^(nation|country|america)_"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">PC1</span>, y <span class="op">=</span> <span class="va">PC2</span>, label <span class="op">=</span> <span class="va">word</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggrepel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html" class="external-link">geom_text_repel</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="recipe-8_files/figure-html/unnamed-chunk-10-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p>These kinds of visualizations can be very useful for exploring the data and drawing conclusions.</p>
+</div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h2>
+<p>In this recipe, we have explored the State of the Union addresses from 1950 to 2019. We have used a number of tools and techniques to explore the data and draw conclusions. We have used the <code>tidytext</code> package to tokenize and lemmatize the words in the addresses. We have used the <code>word2vec</code> package to train word embeddings for each decade. We have used the <code>PsychWordVec</code> package to align the word embeddings to a common space. We have used the <code>wordVectors</code> package to explore the word embeddings. We have used the <code>ggplot2</code> package to visualize the data.</p>
+<p>These strategies, and others, can be used to explore these questions or other questions in more depth. Exploratory analysis is where your creativity and curiosity can shine.</p>
 </div>
 <div class="section level2">
 <h2 id="check-your-understanding">Check your understanding<a class="anchor" aria-label="anchor" href="#check-your-understanding"></a>
 </h2>
+<!-- lesson
+
+### True/False Questions
+
+1. All elements in a matrix must be of the same type (e.g., numeric, character).
+   - [ ] True
+   - [ ] False
+
+2. The `dimnames()` function can only be used to name the rows of a matrix.
+   - [ ] True
+   - [ ] False
+
+3. A DocumentTermMatrix object is a sparse matrix, meaning only non-zero elements are stored.
+   - [ ] True
+   - [ ] False
+
+### Fill-in-the-Blank Questions
+
+4. To create a matrix using the `matrix()` function, you need to provide a vector of elements, the number of __________, and the number of __________.
+
+5. When combining two matrices with different data types using `cbind()`, R will convert the combined matrix elements to the __________ data type.
+
+6. To inspect the dimensions of a matrix, you can use the `__________()` function which returns the number of rows and columns.
+
+### Multiple Choice Questions
+
+7. What is the correct command to see the matrix with each element multiplied by 2?
+   - A) ex_int_mat + 2
+   - B) ex_int_mat / 2
+   - C) ex_int_mat * 2
+   - D) ex_int_mat - 2
+
+8. Which function would you use to access multiple elements of a matrix using row and column names?
+   - A) `ex_int_mat[1, 2]`
+   - B) `ex_int_mat["row1", "col2"]`
+   - C) `ex_int_mat[, c("col2", "col3")]`
+   - D) `ex_int_mat[1:2, 2:3]`
+
+9. If you wanted to calculate the sum of the elements in each column of a matrix, which function would you use?
+   - A) `rowSums()`
+   - B) `colSums()`
+   - C) `sum()`
+   - D) `mean()`
+
+-->
+<!-- chapter
+
+### True/False Questions
+
+1. True or False: Exploratory data analysis (EDA) is used only when researchers have a predefined hypothesis.
+2. True or False: Clustering is a supervised learning technique that groups similar items in the text data into distinct categories.
+3. True or False: In vector space modeling, words that appear in similar contexts tend to have similar meanings, reflecting the distributional hypothesis.
+
+### Fill-in-the-Blank Questions
+
+1. The process of reducing the number of features in a dataset while retaining as much information as possible is known as ____________ reduction.
+2. A ____________ is a sequence of words that co-occur more often than would be expected by chance.
+3. The ____________ model in word2vec predicts the context words based on the target word.
+
+### Multiple Choice Questions
+
+1. Which of the following is NOT one of the steps in the workflow for exploratory data analysis?
+   - A) Inspect
+   - B) Interrogate
+   - C) Invalidate
+   - D) Interpret
+
+2. What does 'PMI' stand for in the context of co-occurrence analysis?
+   - A) Principle Mutual Information
+   - B) Pointwise Mutual Information
+   - C) Primary Mutual Index
+   - D) Probabilistic Measure of Independence
+
+3. What type of distribution is characterized by the fact that the frequency of any word is inversely proportional to its rank in the frequency table?
+   - A) Gaussian distribution
+   - B) Binomial distribution
+   - C) Poisson distribution
+   - D) Zipfian distribution
+-->
+<!-- recipe
+
+### True/False Questions
+
+1. The `skim()` function provides a statistical overview summary that includes missing values for each variable.
+   - [ ] True
+   - [ ] False
+
+2. When creating word embeddings, the CBOW model is better suited for less common words and smaller datasets compared to Skip-gram.
+   - [ ] True
+   - [ ] False
+
+3. After aligning word embedding models to a common space, the individual words are grouped closer together across time.
+   - [ ] True
+   - [ ] False
+
+### Fill-in-the-Blank Questions
+
+4. In text analysis, ________ is used to transform the effect of words that are common across all time periods and promote the effect of words that are more distinctive to each time period.
+
+5. The `count()` function in R is a wrapper for the `summarize()` function and it automatically adds and removes __________.
+
+6. To visualize changes in the language of the SOTU over time, one can calculate the cosine difference between the word embeddings for a word in each decade and visualize it with a __________ plot.
+
+### Multiple Choice Questions
+
+7. What is the correct method to use when adding a linear trend line to a plot in ggplot2?
+   - A) `geom_line()`
+   - B) `geom_smooth(method = "lm")`
+   - C) `geom_bar()`
+   - D) `geom_point()`
+
+8. Which package is used to align word embedding models to a common coordinate space?
+   - A) `tidytext`
+   - B) `word2vec`
+   - C) `PsychWordVec`
+   - D) `ggplot2`
+
+9. How can you identify the words that have changed the most drastically over the years from the data itself?
+   - A) By calculating the mean of the tf-idf values for each word.
+   - B) By counting the number of times each word appears in the corpus.
+   - C) By creating a term-document matrix and then calculating the standard deviation of the tf-idf values for each word.
+   - D) By using the `lemmatize_words()` function on each word.
+-->
+<!-- Comprehension questions -->
+<ol style="list-style-type: decimal">
+<li>In text analysis, <input class="webex-solveme nospaces" size="6" data-answer='["tf-idf"]'> is used to transform the effect of words that are common across all time periods and promote the effect of words that are more distinctive to each time period.</li>
+<li>What is the correct method to use when adding a linear trend line to a plot in ggplot2? <select class="webex-select"><option value="blank"></option>
+<option value="answer">geom_smooth(method = 'lm')</option>
+<option value="">geom_line()</option>
+<option value="">geom_bar()</option>
+<option value="">geom_point()</option></select>
+</li>
+<li>
+<code>torf(TRUE)</code> When working with lists, <code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">walk()</a></code> is like <code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map()</a></code> but does not return a value.</li>
+<li>
+<select class="webex-select"><option value="blank"></option>
+<option value="">TRUE</option>
+<option value="answer">FALSE</option></select> When creating word embeddings, the CBOW model is better suited for less common words and smaller datasets compared to Skip-gram.</li>
+<li>Which package is used to align word embedding models to a common coordinate space? <select class="webex-select"><option value="blank"></option>
+<option value="answer">PsychWordVec</option>
+<option value="">tidytext</option>
+<option value="">word2vec</option>
+<option value="">ggplot2</option></select>
+</li>
+<li>The process of reducing the number of features in a dataset while retaining as much information as possible is known as <input class="webex-solveme nospaces" size="14" data-answer='["dimensionality","dimension"]'> reduction.</li>
+</ol>
 </div>
 <div class="section level2">
+<h2 id="lab-preparation">Lab preparation<a class="anchor" aria-label="anchor" href="#lab-preparation"></a>
+</h2>
+<!-- Lab 08 description -->
+<p>In preparation for <a href="https://github.com/qtalr/lab-08" class="external-link">Lab 8</a>, review and and ensure that you are familiar with the following concepts:</p>
+<ul>
+<li>Tokenizing text</li>
+<li>Generating frequency and dispersion measures</li>
+<li>Creating Term-Document Matrices</li>
+<li>Using the <code>purrr</code> package to iterate over lists</li>
+<li>Visualizations with <code>ggplot2</code>
+</li>
+</ul>
+<p>In this lab, you will have the opportunity to apply the concepts from the materials in this chapter to a new dataset. You should consider the dataset and the questions that you want to ask of the data. You should also consider the tools and techniques that you will use to explore the data and draw conclusions. You will be asked to submit your code and a brief report of your findings.</p>
+</div>
+<div class="section level2 unnumbered">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-R-PsychWordVec" class="csl-entry">
+Bao, Han-Wu-Shuang. 2023. <em>PsychWordVec: Word Embedding Research Framework for Psychological Science</em>. <a href="https://psychbruce.github.io/PsychWordVec/" class="external-link">https://psychbruce.github.io/PsychWordVec/</a>.
+</div>
+<div id="ref-Hamilton2016" class="csl-entry">
+Hamilton, William L., Jure Leskovec, and Daniel Jurafsky. 2016. <span>“Diachronic Word Embeddings Reveal Statistical Laws of Semantic Change.”</span> In <em>Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics</em>, 1489–1501.
+</div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
