@@ -1,3 +1,8 @@
+# qtalrkit 0.9.1
+
+* Changes mirror to "https://gutenberg.pglaf.org/" for `get_gutenberg_works()` function
+* Organizes the output to include the LCC classification as part of the data written to disk for the `get_gutenberg_works()` function
+
 # qtalrkit 0.9.0
 
 * Updated version number to reflect that the package is now in beta

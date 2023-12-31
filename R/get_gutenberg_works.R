@@ -91,7 +91,27 @@ get_gutenberg_works <- function(target_dir, lcc_subject, birth_year = NULL, deat
   # Download works
   results <- works |>
     dplyr::filter(.data$rights == "Public domain in the USA.", .data$has_text == TRUE) |>
-    gutenbergr::gutenberg_download(meta_fields = c("title", "author", "gutenberg_author_id", "gutenberg_bookshelf"))
+    gutenbergr::gutenberg_download(
+      mirror = "https://gutenberg.pglaf.org/",
+      meta_fields = c("title", "author", "gutenberg_author_id", "gutenberg_bookshelf"),
+      verbose = FALSE
+    )
+
+  # Organize works
+  results <-
+    results |>
+    dplyr::mutate(
+      lcc = lcc_subject
+    ) |>
+    dplyr::select(
+      .data$gutenberg_id,
+      .data$lcc,
+      .data$gutenberg_bookshelf,
+      .data$gutenberg_author_id,
+      .data$author,
+      .data$title,
+      .data$text
+    )
 
   # Write works to disk
   readr::write_csv(results, file = target_file)

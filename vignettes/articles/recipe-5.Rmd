@@ -71,39 +71,6 @@ Furthermore, the `gutenbergr` package provides an API for accessing the Project 
 
 ### Data collection strategy
 
-<!--
-
-Types of data collection strategies:
-
-- Direct download
-- Programmatic download
-- APIs (Application Programming Interface)
-
-Other avenues for data collection:
-
-- Web scraping
-- Experimental data collection
-  - Survey data collection
-  - Interviews and focus groups
-  - Behavioral data collection
-
-Key concepts for R programming:
-
-- Vectors, data frames, and lists
-- Variables and functions
-- Control statements
-- Custom functions
-
-Project Gutenberg
-
-- `gutenbergr` package
-- `gutenberg_metadata`, `gutenberg_authors`, `gutenberg_subjects`
-- ...
-
-- Write custom function to download data and metadata from Project Gutenberg
--
--->
-
 Let's now turn to the data collection strategy. There are a number of data collection strategies that can be used to acquire data for a text analysis project. In the chapter, we covered manual and programmatic downloads and APIs. Here we will use an R package which will provide an API for accessing the data source.
 
 ::: {.callout}
