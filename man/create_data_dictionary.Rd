@@ -18,7 +18,7 @@ create_data_dictionary(
 
 \item{file_path}{The file path to save the data dictionary to.}
 
-\item{model}{The ID of the OpenAI chat completion models to use for generating descriptions. If NULL (default), a scaffolding for the data dictionary is created.}
+\item{model}{The ID of the OpenAI chat completion models to use for generating descriptions (see \code{openai::list_models()}). If NULL (default), a scaffolding for the data dictionary is created.}
 
 \item{sample_n}{The number of rows to sample from the data frame to use as input for the model. Default NULL.}
 

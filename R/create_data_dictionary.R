@@ -4,7 +4,7 @@
 #'
 #' @param data A data frame to create a data dictionary for.
 #' @param file_path The file path to save the data dictionary to.
-#' @param model The ID of the OpenAI chat completion models to use for generating descriptions. If NULL (default), a scaffolding for the data dictionary is created.
+#' @param model The ID of the OpenAI chat completion models to use for generating descriptions (see `openai::list_models()`). If NULL (default), a scaffolding for the data dictionary is created.
 #' @param sample_n The number of rows to sample from the data frame to use as input for the model. Default NULL.
 #' @param grouping A character vector of column names to group by when sampling rows from the data frame for the model. Default NULL.
 #' @param force If TRUE, overwrite the file at `file_path` if it already exists. Default FALSE.
