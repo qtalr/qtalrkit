@@ -80,6 +80,7 @@ reference:
     contents:
       - create_data_dictionary  # data dictionary file structure/ contents
       - create_data_origin      # data origin file structure
+      - curate_enntt_data       # curate Europarl Corpus Native, Non...
       - curate_swda_data        # curate Switchboard Dialog Act Corpus
       - get_compressed_data     # download and decompress data
       - get_gutenberg_works     # interface to Project Gutenberg API

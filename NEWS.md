@@ -1,5 +1,7 @@
 # qtalrkit 0.9.2
 
+* Adds `curate_enntt_data()` function to curate data from the Europarl Corpus of Native, Non-Native, and Translated Text (ENNTT).
+
 * Updates recipes
 
 # qtalrkit 0.9.1

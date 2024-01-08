@@ -27,9 +27,9 @@ Imports:
     tidyr,
     Matrix,
     tidytext,
-    gutenbergr
-Suggests:
+    gutenbergr,
     xml2,
+Suggests:
     rvest,
     bookdown,
     fontawesome,

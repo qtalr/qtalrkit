@@ -14,3 +14,4 @@ _R_ideas.md
 .lintr
 .github/workflows/pkgdown.yaml
 *_cache
+data-raw

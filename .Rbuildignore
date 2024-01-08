@@ -11,3 +11,4 @@
 ^\.httr-oauth$
 ^_.*\.md$
 ^\.lintr
+^data-raw$

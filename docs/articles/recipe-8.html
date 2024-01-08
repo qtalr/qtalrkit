@@ -701,17 +701,17 @@ Figure 5: Distinctiveness of words over time
 <code class="sourceCode R"><span><span class="co"># Extract an element from a list</span></span>
 <span><span class="va">sotu_vec_mods</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/pluck.html" class="external-link">pluck</a></span><span class="op">(</span><span class="st">"1950s"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                         dim1 ...     dim100</span></span>
-<span><span class="co">##    1: the             0.0308 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">##    2: of              0.0271 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">##    3: and             0.0228 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">##    4: be             -0.0108 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">##    5: to              0.0216 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">##    1: the            -0.0610 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">##    2: of             -0.0791 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">##    3: and            -0.0703 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">##    4: be             -0.0876 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">##    5: to             -0.0983 ... &lt;100 dims&gt;</span></span>
 <span><span class="co">## -----                                      </span></span>
-<span><span class="co">## 1164: appear          0.0371 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">## 1165: allegiance      0.0289 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">## 1166: accumulate      0.0347 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">## 1167: accomplishment  0.0215 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">## 1168: accept          0.0172 ... &lt;100 dims&gt;</span></span></code></pre>
+<span><span class="co">## 1164: appear         -0.0866 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">## 1165: allegiance     -0.0828 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">## 1166: accumulate     -0.0836 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">## 1167: accomplishment -0.0792 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">## 1168: accept         -0.0757 ... &lt;100 dims&gt;</span></span></code></pre>
 <div class="callout">
 <p><strong><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M64 64V241.6c5.2-1 10.5-1.6 16-1.6H96V208 64c0-8.8-7.2-16-16-16s-16 7.2-16 16zM80 288c-17.7 0-32 14.3-32 32c0 0 0 0 0 0v24c0 66.3 53.7 120 120 120h48c52.5 0 97.1-33.7 113.4-80.7c-3.1 .5-6.2 .7-9.4 .7c-20 0-37.9-9.2-49.7-23.6c-9 4.9-19.4 7.6-30.3 7.6c-15.1 0-29-5.3-40-14c-11 8.8-24.9 14-40 14H120c-13.3 0-24-10.7-24-24s10.7-24 24-24h40c8.8 0 16-7.2 16-16s-7.2-16-16-16H120 80zM0 320s0 0 0 0c0-18 6-34.6 16-48V64C16 28.7 44.7 0 80 0s64 28.7 64 64v82c5.1-1.3 10.5-2 16-2c25.3 0 47.2 14.7 57.6 36c7-2.6 14.5-4 22.4-4c20 0 37.9 9.2 49.7 23.6c9-4.9 19.4-7.6 30.3-7.6c35.3 0 64 28.7 64 64v64 24c0 92.8-75.2 168-168 168H168C75.2 512 0 436.8 0 344V320zm336-64c0-8.8-7.2-16-16-16s-16 7.2-16 16v48 16c0 8.8 7.2 16 16 16s16-7.2 16-16V256zM160 240c5.5 0 10.9 .7 16 2v-2V208c0-8.8-7.2-16-16-16s-16 7.2-16 16v32h16zm64 24v40c0 8.8 7.2 16 16 16s16-7.2 16-16V256 240c0-8.8-7.2-16-16-16s-16 7.2-16 16v24z"></path></svg> Tip</strong></p>
 <p>Since we have our models in a list, we will be using <code>purrr</code> functions quite a bit. Here's a quick summary of some of the <code>purrr</code> functions we will be using.</p>
@@ -734,25 +734,25 @@ Figure 5: Distinctiveness of words over time
 <span>    <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html" class="external-link">str_c</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">word</span>, collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span> <span class="co"># summarize the words into a single string</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## $`1950s`</span></span>
-<span><span class="co">## [1] "liberty, americas, human, ideal, world, peace, win, dignity, know, common"</span></span>
+<span><span class="co">## [1] "justice, liberty, cause, fight, preserve, ideal, americas, want, all, ourselves"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`1960s`</span></span>
-<span><span class="co">## [1] "liberty, rest, laos, independence, why, lead, abandon, endure, pursuit, never"</span></span>
+<span><span class="co">## [1] "same, spirit, border, cause, communism, future, free, diversity, may, trouble"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`1970s`</span></span>
-<span><span class="co">## [1] "determination, overwhelm, international, central, develop, range, ready, africa, far, consultation"</span></span>
+<span><span class="co">## [1] "adversary, determination, self, military, enhance, maintain, alliance, influence, deter, europe"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`1980s`</span></span>
-<span><span class="co">## [1] "press, prosperous, faith, everywhere, democracy, prove, fighter, nicaragua, among, watch"</span></span>
+<span><span class="co">## [1] "free, peace, democracy, world, fighter, chance, everywhere, life, liberty, confidence"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`1990s`</span></span>
-<span><span class="co">## [1] "peace, nation, of, ally, union, leadership, world, bosnia, century, around"</span></span>
+<span><span class="co">## [1] "shape, peace, future, ally, war, soviet, lead, leadership, around, share"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`2000s`</span></span>
-<span><span class="co">## [1] "enemy, friend, ally, and, america, terror, of, liberty, unite, peace"</span></span>
+<span><span class="co">## [1] "peace, democracy, determine, state, the, terror, afghanistan, iraq, middle, enemy"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`2010s`</span></span>
-<span><span class="co">## [1] "honor, celebrate, sky, welcome, salute, light, among, fail, chief, hero"</span></span></code></pre>
+<span><span class="co">## [1] "salute, fight, uniform, hero, honor, celebrate, confident, fundamental, isolate, human"</span></span></code></pre>
 <p>The previous example shows that the closest words to "freedom" in each decade in a synchronic manner. We can inspect these synchronic changes and draw conclusions from them. However, we are interested in diachronic changes. To do this, we will need to align the word embeddings to a common space.</p>
 <p>Now we will identify the common words across the decades and subset the word embeddings to the common vocabulary. The <code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map()</a></code> function iterates over each model in the list and returns the rownames with <code><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames()</a></code> (words) for each model. The <code><a href="https://purrr.tidyverse.org/reference/reduce.html" class="external-link">reduce()</a></code> function then iterates over the list of words and returns the intersection of the words across the models with <code><a href="https://generics.r-lib.org/reference/setops.html" class="external-link">intersect()</a></code>.</p>
 <div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
@@ -778,31 +778,31 @@ Figure 5: Distinctiveness of words over time
 <span></span>
 <span><span class="va">sotu_vec_common_mods</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/pluck.html" class="external-link">pluck</a></span><span class="op">(</span><span class="st">"1950s"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                    dim1 ...     dim100</span></span>
-<span><span class="co">##   1: the         0.0308 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">##   2: of          0.0271 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">##   3: and         0.0228 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">##   4: be         -0.0108 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">##   5: to          0.0216 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">##   1: the        -0.0610 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">##   2: of         -0.0791 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">##   3: and        -0.0703 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">##   4: be         -0.0876 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">##   5: to         -0.0983 ... &lt;100 dims&gt;</span></span>
 <span><span class="co">## ----                                  </span></span>
-<span><span class="co">## 530: happen      0.0093 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">## 531: everything  0.0078 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">## 532: different   0.0204 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">## 533: debate      0.0129 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">## 534: city        0.0255 ... &lt;100 dims&gt;</span></span></code></pre>
+<span><span class="co">## 530: happen     -0.0806 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">## 531: everything -0.0761 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">## 532: different  -0.0754 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">## 533: debate     -0.0836 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">## 534: city       -0.0800 ... &lt;100 dims&gt;</span></span></code></pre>
 <div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sotu_vec_common_mods</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/pluck.html" class="external-link">pluck</a></span><span class="op">(</span><span class="st">"2010s"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##                    dim1 ...     dim100</span></span>
-<span><span class="co">##   1: the         0.0192 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">##   2: of          0.0523 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">##   3: and        -0.0122 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">##   4: be          0.0079 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">##   5: to         -0.0258 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">##   1: the        -0.0854 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">##   2: of         -0.0872 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">##   3: and        -0.0839 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">##   4: be         -0.0777 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">##   5: to         -0.0847 ... &lt;100 dims&gt;</span></span>
 <span><span class="co">## ----                                  </span></span>
-<span><span class="co">## 530: happen      0.0004 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">## 531: everything  0.0075 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">## 532: different   0.0150 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">## 533: debate     -0.0005 ... &lt;100 dims&gt;</span></span>
-<span><span class="co">## 534: city        0.0072 ... &lt;100 dims&gt;</span></span></code></pre>
+<span><span class="co">## 530: happen     -0.0780 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">## 531: everything -0.0855 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">## 532: different  -0.0770 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">## 533: debate     -0.0699 ... &lt;100 dims&gt;</span></span>
+<span><span class="co">## 534: city       -0.0954 ... &lt;100 dims&gt;</span></span></code></pre>
 <p>So now each of the models in the list has the same vocabulary and the same number of dimensions, 100.</p>
 <p>Now we can align the models to a common space. The reason that the models need to be aligned is that the word embeddings are trained on different corpora. This means that the words will be represented in different spaces. We will use the Orthogonal Procrustes solution to align the models to a common coordinate space. The <code>PsychWordVec</code> package <span class="citation">(<a href="#ref-R-PsychWordVec">Bao 2023</a>)</span> has a function, <code><a href="https://psychbruce.github.io/PsychWordVec/reference/orth_procrustes.html" class="external-link">orth_procrustes()</a></code>, that will do this for us. In the process of aligning the models, the models are converted to plain matrices so we will need to convert them back to <code>embed</code> matrix objects.</p>
 <div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
@@ -836,25 +836,25 @@ Figure 5: Distinctiveness of words over time
 <span></span>
 <span><span class="va">differences</span></span></code></pre></div>
 <pre><code><span><span class="co">## $`1950s`</span></span>
-<span><span class="co">## [1] 0</span></span>
+<span><span class="co">## [1] -2.22e-16</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`1960s`</span></span>
-<span><span class="co">## [1] 0.0134</span></span>
+<span><span class="co">## [1] 0.0122</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`1970s`</span></span>
-<span><span class="co">## [1] 0.0223</span></span>
+<span><span class="co">## [1] 0.0262</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`1980s`</span></span>
-<span><span class="co">## [1] 0.0183</span></span>
+<span><span class="co">## [1] 0.0119</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`1990s`</span></span>
-<span><span class="co">## [1] 0.0282</span></span>
+<span><span class="co">## [1] 0.0138</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`2000s`</span></span>
-<span><span class="co">## [1] 0.00434</span></span>
+<span><span class="co">## [1] 0.00437</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $`2010s`</span></span>
-<span><span class="co">## [1] 0.0252</span></span></code></pre>
+<span><span class="co">## [1] 0.00837</span></span></code></pre>
 <p>We now have a list with the cosine difference for each decade compared to the first decade ("1950s"). We can visualize this with a line plot where the x-axis is the decade and the y-axis is the cosine difference. We will add a linear trend line to the plot to get a sense of the overall trend.</p>
 <p>I'll write a function to get the differences for a word and then return a data frame with the decade and the difference. This will make it easier to visualize the differences for multiple words.</p>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
@@ -876,13 +876,13 @@ Figure 5: Distinctiveness of words over time
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 7 × 3</span></span></span>
 <span><span class="co">##   word    decade difference</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> freedom 1950s     0      </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> freedom 1960s     0.013<span style="text-decoration: underline;">4</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> freedom 1970s     0.022<span style="text-decoration: underline;">3</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> freedom 1980s     0.018<span style="text-decoration: underline;">3</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span> freedom 1990s     0.028<span style="text-decoration: underline;">2</span> </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">6</span> freedom 2000s     0.004<span style="text-decoration: underline;">34</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">7</span> freedom 2010s     0.025<span style="text-decoration: underline;">2</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> freedom 1950s   -<span style="color: #BB0000;">2.22</span><span style="color: #949494;">e</span><span style="color: #BB0000;">-16</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> freedom 1960s    1.22<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> freedom 1970s    2.62<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> freedom 1980s    1.19<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">5</span> freedom 1990s    1.38<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">6</span> freedom 2000s    4.37<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">7</span> freedom 2010s    8.37<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span></span></span></code></pre>
 <p>Let's create a function which performs this for us and can plot multiple words at the same time.</p>
 <div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plot_words</span> <span class="op">&lt;-</span></span>
@@ -913,13 +913,13 @@ Figure 5: Distinctiveness of words over time
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 7 × 2</span></span></span>
 <span><span class="co">##   decade words                                                                  </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                                  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> 1950s  lose, everything, away, question, no, fail, deep, fear, prosperity, an…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> 1960s  commit, themselves, both, rule, against, americas, promise, kind, gain…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> 1970s  may, today, always, goal, human, approach, close, progress, moment, lo…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> 1980s  leader, liberty, may, house, pledge, urge, join, look, speak, before   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span> 1990s  europe, prosperity, grow, world, opportunity, struggle, remain, free, …</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">6</span> 2000s  and, nation, war, lead, unite, freedom, liberty, citizen, where, milit…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">7</span> 2010s  very, union, strong, once, may, stand, unite, my, believe, air</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> 1950s  responsible, promise, commit, reason, true, full, debate, lead, duty, …</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> 1960s  look, whole, kind, great, also, real, get, turn, live, another         </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> 1970s  nation, today, moment, not, say, worlds, word, century, chance, history</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> 1980s  friend, spirit, lose, rise, liberty, home, your, just, city, rest      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">5</span> 1990s  nation, honor, us, freedom, come, union, of, report, kind, peace       </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">6</span> 2000s  show, unite, determine, world, liberty, nation, friend, state, democra…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">7</span> 2010s  once, unite, forward, state, believe, man, your, of, i, among</span></span></code></pre>
 <p>Another approach is to visualize the vector space that words occupy over time. To do this we will collapse the word embeddings for each decade into a single matrix. We will append the decade to each word as not to lose the decade information. The we will extract the first two principal components of the matrix, so that we can visualize the data in two dimensions. We will then plot the data with a scatter plot where the x-axis is the first principal component and the y-axis is the second principal component. We will label the points with the words.</p>
 <div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Visualize the vector space of words over time -------------------</span></span>
