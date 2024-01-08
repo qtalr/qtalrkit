@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">qtalrkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,29 +82,803 @@
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
+<!--
+Purpose: To showcase the process of building predictive models. This will include how to identify the variables of interest, inspect the data, interrogate the data, and interpret the results.
+
+Description: Predictive methods used here will lean on the `tidymodels` packages. The focus will be on the process of building predictive models, not on the details of the methods. The process includes identifying the variables that you want to predict (the outcome) and the variables that you will use to predict it (the predictors), how to engineer new variables, how to split the data into a training set and a test set, how to integrate variable selection into the model building process, how to inspect the data to identify potential problems, how to interrogate the data with model development and validation, and how to interpret the results of the model on validation set.
+
+Approach: We will use the ACTIV-ES corpus to build a predictive model that can classify text as one of three dialects of Spanish: Argentinian, Mexican, or Spanish. We will frame this as a supervised learning problem, where we have a set of texts that have been labeled with the dialect of Spanish that they are written in.
+
+Prerequisites: The recipe assumes that you have a solid understanding of the basics of R and the tidyverse. Experience with the `tidymodels` framework is helpful, but not required. The recipe also assumes that you have completed the previous lessons and recipes in this series.
+
+Context: This is the second of three tutorials on text analysis. The previous tutorial was exploratory methods and the following will be on inferential modeling methods. The accompanying lab for this recipe will continue with the options for forking/ cloning a project from GitHub, working with an existing project, and creating a new project. The lab is designed to be completed in a 50 minute class period.
+-->
+<!-- About predictive modeling -->
+<p>This recipe will cover the process of building a predictive model to classify text into one of three Spanish dialects: Argentinian, Mexican, or Spanish. We will take a step-by-step approach that includes data preparation, model training and evaluation, and result interpretation.</p>
+<p>We will see practical examples of how to apply the <code>tidymodels</code> framework to build and evaluate a predictive model. Including:</p>
+<ul>
+<li>How to identify the variables of interest</li>
+<li>How to inspect the data</li>
+<li>How to interrogate the data and iterate on the model to improve performance</li>
+<li>How to interpret the results of the model</li>
+</ul>
+<p>The workflow for building a predictive model is shown in Table <a href="#tab:pda-workflow">1</a>. Note that Step 6 includes an optional step to iterate on the model to improve performance. This is optional because it is not always necessary to iterate on the model. However, it is often the case that the first model you build is not the best model. So it is good to be prepared to iterate on the model.</p>
+<!-- Workflow: steps -->
+<table class="table">
+<caption>
+<span id="tab:pda-workflow">Table 1: </span> The predictive modeling workflow</caption>
+<colgroup>
+<col width="18%">
+<col width="40%">
+<col width="40%">
+</colgroup>
+<thead><tr class="header">
+<th>Step</th>
+<th>Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Identify</td>
+<td>Consider the research question and aim and identify relevant variables</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td></td>
+<td>Split the data into representative training and testing sets</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td></td>
+<td>Apply variable selection and engineering procedures</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Inspect</td>
+<td>Inspect the data to ensure that it is in the correct format and that the training and testing sets are representative of the data</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Interrogate</td>
+<td>Train and evaluate the model on the training set, adjusting models or hyperparameters as needed, to produce a final model</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>(Optional) Iterate</td>
+<td>Repeat steps 3-5 to selecting new variables, models, hyperparameters</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>Interpret</td>
+<td>Interpret the results of the final model in light of the research question or hypothesis</td>
+</tr>
+</tbody>
+</table>
+<!-- Approach --><p>Let's get started by loading some of the key packages we will use in this recipe.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a></span><span class="op">)</span> <span class="co"># for modeling</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/textrecipes" class="external-link">textrecipes</a></span><span class="op">)</span> <span class="co"># for text preprocessing</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span> <span class="co"># for data manipulation</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span> <span class="co"># for data manipulation</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://stringr.tidyverse.org" class="external-link">stringr</a></span><span class="op">)</span> <span class="co"># for string manipulation</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/juliasilge/tidytext" class="external-link">tidytext</a></span><span class="op">)</span> <span class="co"># for text manipulation</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span> <span class="co"># for visualization</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sfirke/janitor" class="external-link">janitor</a></span><span class="op">)</span> <span class="co"># for tabyl()</span></span>
+<span></span>
+<span><span class="fu"><a href="https://tidymodels.tidymodels.org/reference/tidymodels_prefer.html" class="external-link">tidymodels_prefer</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># avoid function name conflicts</span></span></code></pre></div>
+<div class="callout">
+<p><strong><svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M64 64V241.6c5.2-1 10.5-1.6 16-1.6H96V208 64c0-8.8-7.2-16-16-16s-16 7.2-16 16zM80 288c-17.7 0-32 14.3-32 32c0 0 0 0 0 0v24c0 66.3 53.7 120 120 120h48c52.5 0 97.1-33.7 113.4-80.7c-3.1 .5-6.2 .7-9.4 .7c-20 0-37.9-9.2-49.7-23.6c-9 4.9-19.4 7.6-30.3 7.6c-15.1 0-29-5.3-40-14c-11 8.8-24.9 14-40 14H120c-13.3 0-24-10.7-24-24s10.7-24 24-24h40c8.8 0 16-7.2 16-16s-7.2-16-16-16H120 80zM0 320s0 0 0 0c0-18 6-34.6 16-48V64C16 28.7 44.7 0 80 0s64 28.7 64 64v82c5.1-1.3 10.5-2 16-2c25.3 0 47.2 14.7 57.6 36c7-2.6 14.5-4 22.4-4c20 0 37.9 9.2 49.7 23.6c9-4.9 19.4-7.6 30.3-7.6c35.3 0 64 28.7 64 64v64 24c0 92.8-75.2 168-168 168H168C75.2 512 0 436.8 0 344V320zm336-64c0-8.8-7.2-16-16-16s-16 7.2-16 16v48 16c0 8.8 7.2 16 16 16s16-7.2 16-16V256zM160 240c5.5 0 10.9 .7 16 2v-2V208c0-8.8-7.2-16-16-16s-16 7.2-16 16v32h16zm64 24v40c0 8.8 7.2 16 16 16s16-7.2 16-16V256 240c0-8.8-7.2-16-16-16s-16 7.2-16 16v24z"></path></svg> Tip</strong></p>
+<p>Note that loading the <code>tidymodels</code> package will load 22 other packages commonly used in modeling workflows. You can see the list of packages by running <code>tidymodels::tidyverse_packages()</code>.</p>
+</div>
+<p>In Lab 9, we will apply the <code>tidymodels</code> framework to build and explore a predictive model based on another dataset.</p>
 </div>
 <div class="section level2">
 <h2 id="concepts-and-strategies">Concepts and strategies<a class="anchor" aria-label="anchor" href="#concepts-and-strategies"></a>
 </h2>
-<ul>
-<li>Identify the variables that you want to predict (the outcome) and the variables that you will use to predict it (the predictors).
-<ul>
-<li>Split the data into a training set and a test set.</li>
-<li>Integrate variable selection into the model building process.</li>
-</ul>
-</li>
-<li>Inspect the data to identify potential problems.</li>
-<li>Interrogate the data with model development and validation.</li>
-<li>Interpret the results of the model on validation set.</li>
-</ul>
+<div class="section level3">
+<h3 id="orientation">Orientation<a class="anchor" aria-label="anchor" href="#orientation"></a>
+</h3>
+<!-- About the dataset and the aim of the analysis -->
+<p>We will use the ACTIV-ES corpus to build a predictive model that can classify text as one of three dialects of Spanish: Argentinian, Mexican, or Spanish. We will frame this as a supervised learning problem, where we have a set of texts that have been labeled with the dialect of Spanish that they are written in. In contrast to the classification task in the chapter, which was binary, this is a multiclass classification task, where we are trying to classify each document as one of three classes.</p>
+<!-- Prep the dataset -->
+<p>Let's preview the structure of the ACTIVES dataset.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">aes_df</span></span></code></pre></div>
+<pre><code><span><span class="co"># <span style="color: #949494;"># A tibble: 430 × 3</span></span></span>
+<span><span class="co">#    doc_id variety   text                                                        </span></span>
+<span><span class="co">#     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                       </span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 1</span> <span style="text-decoration: underline;">199</span>500 Argentina No está , señora . Aquí tampoco . No aparece , señora . ¿ D…</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 2</span> <span style="text-decoration: underline;">184</span>782 Argentina ALGUIEN AL TELÉFONO . LA ANGUSTIA . Ah , no , no , no mi hi…</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 3</span>  <span style="text-decoration: underline;">47</span>823 Argentina Habrá que cumplir su última voluntad , ¿ el medallón ? Lo v…</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 4</span> <span style="text-decoration: underline;">282</span>622 Argentina Sucedió en Hualfin Esta es la historia de tres generaciones…</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 5</span>  <span style="text-decoration: underline;">62</span>433 Argentina 10 secuestros en 10 días ! Y no hay el menor índice . Bueno…</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 6</span>  <span style="text-decoration: underline;">70</span>250 Argentina Y preguntada que fue sí reconocen el cadáver exhumado ... y…</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 7</span>  <span style="text-decoration: underline;">71</span>897 Argentina ¡ Jeremías ! ¡ Jeremías ! ¡ No dejés parir a tu mujer ! Sei…</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 8</span> <span style="text-decoration: underline;">333</span>883 Argentina Usted . Usted que frecuenta el éxito como una costumbre más…</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 9</span> <span style="text-decoration: underline;">333</span>954 Argentina Miles de campanas nos traen , a través de los siglos , el t…</span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">10</span> <span style="text-decoration: underline;">175</span>243 Argentina Y ? Enseguida viene , fue al baño . Bueno , pero la mesa la…</span></span>
+<span><span class="co"># <span style="color: #949494;"># ℹ 420 more rows</span></span></span></code></pre>
+<p>This dataset contains 430 documents, each of which is labeled with the variety of Spanish that it is written in and the text of the document. A document ID is also included, which we will be able to use to index the documents. The <code>variety</code> vector is a factor. As this will be the outcome variable in our predictive model, this is good as most predictive models require classification variables to be factors.</p>
+<p>Let's get a sense of the distribution of the <code>variety</code> variable.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">aes_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl</a></span><span class="op">(</span><span class="va">variety</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/adorn_pct_formatting.html" class="external-link">adorn_pct_formatting</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 3</span></span></span>
+<span><span class="co">##   variety       n percent</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> Argentina   128 29.8%  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> Mexico      119 27.7%  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> Spain       183 42.6%</span></span></code></pre>
+<p>We can see that the dataset is somewhat balanced, with Peninsular Spanish comprising the larger portion of the texts.</p>
+</div>
+<div class="section level3">
+<h3 id="analysis">Analysis<a class="anchor" aria-label="anchor" href="#analysis"></a>
+</h3>
+<p>At this point we can start to approach building a predictive model that can distinguish between the Spanish varieties using the text. We will first start by applying steps 1 and 2 of the workflow. We will then apply steps 3-5 iteratively to build, evaluate, and improve the model, as necessary, before applying it to the test data to assess and interpret the results.</p>
+<p>Let's go ahead and perform steps 1 and 2. To split the data into training and testing sets, we will use the <code>rsample</code> package. The <code>initial_split()</code> function, sets up the splits and we use <code>variety</code> as the stratification variable to ensure that the training and testing sets are representative of the distribution of the outcome variable. As this process is random, we will set the seed for reproducibility. Finally, we call the <code>training()</code> and <code>testing()</code> functions to extract the training and testing sets.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Set the seed for reproducibility</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Split the data into training and testing sets</span></span>
+<span><span class="va">aes_split</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu">initial_split</span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">aes_df</span>,</span>
+<span>    prop <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>    strata <span class="op">=</span> <span class="va">variety</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">aes_train</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">aes_split</span><span class="op">)</span> <span class="co"># extract the training set</span></span>
+<span><span class="va">aes_test</span> <span class="op">&lt;-</span> <span class="fu">testing</span><span class="op">(</span><span class="va">aes_split</span><span class="op">)</span> <span class="co"># extract the testing set</span></span></code></pre></div>
+<p>We will then set the base recipe which formally identifies the relationship between the predictor and outcome variables. The <code><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe()</a></code> function from the <code>recipes</code> package is used to create a recipe.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Set the base recipe</span></span>
+<span><span class="va">aes_base_rec</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span></span>
+<span>    formula <span class="op">=</span> <span class="va">variety</span> <span class="op">~</span> <span class="va">text</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">aes_train</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p>We now have steps 1 and 2 of the workflow completed. We have identified the variables of interest and split the data into training and testing sets.</p>
+<p>One more thing we will do here is to set up the cross-validation folds. Every time we fit a model to the training data, we will want to evaluate the model's performance on the training data. However, we don't want to do this in a way that is biased --testing the model on the same data that it was trained on! For this reason, we will use cross-validation to split the training data into multiple training and validation sets which represent different splits of the training data.</p>
+<p>We will use the <code>vfold_cv()</code> function from the <code>rsample</code> package to set up the cross-validation folds. We will use 10 folds, which is a common number of folds to use. We will also use the <code>strata</code> argument to ensure that the folds are representative of the distribution of the outcome variable.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Set seed for reproducibility</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Set up the cross-validation folds</span></span>
+<span><span class="va">cv_folds</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu">vfold_cv</span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">aes_train</span>,</span>
+<span>    v <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>    strata <span class="op">=</span> <span class="va">variety</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p>With these common steps completed, we can now apply and reapply steps 3-5 of the workflow to build, evaluate, and improve the model.</p>
+<div class="section level4">
+<h4 id="approach-1">Approach 1<a class="anchor" aria-label="anchor" href="#approach-1"></a>
+</h4>
+<p>In our first approach, let's start simple by using words as features and apply a logistic regression model. We won't be completely naive, however, as we are familiar with the undo influence of the most frequent words. To address this, we will apply a term frequency-inverse document frequency (TF-IDF) transformation to the text in order to downweight the influence of the most frequent words and promote words that are more indicative of each class. Furthermore, we know that we will want to use a regularized regression model to avoid overfitting to particular words.</p>
+<p>To get started, we will use the <code>textrecipes</code> package to add steps to our <code>aes_base_rec</code> recipe to preprocess the text. We will use the <code><a href="https://textrecipes.tidymodels.org/reference/step_tokenize.html" class="external-link">step_tokenize()</a></code> function to tokenize the text. This tokenization process will likely result in a very large number of terms, most of which will not be informative and will add computational overhead. We will want to restrict the number of terms with the <code><a href="https://textrecipes.tidymodels.org/reference/step_tokenfilter.html" class="external-link">step_tokenfilter()</a></code> function. However, it is not clear how many terms we should restrict the tokens to. For now, we will start with 1,000 tokens, but we will likely want to revisit this later. We will also use the <code><a href="https://textrecipes.tidymodels.org/reference/step_tfidf.html" class="external-link">step_tfidf()</a></code> function to apply a TF-IDF transformation to the text setting <code>smooth_idf</code> to <code>FALSE</code>.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Add preprocessing steps to the recipe</span></span>
+<span><span class="va">aes_rec</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">aes_base_rec</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://textrecipes.tidymodels.org/reference/step_tokenize.html" class="external-link">step_tokenize</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://textrecipes.tidymodels.org/reference/step_tokenfilter.html" class="external-link">step_tokenfilter</a></span><span class="op">(</span><span class="va">text</span>, max_tokens <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://textrecipes.tidymodels.org/reference/step_tfidf.html" class="external-link">step_tfidf</a></span><span class="op">(</span><span class="va">text</span>, smooth_idf <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Preview the recipe</span></span>
+<span><span class="va">aes_rec</span></span></code></pre></div>
+<p>To implement the recipe and to preview the text preprocessing steps we apply the <code><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">prep()</a></code> and <code><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake()</a></code> functions.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">aes_bake</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">aes_rec</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">prep</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake</a></span><span class="op">(</span>new_data <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Preview</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">aes_bake</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1]  343 1001</span></span></code></pre>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">aes_bake</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 5 × 5</span></span></span>
+<span><span class="co">##   variety   tfidf_text_1 tfidf_text_10 tfidf_text_15 tfidf_text_2</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> Argentina     0.000<span style="text-decoration: underline;">206</span>     0.000<span style="text-decoration: underline;">599</span>       0.000<span style="text-decoration: underline;">402</span>      0      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> Argentina     0            0              0             0      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> Argentina     0            0.000<span style="text-decoration: underline;">088</span>7      0             0      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> Argentina     0.004<span style="text-decoration: underline;">37</span>      0              0.001<span style="text-decoration: underline;">42</span>       0.003<span style="text-decoration: underline;">81</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">5</span> Argentina     0            0.001<span style="text-decoration: underline;">55</span>        0             0.001<span style="text-decoration: underline;">24</span></span></span></code></pre>
+<p>We now have a recipe that will tokenize the text, restrict the tokens to the most common 1,000 tokens, and create a TF-IDF matrix.</p>
+<p>It is not a bad idea to inspect the features at this point to make sure that the preprocessing steps have been applied correctly and to gauge what this feature selection looks like so that when it comes time to interpret the model, we have a sense of what the model is doing.</p>
+<p>As TF-IDF is going to be the main feature in our model, let's visualize the top 20 terms by class. To do this, we will use the <code>dplyr</code> package to get the median TF-IDF score for each word by class, convert the data from wide to long format using the <code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer()</a></code> function, and then use the <code>ggplot2</code> package to visualize the data.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Sum the term frequencies by class</span></span>
+<span><span class="va">class_freq_wide</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">aes_bake</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">variety</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"tfidf_"</span><span class="op">)</span>,</span>
+<span>      <span class="va">median</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Convert the data from wide to long format</span></span>
+<span><span class="va">class_freq_long</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">class_freq_wide</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span></span>
+<span>    cols <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"tfidf_"</span><span class="op">)</span>,</span>
+<span>    names_to <span class="op">=</span> <span class="st">"term"</span>,</span>
+<span>    values_to <span class="op">=</span> <span class="st">"tfidf"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>term <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html" class="external-link">str_remove</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"tfidf_text_"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Visualize the top 20 terms by class</span></span>
+<span><span class="va">class_freq_long</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_max</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">20</span>, order_by <span class="op">=</span> <span class="va">tfidf</span>, by <span class="op">=</span> <span class="va">variety</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/reorder_within.html" class="external-link">reorder_within</a></span><span class="op">(</span><span class="va">term</span>, <span class="va">tfidf</span>, <span class="va">variety</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">term</span>, y <span class="op">=</span> <span class="va">tfidf</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/reorder_within.html" class="external-link">scale_x_reordered</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">variety</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:tfidf-viz"></span>
+<img src="recipe-9_files/figure-html/tfidf-viz-1.png" alt="Top 20 terms by class" width="100%"><p class="caption">
+Figure 1: Top 20 terms by class
+</p>
+</div>
+<p>In Figure <a href="#fig:tfidf-viz">1</a>, we see the words that are most indicative of each language variety. If you are familiar with Spanish, you can probably detect some variety-specific terms. For example, "vos" is a pronoun used in Argentinian Spanish and "os" is a pronoun used in Peninsular Spanish. There is also some overlap between the varieties, such as "tienes" and "te".</p>
+<p>Another point to note is the difference in magnitude of the TF-IDF scores between the Argentinian and other varieties. This suggests that the Argentinian variety is more distinct from the other varieties than the other varieties are from each other. Among the most distinctive terms are verbal forms that are specific to Argentinian Spanish, such as "tenés" and "sos".</p>
+<p>Now let's create a model specification. We will use the <code>multinom_reg()</code> function from the <code>parsnip</code> package to create a multinomial logistic regression model, as we have multiple classes in our prediction task. We will use the "glmnet" engine, which will allow us to apply regularization to the model, arbitrarily set to 0.01. We will use the <code>set_engine()</code> function to set the engine and the <code>set_mode()</code> function to set the mode to "classification".</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create a model specification</span></span>
+<span><span class="va">aes_spec</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu">multinom_reg</span><span class="op">(</span></span>
+<span>    penalty <span class="op">=</span> <span class="fl">0.01</span>,</span>
+<span>    mixture <span class="op">=</span> <span class="fl">1</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glmnet"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span></span></code></pre></div>
+<p>To combine the recipe and the model specification, we will use the <code>workflows</code> package. We will use the <code>workflow()</code> function and pass <code>add_recipe(aes_rec)</code> and <code>add_model(aes_spec)</code> as arguments to add the recipe and the model specification to the workflow.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create a workflow</span></span>
+<span><span class="va">aes_wf</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">aes_rec</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">aes_spec</span><span class="op">)</span></span></code></pre></div>
+<p>We can now use the cross-validation folds that we set up earlier. We will use the <code>fit_resamples()</code> function to fit the model to the training data using the cross-validation folds.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Fit the model to the training data</span></span>
+<span><span class="va">aes_train_fit</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">aes_wf</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fit_resamples</span><span class="op">(</span></span>
+<span>    resamples <span class="op">=</span> <span class="va">cv_folds</span>,</span>
+<span>    control <span class="op">=</span> <span class="fu">control_resamples</span><span class="op">(</span>save_pred <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p>We can now evaluate the model's performance on the training data. We will use the <code>collect_metrics()</code> function to collect the metrics from the cross-validation folds.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Evaluate the model's performance on the training data</span></span>
+<span><span class="va">aes_train_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">collect_metrics</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 6</span></span></span>
+<span><span class="co">##   .metric  .estimator  mean     n std_err .config             </span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> accuracy multiclass 0.804    10  0.021<span style="text-decoration: underline;">0</span> Preprocessor1_Model1</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> roc_auc  hand_till  0.923    10  0.010<span style="text-decoration: underline;">9</span> Preprocessor1_Model1</span></span></code></pre>
+<p>We can see that the model has a mean accuracy of 80.4% and ROC-AUC of 92.3%. That pretty good for a first pass. To get a sense of how good (or bad) it is, let's compare it to a baseline model.</p>
+<p>A baseline model is the simplest model that we can use to compare the performance of our model to. A common baseline model is a model that always predicts the most frequent class. In our case, this is Peninsular Spanish, which accounts for 42.6% of the data. So it is clear that our model is doing much better than a baseline model which will have an accuracy score of 42.6%.</p>
+<p>We can visualize the correct and incorrect predictions using a confusion matrix. We will use the <code>conf_mat_resampled()</code> function from the <code>yardstick</code> package to create the confusion matrix and the <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> function from the <code>ggfortify</code> package to visualize it.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">aes_train_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">conf_mat_resampled</span><span class="op">(</span>tidy <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"heatmap"</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:aes-a1-conf-mat"></span>
+<img src="recipe-9_files/figure-html/aes-a1-conf-mat-1.png" alt="Confusion matrix for the model in Approach 1" width="100%"><p class="caption">
+Figure 2: Confusion matrix for the model in Approach 1
+</p>
+</div>
+<p>The left-downward diagonal of the confusion matrix represents the average number of documents correctly predicted for the aggregated model across the cross-validation folds. Other cells represent the average number of documents incorrectly predicted for each class-class combination. You can read these by using the row label to identify the predicted class and the column label to identify the actual class. So, for example, the model predicted Mexico <span class="math inline">\(n\)</span> times when the actual class was Argentina. And so on.</p>
+</div>
+<div class="section level4">
+<h4 id="approach-2">Approach 2<a class="anchor" aria-label="anchor" href="#approach-2"></a>
+</h4>
+<p>In our first approach we applied a TF-IDF transformation to the text and used a regularized multinomial logistic regression model. We also restricted the tokens to the 1,000 most frequent tokens and arbitrarily set the regularization parameter to 0.01. This resulted in an aggregate accuracy score of 80.4% on the training data. This is a good start, but see if we can do better.</p>
+<p>In this second approach, let's try to improve the model by applying a more principled approach to feature and hyperparameter selection.</p>
+<p>To do this we will 'tune' the <code>max_tokens</code> and <code>penalty</code> hyperparameters in our recipe and model specifications, respectively. We need to update our recipe and model specification to include placeholders for these parameters replacing the previous values with <code>tune()</code>. We will also need to update our workflow to include the updated recipe and model specification.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Update the recipe</span></span>
+<span><span class="va">aes_rec</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">aes_base_rec</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://textrecipes.tidymodels.org/reference/step_tokenize.html" class="external-link">step_tokenize</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://textrecipes.tidymodels.org/reference/step_tokenfilter.html" class="external-link">step_tokenfilter</a></span><span class="op">(</span><span class="va">text</span>, max_tokens <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># adds placeholder</span></span>
+<span>  <span class="fu"><a href="https://textrecipes.tidymodels.org/reference/step_tfidf.html" class="external-link">step_tfidf</a></span><span class="op">(</span><span class="va">text</span>, smooth_idf <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Update the model specification</span></span>
+<span><span class="va">aes_spec</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu">multinom_reg</span><span class="op">(</span></span>
+<span>    penalty <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span>, <span class="co"># adds placeholder</span></span>
+<span>    mixture <span class="op">=</span> <span class="fl">1</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glmnet"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span></span></code></pre></div>
+<p>We can now create a workflow that includes the recipe and the model specification.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create a workflow</span></span>
+<span><span class="va">aes_wf</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">aes_rec</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">aes_spec</span><span class="op">)</span></span></code></pre></div>
+<p>Now we set up the range of values for both the <code>max_tokens</code> and <code>penalty</code> hyperparameters. The <code>grid_regular()</code> function from the <code>dials</code> package will allow us to specify a grid of values for each hyperparameter.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Set the hyperparameter grid</span></span>
+<span><span class="va">aes_grid</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu">grid_regular</span><span class="op">(</span></span>
+<span>    <span class="fu">max_tokens</span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">250</span>, <span class="fl">2000</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="fu">penalty</span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">3</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>max_tokens <span class="op">=</span> <span class="fl">5</span>, penalty <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">aes_grid</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 50 × 2</span></span></span>
+<span><span class="co">##    max_tokens penalty</span></span>
+<span><span class="co">##         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span>        250 0.001  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span>        687 0.001  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span>       <span style="text-decoration: underline;">1</span>125 0.001  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span>       <span style="text-decoration: underline;">1</span>562 0.001  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span>       <span style="text-decoration: underline;">2</span>000 0.001  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span>        250 0.001<span style="text-decoration: underline;">67</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span>        687 0.001<span style="text-decoration: underline;">67</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span>       <span style="text-decoration: underline;">1</span>125 0.001<span style="text-decoration: underline;">67</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span>       <span style="text-decoration: underline;">1</span>562 0.001<span style="text-decoration: underline;">67</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span>       <span style="text-decoration: underline;">2</span>000 0.001<span style="text-decoration: underline;">67</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 40 more rows</span></span></span></code></pre>
+<p>The <code>range =</code> argument specifies the range of values to include in the grid. For <code>max_tokens</code>, this is straightforward. For <code>penalty</code>, we are specifying the range of values on the log scale. So the range of values is 0.001 to 0.1. The <code>levels</code> argument specifies the number of values to include in the grid. In this case, we will include 5 values for <code>max_tokens</code> and 10 values for <code>penalty</code>. This will result in 50 combinations of hyperparameter values.</p>
+<p>We will then pass our <code>aes_wf</code> workflow to the <code>tune_grid()</code> function with the grid values we specified to tune the hyperparameters.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Tune the hyperparameters</span></span>
+<span><span class="va">aes_tune</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">aes_wf</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tune_grid</span><span class="op">(</span></span>
+<span>    resamples <span class="op">=</span> <span class="va">cv_folds</span>,</span>
+<span>    grid <span class="op">=</span> <span class="va">aes_grid</span>,</span>
+<span>    control <span class="op">=</span> <span class="fu">control_resamples</span><span class="op">(</span>save_pred <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p>The <code>aes_grid</code> object is a tibble which contains the grid all the combinations of hyperparameter values. In this case, there are 50 combinations. That means we are going to fit 50 models to the training data! This is a lot of models, but it is worth it to get a more robust estimate of the model's performance.</p>
+<p>We can use the <code>collect_metrics()</code> function to collect the metrics from the cross-validation folds for each of our tuning parameters, but this will result in a lot of output. Instead, we can use the <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> function to visualize the metrics.</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Plot the collected metrics</span></span>
+<span><span class="va">aes_tune</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:aes-tune-metrics"></span>
+<img src="recipe-9_files/figure-html/aes-tune-metrics-1.png" alt="Metrics for model tuning in Approach 2" width="100%"><p class="caption">
+Figure 3: Metrics for model tuning in Approach 2
+</p>
+</div>
+<p>We see some variation across the folds in the accuracy and ROC-AUC scores. This will help us make a more informed decision about which hyperparameters to use.</p>
+<p>The metric to use to select the best model is something to consider.Accuracy is an important measure, but does not tell the whole story. In particular, accuracy does not tell us how well the model is doing for each class --only the overall correct and incorrect predictions. To get a better sense of how the model is doing across the classes, we can pay attention to the ROC-AUC score. The ROC-AUC score is a measure of the area under the receiver operating characteristic (ROC) curve. The ROC curve plots the true positive rate (TPR) against the false positive rate (FPR) for each class at different probability thresholds. This measure is useful because it is not affected by class imbalance.</p>
+<p>Let's select the best model based on the ROC-AUC score.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get the best model</span></span>
+<span><span class="va">aes_tune_best</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">aes_tune</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">select_best</span><span class="op">(</span><span class="st">"roc_auc"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">aes_tune_best</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 3</span></span></span>
+<span><span class="co">##   penalty max_tokens .config              </span></span>
+<span><span class="co">##     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span>  0.021<span style="text-decoration: underline;">5</span>       <span style="text-decoration: underline;">1</span>562 Preprocessor4_Model07</span></span></code></pre>
+<p>We can now update our workflow with the best hyperparameters.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Update the workflow</span></span>
+<span><span class="va">aes_wf</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">aes_wf</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">finalize_workflow</span><span class="op">(</span><span class="va">aes_tune_best</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">aes_wf</span></span></code></pre></div>
+<pre><code><span><span class="co">## ══ Workflow ════════════════════════════════════════════════════════════════════</span></span>
+<span><span class="co">## <span style="font-style: italic;">Preprocessor:</span> Recipe</span></span>
+<span><span class="co">## <span style="font-style: italic;">Model:</span> multinom_reg()</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## ── Preprocessor ────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">## 3 Recipe Steps</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## • step_tokenize()</span></span>
+<span><span class="co">## • step_tokenfilter()</span></span>
+<span><span class="co">## • step_tfidf()</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## ── Model ───────────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">## Multinomial Regression Model Specification (classification)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Main Arguments:</span></span>
+<span><span class="co">##   penalty = 0.0215443469003188</span></span>
+<span><span class="co">##   mixture = 1</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Computational engine: glmnet</span></span></code></pre>
+<p>We can now see that the updated workflow will replace the <code>tune()</code> placeholders with the best hyperparameters we selected.</p>
+<p>Let's again perform a resampled fit on the training data using our new tuned model and then compare our results with the previous, abritrarily tuned model.</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Fit the model to the training data</span></span>
+<span><span class="va">aes_train_fit</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">aes_wf</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fit_resamples</span><span class="op">(</span></span>
+<span>    resamples <span class="op">=</span> <span class="va">cv_folds</span>,</span>
+<span>    control <span class="op">=</span> <span class="fu">control_resamples</span><span class="op">(</span>save_pred <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Evaluate the model's performance on the training data</span></span>
+<span><span class="va">aes_train_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">collect_metrics</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 6</span></span></span>
+<span><span class="co">##   .metric  .estimator  mean     n std_err .config             </span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> accuracy multiclass 0.819    10  0.013<span style="text-decoration: underline;">5</span> Preprocessor1_Model1</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> roc_auc  hand_till  0.938    10  0.010<span style="text-decoration: underline;">4</span> Preprocessor1_Model1</span></span></code></pre>
+<p>The accuracy score has improved just a bit, from an aggregate score of 80.4% to 81.9%.</p>
+<p>In all likelihood, we would want to continue to iterate on this model, applying different feature selection and engineering procedures, different models, and different hyperparameters --I will consider some suggestions in the next section. However, for the sake of time, we will stop here and train our final model on the training data and then apply the model to the test data to assess and interpret the results.</p>
+<div class="section level5">
+<h5 id="interpreting-the-model">Interpreting the model<a class="anchor" aria-label="anchor" href="#interpreting-the-model"></a>
+</h5>
+<p>At this stage we are ready to interpret the model. We first fit the model to the training data, then apply the model to the test data, and evaluate the model's performance on the test data. Finally, we will dig into the model to interpret the importance of the features to help us understand what the model is doing and what it can tell us about words that are indicative, or not, of each variety.</p>
+<p>Let's fit our final model to the training data and evaluate it on the testing data using the <code>last_fit()</code> function which takes our updated workflow and the original split we created earlier which is stored in <code>aes_split</code>.</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Fit the final model</span></span>
+<span><span class="va">aes_final_fit</span> <span class="op">&lt;-</span> <span class="fu">last_fit</span><span class="op">(</span><span class="va">aes_wf</span>, <span class="va">aes_split</span><span class="op">)</span></span></code></pre></div>
+<p>We can now collect the performance metrics from the testing data.</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get the performance metrics</span></span>
+<span><span class="va">aes_final_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">collect_metrics</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 4</span></span></span>
+<span><span class="co">##   .metric  .estimator .estimate .config             </span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> accuracy multiclass     0.736 Preprocessor1_Model1</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> roc_auc  hand_till      0.872 Preprocessor1_Model1</span></span></code></pre>
+<p>The accuracy of this model on the test data is 73.6%. This is lower than the accuracy on the training data. Should we be surprised? Not really. The model was trained on the training data, so it is not surprising that it would perform better on the training data than the test data, despite the fact that we used cross-validation to evaluate the model on the training data. This is a good reminder that the model is not perfect and that we should not expect it to be.</p>
+<p>What does the 'kap' metric mean? The Kappa statistic is a measure of agreement between the predicted and actual classes. It is a measure of agreement that is corrected for the possibility that some correct prediction may have occurred by chance. The kappa statistic ranges from 0 to 1, with 0 indicating no agreement above chance and 1 indicating perfect agreement. In this case, the kappa statistic is 87.2%, which indicates that there is a moderate amount of agreement between the predicted and actual classes.</p>
+<p>Let's explore if there is a difference in performance across the classes. To do this, we will use the <code>conf_mat()</code> function from the <code>yardstick</code> package to create the confusion matrix and the <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> function from the <code>ggfortify</code> package to visualize it.</p>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">aes_final_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">collect_predictions</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">variety</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"heatmap"</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:aes-a2-conf-mat"></span>
+<img src="recipe-9_files/figure-html/aes-a2-conf-mat-1.png" alt="Confusion matrix for the model in Approach 2" width="100%"><p class="caption">
+Figure 4: Confusion matrix for the model in Approach 2
+</p>
+</div>
+<p>We can see that the model is doing a good job of predicting Peninsular Spanish, but is not doing as well with the other varieties. This is not surprising given that Peninsular Spanish is the most frequent class in the data. This is a good reminder that accuracy is not the only metric to consider when evaluating a model. We can get a better sense of how the model is doing across the classes by looking at the ROC-AUC score.</p>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get the ROC-AUC score</span></span>
+<span><span class="va">aes_final_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">collect_predictions</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">roc_curve</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">variety</span>, <span class="va">.pred_Argentina</span><span class="op">:</span><span class="va">.pred_Spain</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="recipe-9_files/figure-html/unnamed-chunk-27-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p>Taken together, we have a decent model that can predict the variety of Spanish that a text is written in. We can also see that although prediction accuracy appears higher for Peninsular Spanish, the ROC-AUC curves suggest that the model is doing a better job of predicting the other varieties based on the features.</p>
+<p>There is still room for improvement --as we recognized earlier. However, it is important that we do not start to use the testing data to improve the model. The testing data should only be used to evaluate the model. If we start to use the testing data to improve the model, we will no longer have an unbiased estimate of the model's performance.</p>
+<p>Let's now dig into our model's features to explore what words are driving the model's predictions. The approach to do this will depend on the model. In this case, we used a multinomial logistic regression model, which is a linear model. This means that we can interpret the model's coefficients to understand the importance of the features. Coefficients that are positive indicate that the feature is associated with the reference class and coefficients that are negative indicate that the feature is associated with the non-reference class. For classification tasks with two classes, this is straightforward to interpret.</p>
+<p>The issue here, however, is that we have more than two classes (i.e., Argentina, Mexico, and Spain). In these cases, the coefficients estimates for each class need to be extracted and standardized to be compared across classes.</p>
+<p>We can do this using the <code>extract_fit_parsnip()</code> function from the <code>parsnip</code> package. This will extract the model object from the workflow object. The <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> function from the <code>broom</code> package will then organize the coefficients (log-odds) for each predictor terms for each outcome class. We can then use the <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter()</a></code> function from the <code>dplyr</code> package to remove the intercept term and the <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> function from the <code>dplyr</code> package to remove the "tfidf_text_" prefix from the term names so that they are more legible.</p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get the coefficients</span></span>
+<span><span class="va">aes_coefs</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">aes_final_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">extract_fit_parsnip</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">term</span> <span class="op">!=</span> <span class="st">"(Intercept)"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>term <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html" class="external-link">str_remove</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"tfidf_text_"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_sample</a></span><span class="op">(</span><span class="va">aes_coefs</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 10 × 4</span></span></span>
+<span><span class="co">##    class     term      estimate penalty</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> Mexico    vengó            0  0.021<span style="text-decoration: underline;">5</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> Mexico    tú               0  0.021<span style="text-decoration: underline;">5</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> Mexico    tin              0  0.021<span style="text-decoration: underline;">5</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> Mexico    papel            0  0.021<span style="text-decoration: underline;">5</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> Spain     están            0  0.021<span style="text-decoration: underline;">5</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> Argentina perdido          0  0.021<span style="text-decoration: underline;">5</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> Argentina caballero        0  0.021<span style="text-decoration: underline;">5</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> Spain     señora           0  0.021<span style="text-decoration: underline;">5</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> Argentina casar            0  0.021<span style="text-decoration: underline;">5</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> Spain     serás            0  0.021<span style="text-decoration: underline;">5</span></span></span></code></pre>
+<p>Now to standardize the log-odds coefficients so that they are comparable across the classes, we will use the <code><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale()</a></code> function from base R to transform the coeffients such that each class has a mean of 0 and a standard deviation of 1. <code><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale()</a></code> returns a matrix, so we will use the <code><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector()</a></code> function to convert the matrix to a vector.</p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">aes_coefs_z</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">aes_coefs</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">class</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>z_score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">estimate</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_sample</a></span><span class="op">(</span><span class="va">aes_coefs_z</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 10 × 5</span></span></span>
+<span><span class="co">##    class     term     estimate penalty z_score</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> Argentina iba             0  0.021<span style="text-decoration: underline;">5</span> -<span style="color: #BB0000;">0.085</span><span style="color: #BB0000; text-decoration: underline;">7</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> Spain     pudo            0  0.021<span style="text-decoration: underline;">5</span> -<span style="color: #BB0000;">0.032</span><span style="color: #BB0000; text-decoration: underline;">0</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> Spain     pará            0  0.021<span style="text-decoration: underline;">5</span> -<span style="color: #BB0000;">0.032</span><span style="color: #BB0000; text-decoration: underline;">0</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> Argentina dicho           0  0.021<span style="text-decoration: underline;">5</span> -<span style="color: #BB0000;">0.085</span><span style="color: #BB0000; text-decoration: underline;">7</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> Argentina sirve           0  0.021<span style="text-decoration: underline;">5</span> -<span style="color: #BB0000;">0.085</span><span style="color: #BB0000; text-decoration: underline;">7</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> Mexico    cuesta          0  0.021<span style="text-decoration: underline;">5</span> -<span style="color: #BB0000;">0.078</span><span style="color: #BB0000; text-decoration: underline;">7</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> Spain     demonios        0  0.021<span style="text-decoration: underline;">5</span> -<span style="color: #BB0000;">0.032</span><span style="color: #BB0000; text-decoration: underline;">0</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> Argentina punto           0  0.021<span style="text-decoration: underline;">5</span> -<span style="color: #BB0000;">0.085</span><span style="color: #BB0000; text-decoration: underline;">7</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> Mexico    también         0  0.021<span style="text-decoration: underline;">5</span> -<span style="color: #BB0000;">0.078</span><span style="color: #BB0000; text-decoration: underline;">7</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> Spain     cabeza          0  0.021<span style="text-decoration: underline;">5</span> -<span style="color: #BB0000;">0.032</span><span style="color: #BB0000; text-decoration: underline;">0</span></span></span></code></pre>
+<p>Finally, let's visualize the top 25 terms by class. Note that we are using the <code><a href="https://rdrr.io/pkg/tidytext/man/reorder_within.html" class="external-link">reorder_within()</a></code> and <code><a href="https://rdrr.io/pkg/tidytext/man/reorder_within.html" class="external-link">scale_x_reordered()</a></code> functions from the <code>tidytext</code> package to reorder the terms in such a way that our facets allow for distinct terms on the x-axis for each class. Then the <code><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip()</a></code> function from the <code>ggplot2</code> package is used to flip the axes for easier reading.</p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">aes_coefs_z</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/reorder_within.html" class="external-link">reorder_within</a></span><span class="op">(</span><span class="va">term</span>, <span class="va">z_score</span>, <span class="va">class</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_max</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">25</span>, order_by <span class="op">=</span> <span class="va">z_score</span>, by <span class="op">=</span> <span class="va">class</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">term</span>, y <span class="op">=</span> <span class="va">z_score</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/reorder_within.html" class="external-link">scale_x_reordered</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">class</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:aes-a2-coefs-viz"></span>
+<img src="recipe-9_files/figure-html/aes-a2-coefs-viz-1.png" alt="Top 25 terms by class" width="100%"><p class="caption">
+Figure 5: Top 25 terms by class
+</p>
+</div>
+<p>We can assess the distinct features for each class and also gauge the magnitude of the estimates. We should be cautious, however, as these terms are derived from our model that only performs moderately well.</p>
+</div>
+</div>
+<div class="section level4">
+<h4 id="other-approaches">Other approaches<a class="anchor" aria-label="anchor" href="#other-approaches"></a>
+</h4>
+<p>As we have seen, there are many decisions to make when building a predictive model. We have only scratched the surface of the options available. In this section, I will briefly consider some other approaches that may be of interest.</p>
+<p>Features:</p>
+<p>We used words in this recipe and in the chapter classification task. This is merely in order to keep the focus on the process of building a predictive model. There are many other features that could be used. For example, we could use n-grams, character n-grams, or word embeddings. The <code>textrecipes</code> package provides many options for text preprocessing and feature engineering.</p>
+<p>Let's look at how we can derive other linguistic units using <code>textrecipes</code>. First, let's set up a simple dataset and base recipe.</p>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  outcome <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"b"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2020-01-01"</span>, <span class="st">"2021-06-14"</span>, <span class="st">"2020-11-05"</span>, <span class="st">"2023-12-25"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  text <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"This is a fantastic sentence."</span>,</span>
+<span>    <span class="st">"This is another great sentence."</span>,</span>
+<span>    <span class="st">"This is a third, boring sentence."</span>,</span>
+<span>    <span class="st">"This is a fourth and final sentence."</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">base_rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">outcome</span> <span class="op">~</span> <span class="va">text</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span></span></code></pre></div>
+<p>Now, say instead of words, we were interested in deriving word <span class="math inline">\(n\)</span>-grams as our terms. We again use the <code><a href="https://textrecipes.tidymodels.org/reference/step_tokenize.html" class="external-link">step_tokenize()</a></code> function in our recipe. This time, however, we add a value to the <code>token =</code> argument. In this case, we will use "ngrams". <code>textrecipes</code> uses the tokenization engine from the <code>tokenizers</code> package, so the types of tokenization available are the same as those available (see <code>help(tokenizers)</code> for more information).</p>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">base_rec</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://textrecipes.tidymodels.org/reference/step_tokenize.html" class="external-link">step_tokenize</a></span><span class="op">(</span></span>
+<span>    <span class="va">text</span>,</span>
+<span>    token <span class="op">=</span> <span class="st">"ngrams"</span>, <span class="co"># word n-grams</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://textrecipes.tidymodels.org/reference/show_tokens.html" class="external-link">show_tokens</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [[1]]</span></span>
+<span><span class="co">## [1] "this is a"            "is a fantastic"       "a fantastic sentence"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## [[2]]</span></span>
+<span><span class="co">## [1] "this is another"        "is another great"       "another great sentence"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## [[3]]</span></span>
+<span><span class="co">## [1] "this is a"             "is a third"            "a third boring"       </span></span>
+<span><span class="co">## [4] "third boring sentence"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## [[4]]</span></span>
+<span><span class="co">## [1] "this is a"          "is a fourth"        "a fourth and"      </span></span>
+<span><span class="co">## [4] "fourth and final"   "and final sentence"</span></span></code></pre>
+<p>By default <code>tokens = "ngrams"</code> produces trigrams.</p>
+<p>Another option is to use character n-grams. This is useful when we want to capture information about the morphology of the words. For character n-grams, we can use "character_shingle".</p>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">base_rec</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://textrecipes.tidymodels.org/reference/step_tokenize.html" class="external-link">step_tokenize</a></span><span class="op">(</span></span>
+<span>    <span class="va">text</span>,</span>
+<span>    token <span class="op">=</span> <span class="st">"character_shingle"</span> <span class="co"># character n-grams</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://textrecipes.tidymodels.org/reference/show_tokens.html" class="external-link">show_tokens</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [[1]]</span></span>
+<span><span class="co">##  [1] "thi" "his" "isi" "sis" "isa" "saf" "afa" "fan" "ant" "nta" "tas" "ast"</span></span>
+<span><span class="co">## [13] "sti" "tic" "ics" "cse" "sen" "ent" "nte" "ten" "enc" "nce"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## [[2]]</span></span>
+<span><span class="co">##  [1] "thi" "his" "isi" "sis" "isa" "san" "ano" "not" "oth" "the" "her" "erg"</span></span>
+<span><span class="co">## [13] "rgr" "gre" "rea" "eat" "ats" "tse" "sen" "ent" "nte" "ten" "enc" "nce"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## [[3]]</span></span>
+<span><span class="co">##  [1] "thi" "his" "isi" "sis" "isa" "sat" "ath" "thi" "hir" "ird" "rdb" "dbo"</span></span>
+<span><span class="co">## [13] "bor" "ori" "rin" "ing" "ngs" "gse" "sen" "ent" "nte" "ten" "enc" "nce"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## [[4]]</span></span>
+<span><span class="co">##  [1] "thi" "his" "isi" "sis" "isa" "saf" "afo" "fou" "our" "urt" "rth" "tha"</span></span>
+<span><span class="co">## [13] "han" "and" "ndf" "dfi" "fin" "ina" "nal" "als" "lse" "sen" "ent" "nte"</span></span>
+<span><span class="co">## [25] "ten" "enc" "nce"</span></span></code></pre>
+<p>By default <code>tokens = "character_shingle"</code> also produces trigrams.</p>
+<p>Now, say we want to change the number of words in each n-gram or character n-gram. We can do this using the <code>options =</code> argument. This is where we pass tokenizer-specific options. For example, to change the number of words in each n-gram, we can use the <code>n =</code> argument.</p>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">base_rec</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://textrecipes.tidymodels.org/reference/step_tokenize.html" class="external-link">step_tokenize</a></span><span class="op">(</span></span>
+<span>    <span class="va">text</span>,</span>
+<span>    token <span class="op">=</span> <span class="st">"ngrams"</span>,</span>
+<span>    options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="co"># word bigrams</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://textrecipes.tidymodels.org/reference/show_tokens.html" class="external-link">show_tokens</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [[1]]</span></span>
+<span><span class="co">## [1] "this is"            "is a"               "a fantastic"       </span></span>
+<span><span class="co">## [4] "fantastic sentence"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## [[2]]</span></span>
+<span><span class="co">## [1] "this is"        "is another"     "another great"  "great sentence"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## [[3]]</span></span>
+<span><span class="co">## [1] "this is"         "is a"            "a third"         "third boring"   </span></span>
+<span><span class="co">## [5] "boring sentence"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## [[4]]</span></span>
+<span><span class="co">## [1] "this is"        "is a"           "a fourth"       "fourth and"    </span></span>
+<span><span class="co">## [5] "and final"      "final sentence"</span></span></code></pre>
+<p>If you would like to calculate multiple <span class="math inline">\(n\)</span>-gram windows, you can pass the <code>n_min =</code> argument.</p>
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">base_rec</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://textrecipes.tidymodels.org/reference/step_tokenize.html" class="external-link">step_tokenize</a></span><span class="op">(</span></span>
+<span>    <span class="va">text</span>,</span>
+<span>    token <span class="op">=</span> <span class="st">"ngrams"</span>,</span>
+<span>    options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">2</span>, n_min <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># word unigrams and bigrams</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://textrecipes.tidymodels.org/reference/show_tokens.html" class="external-link">show_tokens</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [[1]]</span></span>
+<span><span class="co">## [1] "this"               "this is"            "is"                </span></span>
+<span><span class="co">## [4] "is a"               "a"                  "a fantastic"       </span></span>
+<span><span class="co">## [7] "fantastic"          "fantastic sentence" "sentence"          </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## [[2]]</span></span>
+<span><span class="co">## [1] "this"           "this is"        "is"             "is another"    </span></span>
+<span><span class="co">## [5] "another"        "another great"  "great"          "great sentence"</span></span>
+<span><span class="co">## [9] "sentence"      </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## [[3]]</span></span>
+<span><span class="co">##  [1] "this"            "this is"         "is"              "is a"           </span></span>
+<span><span class="co">##  [5] "a"               "a third"         "third"           "third boring"   </span></span>
+<span><span class="co">##  [9] "boring"          "boring sentence" "sentence"       </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## [[4]]</span></span>
+<span><span class="co">##  [1] "this"           "this is"        "is"             "is a"          </span></span>
+<span><span class="co">##  [5] "a"              "a fourth"       "fourth"         "fourth and"    </span></span>
+<span><span class="co">##  [9] "and"            "and final"      "final"          "final sentence"</span></span>
+<span><span class="co">## [13] "sentence"</span></span></code></pre>
+<p>Names and values of the arguments that <code>options =</code> will take will depend on the type of tokenization specified.</p>
+<p>We could also use metadata, such as the year the text was written, the author, the genre, <em>etc</em>. In these cases, will will update our base recipe to include the metadata as predictors and then we can use the necessary preprocessing steps to prepare the metadata for modeling using functions from the <code>recipes()</code> package (<em>i.e.</em>, `step_normalize(), step_dummy(), <em>etc.</em>).</p>
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">base_rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">outcome</span> <span class="op">~</span> <span class="va">date</span> <span class="op">+</span> <span class="va">text</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span> <span class="co"># add date</span></span>
+<span></span>
+<span><span class="va">base_rec</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://textrecipes.tidymodels.org/reference/step_tokenize.html" class="external-link">step_tokenize</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/step_date.html" class="external-link">step_date</a></span><span class="op">(</span><span class="va">date</span>, features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># extract the year</span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">prep</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/juice.html" class="external-link">juice</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 4</span></span></span>
+<span><span class="co">##   date             text outcome date_year</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;tknlist&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> 2020-01-01 [5 tokens] a            <span style="text-decoration: underline;">2</span>020</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> 2021-06-14 [5 tokens] a            <span style="text-decoration: underline;">2</span>021</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> 2020-11-05 [6 tokens] b            <span style="text-decoration: underline;">2</span>020</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> 2023-12-25 [7 tokens] b            <span style="text-decoration: underline;">2</span>023</span></span></code></pre>
+<p>We could also use other features derived from the text, such as word length, syntactic complexity, sentiment, readability, etc. A number of stylistic features are available using the <code><a href="https://textrecipes.tidymodels.org/reference/step_textfeature.html" class="external-link">step_textfeature()</a></code> function, some 26 (see <code><a href="https://textrecipes.tidymodels.org/reference/count_functions.html" class="external-link">?count_functions</a></code>). However, it is also possible to derive your own features working with the original dataset and then adding the features</p>
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span></span>
+<span>    <span class="co"># Calculate word count and average word length</span></span>
+<span>    <span class="va">df</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/tidytext/man/unnest_tokens.html" class="external-link">unnest_tokens</a></span><span class="op">(</span><span class="va">word</span>, <span class="va">text</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>        word_count <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>        avg_word_length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nchar</a></span><span class="op">(</span><span class="va">word</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span></span>
+<span>  <span class="va">outcome</span> <span class="op">~</span> <span class="va">.</span>, <span class="co"># use all variables</span></span>
+<span>  data <span class="op">=</span> <span class="va">df</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://textrecipes.tidymodels.org/reference/step_tokenize.html" class="external-link">step_tokenize</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://textrecipes.tidymodels.org/reference/step_tf.html" class="external-link">step_tf</a></span><span class="op">(</span><span class="va">text</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/prep.html" class="external-link">prep</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://recipes.tidymodels.org/reference/bake.html" class="external-link">bake</a></span><span class="op">(</span>new_data <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 16</span></span></span>
+<span><span class="co">##   date       word_count avg_word_length outcome tf_text_a tf_text_and</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> 2020-01-01          5            4.8  a               1           0</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> 2021-06-14          5            5.2  a               0           0</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> 2020-11-05          6            4.33 b               1           0</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> 2023-12-25          7            4.14 b               1           1</span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 10 more variables: tf_text_another &lt;int&gt;, tf_text_boring &lt;int&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   tf_text_fantastic &lt;int&gt;, tf_text_final &lt;int&gt;, tf_text_fourth &lt;int&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   tf_text_great &lt;int&gt;, tf_text_is &lt;int&gt;, tf_text_sentence &lt;int&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   tf_text_third &lt;int&gt;, tf_text_this &lt;int&gt;</span></span></span></code></pre>
+<p>Models:</p>
+<p>A big advantage to using the <code>tidymodels</code> approach to modeling is that it allows us to easily try different models. We have used a multinomial logistic regression model in this recipe, but we could also try other models, such as a random forest model, a support vector machine, or a neural network. We can do this by simply changing the model specification in our workflow.</p>
+<p>For example, we could use a random forest model. We would first need to update our model specification to use the <code>rand_forest()</code> function from the <code>parsnip</code> package to create a random forest model. We would also need to update the engine to use the <code>ranger</code> package, which is a fast implementation of random forest models. Finally, we would need to update the mode to "classification".</p>
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create a model specification</span></span>
+<span><span class="va">aes_spec</span> <span class="op">&lt;-</span></span>
+<span>  <span class="co"># Random Forest</span></span>
+<span>  <span class="fu">rand_forest</span><span class="op">(</span></span>
+<span>    mtry <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>    trees <span class="op">=</span> <span class="fl">1000</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"ranger"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># use the ranger engine</span></span>
+<span>  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span></span></code></pre></div>
+<p>It is important to understand that different models have different hyperparameters. As we say with the <code>logistic_reg()</code> and <code>multinom_reg()</code> models, we can tune the <code>penalty</code> hyperparameter. However, this is not the case for all models. For example, the <code>rand_forest()</code> model does not have a <code>penalty</code> hyperparameter. Instead, it has a <code>mtry</code> hyperparameter, which is the number of variables to consider at each split. We can tune this hyperparameter in the same way that we tuned the <code>penalty</code> hyperparameter using <code>tune()</code>, <code>grid_regular()</code>, and <code>tune_grid()</code>.</p>
+<p>Other models to consider for text classification include Naive Bayes, Support Vector Machines, and Neural Networks. The <code>tidymodels</code> framework supports all of these models.</p>
+<p>A last point to consider is whether we will want to be able to interpret the features that drive the model's performance. If so, we will want to use a model that allows us to interpret the features. For example, we could use a linear model, such as a logistic regression model, or a tree-based model, such as a random forest model. However, we would not be able to interpret the features of a neural network model.</p>
+<p>Furthermore, the methods we use to interpret the features will depend on the model. For example, we can interpret the features of a linear model by looking at the coefficients. However, we cannot interpret the features of a random forest model in the same way. Instead, we can use the <code>vip()</code> function from the <code>vip</code> package to visualize the importance of the features.</p>
+</div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h2>
+<p>In this recipe, we've covered the foundational skills needed to construct a predictive (classification) model using the tidymodels framework. We examined the key steps in predictive modeling: identifying data, dividing it into training and test sets, preprocessing, iterative model training, and result interpretation.</p>
+<p>We used a dataset of Spanish texts from three different varieties to demonstrate the process iterating over two approaches. In the first approach, we used a multinomial logistic regression model with TF-IDF features. In the second approach, we tuned the hyperparameters of the model and the preprocessing steps to improve the model's performance. We also touched upon alternative methods, like incorporating other features such as n-grams and experimenting with other models such as random forests, which may prove useful in text classification tasks.</p>
+<p>With the matierals in this chapter you should now have an understanding of how to build and understand a text classification model in R, equipped with insights to further develop your predictive analysis projects.</p>
 </div>
 <div class="section level2">
 <h2 id="check-your-understanding">Check your understanding<a class="anchor" aria-label="anchor" href="#check-your-understanding"></a>
 </h2>
+<ol style="list-style-type: decimal">
+<li>
+<select class="webex-select"><option value="blank"></option>
+<option value="answer">TRUE</option>
+<option value="">FALSE</option></select> There are two basic types of prediction models: regression and classification.</li>
+<li>What is the purpose of splitting data into training and testing sets? <select class="webex-select"><option value="blank"></option>
+<option value="">To make computation faster</option>
+<option value="answer">To avoid overfitting the model</option>
+<option value="">To decrease the size of the dataset</option>
+<option value="">To make the model simpler</option></select>
+</li>
+<li>What is the purpose of cross-validation? <select class="webex-select"><option value="blank"></option>
+<option value="">To make computation faster</option>
+<option value="">To avoid overfitting the model</option>
+<option value="answer">To evaluate the model's performance</option>
+<option value="">To make the model simpler</option></select>
+</li>
+<li>Which of the following models would not be appropriate for a classification task? <select class="webex-select"><option value="blank"></option>
+<option value="">Logistic regression</option>
+<option value="">Random forest</option>
+<option value="">Support vector machine</option>
+<option value="answer">Linear regression</option></select>
+</li>
+<li>Iterative improvement in modeling involves: <select class="webex-select"><option value="blank"></option>
+<option value="">Changing the model</option>
+<option value="">Changing the hyperparameters</option>
+<option value="">Changing the preprocessing steps</option>
+<option value="answer">All of the above</option></select>
+</li>
+<li>
+<select class="webex-select"><option value="blank"></option>
+<option value="">TRUE</option>
+<option value="answer">FALSE</option></select> Feature importance measures are uniform across models.</li>
+</ol>
+</div>
+<div class="section level2">
+<h2 id="lab-preparation">Lab preparation<a class="anchor" aria-label="anchor" href="#lab-preparation"></a>
+</h2>
+<p>In preparation for <a href="https://github.com/qtalr/lab-09" class="external-link">Lab 9</a>, review and ensure that you are familiar with the following concepts:</p>
+<ul>
+<li>Building feature engineering pipelines with <code>recipes</code>
+</li>
+<li>Building model specifications with <code>parsnip</code>
+</li>
+<li>Iterative model training, evaluation, and improvement with <code>workflows</code>, <code>tune</code>, and <code>yardstick</code>
+</li>
+</ul>
+<p>In this lab, you will have an opportunity to apply these concepts to a new dataset and classification task. You should consider the dataset and the task in be performed in the lab and think about how you might approach the task from a feature engineering and model selection perspective. You will be asked to submit you code and a brief reflection on your approach and the results.</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>

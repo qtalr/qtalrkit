@@ -1,3 +1,7 @@
+# qtalrkit 0.9.2
+
+* Updates recipes
+
 # qtalrkit 0.9.1
 
 * Changes mirror to "https://gutenberg.pglaf.org/" for `get_gutenberg_works()` function

@@ -52,7 +52,7 @@ We will model how to explore iteratively using the output of one method to infor
 
 Let's get started by loading some of the packages we will likely use.
 
-```{r load-packages, message=FALSE, warning=FALSE}
+```{r load-packages}
 library(dplyr)      # for data manipulation
 library(stringr)    # for string manipulation
 library(tidyr)      # for data tidying
@@ -72,7 +72,7 @@ We will use the SOTU corpus to demonstrate the different methods. We will select
 
 This will include methods such as frequency and distributional analysis, dimensionality reduction, and word embedding models.
 
-```{r sotu-corpus, message=FALSE, warning=FALSE, echo=FALSE}
+```{r sotu-corpus, echo=FALSE}
 sotu_df <-
   quanteda.corpora::data_corpus_sotu |> # load the SOTU corpus
   quanteda::corpus_subset(Date > "1946-01-01") |> # subset the corpus to post-1945

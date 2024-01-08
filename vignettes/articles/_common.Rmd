@@ -26,7 +26,7 @@ pacman::p_load(
 write_bib(c(
   "tidyverse", "readr", "rmarkdown", "dplyr", "usethis", "gitcreds",
   "quanteda", "textdata", "tidycensus", "sf", "rtweet", "skimr", "janitor",
-  "ggplot2", "gridExtra", "reprex", "rvest", "fs", "purrr", "fontawesome", "webexercises", "corpora", "knitr", "kableExtra", "stringr", "tidyr", "regexplain", "gutenbergr", "word2vec", "wordVectors", "PsychWordVec"
+  "ggplot2", "gridExtra", "reprex", "rvest", "fs", "purrr", "fontawesome", "webexercises", "corpora", "knitr", "kableExtra", "stringr", "tidyr", "regexplain", "gutenbergr", "word2vec", "wordVectors", "PsychWordVec", "broom", "parsnip", "recipes", "tune", "rsample", "workflows", "yardstick", "tidymodels"
 ), "packages.bib")
 
 # Plots ------------------------------------------------------------------
@@ -138,6 +138,8 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE,
   out.width = "100%",
-  fig.align = "center"
+  fig.align = "center",
+  fig.width = 8,
+  fig.height = 4
 )
 ```

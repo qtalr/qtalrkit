@@ -11,23 +11,754 @@ link-citations: true
 ```
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Overview
 
+<!--
+Purpose: To showcase the process of building predictive models. This will include how to identify the variables of interest, inspect the data, interrogate the data, and interpret the results.
+
+Description: Predictive methods used here will lean on the `tidymodels` packages. The focus will be on the process of building predictive models, not on the details of the methods. The process includes identifying the variables that you want to predict (the outcome) and the variables that you will use to predict it (the predictors), how to engineer new variables, how to split the data into a training set and a test set, how to integrate variable selection into the model building process, how to inspect the data to identify potential problems, how to interrogate the data with model development and validation, and how to interpret the results of the model on validation set.
+
+Approach: We will use the ACTIV-ES corpus to build a predictive model that can classify text as one of three dialects of Spanish: Argentinian, Mexican, or Spanish. We will frame this as a supervised learning problem, where we have a set of texts that have been labeled with the dialect of Spanish that they are written in.
+
+Prerequisites: The recipe assumes that you have a solid understanding of the basics of R and the tidyverse. Experience with the `tidymodels` framework is helpful, but not required. The recipe also assumes that you have completed the previous lessons and recipes in this series.
+
+Context: This is the second of three tutorials on text analysis. The previous tutorial was exploratory methods and the following will be on inferential modeling methods. The accompanying lab for this recipe will continue with the options for forking/ cloning a project from GitHub, working with an existing project, and creating a new project. The lab is designed to be completed in a 50 minute class period.
+-->
+
+<!-- About predictive modeling -->
+
+This recipe will cover the process of building a predictive model to classify text into one of three Spanish dialects: Argentinian, Mexican, or Spanish. We will take a step-by-step approach that includes data preparation, model training and evaluation, and result interpretation.
+
+We will see practical examples of how to apply the `tidymodels` framework to build and evaluate a predictive model. Including:
+
+- How to identify the variables of interest
+- How to inspect the data
+- How to interrogate the data and iterate on the model to improve performance
+- How to interpret the results of the model
+
+The workflow for building a predictive model is shown in Table \@ref(tab:pda-workflow). Note that Step 6 includes an optional step to iterate on the model to improve performance. This is optional because it is not always necessary to iterate on the model. However, it is often the case that the first model you build is not the best model. So it is good to be prepared to iterate on the model.
+
+<!-- Workflow: steps -->
+
+| Step | Name | Description |
+|------|-------------|-------------|
+| 1 | Identify | Consider the research question and aim and identify relevant variables |
+| 2 |  | Split the data into representative training and testing sets |
+| 3 |  | Apply variable selection and engineering procedures |
+| 4 | Inspect | Inspect the data to ensure that it is in the correct format and that the training and testing sets are representative of the data |
+| 5 | Interrogate | Train and evaluate the model on the training set, adjusting models or hyperparameters as needed, to produce a final model |
+| 6 | (Optional) Iterate | Repeat steps 3-5 to selecting new variables, models, hyperparameters |
+| 7 | Interpret | Interpret the results of the final model in light of the research question or hypothesis |
+
+Table: (\#tab:pda-workflow) The predictive modeling workflow
+
+<!-- Approach -->
+
+Let's get started by loading some of the key packages we will use in this recipe.
+
+```{r load-packages}
+library(tidymodels) # for modeling
+library(textrecipes) # for text preprocessing
+library(dplyr) # for data manipulation
+library(tidyr) # for data manipulation
+library(stringr) # for string manipulation
+library(tidytext) # for text manipulation
+library(ggplot2) # for visualization
+library(janitor) # for tabyl()
+
+tidymodels_prefer() # avoid function name conflicts
+```
+
+::: {.callout}
+**`r fontawesome::fa('hand-point-up')` Tip**
+
+Note that loading the `tidymodels` package will load 22 other packages commonly used in modeling workflows. You can see the list of packages by running `tidymodels::tidyverse_packages()`.
+:::
+
+In Lab 9, we will apply the `tidymodels` framework to build and explore a predictive model based on another dataset.
+
 ## Concepts and strategies
 
-- Identify the variables that you want to predict (the outcome) and the variables that you will use to predict it (the predictors).
-  - Split the data into a training set and a test set.
-  - Integrate variable selection into the model building process.
-- Inspect the data to identify potential problems.
-- Interrogate the data with model development and validation.
-- Interpret the results of the model on validation set.
+### Orientation
+
+<!-- About the dataset and the aim of the analysis -->
+
+We will use the ACTIV-ES corpus to build a predictive model that can classify text as one of three dialects of Spanish: Argentinian, Mexican, or Spanish. We will frame this as a supervised learning problem, where we have a set of texts that have been labeled with the dialect of Spanish that they are written in. In contrast to the classification task in the chapter, which was binary, this is a multiclass classification task, where we are trying to classify each document as one of three classes.
+
+<!-- Prep the dataset -->
+
+```{r, eval=FALSE, echo=FALSE}
+library(qtalrkit)
+
+# Acquire AES data ---------------------------------------------------
+plain_url <- "https://github.com/francojc/activ-es/raw/master/activ-es-v.02/corpus/plain.zip"
+
+get_compressed_data(url = plain_url, target_dir = "vignettes/articles/data/original/actives", confirmed = TRUE)
+
+aes <- readtext::readtext(
+  file = "vignettes/articles/data/original/actives",
+  docvarsfrom = "filenames",
+  docvarnames = c("language", "variety", "year", "title", "kind", "genre", "imbd_id"),
+  dvsep = "_",
+  verbosity = 0
+)
+
+aes_df <-
+  aes |>
+  mutate(
+    doc_id = imbd_id
+  ) |>
+  as_tibble() |>
+  select(doc_id, variety, text)
+
+readr::write_csv(aes_df, "vignettes/articles/data/derived/actives/actives_curated.csv")
+
+# Document data dictionary -------------------------------------------
+create_data_dictionary(data = aes_df, file_path = "vignettes/articles/data/derived/actives_curated_dd.csv", model = "gpt-3.5-turbo")
+```
+
+```{r, include=FALSE}
+aes_df <-
+  readr::read_csv("data/derived/actives/actives_curated.csv") |>
+  mutate(variety = factor(variety))
+```
+
+Let's preview the structure of the ACTIVES dataset.
+
+```{r, comment = "#"}
+aes_df
+```
+
+This dataset contains 430 documents, each of which is labeled with the variety of Spanish that it is written in and the text of the document. A document ID is also included, which we will be able to use to index the documents. The `variety` vector is a factor. As this will be the outcome variable in our predictive model, this is good as most predictive models require classification variables to be factors.
+
+Let's get a sense of the distribution of the `variety` variable.
+
+```{r}
+aes_df |>
+  tabyl(variety) |>
+  adorn_pct_formatting(digits = 1)
+```
+
+We can see that the dataset is somewhat balanced, with Peninsular Spanish comprising the larger portion of the texts.
+
+### Analysis
+
+At this point we can start to approach building a predictive model that can distinguish between the Spanish varieties using the text. We will first start by applying steps 1 and 2 of the workflow. We will then apply steps 3-5 iteratively to build, evaluate, and improve the model, as necessary, before applying it to the test data to assess and interpret the results.
+
+Let's go ahead and perform steps 1 and 2. To split the data into training and testing sets, we will use the `rsample` package. The `initial_split()` function, sets up the splits and we use `variety` as the stratification variable to ensure that the training and testing sets are representative of the distribution of the outcome variable. As this process is random, we will set the seed for reproducibility. Finally, we call the `training()` and `testing()` functions to extract the training and testing sets.
+
+```{r}
+# Set the seed for reproducibility
+set.seed(1234)
+
+# Split the data into training and testing sets
+aes_split <-
+  initial_split(
+    data = aes_df,
+    prop = 0.8,
+    strata = variety
+  )
+
+aes_train <- training(aes_split) # extract the training set
+aes_test <- testing(aes_split) # extract the testing set
+```
+
+We will then set the base recipe which formally identifies the relationship between the predictor and outcome variables. The `recipe()` function from the `recipes` package is used to create a recipe.
+
+```{r}
+# Set the base recipe
+aes_base_rec <-
+  recipe(
+    formula = variety ~ text,
+    data = aes_train
+  )
+```
+
+We now have steps 1 and 2 of the workflow completed. We have identified the variables of interest and split the data into training and testing sets.
+
+One more thing we will do here is to set up the cross-validation folds. Every time we fit a model to the training data, we will want to evaluate the model's performance on the training data. However, we don't want to do this in a way that is biased --testing the model on the same data that it was trained on! For this reason, we will use cross-validation to split the training data into multiple training and validation sets which represent different splits of the training data.
+
+We will use the `vfold_cv()` function from the `rsample` package to set up the cross-validation folds. We will use 10 folds, which is a common number of folds to use. We will also use the `strata` argument to ensure that the folds are representative of the distribution of the outcome variable.
+
+```{r}
+# Set seed for reproducibility
+set.seed(1234)
+
+# Set up the cross-validation folds
+cv_folds <-
+  vfold_cv(
+    data = aes_train,
+    v = 10,
+    strata = variety
+  )
+```
+
+With these common steps completed, we can now apply and reapply steps 3-5 of the workflow to build, evaluate, and improve the model.
+
+#### Approach 1
+
+In our first approach, let's start simple by using words as features and apply a logistic regression model. We won't be completely naive, however, as we are familiar with the undo influence of the most frequent words. To address this, we will apply a term frequency-inverse document frequency (TF-IDF) transformation to the text in order to downweight the influence of the most frequent words and promote words that are more indicative of each class. Furthermore, we know that we will want to use a regularized regression model to avoid overfitting to particular words.
+
+To get started, we will use the `textrecipes` package to add steps to our `aes_base_rec` recipe to preprocess the text. We will use the `step_tokenize()` function to tokenize the text. This tokenization process will likely result in a very large number of terms, most of which will not be informative and will add computational overhead. We will want to restrict the number of terms with the `step_tokenfilter()` function. However, it is not clear how many terms we should restrict the tokens to. For now, we will start with 1,000 tokens, but we will likely want to revisit this later. We will also use the `step_tfidf()` function to apply a TF-IDF transformation to the text setting `smooth_idf` to `FALSE`.
+
+```{r}
+# Add preprocessing steps to the recipe
+aes_rec <-
+  aes_base_rec |>
+  step_tokenize(text) |>
+  step_tokenfilter(text, max_tokens = 1000) |>
+  step_tfidf(text, smooth_idf = FALSE)
+
+# Preview the recipe
+aes_rec
+```
+
+To implement the recipe and to preview the text preprocessing steps we apply the `prep()` and `bake()` functions.
+
+```{r}
+aes_bake <-
+  aes_rec |>
+  prep() |>
+  bake(new_data = NULL)
+
+# Preview
+dim(aes_bake)
+aes_bake[1:5, 1:5]
+```
+
+We now have a recipe that will tokenize the text, restrict the tokens to the most common 1,000 tokens, and create a TF-IDF matrix.
+
+It is not a bad idea to inspect the features at this point to make sure that the preprocessing steps have been applied correctly and to gauge what this feature selection looks like so that when it comes time to interpret the model, we have a sense of what the model is doing.
+
+As TF-IDF is going to be the main feature in our model, let's visualize the top 20 terms by class. To do this, we will use the `dplyr` package to get the median TF-IDF score for each word by class, convert the data from wide to long format using the `pivot_longer()` function, and then use the `ggplot2` package to visualize the data.
+
+```{r tfidf-viz, fig.cap="Top 20 terms by class"}
+# Sum the term frequencies by class
+class_freq_wide <-
+  aes_bake |>
+  group_by(variety) |>
+  summarize(
+    across(
+      starts_with("tfidf_"),
+      median
+    )
+  ) |>
+  ungroup()
+
+# Convert the data from wide to long format
+class_freq_long <-
+  class_freq_wide |>
+  pivot_longer(
+    cols = starts_with("tfidf_"),
+    names_to = "term",
+    values_to = "tfidf"
+  ) |>
+  mutate(term = str_remove(term, "tfidf_text_"))
+
+# Visualize the top 20 terms by class
+class_freq_long |>
+  slice_max(n = 20, order_by = tfidf, by = variety) |>
+  mutate(term = reorder_within(term, tfidf, variety)) |>
+  ggplot(aes(x = term, y = tfidf)) +
+  geom_col() +
+  scale_x_reordered() +
+  facet_wrap(~variety, scales = "free_y") +
+  coord_flip()
+```
+
+In Figure \@ref(fig:tfidf-viz), we see the words that are most indicative of each language variety. If you are familiar with Spanish, you can probably detect some variety-specific terms. For example, "vos" is a pronoun used in Argentinian Spanish and "os" is a pronoun used in Peninsular Spanish. There is also some overlap between the varieties, such as "tienes" and "te".
+
+Another point to note is the difference in magnitude of the TF-IDF scores between the Argentinian and other varieties. This suggests that the Argentinian variety is more distinct from the other varieties than the other varieties are from each other. Among the most distinctive terms are verbal forms that are specific to Argentinian Spanish, such as "tenés" and "sos".
+
+Now let's create a model specification. We will use the `multinom_reg()` function from the `parsnip` package to create a multinomial logistic regression model, as we have multiple classes in our prediction task. We will use the "glmnet" engine, which will allow us to apply regularization to the model, arbitrarily set to 0.01. We will use the `set_engine()` function to set the engine and the `set_mode()` function to set the mode to "classification".
+
+```{r}
+# Create a model specification
+aes_spec <-
+  multinom_reg(
+    penalty = 0.01,
+    mixture = 1
+  ) |>
+  set_engine("glmnet") |>
+  set_mode("classification")
+```
+
+To combine the recipe and the model specification, we will use the `workflows` package. We will use the `workflow()` function and pass `add_recipe(aes_rec)` and `add_model(aes_spec)` as arguments to add the recipe and the model specification to the workflow.
+
+```{r}
+# Create a workflow
+aes_wf <-
+  workflow() |>
+  add_recipe(aes_rec) |>
+  add_model(aes_spec)
+```
+
+We can now use the cross-validation folds that we set up earlier. We will use the `fit_resamples()` function to fit the model to the training data using the cross-validation folds.
+
+```{r}
+# Fit the model to the training data
+aes_train_fit <-
+  aes_wf |>
+  fit_resamples(
+    resamples = cv_folds,
+    control = control_resamples(save_pred = TRUE)
+  )
+```
+
+We can now evaluate the model's performance on the training data. We will use the `collect_metrics()` function to collect the metrics from the cross-validation folds.
+
+```{r}
+# Evaluate the model's performance on the training data
+aes_train_fit |>
+  collect_metrics()
+```
+
+```{r, include=FALSE}
+aes_train_fit_metrics <-
+  aes_train_fit |>
+  collect_metrics()
+
+aes_acc <-
+  aes_train_fit_metrics[1, 3] |>
+  pull() |>
+  scales::percent(0.1)
+aes_roc_auc <-
+  aes_train_fit_metrics[2, 3] |>
+  pull() |>
+  scales::percent(0.1)
+```
+
+We can see that the model has a mean accuracy of `r aes_acc` and ROC-AUC of `r aes_roc_auc`. That pretty good for a first pass. To get a sense of how good (or bad) it is, let's compare it to a baseline model.
+
+A baseline model is the simplest model that we can use to compare the performance of our model to. A common baseline model is a model that always predicts the most frequent class. In our case, this is Peninsular Spanish, which accounts for 42.6% of the data. So it is clear that our model is doing much better than a baseline model which will have an accuracy score of 42.6%.
+
+We can visualize the correct and incorrect predictions using a confusion matrix. We will use the `conf_mat_resampled()` function from the `yardstick` package to create the confusion matrix and the `autoplot()` function from the `ggfortify` package to visualize it.
+
+```{r aes-a1-conf-mat, fig.cap="Confusion matrix for the model in Approach 1"}
+aes_train_fit |>
+  conf_mat_resampled(tidy = FALSE) |>
+  autoplot(type = "heatmap")
+```
+
+The left-downward diagonal of the confusion matrix represents the average number of documents correctly predicted for the aggregated model across the cross-validation folds. Other cells represent the average number of documents incorrectly predicted for each class-class combination. You can read these by using the row label to identify the predicted class and the column label to identify the actual class. So, for example, the model predicted Mexico $n$ times when the actual class was Argentina. And so on.
+
+#### Approach 2
+
+In our first approach we applied a TF-IDF transformation to the text and used a regularized multinomial logistic regression model. We also restricted the tokens to the 1,000 most frequent tokens and arbitrarily set the regularization parameter to 0.01. This resulted in an aggregate accuracy score of `r aes_acc` on the training data. This is a good start, but see if we can do better.
+
+In this second approach, let's try to improve the model by applying a more principled approach to feature and hyperparameter selection.
+
+To do this we will 'tune' the `max_tokens` and `penalty` hyperparameters in our recipe and model specifications, respectively. We need to update our recipe and model specification to include placeholders for these parameters replacing the previous values with `tune()`. We will also need to update our workflow to include the updated recipe and model specification.
+
+```{r}
+# Update the recipe
+aes_rec <-
+  aes_base_rec |>
+  step_tokenize(text) |>
+  step_tokenfilter(text, max_tokens = tune()) |> # adds placeholder
+  step_tfidf(text, smooth_idf = FALSE)
+
+# Update the model specification
+aes_spec <-
+  multinom_reg(
+    penalty = tune(), # adds placeholder
+    mixture = 1
+  ) |>
+  set_engine("glmnet") |>
+  set_mode("classification")
+```
+
+We can now create a workflow that includes the recipe and the model specification.
+
+```{r}
+# Create a workflow
+aes_wf <-
+  workflow() |>
+  add_recipe(aes_rec) |>
+  add_model(aes_spec)
+```
+
+Now we set up the range of values for both the `max_tokens` and `penalty` hyperparameters. The `grid_regular()` function from the `dials` package will allow us to specify a grid of values for each hyperparameter.
+
+
+```{r}
+# Set the hyperparameter grid
+aes_grid <-
+  grid_regular(
+    max_tokens(range = c(250, 2000)),
+    penalty(range = c(-3, -1)),
+    levels = c(max_tokens = 5, penalty = 10)
+  )
+
+aes_grid
+```
+
+The `range = ` argument specifies the range of values to include in the grid. For `max_tokens`, this is straightforward. For `penalty`, we are specifying the range of values on the log scale. So the range of values is 0.001 to 0.1. The `levels` argument specifies the number of values to include in the grid. In this case, we will include 5 values for `max_tokens` and 10 values for `penalty`. This will result in 50 combinations of hyperparameter values.
+
+We will then pass our `aes_wf` workflow to the `tune_grid()` function with the grid values we specified to tune the hyperparameters.
+
+```{r}
+# Tune the hyperparameters
+aes_tune <-
+  aes_wf |>
+  tune_grid(
+    resamples = cv_folds,
+    grid = aes_grid,
+    control = control_resamples(save_pred = TRUE)
+  )
+```
+
+The `aes_grid` object is a tibble which contains the grid all the combinations of hyperparameter values. In this case, there are 50 combinations. That means we are going to fit 50 models to the training data! This is a lot of models, but it is worth it to get a more robust estimate of the model's performance.
+
+We can use the `collect_metrics()` function to collect the metrics from the cross-validation folds for each of our tuning parameters, but this will result in a lot of output. Instead, we can use the `autoplot()` function to visualize the metrics.
+
+```{r aes-tune-metrics, fig.cap="Metrics for model tuning in Approach 2"}
+# Plot the collected metrics
+aes_tune |> autoplot()
+```
+
+We see some variation across the folds in the accuracy and ROC-AUC scores. This will help us make a more informed decision about which hyperparameters to use.
+
+The metric to use to select the best model is something to consider.Accuracy is an important measure, but does not tell the whole story. In particular, accuracy does not tell us how well the model is doing for each class --only the overall correct and incorrect predictions. To get a better sense of how the model is doing across the classes, we can pay attention to the ROC-AUC score. The ROC-AUC score is a measure of the area under the receiver operating characteristic (ROC) curve. The ROC curve plots the true positive rate (TPR) against the false positive rate (FPR) for each class at different probability thresholds. This measure is useful because it is not affected by class imbalance.
+
+Let's select the best model based on the ROC-AUC score.
+
+```{r}
+# Get the best model
+aes_tune_best <-
+  aes_tune |>
+  select_best("roc_auc")
+
+aes_tune_best
+```
+
+We can now update our workflow with the best hyperparameters.
+
+```{r}
+# Update the workflow
+aes_wf <-
+  aes_wf |>
+  finalize_workflow(aes_tune_best)
+
+aes_wf
+```
+
+We can now see that the updated workflow will replace the `tune()` placeholders with the best hyperparameters we selected.
+
+Let's again perform a resampled fit on the training data using our new tuned model and then compare our results with the previous, abritrarily tuned model.
+
+```{r}
+# Fit the model to the training data
+aes_train_fit <-
+  aes_wf |>
+  fit_resamples(
+    resamples = cv_folds,
+    control = control_resamples(save_pred = TRUE)
+  )
+
+# Evaluate the model's performance on the training data
+aes_train_fit |>
+  collect_metrics()
+```
+
+```{r, include=FALSE}
+aes_train_fit_metrics <-
+  aes_train_fit |>
+  collect_metrics()
+
+aes_a2_acc <-
+  aes_train_fit_metrics[1, 3] |>
+  pull() |>
+  scales::percent(0.1)
+
+aes_a2_roc_auc <-
+  aes_train_fit_metrics[2, 3] |>
+  pull() |>
+  scales::percent(0.1)
+```
+
+The accuracy score has improved just a bit, from an aggregate score of `r aes_acc` to `r aes_a2_acc`.
+
+In all likelihood, we would want to continue to iterate on this model, applying different feature selection and engineering procedures, different models, and different hyperparameters --I will consider some suggestions in the next section. However, for the sake of time, we will stop here and train our final model on the training data and then apply the model to the test data to assess and interpret the results.
+
+##### Interpreting the model
+
+At this stage we are ready to interpret the model. We first fit the model to the training data, then apply the model to the test data, and evaluate the model's performance on the test data. Finally, we will dig into the model to interpret the importance of the features to help us understand what the model is doing and what it can tell us about words that are indicative, or not, of each variety.
+
+Let's fit our final model to the training data and evaluate it on the testing data using the `last_fit()` function which takes our updated workflow and the original split we created earlier which is stored in `aes_split`.
+
+```{r}
+# Fit the final model
+aes_final_fit <- last_fit(aes_wf, aes_split)
+```
+
+We can now collect the performance metrics from the testing data.
+
+```{r}
+# Get the performance metrics
+aes_final_fit |>
+  collect_metrics()
+```
+
+```{r, include=FALSE}
+aes_final_metrics <-
+  aes_final_fit |>
+  collect_metrics()
+
+aes_final_metrics_acc <-
+  aes_final_metrics[1, 3] |>
+  pull() |>
+  scales::percent(0.1)
+
+aes_final_metrics_kappa <-
+  aes_final_metrics[2, 3] |>
+  pull() |>
+  scales::percent(0.1)
+```
+
+The accuracy of this model on the test data is `r aes_final_metrics_acc`. This is lower than the accuracy on the training data. Should we be surprised? Not really. The model was trained on the training data, so it is not surprising that it would perform better on the training data than the test data, despite the fact that we used cross-validation to evaluate the model on the training data. This is a good reminder that the model is not perfect and that we should not expect it to be.
+
+What does the 'kap' metric mean? The Kappa statistic is a measure of agreement between the predicted and actual classes. It is a measure of agreement that is corrected for the possibility that some correct prediction may have occurred by chance. The kappa statistic ranges from 0 to 1, with 0 indicating no agreement above chance and 1 indicating perfect agreement. In this case, the kappa statistic is `r aes_final_metrics_kappa`, which indicates that there is a moderate amount of agreement between the predicted and actual classes.
+
+Let's explore if there is a difference in performance across the classes. To do this, we will use the `conf_mat()` function from the `yardstick` package to create the confusion matrix and the `autoplot()` function from the `ggfortify` package to visualize it.
+
+```{r aes-a2-conf-mat, fig.cap="Confusion matrix for the model in Approach 2"}
+aes_final_fit |>
+  collect_predictions() |>
+  conf_mat(truth = variety, estimate = .pred_class) |>
+  autoplot(type = "heatmap")
+```
+
+We can see that the model is doing a good job of predicting Peninsular Spanish, but is not doing as well with the other varieties. This is not surprising given that Peninsular Spanish is the most frequent class in the data. This is a good reminder that accuracy is not the only metric to consider when evaluating a model. We can get a better sense of how the model is doing across the classes by looking at the ROC-AUC score.
+
+```{r}
+# Get the ROC-AUC score
+aes_final_fit |>
+  collect_predictions() |>
+  roc_curve(truth = variety, .pred_Argentina:.pred_Spain) |>
+  autoplot()
+```
+
+Taken together, we have a decent model that can predict the variety of Spanish that a text is written in. We can also see that although prediction accuracy appears higher for Peninsular Spanish, the ROC-AUC curves suggest that the model is doing a better job of predicting the other varieties based on the features.
+
+There is still room for improvement --as we recognized earlier. However, it is important that we do not start to use the testing data to improve the model. The testing data should only be used to evaluate the model. If we start to use the testing data to improve the model, we will no longer have an unbiased estimate of the model's performance.
+
+Let's now dig into our model's features to explore what words are driving the model's predictions. The approach to do this will depend on the model. In this case, we used a multinomial logistic regression model, which is a linear model. This means that we can interpret the model's coefficients to understand the importance of the features. Coefficients that are positive indicate that the feature is associated with the reference class and coefficients that are negative indicate that the feature is associated with the non-reference class. For classification tasks with two classes, this is straightforward to interpret.
+
+The issue here, however, is that we have more than two classes (i.e., Argentina, Mexico, and Spain). In these cases, the coefficients estimates for each class need to be extracted and standardized to be compared across classes.
+
+We can do this using the `extract_fit_parsnip()` function from the `parsnip` package. This will extract the model object from the workflow object. The `tidy()` function from the `broom` package will then organize the coefficients (log-odds) for each predictor terms for each outcome class. We can then use the `filter()` function from the `dplyr` package to remove the intercept term and the `mutate()` function from the `dplyr` package to remove the "tfidf_text_" prefix from the term names so that they are more legible.
+
+```{r}
+# Get the coefficients
+aes_coefs <-
+  aes_final_fit |>
+  extract_fit_parsnip() |>
+  tidy() |>
+  filter(term != "(Intercept)") |>
+  mutate(term = str_remove(term, "tfidf_text_"))
+
+slice_sample(aes_coefs, n = 10)
+```
+
+Now to standardize the log-odds coefficients so that they are comparable across the classes, we will use the `scale()` function from base R to transform the coeffients such that each class has a mean of 0 and a standard deviation of 1. `scale()` returns a matrix, so we will use the `as.vector()` function to convert the matrix to a vector.
+
+
+```{r}
+aes_coefs_z <-
+  aes_coefs |>
+  group_by(class) |>
+  mutate(z_score = as.vector(scale(estimate))) |>
+  ungroup()
+
+slice_sample(aes_coefs_z, n = 10)
+```
+
+Finally, let's visualize the top 25 terms by class. Note that we are using the `reorder_within()` and `scale_x_reordered()` functions from the `tidytext` package to reorder the terms in such a way that our facets allow for distinct terms on the x-axis for each class. Then the `coord_flip()` function from the `ggplot2` package is used to flip the axes for easier reading.
+
+```{r aes-a2-coefs-viz, fig.cap="Top 25 terms by class"}
+aes_coefs_z |>
+  mutate(term = reorder_within(term, z_score, class)) |>
+  slice_max(n = 25, order_by = z_score, by = class) |>
+  ggplot(aes(x = term, y = z_score)) +
+  geom_col() +
+  scale_x_reordered() +
+  facet_wrap(~class, scales = "free_y") +
+  coord_flip()
+```
+
+We can assess the distinct features for each class and also gauge the magnitude of the estimates. We should be cautious, however, as these terms are derived from our model that only performs moderately well.
+
+
+#### Other approaches
+
+As we have seen, there are many decisions to make when building a predictive model. We have only scratched the surface of the options available. In this section, I will briefly consider some other approaches that may be of interest.
+
+Features:
+
+We used words in this recipe and in the chapter classification task. This is merely in order to keep the focus on the process of building a predictive model. There are many other features that could be used. For example, we could use n-grams, character n-grams, or word embeddings. The `textrecipes` package provides many options for text preprocessing and feature engineering.
+
+Let's look at how we can derive other linguistic units using `textrecipes`. First, let's set up a simple dataset and base recipe.
+
+```{r}
+df <- tibble(
+  outcome = factor(c("a", "a", "b", "b")),
+  date = as.Date(c("2020-01-01", "2021-06-14", "2020-11-05", "2023-12-25")),
+  text = c(
+    "This is a fantastic sentence.",
+    "This is another great sentence.",
+    "This is a third, boring sentence.",
+    "This is a fourth and final sentence."
+  )
+)
+
+base_rec <- recipe(outcome ~ text, data = df)
+```
+
+Now, say instead of words, we were interested in deriving word $n$-grams as our terms. We again use the `step_tokenize()` function in our recipe. This time, however, we add a value to the `token = ` argument. In this case, we will use "ngrams". `textrecipes` uses the tokenization engine from the `tokenizers` package, so the types of tokenization available are the same as those available (see `help(tokenizers)` for more information).
+
+```{r}
+base_rec |>
+  step_tokenize(
+    text,
+    token = "ngrams", # word n-grams
+  ) |>
+  show_tokens(text)
+```
+
+By default `tokens = "ngrams"` produces trigrams.
+
+Another option is to use character n-grams. This is useful when we want to capture information about the morphology of the words. For character n-grams, we can use "character_shingle".
+
+```{r}
+base_rec |>
+  step_tokenize(
+    text,
+    token = "character_shingle" # character n-grams
+  ) |>
+  show_tokens(text)
+```
+
+By default `tokens = "character_shingle"` also produces trigrams.
+
+Now, say we want to change the number of words in each n-gram or character n-gram. We can do this using the `options = ` argument. This is where we pass tokenizer-specific options. For example, to change the number of words in each n-gram, we can use the `n = ` argument.
+
+```{r}
+base_rec |>
+  step_tokenize(
+    text,
+    token = "ngrams",
+    options = list(n = 2) # word bigrams
+  ) |>
+  show_tokens(text)
+```
+
+If you would like to calculate multiple $n$-gram windows, you can pass the `n_min = ` argument.
+
+```{r}
+base_rec |>
+  step_tokenize(
+    text,
+    token = "ngrams",
+    options = list(n = 2, n_min = 1) # word unigrams and bigrams
+  ) |>
+  show_tokens(text)
+```
+
+Names and values of the arguments that `options = ` will take will depend on the type of tokenization specified.
+
+We could also use metadata, such as the year the text was written, the author, the genre, *etc*. In these cases, will will update our base recipe to include the metadata as predictors and then we can use the necessary preprocessing steps to prepare the metadata for modeling using functions from the `recipes()` package (*i.e.*, `step_normalize(), step_dummy(), *etc.*).
+
+```{r}
+base_rec <- recipe(outcome ~ date + text, data = df) # add date
+
+base_rec |>
+  step_tokenize(text) |>
+  step_date(date, features = c("year")) |> # extract the year
+  prep() |>
+  juice()
+```
+
+We could also use other features derived from the text, such as word length, syntactic complexity, sentiment, readability, etc. A number of stylistic features are available using the `step_textfeature()` function, some 26 (see `?count_functions`). However, it is also possible to derive your own features working with the original dataset and then adding the features
+
+```{r}
+df <-
+  df |>
+  left_join(
+    # Calculate word count and average word length
+    df |>
+      unnest_tokens(word, text, drop = FALSE) |>
+      group_by(text) |>
+      summarize(
+        word_count = n(),
+        avg_word_length = mean(nchar(word))
+      )
+  )
+
+recipe(
+  outcome ~ ., # use all variables
+  data = df
+) |>
+  step_tokenize(text) |>
+  step_tf(text) |>
+  prep() |>
+  bake(new_data = NULL)
+```
+
+Models:
+
+A big advantage to using the `tidymodels` approach to modeling is that it allows us to easily try different models. We have used a multinomial logistic regression model in this recipe, but we could also try other models, such as a random forest model, a support vector machine, or a neural network. We can do this by simply changing the model specification in our workflow.
+
+For example, we could use a random forest model. We would first need to update our model specification to use the `rand_forest()` function from the `parsnip` package to create a random forest model. We would also need to update the engine to use the `ranger` package, which is a fast implementation of random forest models. Finally, we would need to update the mode to "classification".
+
+```{r}
+# Create a model specification
+aes_spec <-
+  # Random Forest
+  rand_forest(
+    mtry = 10,
+    trees = 1000
+  ) |>
+  set_engine("ranger") |> # use the ranger engine
+  set_mode("classification")
+```
+
+It is important to understand that different models have different hyperparameters. As we say with the `logistic_reg()` and `multinom_reg()` models, we can tune the `penalty` hyperparameter. However, this is not the case for all models. For example, the `rand_forest()` model does not have a `penalty` hyperparameter. Instead, it has a `mtry` hyperparameter, which is the number of variables to consider at each split. We can tune this hyperparameter in the same way that we tuned the `penalty` hyperparameter using `tune()`, `grid_regular()`, and `tune_grid()`.
+
+Other models to consider for text classification include Naive Bayes, Support Vector Machines, and Neural Networks. The `tidymodels` framework supports all of these models.
+
+A last point to consider is whether we will want to be able to interpret the features that drive the model's performance. If so, we will want to use a model that allows us to interpret the features. For example, we could use a linear model, such as a logistic regression model, or a tree-based model, such as a random forest model. However, we would not be able to interpret the features of a neural network model.
+
+Furthermore, the methods we use to interpret the features will depend on the model. For example, we can interpret the features of a linear model by looking at the coefficients. However, we cannot interpret the features of a random forest model in the same way. Instead, we can use the `vip()` function from the `vip` package to visualize the importance of the features.
 
 ## Summary
 
+In this recipe, we've covered the foundational skills needed to construct a predictive (classification) model using the tidymodels framework. We examined the key steps in predictive modeling: identifying data, dividing it into training and test sets, preprocessing, iterative model training, and result interpretation.
+
+We used a dataset of Spanish texts from three different varieties to demonstrate the process iterating over two approaches. In the first approach, we used a multinomial logistic regression model with TF-IDF features. In the second approach, we tuned the hyperparameters of the model and the preprocessing steps to improve the model's performance. We also touched upon alternative methods, like incorporating other features such as n-grams and experimenting with other models such as random forests, which may prove useful in text classification tasks.
+
+With the matierals in this chapter you should now have an understanding of how to build and understand a text classification model in R, equipped with insights to further develop your predictive analysis projects.
+
 ## Check your understanding
 
+1. `r torf(TRUE)` There are two basic types of prediction models: regression and classification.
+2. What is the purpose of splitting data into training and testing sets? `r mcq(c("To make computation faster", answer = "To avoid overfitting the model", "To decrease the size of the dataset", "To make the model simpler"))`
+3. What is the purpose of cross-validation? `r mcq(c("To make computation faster", "To avoid overfitting the model", answer = "To evaluate the model's performance", "To make the model simpler"))`
+4. Which of the following models would not be appropriate for a classification task? `r mcq(c("Logistic regression", "Random forest", "Support vector machine", answer = "Linear regression"))`
+5. Iterative improvement in modeling involves: `r mcq(c("Changing the model", "Changing the hyperparameters", "Changing the preprocessing steps", answer = "All of the above"))`
+6. `r torf(FALSE)` Feature importance measures are uniform across models.
+
+## Lab preparation
+
+In preparation for [Lab 9](https://github.com/qtalr/lab-09), review and ensure that you are familiar with the following concepts:
+
+- Building feature engineering pipelines with `recipes`
+- Building model specifications with `parsnip`
+- Iterative model training, evaluation, and improvement with `workflows`, `tune`, and `yardstick`
+
+In this lab, you will have an opportunity to apply these concepts to a new dataset and classification task. You should consider the dataset and the task in be performed in the lab and think about how you might approach the task from a feature engineering and model selection perspective. You will be asked to submit you code and a brief reflection on your approach and the results.
 
 ## References
