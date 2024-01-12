@@ -1,5 +1,5 @@
 ---
-title: "10. Testing generalizations"
+title: "10. Building inference models"
 pkgdown:
   as_is: true
 bibliography: [bibliography.bib, packages.bib]
@@ -7,30 +7,345 @@ biblio-style: apalike
 link-citations: true
 ---
 
-<!--
-The goal will be to do one, more advanced example
--->
-
-
 ```{r, child="_common.Rmd"}
 ```
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE) # remove cache = TRUE when done
 ```
 
 ## Overview
 
+In this recipe, we will explore statistical modeling and data analysis with using a practical research hypothesis in the area of Second Language Acquisition and Teaching. We'll use R and the infer package to understand inference-based models. You'll learn how to work with key variables, examine data distributions, and employ statistical methods to test hypotheses about their relationships. Our discussion will also involve improving our computing skills through practical exercises in data manipulation, visualization, and statistical analysis. This will provide you with the necessary tools to prepare, conduct, and interpret complex datasets and analyses.
+
+You will learn how to:
+
+- identify and map the hypothesis statement to the appropriate response and explanatory variables
+- employ simulation-based methods for statistical inference
+- interpret and evaluate the results of inferential models
+
+In lab 10, we will use these skills to analyze another dataset of your choice.
+
 ## Concepts and stragegies
 
-- Identify and map the hypothesis to variables
-- Inspect the data distributions
-- Interrogate the data
-- Interpret the results
+Statistical inference is the most structured approach to data analysis. It is the process of using data to draw conclusions about a population, therefore the underlying data and the process to conduct the analysis must be rigorous and exploration is limited and iteration is avoided. The workflow for building inference-based models can be seen in Table \@ref(tab:ida-workflow).
+
+| Step | Name | Description |
+|:-----|:-----|:------------|
+| 1 | Identify | Identify and map the hypothesis statement to the appropriate response and explanatory variables |
+| 2 | Inspect | Assess the distribution of the variable(s) with the appropriate descriptive statistics and visualizations. |
+| 3 | Interrogate | Apply the appropriate statistical procedure to the dataset. |
+| 4 | Interpret | Review the statistical results and interpret them in the context of the hypothesis. |
+
+Table: (\#tab:ida-workflow) The inference-based modeling workflow
+
+Before we begin, let's load the packages we will use in this recipe.
+
+```{r load-packages, message=FALSE, warning=FALSE}
+library(readr) # for reading data
+library(kableExtra) # for table formatting
+library(dplyr) # for data wrangling
+library(skimr) # for data summaries
+library(janitor) # for data cleaning/ tablulations
+library(ggplot2) # for data visualizations
+library(infer) # for statistical inference
+```
+
+### Orientation
+
+In the area of Second Language Acquisition and Teaching, the relationship between learner proficiency and particular linguistic variables has been a topic of interest for decades. In this section, we will explore the relationship between placement scores and lexical features of learner sample writing. The goal is to determine the extent to which a simplified set of lexical features can be employed as a diagnostic tool for assessing overall learner proficiency.
+
+The background here comes from a study by @Crossley2010, who investigated the relationship between lexical features and learner proficiency. The authors used a corpus of learner writing samples which were assessed and scored by human raters. Then a set of lexical features were extracted from the writing samples and subjected to a series of statistical analyses. The results suggested three key variables which were highly correlated with the human ratings of learner proficiency: lexical diversity, word hypernymy values, and content word frequency.
+
+In this sample study, I will suggest that the variables lexical diversity and content word frequency actually represent a single underlying construct, which I will call "lexical sophistication". Lexical diversity aims to gauge the range of vocabulary used by the learner. In the context of L2 writing, it is less likely that demonstrated range of unique vocabulary is what constitutes proficiency --as a lexically diverse text in which the writer uses primarily spoken register vocabulary is unlikely to be considered in academic writing contexts. Instead, rather it is more likely that the ability to use more sophisticated vocabulary is what is being measured. On the other hand, content word frequency purports to gauge the degree to which more infrequent words are used in L2 writing. However, I would argue that this is also a measure of lexical sophistication. In other words, the ability to use more sophisticated vocabulary inherently taps into the use of more infrequent words.
+
+The goal of this study is to determine the extent to which this construct can be used as a proxy for lexical diversity and content word frequency, and thus as a diagnostic tool for assessing learner proficiency. The research statement is as follows:
+
+> The lexical sophistication of learner writing is positively correlated with learner proficiency.
+
+Operationalizing this statement requires a few steps. First, we need to identify the variables which will be used to represent the construct of lexical sophistication.
+
+In addition, ideally the variables used to represent lexical sophistication should be easy to extract from learner writing samples, if this is to be used as a diagnostic tool. Plausible linguistic variables to consider in this study are the following:
+
+- Number of syllables per word
+- Number of morphemes per word
+
+In addtion, to these variables, we will also consider word frequency estimates to maintain consistency with the original study. I will also consider the number of characters per word, although not strictly linguistic in nature, this is a variable which is easy to extract from learner writing samples and is likely to be correlated with the number of syllables and/ or morphemes per word.
+
+Second, we need to identify the variables which will be used to represent learner proficiency. In this study, we will use the placement scores of the learners as a proxy for proficiency. The placement scores are based on the results of a placement test which was administered to the learners prior to the writing samples being collected.
+
+The hypothesis statement is as follows:
+
+> Learner proficiency as measured by placement scores is positively correlated with lexical sophistication as measured by the number of syllables per word, number of morphemes per word, and word frequency estimates.
+
+### Analysis
+
+The dataset used in this study is is transformed version of the Pittsburgh English Language Institute Corpus (PELIC). Writing samples and placement scores were extracted from the corpus for learners in the English for Academic Purposes (EAP) program. The tokenized writing samples were filtered for content words (i.e. nouns, verbs, adjectives). Subsequently, lexical features were joined from the English Lexicon Project (ELP) database by word form.
+
+The data dictionary for the dataset is as follows:
+
+```{r data-dictionary, echo=FALSE}
+read_csv("data/derived/pelic_transformed_dd.csv") |>
+  kbl(col.names = c("Variable", "Name", "Type", "Description"), caption = "Data dictionary for the transformed PELIC/ ELP dataset.") |>
+  kable_styling("striped")
+```
+
+#### Identify
+
+In Table \@ref(tab:data-dictionary), we can see the variables which will be used to represent lexical sophistication and learner proficiency. The explanatory variables which will be used to represent lexical sophistication are `chars`, `sylls`, `morphs`, and `freq`. The response variable which will be used to represent learner proficiency is `placement`.
+
+Let's read in the dataset.
+
+```{r read-data}
+pelic <- read_csv("data/derived/pelic/pelic_transformed.csv")
+
+pelic
+```
+
+The dataset contains 276 observations for our variables of interest. Let's now map the hypothesis statement to the appropriate response and explanatory variables.
+
+```
+placement ~ chars + sylls + morphs + freq
+```
+
+We will specify the relationship between the response and explanatory variables using the formula notation in the interrogation phase. The explanatory variables will be used in an additive model using multiple linear regression.
+
+#### Inspect
+
+First step is to get a statistical overview of the dataset. We can use the `skim()` function from the `skimr` package to get a statistical summary of the dataset.
+
+```{r skim-data, eval=FALSE}
+pelic |>
+  skim()
+```
+
+```{r skim-data-show, echo=FALSE}
+pelic |>
+  skim() |>
+  capture.output() |>
+  cat(sep = "\n")
+```
+
+We are looking for any missing values or other anomalies in the dataset. We can see that there are no missing values in the dataset.
+
+Let's now inspect the variables of interest to get a sense of the distributions of the variables. There are really three things we are looking to find out:
+
+- What is the distribution of the variables individually?
+- What is the relationship between the explanatory variables and the response variable?
+- What is the relationship (if any) between the variables?
+
+Since we are working with numeric variables, we would create a histogram or density plot for each individual variable. Then a scatterplot for the relationship between the explanatory variables and the response variable. Finally, a correlation matrix for the relationship between the variables.
+
+I would like to introduce a shortcut to create all three types of visualizations in one plot. The `ggpairs()` function from the `GGally` package creates a matrix of plots for all combinations of variables in the dataset. We can specify the type of plot to create for each combination of variables. Let's create a matrix of plots for the variables of interest.
+
+```{r ggpairs, fig.width=7, fig.height=7, fig.cap="Matrix of plots for the variables of interest."}
+
+# Load the GGally package
+library(GGally)
+
+# Create the matrix of plots
+pelic |>
+  select(placement, chars, sylls, morphs, freq) |>
+  ggpairs()
+```
+
+The plot in Figure \@ref(fig:ggpairs) shows a lot of information. Let's break it down.
+
+The diagonal plots show the distribution of each variable. In these plots we are looking for any outliers or skewness in the distributions. We can see that on the whole the distributions are fairly normal. Our simulation-based inference methods do not require the data to be normally distributed, but highly skewed distributions can compress the range of the data and thus affect the results.
+
+The lower triangle plots show the scatterplots for the relationship between the explanatory variables and the response variable and in the upper triangle we see the correlation coefficients for the relationship between the variables.
+
+Let's focus on the upper triangle, specifically the first row of statistics reported. The first row shows the correlation between the response variable and the explanatory variables. All variables show a positive correlation with the response variable, except for frequency, which is negative. This is what we predicted in the hypothesis statement. The strengths of these correlations are fairly weak, especially for frequency. We will let our model determine the strength of the relationship and whether it is statistically significant, but it's worth noting.
+
+Now let's focus on the upper triangle for the second, third, and fourth row of correlation measures. These show the correlation between the explanatory variables themselves. The variables `chars`, `sylls`, and `morphs` are highly intercorrelated. This is not surprising since the number of characters in a word is related to the number of syllables and morphemes. Yet if we consider all three in our model we run the risk of multicollinearity. So we need to decide which of these variables to include in our model.
+
+One way to do this is assess the theoretical importance of each variable. In this case, we might consider the number of syllables and morphemes to be more important than the number of characters. Another perspective is to see which of the remaining two variables is least correlated with `freq` with the hopes of capturing non-overlapping variance in the response variable. In this case, `sylls` is less correlated with `freq` than `morphs`. So we will include `sylls` and `freq` in our model.
+
+If we were to use the response variable `placement` as our reason for selecting the explanatory variables, we would be committing the logical fallacy of circular reasoning --in essence, tailoring the model to the data.
+
+So lets select `sylls` and `freq` as our explanatory variables for our final model.
+
+```{r select-vars}
+pelic <-
+  pelic |>
+  select(placement, sylls, freq)
+```
+
+A last thing to consider before we enter into the model building phase, is to address the fact that the `sylls` and `freq` variables are on very distinct scales. In regression modeling, this can cause problems both for fitting the model and for interpreting the model.
+
+We can address this by normalizing the variables. This will transform the variables to have a mean of zero and a standard deviation of one. This is known as a z-score. Z-score normalization does not change the distribution nor the relationship between the variables, but it does make the variables more comparable.
+
+```{r}
+
+# Function to get z-score
+get_z_score <- function(x) {
+  (x - mean(x)) / sd(x)
+}
+
+# Normalize the variables
+pelic <-
+  pelic |>
+  mutate(
+    sylls_z = get_z_score(sylls),
+    freq_z = get_z_score(freq)
+  )
+```
+
+#### Interrogate
+
+Now we will analyze the data using the `infer` package. The `infer` package is a framework for conducting statistical inference using simulation-based methods. The steps for using the `infer` package are as follows:
+
+1. Specify the model relationships
+2. Calculate the model statistics (fit)
+3. Simulate the null distribution
+4. Calculate the $p$-value
+5. Simulate model statistics (fit)
+6. Calculate the confidence interval
+7. Calculate the effect size
+
+Step 1. We will use the `specify()` function to add the formula notation to specify the relationship between the response and explanatory variables.
+
+```{r specify-model}
+# Specify the model
+pelic_spec <-
+  pelic |>
+  specify(placement ~ sylls_z + freq_z)
+
+pelic_spec
+```
+
+Step 2. We will use the `fit()` function to calculate the model statistics.
+
+```{r calculate-fit}
+# Calculate the model statistics
+pelic_obs_fit <-
+  pelic_spec |>
+  fit()
+
+pelic_obs_fit
+```
+
+We now have the calculated model statistics. The model statistics in a linear regression model are the intercept and the slopes for the explanatory variables. The intercept is the predicted value of the response variable when all explanatory variables are zero. The slopes are the predicted change in the response variable for a one unit change in the explanatory variable.
+
+Step 3. At this point we need to use `hypothesize()` and to use 'independence' as our null hypothesis. The `hypothesize()` function takes the model object `pelic_spec` and the type of null hypothesis we are assuming, in this case 'independence'. Then we will pass this to `generate()` to create a null distribution. The `generate()` function takes the model object, the number of simulations, and the type of simulation as arguments. The type of simulation for models with multiple independent variables is `permute`.
+
+```{r generate-null-distribution}
+# Create the null distribution
+pelic_null_fit <-
+  pelic_spec |>
+  hypothesize(null = "independence") |>
+  generate(reps = 10000, type = "permute") |>
+  fit()
+```
+
+::: {.callout}
+**`r fontawesome::fa('hand-point-up')` Tip**
+
+The larger the number of `reps` the more reliable the results will be. Note, that the `generate()` function will take a while to run for large reps and depending on your computer's memory, it may crash. If this happens, try reducing the number of reps.
+:::
+
+Step 4. The `get_p_value()` function takes the model object and the null distribution object as arguments. We choose a "two-sided" test because we are interested in whether the explanatory variables are positively or negatively correlated with the response variable.
+
+```{r calculate-p-value}
+# Calculate the p-value
+pelic_p_value <-
+  get_pvalue(
+    x = pelic_null_fit,
+    obs_stat = pelic_obs_fit,
+    direction = "two-sided"
+  )
+
+pelic_p_value
+```
+
+OK. So results suggest that syllables is a significant predictor of placement scores, but frequency is not. Let's now move to the interpretation phase.
+
+#### Interpret
+
+Our signficant $p$-value suggests that the explanatory variable `sylls_z` is a significant predictor of the response variable `placement`. However, a $p$-value is an arbitrary threshold. We need to consider the likelihood of the observed test statistic is different from zero. We can do this by calculating the confidence interval.
+
+Step 5. We will need to simulate the model statistics again, but this time we will use the `generate()` function with the type "bootstrap" to simulate the model statistics with replacement giving us a distribution of model statistics.
+
+```{r generate-bootstrap}
+# Create the bootstrap distribution
+pelic_bootstrap_fit <-
+  pelic_spec |>
+  generate(reps = 10000, type = "bootstrap") |>
+  fit()
+```
+
+Step 6. Calculate the confidence interval.
+
+We get the confidence interval by using the `get_ci()` function. The `get_ci()` function takes the bootstrapped model object and the observed statistics as the estimates to calculate the confidence interval. We will use the default confidence level of 95%.
+
+```{r calculate-ci}
+# Calculate the confidence interval
+pelic_obs_ci <-
+  pelic_bootstrap_fit |>
+  get_ci(point_estimate = pelic_obs_fit)
+
+pelic_obs_ci
+```
+
+The confidence interval underscores the results of the $p$-value. The confidence interval does not include zero for syllables, but does for frequency. Comparing the confidence interval to the actual observed statistics, we can see how close the observed statistics are to the confidence interval margins.
+
+```{r compare-ci}
+pelic_obs_fit
+```
+
+The observed statistic for `sylls_z` is nicely within the confidence interval.
+
+Step 7. Calculate effect size
+
+Whether a explanatory variable is significant or not is one thing, but gauging the magnitude of the relationship is another. Looking at the observed fit of the model, we can see that the coefficient for syllables is 2.91. But what does this mean? It means the the model predicts that for an increase of our syllable measure by one unit, the placement score will increase by 2.91 units.
+
+Now the placement score is still in the original scale, so this means that we are dealing with 2.91 score points. For the syllables, however, we have standardized the variable, so we are dealing with standard deviations --less straightforward to interpret. The good news is we can back-transform the standardized variable to the original scale by multiplying by the standard deviation and adding the mean from the original variable.
+
+```{r back-transform}
+# Back-transform the standardized variable
+(2.91 * sd(pelic$sylls)) + mean(pelic$sylls)
+```
+
+Therefore a mean increase of 1 syllable is associated with a 2.28 point increase in placement score.
+
+Another helpful way to interpret the results is to consider how much of the variance in the dependent variable is explained by the independent variable. $R^2$ is a typical measure of effect size. To calculate $R^2$ we need the correlation coefficient ($r$), which can be calculated by dividing the coefficient by the standard deviation of the response variable. Then we square the correlation coefficient to get $R^2$.
+
+```{r calculate-r2}
+# Correlation coefficient and R^2
+pelic_obs_fit |>
+  mutate(
+    r = estimate / sd(pelic_spec$placement),
+    r2 = r^2
+  )
+```
+
+We can see her that the $R^2$ is 0.052, which means that the number of syllables explains 5.2% of the variance in placement scores. This means that syllables don't explain all that much in the variation in placement scores. But it is a significant relationship.
 
 ## Summary
 
+In summary, this programming tutorial has provided a comprehensive guide to building inference-based models using the infer package in R. We have explored the concept of lexical sophistication as a diagnostic tool for assessing learner proficiency in Second Language Acquisition and Teaching. Through a detailed workflow involving identifying variables, inspecting data distributions, interrogating the dataset with statistical procedures, and interpreting results, we have demonstrated the importance of careful variable selection and normalization in regression modeling. Our analysis revealed that while syllables per word significantly predict learner placement scores, content word frequency does not. The effect size, indicated by an $R^2$ of 0.052, suggests that lexical sophistication, as measured by syllable count, accounts for a small but significant portion of the variance in learner proficiency. This study underscores the nuanced relationship between linguistic features and language learning outcomes, and highlights the potential of statistical modeling in educational research.
+
 ## Check your understanding
 
+<!-- [ ] return to edit these comprehension questions -->
+
+1. `r torf(TRUE)` Simulation-based inference is a method that can be used to approximate traditional inferential statistics without the need for theoretical assumptions about the data.
+2. What is the primary goal of using the `infer` package for simulation-based inference? `r mcq(c("To visualize data distributions", "To perform regression analysis", answer = "To create resampling simulations for hypothesis testing and constructing confidence intervals", "To fit predictive models"))`
+3. How does simulation-based inference contribute to understanding population parameters? `r mcq(c(answer = "It allows us to make probabilistic statements about population parameters based on simulated sampling distributions", "It provides exact calculations of population parameters", "It eliminates the need for sample data", "It guarantees more accurate results than traditional methods"))`
+4. Which of the following is not a typical step in simulation-based inference? `r mcq(c("Defining a model of interest", "Generating resamples or permutations", "Calculating summary statistics", answer = "Training a machine learning classifier"))`
+5. In the context of Second Language Acquisition research, why might simulation-based inference be particularly useful? `r mcq(c("Because it can handle very large datasets", answer = "Because it allows for the exploration of hypotheses under different assumptions and conditions", "Because it simplifies the data collection process", "Because it directly measures the language ability of individuals"))`
+6. `r torf(FALSE)` The results from simulation-based inference are always deterministic and do not vary between simulations.
+
+## Lab preparation
+
+In preparation for [Lab 10](https://github.com/qtalr/lab-09), ensure that you are comfortable with the following key concepts related to simulation-based inference:
+
+- Understanding the principles of statistical inference and how simulations can be used to approximate traditional inferential statistics.
+
+- Utilizing the `infer` package in R to create resampling simulations for hypothesis testing and constructing confidence intervals.
+
+- Interpreting the results of simulation-based inference focusing on what the simulated distributions imply about the population parameters.
+
+In this lab, you will be challenged to apply these core ideas to a new dataset of your choosing. Reflect on the nature of the data and the hypotheses you might test using simulation-based methods. Consider how you would design your simulation study to address a particular hypothesis. You will be expected to submit your code along with a concise reflection on your methodology and the insights gained from your analysis.
 
 ## References
