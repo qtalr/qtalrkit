@@ -359,8 +359,8 @@ Genre name
 "of",36412,"preposition"
 "and",28853,"conjunction"</code></pre>
 <p>A CSV file is a type of delimited file, which means that the data is separated by a delimiter. In the case of a CSV file, the delimiter is a comma. Other types of delimited files use different delimiters, such as tab-separated values (TSV) files which use a tab character as the delimiter, or even a pipe (<code>|</code>) or semicolon (<code>;</code>).</p>
-<p>The <code>readr</code> package provides functions to read rectangular data into R. The <code>read_csv()</code> function reads CSV files, the <code>read_tsv()</code> function reads TSV files, and the <code>read_delim()</code> function reads other types of delimited files.</p>
-<p>Let's use the <code>read_csv()</code> function to read the <code>brown_passives_curated.csv</code> file into R. To do this we will use the <code>file =</code> argument to specify the path to the file. Now, the file "path" is the location of the file on the computer. We can specify this path in two ways:</p>
+<p>The <code>readr</code> package provides functions to read rectangular data into R. The <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv()</a></code> function reads CSV files, the <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_tsv()</a></code> function reads TSV files, and the <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_delim()</a></code> function reads other types of delimited files.</p>
+<p>Let's use the <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv()</a></code> function to read the <code>brown_passives_curated.csv</code> file into R. To do this we will use the <code>file =</code> argument to specify the path to the file. Now, the file "path" is the location of the file on the computer. We can specify this path in two ways:</p>
 <ul>
 <li>Relative path: The relative path is the path to the file relative to the current working directory. The current working directory is the directory in which the R session is running.</li>
 <li>Absolute path: The absolute path is the path to the file from the root directory of the computer.</li>
@@ -384,7 +384,7 @@ Genre name
 brown_passives_df &lt;-
   read_csv(file = "../data/derived/brown_passives_curated.csv")
 ```</code></pre>
-<p>Running the above code chunk in our Quarto document will read the data into R and assign it to the <code>brown_passives_df</code> variable. It will also show the code used to read the data into R. Furthermore, so functions will display messages in the output. For example, the <code>read_csv()</code> function will display a message that various parsing options were used to read the data into R, as seen below:</p>
+<p>Running the above code chunk in our Quarto document will read the data into R and assign it to the <code>brown_passives_df</code> variable. It will also show the code used to read the data into R. Furthermore, so functions will display messages in the output. For example, the <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv()</a></code> function will display a message that various parsing options were used to read the data into R, as seen below:</p>
 <pre><code><span><span class="co">## <span style="font-weight: bold;">Rows: </span><span style="color: #0000BB;">15</span> <span style="font-weight: bold;">Columns: </span><span style="color: #0000BB;">5</span></span></span>
 <span><span class="co">## <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span></span>
 <span><span class="co">## <span style="font-weight: bold;">Delimiter:</span> ","</span></span>
@@ -393,7 +393,7 @@ brown_passives_df &lt;-
 <span><span class="co">## </span></span>
 <span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Use `spec()` to retrieve the full column specification for this data.</span></span>
 <span><span class="co">## <span style="color: #00BBBB;">ℹ</span> Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span></code></pre>
-<p>This information can be helpful in an interactive session, as <code>read_csv()</code> tells us the dimensions of the data and the data types of each column.
+<p>This information can be helpful in an interactive session, as <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv()</a></code> tells us the dimensions of the data and the data types of each column.
 But this output is not necessary, and is unnecessarily verbose in a reproducible document.</p>
 <p>We can hide any messages produced by a function by using the <code>message = false</code> key-value pair in the code block. For example, the following code block will read the data into R and assign it to the <code>brown_passives_df</code> variable without displaying any messages:</p>
 <pre><code>```{r}
@@ -481,11 +481,11 @@ brown_passives_df &lt;-
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 5 × 5</span></span></span>
 <span><span class="co">##   cat   passive    n_w   n_s name           </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> G        <span style="text-decoration: underline;">1</span>460 <span style="text-decoration: underline;">173</span>017  <span style="text-decoration: underline;">6</span>537 belles lettres </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> L         265  <span style="text-decoration: underline;">57</span>624  <span style="text-decoration: underline;">3</span>673 detective      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> N         290  <span style="text-decoration: underline;">69</span>909  <span style="text-decoration: underline;">4</span>438 adventure      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> B         543  <span style="text-decoration: underline;">61</span>535  <span style="text-decoration: underline;">2</span>399 press editorial</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">3</span> D         351  <span style="text-decoration: underline;">39</span>029  <span style="text-decoration: underline;">1</span>372 religion       </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> M         104  <span style="text-decoration: underline;">14</span>433   873 science fiction</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span> H         837  <span style="text-decoration: underline;">69</span>446  <span style="text-decoration: underline;">2</span>012 miscellaneous</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> L         265  <span style="text-decoration: underline;">57</span>624  <span style="text-decoration: underline;">3</span>673 detective      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">5</span> J        <span style="text-decoration: underline;">2</span>423 <span style="text-decoration: underline;">181</span>426  <span style="text-decoration: underline;">6</span>311 learned</span></span></code></pre>
 <p>These functions can be helpful to get a sense of the data in different ways. In combination with <code><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange()</a></code> function, we can also sort the data frame by a column or columns and then select the first or last rows.</p>
 <p>For example, the following code block will sort the data frame by the <code>passive</code> column in ascending order and then select the first 5 rows:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
@@ -644,11 +644,11 @@ brown_passives_df &lt;-
 <p>Finally, we can write data, including data frames, to a file with the <code>write_*()</code> functions from the <code>readr</code> package. The <code>write_*()</code> functions include:</p>
 <ul>
 <li>
-<code>write_csv()</code>: Write a data frame to a CSV file.</li>
+<code><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv()</a></code>: Write a data frame to a CSV file.</li>
 <li>
-<code>write_tsv()</code>: Write a data frame to a TSV file.</li>
+<code><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_tsv()</a></code>: Write a data frame to a TSV file.</li>
 <li>
-<code>write_delim()</code>: Write a data frame to a delimited file with the specified delimiter (<code>|</code>, <code>;</code>, <em>etc</em>).</li>
+<code><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_delim()</a></code>: Write a data frame to a delimited file with the specified delimiter (<code>|</code>, <code>;</code>, <em>etc</em>).</li>
 </ul>
 <p>To create a distinct data frame from the one we read into R, let's subset our <code>brown_passives_df</code> data frame by columns and rows to create a new data frame that contains only the <code>passive</code>, <code>n_w</code>, and <code>name</code> columns and only the rows where the values of the <code>passive</code> column are greater than <code>&gt;</code> 1,000 and assign it to the <code>brown_passives_subset_df</code>.</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
@@ -660,7 +660,7 @@ brown_passives_df &lt;-
 <p>Now the following code block will write the <code>brown_passives_subset_df</code> data frame to a CSV file given the specified file path:</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Write the data frame to a CSV file</span></span>
-<span><span class="fu">write_csv</span><span class="op">(</span></span>
+<span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">brown_passives_subset_df</span>,</span>
 <span>  file <span class="op">=</span> <span class="st">"../data/derived/brown_passives_subset.csv"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -723,11 +723,11 @@ brown_passives_df &lt;-
 <li>Load packages into an R session with <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code>
 </li>
 <li>Understand how to read and create file relative file paths</li>
-<li>Read data into R with the <code>read_csv()</code> function</li>
+<li>Read data into R with the <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv()</a></code> function</li>
 <li>Inspect data frames with <code>dplyr</code> functions such as <code><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_head()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_tail()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_sample()</a></code>, and <code><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange()</a></code>.</li>
 <li>Use the <code>|&gt;</code> pipe operator to chain functions together.</li>
 <li>Subset data frames with <code>dplyr</code> functions such as <code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter()</a></code>.</li>
-<li>Write data frames to a file with the <code>write_csv()</code> function.</li>
+<li>Write data frames to a file with the <code><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv()</a></code> function.</li>
 </ul>
 </div>
 <div class="section level2 unnumbered">

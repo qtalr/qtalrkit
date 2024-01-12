@@ -40,7 +40,7 @@ pre {
   border-bottom: 1px solid #dee2e6
 }
 
-/* matches the .callout class as an alternative 
+/* matches the .callout class as an alternative
 to avoid citation issues inside callout environments */
 
 blockquote {
@@ -173,5 +173,3 @@ input.webex-solveme.webex-correct,
 .webex-radiogroup {
   margin: 1em 0;
 }
-
-/* Input formatting */

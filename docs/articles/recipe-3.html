@@ -986,7 +986,7 @@ Figure 1: Histogram of <code>percent_passive</code>
 <hr>
 <p>The <code>ggplot2</code> package implements the 'Grammar of Graphics' approach to creating plots. This approach is based on the idea that plots can be broken down into components, or layers, and that each layer can be manipulated independently.</p>
 <p>The main components are data, aesthetics, and geometries. Data is the data frame that contains the variables to be plotted. Aesthetics are the variables that will be mapped to the x-axis, y-axis (as well as color, shape, size, <em>etc.</em>). Geometries are the visual elements that will be used to represent the data, such as points, lines, bars, <em>etc.</em>.</p>
-<p>As discussed in the R lesson "Visual Summaries", the <code>aes()</code> function is used to map variables to aesthetics and can be added to the <code>ggplot()</code> function or to the <code>geom_*()</code> function depending on whether the aesthetic is mapped to all geometries or to a specific geometry, respectively.</p>
+<p>As discussed in the R lesson "Visual Summaries", the <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> function is used to map variables to aesthetics and can be added to the <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot()</a></code> function or to the <code>geom_*()</code> function depending on whether the aesthetic is mapped to all geometries or to a specific geometry, respectively.</p>
 <p>Take a look at the following stages of the earlier plot in each of the tabs below.</p>
 <div class="section level4 tabset tabset-pills">
 <h4 id="stages">Stages<a class="anchor" aria-label="anchor" href="#stages"></a>
@@ -1005,7 +1005,7 @@ Figure 1: Histogram of <code>percent_passive</code>
 <p>The data layer does not produce a plot but it is the foundation of the plot.</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Data layer</span></span>
-<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span></span></code></pre></div>
 <p><img src="recipe-3_files/figure-html/ggplot2-brown-fam-percent-passive-hist-data-1.png" width="100%" style="display: block; margin: auto;"></p>
 </div>
 <div class="tab-pane" id="aesthetics" role="tabpanel" aria-labelledby="aesthetics-tab">
@@ -1013,7 +1013,7 @@ Figure 1: Histogram of <code>percent_passive</code>
 <p>The aesthetics layer does not produce a plot but it maps the variables to the aesthetics to be used in the plot.</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Aesthetics layer</span></span>
-<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">brown_fam_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="recipe-3_files/figure-html/ggplot2-brown-fam-percent-passive-hist-aes-1.png" width="100%" style="display: block; margin: auto;"></p>
 </div>
 <div class="tab-pane" id="geometries" role="tabpanel" aria-labelledby="geometries-tab">
@@ -1021,8 +1021,8 @@ Figure 1: Histogram of <code>percent_passive</code>
 <p>The geometries layer produces the plot connecting the data and aesthetics layers in the particular way specified by the geometries, in this case a histogram.</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Geometries layer</span></span>
-<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_histogram</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">brown_fam_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="recipe-3_files/figure-html/ggplot2-brown-fam-percent-passive-hist-geom-1.png" width="100%" style="display: block; margin: auto;"></p>
 </div>
 </div>
@@ -1047,16 +1047,16 @@ Figure 1: Histogram of <code>percent_passive</code>
 
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Histogram</span></span>
-<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_histogram</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="recipe-3_files/figure-html/plot-single-hist-1.png" width="100%" style="display: block; margin: auto;"></p>
 </div>
 <div class="tab-pane" id="density-plot" role="tabpanel" aria-labelledby="density-plot-tab">
 
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Density plot</span></span>
-<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_density</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="recipe-3_files/figure-html/plot-single-density-1.png" width="100%" style="display: block; margin: auto;"></p>
 </div>
 </div>
@@ -1077,9 +1077,9 @@ Figure 1: Histogram of <code>percent_passive</code>
 
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Density plot</span></span>
-<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_density</span><span class="op">(</span></span>
-<span>    <span class="fu">aes</span><span class="op">(</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
 <span>      x <span class="op">=</span> <span class="va">percent_passive</span>,</span>
 <span>      fill <span class="op">=</span> <span class="va">lang_variety</span></span>
 <span>    <span class="op">)</span>,</span>
@@ -1091,9 +1091,9 @@ Figure 1: Histogram of <code>percent_passive</code>
 
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Boxplot</span></span>
-<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_boxplot</span><span class="op">(</span></span>
-<span>    <span class="fu">aes</span><span class="op">(</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
 <span>      x <span class="op">=</span> <span class="va">lang_variety</span>,</span>
 <span>      y <span class="op">=</span> <span class="va">percent_passive</span></span>
 <span>    <span class="op">)</span></span>
@@ -1104,9 +1104,9 @@ Figure 1: Histogram of <code>percent_passive</code>
 
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Violin plot</span></span>
-<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_violin</span><span class="op">(</span></span>
-<span>    <span class="fu">aes</span><span class="op">(</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">geom_violin</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
 <span>      x <span class="op">=</span> <span class="va">lang_variety</span>,</span>
 <span>      y <span class="op">=</span> <span class="va">percent_passive</span></span>
 <span>    <span class="op">)</span></span>
@@ -1129,9 +1129,9 @@ Figure 1: Histogram of <code>percent_passive</code>
 
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Scatterplot</span></span>
-<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_point</span><span class="op">(</span></span>
-<span>    <span class="fu">aes</span><span class="op">(</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
 <span>      x <span class="op">=</span> <span class="va">active_verbs</span>,</span>
 <span>      y <span class="op">=</span> <span class="va">passive_verbs</span></span>
 <span>    <span class="op">)</span></span>
@@ -1142,15 +1142,15 @@ Figure 1: Histogram of <code>percent_passive</code>
 
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Scatterplot with regression line</span></span>
-<span><span class="fu">ggplot</span><span class="op">(</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span></span>
 <span>  <span class="va">brown_fam_df</span>,</span>
-<span>  <span class="fu">aes</span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="va">active_verbs</span>,</span>
 <span>    y <span class="op">=</span> <span class="va">passive_verbs</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_smooth</span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="recipe-3_files/figure-html/plot-two-scatter-regression-1.png" width="100%" style="display: block; margin: auto;"></p>
 </div>
 </div>
@@ -1179,7 +1179,7 @@ Figure 1: Histogram of <code>percent_passive</code>
 <option value="">dplyr</option>
 <option value="">ggplot2</option>
 <option value="answer">knitr</option></select> package is used to create formatted tables in R.</li>
-<li>To add a geometry layer, such as <code>geom_histogram()</code>, to a ggplot object the <code>|&gt;</code> operator is used. <select class="webex-select"><option value="blank"></option>
+<li>To add a geometry layer, such as <code><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram()</a></code>, to a ggplot object the <code>|&gt;</code> operator is used. <select class="webex-select"><option value="blank"></option>
 <option value="">TRUE</option>
 <option value="answer">FALSE</option></select>
 </li>
@@ -1189,7 +1189,7 @@ Figure 1: Histogram of <code>percent_passive</code>
 <option value="">boxplot</option>
 <option value="">violin plot</option>
 <option value="answer">scatterplot</option></select> is often used.</li>
-<li>When the <code>aes()</code> function is added to the <code>ggplot()</code> function, the aesthetic is mapped to all geometries. <select class="webex-select"><option value="blank"></option>
+<li>When the <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> function is added to the <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot()</a></code> function, the aesthetic is mapped to all geometries. <select class="webex-select"><option value="blank"></option>
 <option value="answer">TRUE</option>
 <option value="">FALSE</option></select>
 </li>

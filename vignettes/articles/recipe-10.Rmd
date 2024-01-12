@@ -11,7 +11,7 @@ link-citations: true
 ```
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, cache = TRUE) # remove cache = TRUE when done
+knitr::opts_chunk$set(echo = TRUE, cache = FALSE) # remove cache = FALSE when done editing
 ```
 
 ## Overview
