@@ -38,14 +38,14 @@ library(qtalrkit)
 
 ## `swirl` lessons
 
-### Installation 
+### Installation
 
 The swirl lessons can be downloaded within an R console by running:
 
 ```r
 install.packages("swirl")
 library("swirl")
-install_course_github("qtalr", "lessons")
+install_course_github("qtalr", "Lessons")
 ```
 
 
@@ -58,16 +58,16 @@ If you need to update the lessons, run:
 library("swirl")
 
 # Uninstall the course
-uninstall_course("lessons")
+uninstall_course("Lessons")
 
 # Reinstall the course
-install_course_github("qtalr", "lessons")
+install_course_github("qtalr", "Lessons")
 ```
 :::
 
 ### Load and run
 
-To load and start a lesson run: 
+To load and start a lesson run:
 
 ```r
 swirl()

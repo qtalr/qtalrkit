@@ -7,7 +7,7 @@ pkgdown:
   as_is: true
 ---
 
-<!--  
+<!--
 - [ ] Revise the pinboard tags to reflect these groupings
 - [ ] Check pinboard for dead links
 -->
@@ -25,13 +25,15 @@ library(readr) # for data manipulation
 
 ## Published
 
-### Repositories 
+### Repositories
 
 Language-dedicated repositories are a great source of data for language research. Below I've included a listing of some of the more commonly used repositories.
 
 ```{r pinboard-repos}
 read_rds("assets/listings/data_repositories.rds") |>
-  kable(caption = "Data repositories")
+  kbl(caption = "Data repositories", escape = FALSE) |>
+  column_spec(1, width = "15em") |>
+  kable_styling()
 ```
 
 ### Corpora and datasets
@@ -39,13 +41,15 @@ read_rds("assets/listings/data_repositories.rds") |>
 Below I've included a listing of corpora and datasets that are available for language research. This list is not exhaustive, but includes a few of the more common corpora and datasets used in language research.
 
 ```{r pinboard-datasets}
-read_rds("assets/listings/data_corpora.rds") |> 
-  kable(caption = "Corpora and language datasets")
+read_rds("assets/listings/data_corpora.rds") |>
+  kbl(caption = "Corpora and language datasets", escape = FALSE) |>
+  column_spec(1, width = "15em") |>
+  kable_styling()
 ```
 
 ### Data sharing platforms
 
-<!--  
+<!--
 - [ ] Add data sharing platforms to pinboard
 - [ ] Create a listing of data sharing platforms
 - [ ] Include the listing here
@@ -63,8 +67,10 @@ read_rds("assets/listings/data_corpora.rds") |>
 The list of data available for language research is constantly growing. I've document very few of the wide variety of resources. In Table \@ref(tab:pinboard-listings) I've included attempts by others to provide a summary of the corpus data and language resources available.
 
 ```{r pinboard-listings}
-read_rds("assets/listings/data_listings.rds") |> 
-  kable(caption = "Aggregated listings of language corpora and datasets")
+read_rds("assets/listings/data_listings.rds") |>
+  kbl(caption = "Aggregated listings of language corpora and datasets", escape = FALSE) |>
+  column_spec(1, width = "15em") |>
+  kable_styling()
 ```
 
 ## Custom-built
@@ -74,8 +80,10 @@ read_rds("assets/listings/data_listings.rds") |>
 There are many APIs available for accessing language corpora and datasets. Below I've included a few of the R packages that provide access to these resources.
 
 ```{r pinboard-apis}
-read_rds("assets/listings/data_apis.rds") |> 
-  kable(caption = "R Package APIs to language corpora and datasets.)")
+read_rds("assets/listings/data_apis.rds") |>
+  kbl(caption = "R Package APIs to language corpora and datasets.)", escape = FALSE) |>
+  column_spec(1, width = "15em") |>
+  kable_styling()
 ```
 
 ## Other language resources
@@ -83,6 +91,8 @@ read_rds("assets/listings/data_apis.rds") |>
 Data for language research is not limited to (primary) text sources. Other sources may include processed data from previous research; word lists, linguistic features, *etc*.. Alone or in combination with text sources this data can be a rich and viable source of data for a research project.
 
 ```{r pinboard-other}
-read_rds("assets/listings/data_experimental.rds") |> 
-  kable(caption = "Other language resources")
+read_rds("assets/listings/data_experimental.rds") |>
+  kbl(caption = "Other language resources", escape = FALSE) |>
+  column_spec(1, width = "15em") |>
+  kable_styling()
 ```
