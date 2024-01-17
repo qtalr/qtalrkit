@@ -219,7 +219,9 @@ and that you are prepared to do the following:
 
 ::: {.callout}
 
-As this is the first lab, I will provide guidance on how to access the lab materials. The lab materials are hosted on GitHub. GitHub is a platform for hosting code and other files. To access the lab materials, you will not need to create a GitHub account, but you may sign up for a free account if you wish[^1]. You will, however, need to verify that Git is installed on your computer, and if not, install it.
+As this is the first lab, I will provide guidance on how to access the lab materials if you have not recieved guidance on how to do this.
+
+The lab materials are hosted on GitHub. GitHub is a platform for hosting code and other files. To access the lab materials, you will not need to create a GitHub account, but you may sign up for a free account if you wish[^1]. You will, however, need to verify that Git is installed on your computer, and if not, install it.
 
 [^1]:  Note, if you use an education email (`.edu`) you will be able to advantage of the [Student Education Benefits](https://education.github.com/benefits).
 
