@@ -36,9 +36,6 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../articles/qtalrkit.html">Get started</a>
-</li>
 <li class="active nav-item">
   <a class="nav-link" href="../articles/index.html">Materials</a>
 </li>
@@ -479,13 +476,13 @@ brown_passives_df &lt;-
 <code class="sourceCode R"><span><span class="co"># Select a random sample of 5 rows</span></span>
 <span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_sample</a></span><span class="op">(</span><span class="va">brown_passives_df</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 5 × 5</span></span></span>
-<span><span class="co">##   cat   passive    n_w   n_s name            </span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> J        <span style="text-decoration: underline;">2</span>423 <span style="text-decoration: underline;">181</span>426  <span style="text-decoration: underline;">6</span>311 learned         </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> H         837  <span style="text-decoration: underline;">69</span>446  <span style="text-decoration: underline;">2</span>012 miscellaneous   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> G        <span style="text-decoration: underline;">1</span>460 <span style="text-decoration: underline;">173</span>017  <span style="text-decoration: underline;">6</span>537 belles lettres  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> E         853  <span style="text-decoration: underline;">82</span>010  <span style="text-decoration: underline;">3</span>286 skills / hobbies</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span> K         352  <span style="text-decoration: underline;">68</span>599  <span style="text-decoration: underline;">3</span>983 general fiction</span></span></code></pre>
+<span><span class="co">##   cat   passive    n_w   n_s name           </span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> D         351  <span style="text-decoration: underline;">39</span>029  <span style="text-decoration: underline;">1</span>372 religion       </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> F        <span style="text-decoration: underline;">1</span>034 <span style="text-decoration: underline;">110</span>363  <span style="text-decoration: underline;">4</span>387 popular lore   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> L         265  <span style="text-decoration: underline;">57</span>624  <span style="text-decoration: underline;">3</span>673 detective      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> G        <span style="text-decoration: underline;">1</span>460 <span style="text-decoration: underline;">173</span>017  <span style="text-decoration: underline;">6</span>537 belles lettres </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">5</span> M         104  <span style="text-decoration: underline;">14</span>433   873 science fiction</span></span></code></pre>
 <p>These functions can be helpful to get a sense of the data in different ways. In combination with <code><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange()</a></code> function, we can also sort the data frame by a column or columns and then select the first or last rows.</p>
 <p>For example, the following code block will sort the data frame by the <code>passive</code> column in ascending order and then select the first 5 rows:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">

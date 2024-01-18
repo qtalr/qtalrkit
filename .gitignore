@@ -15,3 +15,4 @@ _R_ideas.md
 .github/workflows/pkgdown.yaml
 *_cache
 data-raw
+vignettes/_qtalrkit.Rmd

@@ -36,9 +36,6 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../articles/qtalrkit.html">Get started</a>
-</li>
 <li class="active nav-item">
   <a class="nav-link" href="../articles/index.html">Materials</a>
 </li>
@@ -463,9 +460,9 @@ Figure 1: Matrix of plots for the variables of interest.
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 2</span></span></span>
 <span><span class="co">##   term      p_value</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> freq_z     0.447 </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> intercept  1     </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> sylls_z    0.000<span style="text-decoration: underline;">2</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> freq_z      0.457</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> intercept   1    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> sylls_z     0</span></span></code></pre>
 <p>OK. So results suggest that syllables is a significant predictor of placement scores, but frequency is not. Let's now move to the interpretation phase.</p>
 </div>
 <div class="section level4">
@@ -491,9 +488,9 @@ Figure 1: Matrix of plots for the variables of interest.
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 3</span></span></span>
 <span><span class="co">##   term      lower_ci upper_ci</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> freq_z      -<span style="color: #BB0000;">0.908</span>     2.21</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> freq_z      -<span style="color: #BB0000;">0.859</span>     2.20</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">2</span> intercept   57.7      60.6 </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> sylls_z      1.22      4.80</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> sylls_z      1.22      4.74</span></span></code></pre>
 <p>The confidence interval underscores the results of the <span class="math inline">\(p\)</span>-value. The confidence interval does not include zero for syllables, but does for frequency. Comparing the confidence interval to the actual observed statistics, we can see how close the observed statistics are to the confidence interval margins.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pelic_obs_fit</span></span></code></pre></div>
