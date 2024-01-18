@@ -82,15 +82,7 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>In this guide, we will explore options for setting up an R environment. We will discuss local, remote, and virtual environments. Each have their own advantages and shortcomings.</p>
-<div class="callout">
-<p><strong><svg aria-hidden="true" role="img" viewbox="0 0 576 512" style="height:1em;width:1.12em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M64 80c-8.8 0-16 7.2-16 16V416c0 8.8 7.2 16 16 16H512c8.8 0 16-7.2 16-16V96c0-8.8-7.2-16-16-16H64zM0 96C0 60.7 28.7 32 64 32H512c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zm96 64a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm104 0c0-13.3 10.7-24 24-24H448c13.3 0 24 10.7 24 24s-10.7 24-24 24H224c-13.3 0-24-10.7-24-24zm0 96c0-13.3 10.7-24 24-24H448c13.3 0 24 10.7 24 24s-10.7 24-24 24H224c-13.3 0-24-10.7-24-24zm0 96c0-13.3 10.7-24 24-24H448c13.3 0 24 10.7 24 24s-10.7 24-24 24H224c-13.3 0-24-10.7-24-24zm-72-64a32 32 0 1 1 0-64 32 32 0 1 1 0 64zM96 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> Outcomes</strong></p>
-<ul>
-<li>Understand the different options for working with R</li>
-<li>Learn about the advantages and disadvantages of each option</li>
-<li>Choose the option that best fits your needs</li>
-</ul>
-</div>
+<p>In this guide, we will explore options for setting up an R environment. We will discuss local, remote, and virtual environments. Each have their own advantages and shortcomings. The best option for you will depend on your needs and preferences.</p>
 </div>
 <div class="section level2">
 <h2 id="environment-setups">Environment setups<a class="anchor" aria-label="anchor" href="#environment-setups"></a>
@@ -111,8 +103,7 @@
 <li>manage your own backups and version control for collaborative projects.</li>
 </ul>
 <p>This can be a challenge for new users, but there are a number of resources available to help you get started and troubleshoot any issues you may encounter.</p>
-<p>To get started, install R from <a href="https://cran.r-project.org/" class="external-link">CRAN</a>. You can download the latest version of R for your operating system <a href="https://cran.r-project.org/mirrors.html" class="external-link">here</a>. Once you have installed R, you will need to install an IDE. We recommend <a href="https://www.rstudio.com/products/rstudio/download/" class="external-link">RStudio</a>, a free and open-source IDE for R. RStudio provides a number of features that make it easier to work with R.</p>
-<p>For projects that require collaboration, we recommend using a version control system such as <a href="https://git-scm.com/" class="external-link">Git</a> and a hosting service such as <a href="https:://github.com">GitHub</a> or <a href="https://gitlab.com" class="external-link">GitLab</a>. These tools will help you manage your code and collaborate with others.</p>
+<p>To get started, install R from <a href="https://cran.r-project.org/" class="external-link">CRAN</a>. You can download the latest version of R for your operating system <a href="https://cran.r-project.org/mirrors.html" class="external-link">here</a>. Once you have installed R, you will need to install an IDE. For complete beginners, I recommend <a href="https://www.rstudio.com/products/rstudio/download/" class="external-link">RStudio</a>, a free and open-source IDE for R. RStudio provides a number of features that make it easier to work with R. If you are new to R, but have experience with other programming languages, you may prefer to use a more general-purpose IDE such as <a href="https://code.visualstudio.com/" class="external-link">VS Code</a>.</p>
 </div>
 <div class="section level3">
 <h3 id="remote-environments">Remote environments<a class="anchor" aria-label="anchor" href="#remote-environments"></a>
@@ -138,8 +129,6 @@
 <h3 id="virtual-environments">Virtual environments<a class="anchor" aria-label="anchor" href="#virtual-environments"></a>
 </h3>
 <p>If you are new to R, you may want to consider working in the cloud to get started. If you plan to continue to work with R in the future, you will most likely want to install R and an IDE on your local computer or explore using a <strong>virtual environment</strong>. Virtual environments, such as <a href="https://www.docker.com/" class="external-link">Docker</a>, provide a way to use a pre-configured computing environment or create your own that you can share with others. Virtual environments are a good option if you want to ensure that everyone in your research group is working with the same computing environment. Pre-configured virtual environments exist for R through the <a href="https://rocker-project.org/" class="external-link">Rocker project</a> and can be used locally or in the cloud.</p>
-<p>Docker is a platform that allows you to create, deploy, and run applications in containers. Rocker is a collection of Docker images specifically designed for running R.</p>
-<p>Docker enables you to package an application along with its dependencies into a container, ensuring that it will run consistently across different environments. Rocker extends this concept to R, providing pre-built Docker images with various R configurations.</p>
 <p>Using Docker with Rocker offers several benefits:</p>
 <ul>
 <li>Reproducible environments</li>
@@ -170,7 +159,7 @@
 <div class="section level2">
 <h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h2>
-<p>In this guide, we have discussed strategies for working with R. All three options offer unique advantages. In <a href="#ab:env-comparison"><strong>??</strong></a>, we summarize some of the characteristics, benefits, and drawbacks of each option.</p>
+<p>In this guide, we have discussed strategies for working with R. All three options offer unique advantages. In Table <a href="#tab:env-comparison">1</a>, we summarize some of the characteristics, benefits, and drawbacks of each option.</p>
 <table class="table">
 <caption>
 <span id="tab:env-comparison">Table 1: </span> Comparison of different environments for working with R and RStudio</caption>

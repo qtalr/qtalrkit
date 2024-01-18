@@ -7,14 +7,14 @@ pkgdown:
   as_is: true
 ---
 
-<!-- 
-  
-  - [ ] need to complete guide 
+<!--
+
+  - [ ] need to complete guide
   - [x] Is git necessary to clone a repo? Yes.
-    - [ ] Update this guide to 
+    - [ ] Update this guide to
       - [ ] replace recipe-0 instructions (install git, clone repo)
       - [ ] instructions for recipe-4 (git config, use github)
-      - [ ] 
+      - [ ]
 
 -->
 
@@ -26,6 +26,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Introduction
+
+This textbook places a heavy emphasis on reproducible research. The most important thing you can do to ensure reproducibility is to use a version control system and a hosting service. For most people, the best option is Git and GitHub.
 
 In this guide, we will cover the basics of setting up Git and GitHub. We will also cover the basics of using Git and GitHub to manage a project. This guide is intended for beginners who are new to Git and GitHub. It is also intended for those who are new to using Git and GitHub with R.
 
@@ -39,7 +41,7 @@ In this guide, we will cover the basics of setting up Git and GitHub. We will al
 
 ## What is Git, Github? And why should I use it?
 
-Git is a version control system. It allows you to track changes to files and folders over time. It also allows you to collaborate with others on projects. Think of it as MS Word's "Track Changes" feature on steroids. 
+Git is a version control system. It allows you to track changes to files and folders over time. It also allows you to collaborate with others on projects. Think of it as MS Word's "Track Changes" feature on steroids.
 
 Git is a command line tool, but there are also graphical user interfaces (GUIs) to interact with Git in a more user-friendly way. Git is a great tool for managing projects. It is especially useful for managing projects that involve multiple people.
 
@@ -109,7 +111,7 @@ B. Fork and clone a remote template repository to your local machine:
   - Paste the URL of the forked repository
   - Choose the directory location for the project
   - Create Project
-  
+
 C. Create/ Join a remote repository and clone it to your local machine:
 
 - Create a new repository on GitHub
