@@ -334,5 +334,9 @@ Also, since you will do an article summary, you should be prepared with:
   - the results/ findings of the study
 - a BibTeX formatted reference for the article
 
+::: {.callout}
+If you do not find an article of interest, you can use @Bychkovska2017.
+:::
+
 ## References
 
