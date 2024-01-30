@@ -1,5 +1,5 @@
 ---
-title: "4. Scaffolding a research project"
+title: "4. Understanding the computing environment"
 bibliography: [bibliography.bib, packages.bib]
 biblio-style: apalike
 link-citations: true

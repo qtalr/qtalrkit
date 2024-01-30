@@ -1,5 +1,5 @@
 ---
-title: "2. Reading, inspecting, and writing data"
+title: "2. Reading, inspecting, and writing datasets"
 pkgdown:
   as_is: true
 bibliography: [bibliography.bib, packages.bib]
@@ -29,17 +29,17 @@ Description: This recipe will start by very briefly reviewing the purpose of Qua
 
 Approach: The approach will be to use a Quarto document to demonstrate the use of R functions and Quarto code blocks to read, inspect, and write data. A sample dataset will be used to demonstrate the use of the `readr` package to read data into R with `read_*()`. The `dplyr` package will be used to inspect and transform (subset) the data, including the `select()`, `slice()`, `filter()`, and `arrange()` functions. Finally, the `readr` package will be used to write the data to a file `write_csv()`. The recipe will also demonstrate the use of the native R pipe operator `|>` to chain functions together in to more readable code.
 
-Prerequisites: It will be assumed that learners can create a Quarto document in RStudio, have a basic understanding of R and using R in RStudio editor and console, and have a basic understanding of vectors and data frames and assigning objects to variables.
+Prerequisites: It will be assumed that learners can create a Quarto document in RStudio, have a basic understanding of R and using R in RStudio editor and console, and have a basic understanding of vectors and datasetsframes and assigning objects to variables.
 -->
 
-This Recipes guides you through the process of reading, inspecting, and writing data using R packages and functions in a Quarto environment. You'll learn how to effectively combine code and narrative to create a reproducible document that can be shared with others.
+This Recipe guides you through the process of reading, inspecting, and writing datasets using R packages and functions in a Quarto environment. You'll learn how to effectively combine code and narrative to create a reproducible document that can be shared with others.
 
 We will cover the following topics:
 
 - Loading packages into an R session
-- Reading data into R with `read_*()` functions
-- Inspecting data with `dplyr` functions
-- Writing data to a file with `write_*()` functions
+- Reading datasets into R with `read_*()` functions
+- Inspecting datasets with `dplyr` functions
+- Writing datasets to a file with `write_*()` functions
 
 In Lab 2, you will be able to apply these skills to and employ your Quarto skills to create a well-documented and reproducible document.
 
@@ -78,7 +78,7 @@ Code blocks have various options that can be added by using key-value pairs that
 
 ### Setting up the environment
 
-Before we can read, inspect, and write data, we need to load the packages that contain the functions we will use. We will use the `readr` package to read data into R and write data to disk and the `dplyr` package to inspect and transform (subset) the data.
+Before we can read, inspect, and write data, we need to load the packages that contain the functions we will use. We will use the `readr` package to read datasets into R and write datasets to disk and the `dplyr` package to inspect and transform (subset) the data.
 
 There are a few ways to load packages into an R session. The most common way is to use the `library()` function. The `library()` function loads a package into the R session and stops the script if the package is not available on the current computing environment.
 
@@ -110,7 +110,7 @@ If you interested in learning about safeguarding package loading in a reproducib
 
 ### Understanding the data
 
-Now that we have our environment set up, we can read the data into R. But before we do, we should make sure that we understand the data by looking at the data documentation.
+Now that we have our environment set up, we can read the dataset into R. But before we do, we should make sure that we understand the data by looking at the data documentation.
 
 The dataset that we will read into our R session based on the Brown Corpus [@Francis1961]. I've created a data origin file that contains the data documentation for the Brown Corpus, as we can see in Table \@ref(tab:brow-passives-do).
 
@@ -118,10 +118,11 @@ The dataset that we will read into our R session based on the Brown Corpus [@Fra
 # Read and display the data origin file
 read_csv(file = "data/original/brown_passives_do.csv") |>
   kable(caption = "Data origin file for the Brown Corpus.") |>
-  kable_styling()
+  kable_styling() |>
+  column_spec(1, width = "15em")
 ```
 
-This data origin file provides an overview of the original data source. In this case, the dataset we will read into R is a subset of the Brown Corpus which is an aggregate of the use of passive voice. This data was developed by the authors of the `corpora` package [@R-corpora]. I've exported the data to a CSV file, which we will read into R.
+This data origin file provides an overview of the original data source. In this case, the dataset we will read into R is a subset of the Brown Corpus which is an aggregate of the use of passive voice. This dataset was developed by the authors of the `corpora` package [@R-corpora]. I've exported the dataset to a CSV file, which we will read into R.
 
 The data dictionary which describes the dataset we will read appears in Table \@ref(tab:brow-passives-dd).
 
@@ -134,17 +135,17 @@ read_csv(file = "data/derived/brown_passives_curated_dd.csv") |>
 
 With this information, we are now in a position to read and inspect the dataset.
 
-### Reading data into R with `readr`
+### Reading datasets into R with `readr`
 
 <!--
 - Use the `corpora::BrownLOBpassives` dataset
-- Write the data to different file formats
+- Write the datasets to different file formats
   - `write_csv()`
   - `write_tsv()`
   - `write_delim()`
 -->
 
-We've now prepared our Quarto document by loading the packages we will use and and we have reviewed the data documentation so that we understand the data we will read into R. We are now ready to read the data into R.
+We've now prepared our Quarto document by loading the packages we will use and and we have reviewed the dataset documentation so that we understand the dataset we will read into R. We are now ready to read the dataset into R.
 
 R provides a number of functions to read data of many types in R. We will explore many types of data and datasets in this course. For now, we will focus on reading rectangular data into R. Rectangular data is data that is organized in rows and columns, such as a spreadsheet.
 
@@ -159,7 +160,7 @@ One of the most common file formats for rectangular data is the comma-separated 
 
 A CSV file is a type of delimited file, which means that the data is separated by a delimiter. In the case of a CSV file, the delimiter is a comma. Other types of delimited files use different delimiters, such as tab-separated values (TSV) files which use a tab character as the delimiter, or even a pipe (`|`) or semicolon (`;`).
 
-The `readr` package provides functions to read rectangular data into R. The `read_csv()` function reads CSV files, the `read_tsv()` function reads TSV files, and the `read_delim()` function reads other types of delimited files.
+The `readr` package provides functions to read rectangular dataset into R. The `read_csv()` function reads CSV files, the `read_tsv()` function reads TSV files, and the `read_delim()` function reads other types of delimited files.
 
 Let's use the `read_csv()` function to read the `brown_passives_curated.csv` file into R. To do this we will use the `file = ` argument to specify the path to the file. Now, the file "path" is the location of the file on the computer. We can specify this path in two ways:
 
@@ -195,7 +196,7 @@ brown_passives_df <-
 ```
 ````
 
-Running the above code chunk in our Quarto document will read the data into R and assign it to the `brown_passives_df` variable. It will also show the code used to read the data into R. Furthermore, so functions will display messages in the output. For example, the `read_csv()` function will display a message that various parsing options were used to read the data into R, as seen below:
+Running the above code chunk in our Quarto document will read the dataset into R and assign it to the `brown_passives_df` variable. It will also show the code used to read the dataset into R. Furthermore, so functions will display messages in the output. For example, the `read_csv()` function will display a message that various parsing options were used to read the dataset into R, as seen below:
 
 ```{r read-dataset-brown-passives-curated, echo=FALSE, message=TRUE}
 # Read the dataset
@@ -203,10 +204,10 @@ brown_passives_df <-
   read_csv(file = "data/derived/brown/brown_passives_curated.csv")
 ```
 
-This information can be helpful in an interactive session, as `read_csv()` tells us the dimensions of the data and the data types of each column.
+This information can be helpful in an interactive session, as `read_csv()` tells us the dimensions of the dataset and the data types of each column.
 But this output is not necessary, and is unnecessarily verbose in a reproducible document.
 
-We can hide any messages produced by a function by using the `message = false` key-value pair in the code block. For example, the following code block will read the data into R and assign it to the `brown_passives_df` variable without displaying any messages:
+We can hide any messages produced by a function by using the `message = false` key-value pair in the code block. For example, the following code block will read the dataset into R and assign it to the `brown_passives_df` variable without displaying any messages:
 
 ````
 ```{r}`r ''`
@@ -221,20 +222,20 @@ brown_passives_df <-
 
 No messages are displayed in the document output.
 
-### Inspecting data with `dplyr`
+### Inspecting datasets with `dplyr`
 
-The objective of this section is to demonstrate how to inspect and transform (subset) data using the `dplyr` package. We will use the `dplyr` package to inspect the data we read into R in the previous section.
+The objective of this section is to demonstrate how to inspect and transform (subset) datasets using the `dplyr` package. We will use the `dplyr` package to inspect the dataset we read into R in the previous section.
 
 Reading a CSV file into R will create a data frame object. Thus, I assigned the result to `brown_passives_df`. The `df` suffix is a common naming convention for rectangular data frames. It is good practice to use a consistent naming convention for objects in your code. This makes it easier to understand the code and to avoid errors.
 
-Let's do get an overview of the data by using the `glimpse()` function from the `dplyr` package. The `glimpse()` function displays the dimensions of the data frame and the data types of each column.
+Let's do get an overview of the dataset by using the `glimpse()` function from the `dplyr` package. The `glimpse()` function displays the dimensions of the data frame and the data types of each column.
 
 ```{r glimpse-brown-passives-curated, echo=TRUE}
 # Preview
 glimpse(brown_passives_df)
 ```
 
-If we want a more, tabular-like view of the data, we can simply print the data frame to the console. It's worth mentioning, that all `readr` functions return tibbles, so we gain the benefits of tibbles when we read data into R with `readr` functions, one of which is that we do not have to worry that printing a data frame to the console, or our document, will print all of the data.
+If we want a more, tabular-like view of the data, we can simply print the dataset frame to the console. It's worth mentioning, that all `readr` functions return tibbles, so we gain the benefits of tibbles when we read dataset into R with `readr` functions, one of which is that we do not have to worry that printing a data frame to the console, or our document, will print all of the data.
 
 ```{r print-brown-passives-curated, echo=TRUE}
 # Print the data frame
@@ -270,7 +271,7 @@ Finally, we can select a random sample of 5 rows from the data frame with the `s
 slice_sample(brown_passives_df, n = 5)
 ```
 
-These functions can be helpful to get a sense of the data in different ways. In combination with `arrange()` function, we can also sort the data frame by a column or columns and then select the first or last rows.
+These functions can be helpful to get a sense of the dataset in different ways. In combination with `arrange()` function, we can also sort the data frame by a column or columns and then select the first or last rows.
 
 For example, the following code block will sort the data frame by the `passive` column in ascending order and then select the first 5 rows:
 
@@ -311,9 +312,9 @@ brown_passives_df |> # Pass the data frame to the next function
 
 This is a good practice to follow when writing code. It makes the code more readable and easier to understand for others and for your future self!
 
-### Subsetting data with `dplyr`
+### Subsetting datasets with `dplyr`
 
-Now that we have a sense of the data, we can subset the data to create a variations of our original data frame. We can subset the data frame by selecting columns and/ or rows.
+Now that we have a sense of the data, we can subset the dataset to create a variations of our original data frame. We can subset the data frame by selecting columns and/ or rows.
 
 In the [R lesson](https://github.com/qtalr/lessons) "Packages and Functions", we saw that base R provides the bracket (`[]`) operator to subset data frames. The `dplyr` package provides functions to subset data frames which can be more readable and easier to use.
 
@@ -378,7 +379,7 @@ brown_passives_df |>
 For more sophisticated subsetting, we can use the `str_detect()` function from the `stringr` package to select rows where the values of the `name` column contain a certain string. This approach will be enhanced later in the course when we learn about [regular expressions](https://en.wikipedia.org/wiki/Regular_expression).
 :::
 
-### Writing data to a file with `readr`
+### Writing datasets to a file with `readr`
 
 Finally, we can write data, including data frames, to a file with the `write_*()` functions from the `readr` package. The `write_*()` functions include:
 
@@ -421,7 +422,7 @@ project/
     └── reading-inspecting-writing.qmd
 ```
 
-There is much more to learn about reading, inspecting, and writing data in R. We will introduce more functions and techniques in the coming lessons. For now, we have learned how to read, inspect, and write data using R functions and Quarto code blocks!
+There is much more to learn about reading, inspecting, and writing datasets in R. We will introduce more functions and techniques in the coming lessons. For now, we have learned how to read, inspect, and write datasets using R functions and Quarto code blocks!
 
 ## Check your understanding
 
@@ -446,7 +447,7 @@ In addition to the knowledge and skills you have developed in Labs 0 and 1, to c
 - Understand the purpose of the `label`, `echo`, `message`, and `include` options in a code block
 - Load packages into an R session with `library()`
 - Understand how to read and create file relative file paths
-- Read data into R with the `read_csv()` function
+- Read datasets into R with the `read_csv()` function
 - Inspect data frames with `dplyr` functions such as `glimpse()`, `slice_head()`, `slice_tail()`, `slice_sample()`, and `arrange()`.
 - Use the `|>` pipe operator to chain functions together.
 - Subset data frames with `dplyr` functions such as `select()` and `filter()`.

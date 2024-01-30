@@ -1,5 +1,5 @@
 ---
-title: "0. Writing with code"
+title: "0. Literate Programming and Quarto"
 pkgdown:
   as_is: true
 bibliography: [bibliography.bib, packages.bib]
