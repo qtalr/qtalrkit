@@ -103,7 +103,7 @@ A statistical overview of the data is a good place to start as it gives us a sen
 
 Let's create a statistical overview of the `brown_fam_df` dataset.
 
-  <!-- [ ] skim output in rmd show a Table for part, fix -->
+<!-- [ ] skim output in rmd show a Table for part, fix -->
 
 ```{r skim-brown-fam-show, eval=FALSE}
 # Load packages
@@ -312,72 +312,35 @@ brown_fam_df |>
 
 The results do not include the percent of observations for each level of the variable as it is not clear how to calculate the percent of observations for each level of the variable when there are multiple grouping variables. We must specify if we want to calculate the percent of observations by row or by column.
 
-The `janitor` package includes a variety of `adorn_*()` functions to add additional information to the results of `tabyl()`, including percentages, frequency, and totals.
+::: {.callout}
+**`r fontawesome::fa('medal')` Dive deeper**
 
-- `adorn_percentages()`: add percentages to the results of `tabyl()`
-- `adorn_pct_formatting()`: format percentages to include a `%` sign
-- `adorn_ns()`: add the frequency to the results of `tabyl()`
-- `adorn_rounding()`: round the results of `tabyl()`
-- `adorn_totals()`: add totals to the results of `tabyl()`
-
-So, let's return to adding percentages to our results from the `genre` and `lang_variety` cross-tabulation. Let's calculate the by-column percentages of observations which will give ue the percent of observations for each level of the `genre` variable in each level of the `lang_varity` variable. In other words, we are aiming to assess to what degree the distribution of `genre` is similar or different across `lang_variety`.
-
-```{r tabyl-brown-fam-genre-lang-variety-adorn-perc}
-# Cross-tabulation for `genre` and `lang_variety`
-brown_genre_lang_ct <-
-  brown_fam_df |>
-  tabyl(genre, lang_variety) |> # genre x lang_variety
-  adorn_percentages("col") |> # by-column percentages
-  adorn_pct_formatting() |> # format percentages
-  adorn_ns("front") # add frequency (in front)
-
-# View
-brown_genre_lang_ct
-```
-
-You can see that I assigned the results of the cross-tabulation to the object `brown_genre_lang_ct`. It is important to note that the results of `tabyl()` are data frames, albeit with a special class `tabyl`.
-
-```{r class-brown-genre-lang-ct-inspect}
-# Class of `brown_genre_lang_ct`
-class(brown_genre_lang_ct)
-```
-
-Therefore, we can apply subsequent operations to the results of `tabyl()` as we would any other data frame. However, we must pay attention to the variable types of the results of `tabyl()`.
-
-```{r class-brown-genre-lang-ct-inspect-variables}
-# Variable types of `brown_genre_lang_ct`
-glimpse(brown_genre_lang_ct)
-```
-
-We see that what look like numeric values in the results of `tabyl()` are actually character values. Just something to be aware of when working with the results of `tabyl()`.
+The `janitor` package includes a variety of `adorn_*()` functions to add additional information to the results of `tabyl()`, including percentages, frequencies, and totals. Feel free to explore these functions on your own. We will return to this topic again later in the course.
+:::
 
 ### Creating Quarto tables
-
-<!--
-- Summarizing data is not only for understanding the data but also for communicating the data in reports, manuscripts, and presentations
-- We can use the `knitr` package to create tables in Quarto
-- We can use the `kable()` function to create tables in Quarto
-  - `kable()` takes a data frame (or matrix) as an argument
-  - the `format` argument will be derived from the Quarto document format
-- To cross-reference and add a caption to a table in Quarto we use the code block options `label` and `tbl-cap`
-  - `label` a label prefixed with `tbl-` is used to create a cross-reference to the table
-  - `tbl-cap` is used to create a caption for the table, in quotation marks
--->
 
 Summarizing the data is not only useful for our understanding of the data as part of our analysis but also for communicating the data in reports, manuscripts, and presentations.
 
 One way to communicate summary statistics is with tables. In Quarto, we can use the `knitr` package [@R-knitr] in combination with code block options to produce formatted tables which we can cross-reference in our prose sections.
 
-Let's work with the `brown_genre_lang_ct` object we created in the previous section.
+Let's create an object from the cross-tabulation for the `genre` and `lang_variety` variables in the `brown_fam_df` dataset to work with.
+
+```{r brown-genre-lang-cross-tab}
+# Cross-tabulation for `genre` and `lang_variety`
+bf_genre_lang_ct <-
+  brown_fam_df |>
+  tabyl(genre, lang_variety)
+```
 
 To create a table in Quarto, we use the `kable()` function. The `kable()` function takes a data frame (or matrix) as an argument. The `format` argument will be derived from the Quarto document format ('html', 'pdf', *etc.*).
 
-```{r kable-brown-genre-lang-ct}
+```{r kable-brown-genre-lang-cross-tab}
 # Load packages
 library(knitr)
 
 # Create a table in Quarto
-kable(brown_genre_lang_ct)
+kable(bf_genre_lang_ct)
 ```
 
 To add a caption to the table and to enable cross-referencing, we use the code block options `label` and `tbl-cap`. The `label` option takes a label prefixed with `tbl-` to create a cross-reference to the table. The `tbl-cap` option takes a caption for the table, in quotation marks.
@@ -388,7 +351,7 @@ To add a caption to the table and to enable cross-referencing, we use the code b
 #| tbl-cap: "Cross-tabulation of `genre` and `lang_variety`"
 
 # Create a table in Quarto
-kable(brown_genre_lang_ct)
+kable(bf_genre_lang_ct)
 ```
 ````
 
@@ -403,7 +366,7 @@ As we see in @tbl-brown-genre-lang-ct, the distribution of `genre` is similar ac
 #| tbl-cap: "Cross-tabulation of `genre` and `lang_variety`"
 
 # Print cross-tabulation
-kable(brown_genre_lang_ct)
+kable(bf_genre_lang_ct)
 ```
 
 ````
@@ -414,7 +377,7 @@ As we see in Table \@ref(tab:kable-brown-genre-lang-ct-example), the distributio
 
 ```{r kable-brown-genre-lang-ct-example, echo=FALSE, out.width="100%"}
 kable(
-  brown_genre_lang_ct,
+  bf_genre_lang_ct,
   caption = "Cross-tabulation of `genre` and `lang_variety`"
 )
 ```
@@ -427,15 +390,6 @@ kable(
 
 
 ### Creating Quarto plots
-
-<!--
-- Communicating data and relationships in data is often best done with plots
-- We can use the `ggplot2` package to create plots in Quarto
-- To cross-reference and add a caption to a plot in Quarto we use the code block options `label` and `fig-cap`
-  - `label` a label prefixed with `fig-` is used to create a cross-reference to the plot
-  - `fig-cap` is used to create a caption for the plot, in quotation marks
-
--->
 
 Where tables are useful for communicating summary statistics for numeric and character variables, plots are useful for communicating relationships between variables especially when one or more of the variables is numeric. Furthermore, for complex relationships, plots can be more effective than tables.
 

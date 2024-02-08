@@ -168,7 +168,7 @@ Prerequisites: It will be assumed that learners have a basic understanding of th
 -->
 <p>A statistical overview of the data is a good place to start as it gives us a sense of all of the variables and variable types in the dataset. We can use the <code>skimr</code> package to create a statistical overview of the data, using the very convienent <code><a href="https://docs.ropensci.org/skimr/reference/skim.html" class="external-link">skim()</a></code> function.</p>
 <p>Let's create a statistical overview of the <code>brown_fam_df</code> dataset.</p>
-<p><!-- [ ] skim output in rmd show a Table for part, fix --></p>
+<!-- [ ] skim output in rmd show a Table for part, fix -->
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load packages</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/skimr/" class="external-link">skimr</a></span><span class="op">)</span></span>
@@ -474,265 +474,110 @@ Prerequisites: It will be assumed that learners have a basic understanding of th
 <span><span class="co">## <span style="color: #BCBCBC;">10</span> general fiction     58    87</span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 5 more rows</span></span></span></code></pre>
 <p>The results do not include the percent of observations for each level of the variable as it is not clear how to calculate the percent of observations for each level of the variable when there are multiple grouping variables. We must specify if we want to calculate the percent of observations by row or by column.</p>
-<p>The <code>janitor</code> package includes a variety of <code>adorn_*()</code> functions to add additional information to the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>, including percentages, frequency, and totals.</p>
-<ul>
-<li>
-<code><a href="https://sfirke.github.io/janitor/reference/adorn_percentages.html" class="external-link">adorn_percentages()</a></code>: add percentages to the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>
-</li>
-<li>
-<code><a href="https://sfirke.github.io/janitor/reference/adorn_pct_formatting.html" class="external-link">adorn_pct_formatting()</a></code>: format percentages to include a <code>%</code> sign</li>
-<li>
-<code><a href="https://sfirke.github.io/janitor/reference/adorn_ns.html" class="external-link">adorn_ns()</a></code>: add the frequency to the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>
-</li>
-<li>
-<code><a href="https://sfirke.github.io/janitor/reference/adorn_rounding.html" class="external-link">adorn_rounding()</a></code>: round the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>
-</li>
-<li>
-<code><a href="https://sfirke.github.io/janitor/reference/adorn_totals.html" class="external-link">adorn_totals()</a></code>: add totals to the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>
-</li>
-</ul>
-<p>So, let's return to adding percentages to our results from the <code>genre</code> and <code>lang_variety</code> cross-tabulation. Let's calculate the by-column percentages of observations which will give ue the percent of observations for each level of the <code>genre</code> variable in each level of the <code>lang_varity</code> variable. In other words, we are aiming to assess to what degree the distribution of <code>genre</code> is similar or different across <code>lang_variety</code>.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Cross-tabulation for `genre` and `lang_variety`</span></span>
-<span><span class="va">brown_genre_lang_ct</span> <span class="op">&lt;-</span></span>
-<span>  <span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl</a></span><span class="op">(</span><span class="va">genre</span>, <span class="va">lang_variety</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># genre x lang_variety</span></span>
-<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/adorn_percentages.html" class="external-link">adorn_percentages</a></span><span class="op">(</span><span class="st">"col"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># by-column percentages</span></span>
-<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/adorn_pct_formatting.html" class="external-link">adorn_pct_formatting</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># format percentages</span></span>
-<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/adorn_ns.html" class="external-link">adorn_ns</a></span><span class="op">(</span><span class="st">"front"</span><span class="op">)</span> <span class="co"># add frequency (in front)</span></span>
-<span></span>
-<span><span class="co"># View</span></span>
-<span><span class="va">brown_genre_lang_ct</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 15 × 3</span></span></span>
-<span><span class="co">##    genre            AmE         BrE        </span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> press reportage  88  (8.8%)  132  (8.8%)</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> press editorial  54  (5.4%)  81  (5.4%) </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> press reviews    34  (3.4%)  51  (3.4%) </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> religion         34  (3.4%)  51  (3.4%) </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> skills / hobbies 72  (7.2%)  114  (7.6%)</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> popular lore     96  (9.6%)  132  (8.8%)</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> belles lettres   150 (15.0%) 231 (15.4%)</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> miscellaneous    60  (6.0%)  90  (6.0%) </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> learned          160 (16.0%) 240 (16.0%)</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> general fiction  58  (5.8%)  87  (5.8%) </span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 5 more rows</span></span></span></code></pre>
-<p>You can see that I assigned the results of the cross-tabulation to the object <code>brown_genre_lang_ct</code>. It is important to note that the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code> are data frames, albeit with a special class <code>tabyl</code>.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Class of `brown_genre_lang_ct`</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">brown_genre_lang_ct</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "tabyl"      "data.frame"</span></span></code></pre>
-<p>Therefore, we can apply subsequent operations to the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code> as we would any other data frame. However, we must pay attention to the variable types of the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Variable types of `brown_genre_lang_ct`</span></span>
-<span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">brown_genre_lang_ct</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Rows: 15</span></span>
-<span><span class="co">## Columns: 3</span></span>
-<span><span class="co">## $ genre <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> press reportage, press editorial, press reviews, religion, skill…</span></span>
-<span><span class="co">## $ AmE   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "88  (8.8%)", "54  (5.4%)", "34  (3.4%)", "34  (3.4%)", "72  (7.…</span></span>
-<span><span class="co">## $ BrE   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "132  (8.8%)", "81  (5.4%)", "51  (3.4%)", "51  (3.4%)", "114  (…</span></span></code></pre>
-<p>We see that what look like numeric values in the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code> are actually character values. Just something to be aware of when working with the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>.</p>
+<div class="callout">
+<p><strong><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M4.1 38.2C1.4 34.2 0 29.4 0 24.6C0 11 11 0 24.6 0H133.9c11.2 0 21.7 5.9 27.4 15.5l68.5 114.1c-48.2 6.1-91.3 28.6-123.4 61.9L4.1 38.2zm503.7 0L405.6 191.5c-32.1-33.3-75.2-55.8-123.4-61.9L350.7 15.5C356.5 5.9 366.9 0 378.1 0H487.4C501 0 512 11 512 24.6c0 4.8-1.4 9.6-4.1 13.6zM80 336a176 176 0 1 1 352 0A176 176 0 1 1 80 336zm184.4-94.9c-3.4-7-13.3-7-16.8 0l-22.4 45.4c-1.4 2.8-4 4.7-7 5.1L168 298.9c-7.7 1.1-10.7 10.5-5.2 16l36.3 35.4c2.2 2.2 3.2 5.2 2.7 8.3l-8.6 49.9c-1.3 7.6 6.7 13.5 13.6 9.9l44.8-23.6c2.7-1.4 6-1.4 8.7 0l44.8 23.6c6.9 3.6 14.9-2.2 13.6-9.9l-8.6-49.9c-.5-3 .5-6.1 2.7-8.3l36.3-35.4c5.6-5.4 2.5-14.8-5.2-16l-50.1-7.3c-3-.4-5.7-2.4-7-5.1l-22.4-45.4z"></path></svg> Dive deeper</strong></p>
+<p>The <code>janitor</code> package includes a variety of <code>adorn_*()</code> functions to add additional information to the results of <code><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl()</a></code>, including percentages, frequencies, and totals. Feel free to explore these functions on your own. We will return to this topic again later in the course.</p>
+</div>
 </div>
 <div class="section level3">
 <h3 id="creating-quarto-tables">Creating Quarto tables<a class="anchor" aria-label="anchor" href="#creating-quarto-tables"></a>
 </h3>
-<!--
-- Summarizing data is not only for understanding the data but also for communicating the data in reports, manuscripts, and presentations
-- We can use the `knitr` package to create tables in Quarto
-- We can use the `kable()` function to create tables in Quarto
-  - `kable()` takes a data frame (or matrix) as an argument
-  - the `format` argument will be derived from the Quarto document format
-- To cross-reference and add a caption to a table in Quarto we use the code block options `label` and `tbl-cap`
-  - `label` a label prefixed with `tbl-` is used to create a cross-reference to the table
-  - `tbl-cap` is used to create a caption for the table, in quotation marks
--->
 <p>Summarizing the data is not only useful for our understanding of the data as part of our analysis but also for communicating the data in reports, manuscripts, and presentations.</p>
 <p>One way to communicate summary statistics is with tables. In Quarto, we can use the <code>knitr</code> package <span class="citation">(<a href="#ref-R-knitr">Xie 2023</a>)</span> in combination with code block options to produce formatted tables which we can cross-reference in our prose sections.</p>
-<p>Let's work with the <code>brown_genre_lang_ct</code> object we created in the previous section.</p>
+<p>Let's create an object from the cross-tabulation for the <code>genre</code> and <code>lang_variety</code> variables in the <code>brown_fam_df</code> dataset to work with.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Cross-tabulation for `genre` and `lang_variety`</span></span>
+<span><span class="va">bf_genre_lang_ct</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">brown_fam_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://sfirke.github.io/janitor/reference/tabyl.html" class="external-link">tabyl</a></span><span class="op">(</span><span class="va">genre</span>, <span class="va">lang_variety</span><span class="op">)</span></span></code></pre></div>
 <p>To create a table in Quarto, we use the <code><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable()</a></code> function. The <code><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable()</a></code> function takes a data frame (or matrix) as an argument. The <code>format</code> argument will be derived from the Quarto document format ('html', 'pdf', <em>etc.</em>).</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load packages</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/" class="external-link">knitr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create a table in Quarto</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">brown_genre_lang_ct</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">bf_genre_lang_ct</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
-<thead><tr>
-<th style="text-align:left;">
-genre
-</th>
-<th style="text-align:left;">
-AmE
-</th>
-<th style="text-align:left;">
-BrE
-</th>
+<thead><tr class="header">
+<th align="left">genre</th>
+<th align="right">AmE</th>
+<th align="right">BrE</th>
 </tr></thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-press reportage
-</td>
-<td style="text-align:left;">
-88 (8.8%)
-</td>
-<td style="text-align:left;">
-132 (8.8%)
-</td>
+<tr class="odd">
+<td align="left">press reportage</td>
+<td align="right">88</td>
+<td align="right">132</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-press editorial
-</td>
-<td style="text-align:left;">
-54 (5.4%)
-</td>
-<td style="text-align:left;">
-81 (5.4%)
-</td>
+<tr class="even">
+<td align="left">press editorial</td>
+<td align="right">54</td>
+<td align="right">81</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-press reviews
-</td>
-<td style="text-align:left;">
-34 (3.4%)
-</td>
-<td style="text-align:left;">
-51 (3.4%)
-</td>
+<tr class="odd">
+<td align="left">press reviews</td>
+<td align="right">34</td>
+<td align="right">51</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-religion
-</td>
-<td style="text-align:left;">
-34 (3.4%)
-</td>
-<td style="text-align:left;">
-51 (3.4%)
-</td>
+<tr class="even">
+<td align="left">religion</td>
+<td align="right">34</td>
+<td align="right">51</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-skills / hobbies
-</td>
-<td style="text-align:left;">
-72 (7.2%)
-</td>
-<td style="text-align:left;">
-114 (7.6%)
-</td>
+<tr class="odd">
+<td align="left">skills / hobbies</td>
+<td align="right">72</td>
+<td align="right">114</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-popular lore
-</td>
-<td style="text-align:left;">
-96 (9.6%)
-</td>
-<td style="text-align:left;">
-132 (8.8%)
-</td>
+<tr class="even">
+<td align="left">popular lore</td>
+<td align="right">96</td>
+<td align="right">132</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-belles lettres
-</td>
-<td style="text-align:left;">
-150 (15.0%)
-</td>
-<td style="text-align:left;">
-231 (15.4%)
-</td>
+<tr class="odd">
+<td align="left">belles lettres</td>
+<td align="right">150</td>
+<td align="right">231</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-miscellaneous
-</td>
-<td style="text-align:left;">
-60 (6.0%)
-</td>
-<td style="text-align:left;">
-90 (6.0%)
-</td>
+<tr class="even">
+<td align="left">miscellaneous</td>
+<td align="right">60</td>
+<td align="right">90</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-learned
-</td>
-<td style="text-align:left;">
-160 (16.0%)
-</td>
-<td style="text-align:left;">
-240 (16.0%)
-</td>
+<tr class="odd">
+<td align="left">learned</td>
+<td align="right">160</td>
+<td align="right">240</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-general fiction
-</td>
-<td style="text-align:left;">
-58 (5.8%)
-</td>
-<td style="text-align:left;">
-87 (5.8%)
-</td>
+<tr class="even">
+<td align="left">general fiction</td>
+<td align="right">58</td>
+<td align="right">87</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-detective
-</td>
-<td style="text-align:left;">
-48 (4.8%)
-</td>
-<td style="text-align:left;">
-72 (4.8%)
-</td>
+<tr class="odd">
+<td align="left">detective</td>
+<td align="right">48</td>
+<td align="right">72</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-science fiction
-</td>
-<td style="text-align:left;">
-12 (1.2%)
-</td>
-<td style="text-align:left;">
-18 (1.2%)
-</td>
+<tr class="even">
+<td align="left">science fiction</td>
+<td align="right">12</td>
+<td align="right">18</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-adventure
-</td>
-<td style="text-align:left;">
-57 (5.7%)
-</td>
-<td style="text-align:left;">
-87 (5.8%)
-</td>
+<tr class="odd">
+<td align="left">adventure</td>
+<td align="right">57</td>
+<td align="right">87</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-romance
-</td>
-<td style="text-align:left;">
-58 (5.8%)
-</td>
-<td style="text-align:left;">
-87 (5.8%)
-</td>
+<tr class="even">
+<td align="left">romance</td>
+<td align="right">58</td>
+<td align="right">87</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-humour
-</td>
-<td style="text-align:left;">
-18 (1.8%)
-</td>
-<td style="text-align:left;">
-27 (1.8%)
-</td>
+<tr class="odd">
+<td align="left">humour</td>
+<td align="right">18</td>
+<td align="right">27</td>
 </tr>
 </tbody>
 </table>
@@ -742,7 +587,7 @@ humour
 #| tbl-cap: "Cross-tabulation of `genre` and `lang_variety`"
 
 # Create a table in Quarto
-kable(brown_genre_lang_ct)
+kable(bf_genre_lang_ct)
 ```</code></pre>
 <p>Now we can cross-reference the table with the <code>@tbl-brown-genre-lang-ct</code> syntax. So the following Quarto document will produce the following prose with a cross-reference to the formatted table output.</p>
 <pre><code>
@@ -753,7 +598,7 @@ As we see in @tbl-brown-genre-lang-ct, the distribution of `genre` is similar ac
 #| tbl-cap: "Cross-tabulation of `genre` and `lang_variety`"
 
 # Print cross-tabulation
-kable(brown_genre_lang_ct)
+kable(bf_genre_lang_ct)
 ```
 </code></pre>
 <hr>
@@ -762,202 +607,98 @@ kable(brown_genre_lang_ct)
 <caption>
 <span id="tab:kable-brown-genre-lang-ct-example">Table 1: </span>Cross-tabulation of <code>genre</code> and <code>lang_variety</code>
 </caption>
-<thead><tr>
-<th style="text-align:left;">
-genre
-</th>
-<th style="text-align:left;">
-AmE
-</th>
-<th style="text-align:left;">
-BrE
-</th>
+<thead><tr class="header">
+<th align="left">genre</th>
+<th align="right">AmE</th>
+<th align="right">BrE</th>
 </tr></thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-press reportage
-</td>
-<td style="text-align:left;">
-88 (8.8%)
-</td>
-<td style="text-align:left;">
-132 (8.8%)
-</td>
+<tr class="odd">
+<td align="left">press reportage</td>
+<td align="right">88</td>
+<td align="right">132</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-press editorial
-</td>
-<td style="text-align:left;">
-54 (5.4%)
-</td>
-<td style="text-align:left;">
-81 (5.4%)
-</td>
+<tr class="even">
+<td align="left">press editorial</td>
+<td align="right">54</td>
+<td align="right">81</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-press reviews
-</td>
-<td style="text-align:left;">
-34 (3.4%)
-</td>
-<td style="text-align:left;">
-51 (3.4%)
-</td>
+<tr class="odd">
+<td align="left">press reviews</td>
+<td align="right">34</td>
+<td align="right">51</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-religion
-</td>
-<td style="text-align:left;">
-34 (3.4%)
-</td>
-<td style="text-align:left;">
-51 (3.4%)
-</td>
+<tr class="even">
+<td align="left">religion</td>
+<td align="right">34</td>
+<td align="right">51</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-skills / hobbies
-</td>
-<td style="text-align:left;">
-72 (7.2%)
-</td>
-<td style="text-align:left;">
-114 (7.6%)
-</td>
+<tr class="odd">
+<td align="left">skills / hobbies</td>
+<td align="right">72</td>
+<td align="right">114</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-popular lore
-</td>
-<td style="text-align:left;">
-96 (9.6%)
-</td>
-<td style="text-align:left;">
-132 (8.8%)
-</td>
+<tr class="even">
+<td align="left">popular lore</td>
+<td align="right">96</td>
+<td align="right">132</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-belles lettres
-</td>
-<td style="text-align:left;">
-150 (15.0%)
-</td>
-<td style="text-align:left;">
-231 (15.4%)
-</td>
+<tr class="odd">
+<td align="left">belles lettres</td>
+<td align="right">150</td>
+<td align="right">231</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-miscellaneous
-</td>
-<td style="text-align:left;">
-60 (6.0%)
-</td>
-<td style="text-align:left;">
-90 (6.0%)
-</td>
+<tr class="even">
+<td align="left">miscellaneous</td>
+<td align="right">60</td>
+<td align="right">90</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-learned
-</td>
-<td style="text-align:left;">
-160 (16.0%)
-</td>
-<td style="text-align:left;">
-240 (16.0%)
-</td>
+<tr class="odd">
+<td align="left">learned</td>
+<td align="right">160</td>
+<td align="right">240</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-general fiction
-</td>
-<td style="text-align:left;">
-58 (5.8%)
-</td>
-<td style="text-align:left;">
-87 (5.8%)
-</td>
+<tr class="even">
+<td align="left">general fiction</td>
+<td align="right">58</td>
+<td align="right">87</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-detective
-</td>
-<td style="text-align:left;">
-48 (4.8%)
-</td>
-<td style="text-align:left;">
-72 (4.8%)
-</td>
+<tr class="odd">
+<td align="left">detective</td>
+<td align="right">48</td>
+<td align="right">72</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-science fiction
-</td>
-<td style="text-align:left;">
-12 (1.2%)
-</td>
-<td style="text-align:left;">
-18 (1.2%)
-</td>
+<tr class="even">
+<td align="left">science fiction</td>
+<td align="right">12</td>
+<td align="right">18</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-adventure
-</td>
-<td style="text-align:left;">
-57 (5.7%)
-</td>
-<td style="text-align:left;">
-87 (5.8%)
-</td>
+<tr class="odd">
+<td align="left">adventure</td>
+<td align="right">57</td>
+<td align="right">87</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-romance
-</td>
-<td style="text-align:left;">
-58 (5.8%)
-</td>
-<td style="text-align:left;">
-87 (5.8%)
-</td>
+<tr class="even">
+<td align="left">romance</td>
+<td align="right">58</td>
+<td align="right">87</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-humour
-</td>
-<td style="text-align:left;">
-18 (1.8%)
-</td>
-<td style="text-align:left;">
-27 (1.8%)
-</td>
+<tr class="odd">
+<td align="left">humour</td>
+<td align="right">18</td>
+<td align="right">27</td>
 </tr>
 </tbody>
 </table>
 <hr>
 <blockquote>
 <p><strong><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M4.1 38.2C1.4 34.2 0 29.4 0 24.6C0 11 11 0 24.6 0H133.9c11.2 0 21.7 5.9 27.4 15.5l68.5 114.1c-48.2 6.1-91.3 28.6-123.4 61.9L4.1 38.2zm503.7 0L405.6 191.5c-32.1-33.3-75.2-55.8-123.4-61.9L350.7 15.5C356.5 5.9 366.9 0 378.1 0H487.4C501 0 512 11 512 24.6c0 4.8-1.4 9.6-4.1 13.6zM80 336a176 176 0 1 1 352 0A176 176 0 1 1 80 336zm184.4-94.9c-3.4-7-13.3-7-16.8 0l-22.4 45.4c-1.4 2.8-4 4.7-7 5.1L168 298.9c-7.7 1.1-10.7 10.5-5.2 16l36.3 35.4c2.2 2.2 3.2 5.2 2.7 8.3l-8.6 49.9c-1.3 7.6 6.7 13.5 13.6 9.9l44.8-23.6c2.7-1.4 6-1.4 8.7 0l44.8 23.6c6.9 3.6 14.9-2.2 13.6-9.9l-8.6-49.9c-.5-3 .5-6.1 2.7-8.3l36.3-35.4c5.6-5.4 2.5-14.8-5.2-16l-50.1-7.3c-3-.4-5.7-2.4-7-5.1l-22.4-45.4z"></path></svg> Dive deeper</strong></p>
-<p>The <code>kableExtra</code> package <span class="citation">(<a href="#ref-R-kableExtra">Zhu 2021</a>)</span> provides additional functionality for formatting tables in Quarto.</p>
+<p>The <code>kableExtra</code> package <span class="citation">(<a href="#ref-R-kableExtra">Zhu 2024</a>)</span> provides additional functionality for formatting tables in Quarto.</p>
 </blockquote>
 </div>
 <div class="section level3">
 <h3 id="creating-quarto-plots">Creating Quarto plots<a class="anchor" aria-label="anchor" href="#creating-quarto-plots"></a>
 </h3>
-<!--
-- Communicating data and relationships in data is often best done with plots
-- We can use the `ggplot2` package to create plots in Quarto
-- To cross-reference and add a caption to a plot in Quarto we use the code block options `label` and `fig-cap`
-  - `label` a label prefixed with `fig-` is used to create a cross-reference to the plot
-  - `fig-cap` is used to create a caption for the plot, in quotation marks
-
--->
 <p>Where tables are useful for communicating summary statistics for numeric and character variables, plots are useful for communicating relationships between variables especially when one or more of the variables is numeric. Furthermore, for complex relationships, plots can be more effective than tables.</p>
 <p>In Quarto, we can use the <code>ggplot2</code> package <span class="citation">(<a href="#ref-R-ggplot2">Wickham et al. 2023</a>)</span> in combination with code block options to produce formatted plots which we can cross-reference in our prose sections.</p>
 <p>Let's see this in action with a simple histogram of the <code>percent_passive</code> variable in the <code>brown_fam_df</code> dataset. The Quarto document will produce the following prose with a cross-reference to the formatted plot output.</p>
@@ -983,7 +724,7 @@ Figure 1: Histogram of <code>percent_passive</code>
 <hr>
 <p>The <code>ggplot2</code> package implements the 'Grammar of Graphics' approach to creating plots. This approach is based on the idea that plots can be broken down into components, or layers, and that each layer can be manipulated independently.</p>
 <p>The main components are data, aesthetics, and geometries. Data is the data frame that contains the variables to be plotted. Aesthetics are the variables that will be mapped to the x-axis, y-axis (as well as color, shape, size, <em>etc.</em>). Geometries are the visual elements that will be used to represent the data, such as points, lines, bars, <em>etc.</em>.</p>
-<p>As discussed in the R lesson "Visual Summaries", the <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> function is used to map variables to aesthetics and can be added to the <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot()</a></code> function or to the <code>geom_*()</code> function depending on whether the aesthetic is mapped to all geometries or to a specific geometry, respectively.</p>
+<p>As discussed in the R lesson "Visual Summaries", the <code>aes()</code> function is used to map variables to aesthetics and can be added to the <code>ggplot()</code> function or to the <code>geom_*()</code> function depending on whether the aesthetic is mapped to all geometries or to a specific geometry, respectively.</p>
 <p>Take a look at the following stages of the earlier plot in each of the tabs below.</p>
 <div class="section level4 tabset tabset-pills">
 <h4 id="stages">Stages<a class="anchor" aria-label="anchor" href="#stages"></a>
@@ -1000,26 +741,26 @@ Figure 1: Histogram of <code>percent_passive</code>
 <div class="active  tab-pane" id="data" role="tabpanel" aria-labelledby="data-tab">
 
 <p>The data layer does not produce a plot but it is the foundation of the plot.</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Data layer</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span></span></code></pre></div>
 <p><img src="recipe-3_files/figure-html/ggplot2-brown-fam-percent-passive-hist-data-1.png" width="100%" style="display: block; margin: auto;"></p>
 </div>
 <div class="tab-pane" id="aesthetics" role="tabpanel" aria-labelledby="aesthetics-tab">
 
 <p>The aesthetics layer does not produce a plot but it maps the variables to the aesthetics to be used in the plot.</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Aesthetics layer</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">brown_fam_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="recipe-3_files/figure-html/ggplot2-brown-fam-percent-passive-hist-aes-1.png" width="100%" style="display: block; margin: auto;"></p>
 </div>
 <div class="tab-pane" id="geometries" role="tabpanel" aria-labelledby="geometries-tab">
 
 <p>The geometries layer produces the plot connecting the data and aesthetics layers in the particular way specified by the geometries, in this case a histogram.</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Geometries layer</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">brown_fam_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="recipe-3_files/figure-html/ggplot2-brown-fam-percent-passive-hist-geom-1.png" width="100%" style="display: block; margin: auto;"></p>
 </div>
 </div>
@@ -1042,18 +783,18 @@ Figure 1: Histogram of <code>percent_passive</code>
 <div class="tab-content">
 <div class="active  tab-pane" id="histogram" role="tabpanel" aria-labelledby="histogram-tab">
 
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Histogram</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="recipe-3_files/figure-html/plot-single-hist-1.png" width="100%" style="display: block; margin: auto;"></p>
 </div>
 <div class="tab-pane" id="density-plot" role="tabpanel" aria-labelledby="density-plot-tab">
 
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Density plot</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_density</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">percent_passive</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="recipe-3_files/figure-html/plot-single-density-1.png" width="100%" style="display: block; margin: auto;"></p>
 </div>
 </div>
@@ -1072,11 +813,11 @@ Figure 1: Histogram of <code>percent_passive</code>
 <div class="tab-content">
 <div class="active  tab-pane" id="density-plot-1" role="tabpanel" aria-labelledby="density-plot-1-tab">
 
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Density plot</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_density</span><span class="op">(</span></span>
+<span>    <span class="fu">aes</span><span class="op">(</span></span>
 <span>      x <span class="op">=</span> <span class="va">percent_passive</span>,</span>
 <span>      fill <span class="op">=</span> <span class="va">lang_variety</span></span>
 <span>    <span class="op">)</span>,</span>
@@ -1086,11 +827,11 @@ Figure 1: Histogram of <code>percent_passive</code>
 </div>
 <div class="tab-pane" id="boxplot" role="tabpanel" aria-labelledby="boxplot-tab">
 
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Boxplot</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_boxplot</span><span class="op">(</span></span>
+<span>    <span class="fu">aes</span><span class="op">(</span></span>
 <span>      x <span class="op">=</span> <span class="va">lang_variety</span>,</span>
 <span>      y <span class="op">=</span> <span class="va">percent_passive</span></span>
 <span>    <span class="op">)</span></span>
@@ -1099,11 +840,11 @@ Figure 1: Histogram of <code>percent_passive</code>
 </div>
 <div class="tab-pane" id="violin-plot" role="tabpanel" aria-labelledby="violin-plot-tab">
 
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Violin plot</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">geom_violin</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_violin</span><span class="op">(</span></span>
+<span>    <span class="fu">aes</span><span class="op">(</span></span>
 <span>      x <span class="op">=</span> <span class="va">lang_variety</span>,</span>
 <span>      y <span class="op">=</span> <span class="va">percent_passive</span></span>
 <span>    <span class="op">)</span></span>
@@ -1124,11 +865,11 @@ Figure 1: Histogram of <code>percent_passive</code>
 <div class="tab-content">
 <div class="active  tab-pane" id="scatterplot" role="tabpanel" aria-labelledby="scatterplot-tab">
 
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Scatterplot</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">brown_fam_df</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span></span>
+<span>    <span class="fu">aes</span><span class="op">(</span></span>
 <span>      x <span class="op">=</span> <span class="va">active_verbs</span>,</span>
 <span>      y <span class="op">=</span> <span class="va">passive_verbs</span></span>
 <span>    <span class="op">)</span></span>
@@ -1137,17 +878,17 @@ Figure 1: Histogram of <code>percent_passive</code>
 </div>
 <div class="tab-pane" id="scatterplot-with-regression-line" role="tabpanel" aria-labelledby="scatterplot-with-regression-line-tab">
 
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Scatterplot with regression line</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span></span>
 <span>  <span class="va">brown_fam_df</span>,</span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
+<span>  <span class="fu">aes</span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="va">active_verbs</span>,</span>
 <span>    y <span class="op">=</span> <span class="va">passive_verbs</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_smooth</span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="recipe-3_files/figure-html/plot-two-scatter-regression-1.png" width="100%" style="display: block; margin: auto;"></p>
 </div>
 </div>
@@ -1176,7 +917,7 @@ Figure 1: Histogram of <code>percent_passive</code>
 <option value="">dplyr</option>
 <option value="">ggplot2</option>
 <option value="answer">knitr</option></select> package is used to create formatted tables in R.</li>
-<li>To add a geometry layer, such as <code><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram()</a></code>, to a ggplot object the <code>|&gt;</code> operator is used. <select class="webex-select"><option value="blank"></option>
+<li>To add a geometry layer, such as <code>geom_histogram()</code>, to a ggplot object the <code>|&gt;</code> operator is used. <select class="webex-select"><option value="blank"></option>
 <option value="">TRUE</option>
 <option value="answer">FALSE</option></select>
 </li>
@@ -1186,7 +927,7 @@ Figure 1: Histogram of <code>percent_passive</code>
 <option value="">boxplot</option>
 <option value="">violin plot</option>
 <option value="answer">scatterplot</option></select> is often used.</li>
-<li>When the <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> function is added to the <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot()</a></code> function, the aesthetic is mapped to all geometries. <select class="webex-select"><option value="blank"></option>
+<li>When the <code>aes()</code> function is added to the <code>ggplot()</code> function, the aesthetic is mapped to all geometries. <select class="webex-select"><option value="blank"></option>
 <option value="answer">TRUE</option>
 <option value="">FALSE</option></select>
 </li>
@@ -1226,7 +967,7 @@ Wickham, Hadley, Winston Chang, Lionel Henry, Thomas Lin Pedersen, Kohske Takaha
 Xie, Yihui. 2023. <em>Knitr: A General-Purpose Package for Dynamic Report Generation in r</em>. <a href="https://yihui.org/knitr/" class="external-link">https://yihui.org/knitr/</a>.
 </div>
 <div id="ref-R-kableExtra" class="csl-entry">
-Zhu, Hao. 2021. <em>kableExtra: Construct Complex Table with Kable and Pipe Syntax</em>. <a href="http://haozhu233.github.io/kableExtra/" class="external-link">http://haozhu233.github.io/kableExtra/</a>.
+Zhu, Hao. 2024. <em>kableExtra: Construct Complex Table with Kable and Pipe Syntax</em>. <a href="http://haozhu233.github.io/kableExtra/" class="external-link">http://haozhu233.github.io/kableExtra/</a>.
 </div>
 </div>
 </div>
