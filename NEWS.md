@@ -1,3 +1,7 @@
+# qtalrkit 0.9.3
+
+* updates `create_data_origin()` to use base R. It also adds functionality to optionally return the data origin as a data frame and to overwrite the file if it already exists.
+
 # qtalrkit 0.9.2
 
 * Adds `curate_enntt_data()` function to curate data from the Europarl Corpus of Native, Non-Native, and Translated Text (ENNTT).
