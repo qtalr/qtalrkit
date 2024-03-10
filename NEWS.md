@@ -1,3 +1,7 @@
+# qtalrkit 0.9.4
+
+* A fix to `get_compressed_data()` to avoid the infinite loop that was caused by the confirmation prompt.
+
 # qtalrkit 0.9.3
 
 * updates `create_data_origin()` to use base R. It also adds functionality to optionally return the data origin as a data frame and to overwrite the file if it already exists.
